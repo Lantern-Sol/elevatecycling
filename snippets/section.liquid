@@ -175,7 +175,7 @@
         {%- assign floating_text_preset_mobile = section.settings.floating_media_text_preset_mobile -%}
         {%- assign floating_text_alignment = section.settings.floating_media_text_alignment | default: 'center' -%}
         <div
-          class="section-floating-media__text color-{{ section.settings.floating_media_color_scheme }} {{ floating_text_preset }}{% if floating_text_preset_mobile != blank %} mobile-preset-{{ floating_text_preset_mobile }}{% endif %}"
+          class="section-floating-media__text {{ floating_text_preset }}{% if floating_text_preset_mobile != blank %} mobile-preset-{{ floating_text_preset_mobile }}{% endif %}"
           style="padding: {{ text_pad_y_rem }}rem {{ text_pad_x_rem }}rem; padding-top: {{ text_pad_y_rem | plus: 0.25 }}rem; --text-align: {{ floating_text_alignment }};"
         >
           {{ section.settings.floating_media_text }}

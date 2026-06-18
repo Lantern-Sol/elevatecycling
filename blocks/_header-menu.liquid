@@ -163,8 +163,7 @@
                       content_aspect_ratio: ratio,
                       image_border_radius: image_border_radius,
                       feature_button_label: block_settings.feature_button_label,
-                      feature_button_style_class: block_settings.feature_button_style_class,
-                      feature_color_scheme: block_settings.feature_color_scheme
+                      feature_button_style_class: block_settings.feature_button_style_class
                     %}
                   </div>
                 </div>
@@ -1025,14 +1024,6 @@
         { "value": "button-secondary", "label": "t:options.secondary" }
       ],
       "default": "button-secondary",
-      "visible_if": "{{ block.settings.menu_style == 'featured_collections' }}"
-    },
-    {
-      "type": "color_scheme",
-      "id": "feature_color_scheme",
-      "label": "Card color scheme",
-      "info": "Applied to each featured collection card (title, subtext, button).",
-      "default": "scheme-1",
       "visible_if": "{{ block.settings.menu_style == 'featured_collections' }}"
     },
     {

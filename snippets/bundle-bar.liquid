@@ -11,11 +11,10 @@
   assign max_items = section.settings.max_items | default: 4
   assign bar_title = section.settings.bar_title | default: 'YOUR BUNDLE'
   assign bar_cta = section.settings.bar_cta | default: 'ADD BUNDLE TO CART'
-  assign bar_color_scheme = section.settings.bar_color_scheme | default: section.settings.color_scheme
 -%}
 
 <bundle-bar
-  class="bundle-bar color-{{ bar_color_scheme }}"
+  class="bundle-bar"
   data-section-id="{{ section.id }}"
   data-max-items="{{ max_items }}"
   data-min-items="{{ section.settings.min_items | default: 4 }}"

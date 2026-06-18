@@ -11,7 +11,6 @@
   assign show_category_tabs = section.settings.show_category_tabs
   assign tabs_alignment = section.settings.tabs_alignment | default: 'center'
   assign show_pagination = section.settings.show_pagination
-  assign featured_card_color_scheme = section.settings.featured_card_color_scheme
   assign featured_bg_image = section.settings.featured_card_background_image
   assign featured_bg_position = section.settings.featured_card_background_position | default: 'cover'
   assign featured_bg_overlay_opacity = section.settings.featured_card_background_overlay_opacity | default: 0
@@ -166,7 +165,7 @@
               class="
                 blog-post-item
                 {% if is_horizontal %}blog-post-item--horizontal{% endif %}
-                {% if is_featured %}blog-post-item--featured color-{{ featured_card_color_scheme }}{% endif %}
+                {% if is_featured %}blog-post-item--featured{% endif %}
               "
               data-testid="blog-post-item"
               data-blog-index="{{ section.id }}-{{ forloop.index }}"
@@ -260,7 +259,7 @@
             class="
               blog-post-item
               {% if is_horizontal %}blog-post-item--horizontal{% endif %}
-              {% if is_featured %}blog-post-item--featured color-{{ featured_card_color_scheme }}{% endif %}
+              {% if is_featured %}blog-post-item--featured{% endif %}
             "
             data-testid="blog-post-item"
             data-blog-index="{{ section.id }}-{{ forloop.index }}"
@@ -552,13 +551,6 @@
       "max": 4,
       "step": 1,
       "default": 3,
-      "visible_if": "{{ section.settings.layout_type == 'featured-grid' }}"
-    },
-    {
-      "type": "color_scheme",
-      "id": "featured_card_color_scheme",
-      "label": "Featured card color scheme",
-      "default": "scheme-5",
       "visible_if": "{{ section.settings.layout_type == 'featured-grid' }}"
     },
     {

@@ -74,7 +74,6 @@
       ref="menuDrawer"
       class="
         menu-drawer
-        color-{{ section.settings.color_scheme_drawer }}
         {% if block_settings.background_color != blank or block_settings.text_color != blank %}
           color-custom-{{ block.id }}
         {% endif %}
@@ -389,7 +388,7 @@
                             <ul class="menu-drawer__featured-content-list list-unstyled">
                               {% if featured_collections.size > 0 %}
                                 {%- for collection in featured_collections limit: max_featured_items -%}
-                                  <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--collection{% if block_settings.feature_color_scheme != blank %} color-{{ block_settings.feature_color_scheme }}{% endif %}">
+                                  <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--collection">
                                     {% render 'resource-card',
                                       resource: collection.object,
                                       resource_type: 'collection',
@@ -404,7 +403,7 @@
                               {% else %}
                                 {% paginate featured_products_collection.products by max_featured_items %}
                                   {%- for product in featured_products_collection.products limit: max_featured_items -%}
-                                    <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--product{% if block_settings.feature_color_scheme != blank %} color-{{ block_settings.feature_color_scheme }}{% endif %}">
+                                    <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--product">
                                       {% render 'resource-card',
                                         resource: product,
                                         resource_type: 'product',
@@ -637,7 +636,7 @@
           <ul class="menu-drawer__featured-content-list menu-drawer__animated-element list-unstyled">
             {% if top_level_featured_collections.size > 0 %}
               {%- for collection in top_level_featured_collections limit: max_featured_items -%}
-                <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--collection{% if block_settings.feature_color_scheme != blank %} color-{{ block_settings.feature_color_scheme }}{% endif %}">
+                <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--collection">
                   {% render 'resource-card',
                     resource: collection.object,
                     resource_type: 'collection',
@@ -652,7 +651,7 @@
             {% elsif top_level_featured_products_collection.products_count > 0 %}
               {% paginate top_level_featured_products_collection.products by max_featured_items %}
                 {%- for product in top_level_featured_products_collection.products limit: max_featured_items -%}
-                  <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--product{% if block_settings.feature_color_scheme != blank %} color-{{ block_settings.feature_color_scheme }}{% endif %}">
+                  <li class="menu-drawer__featured-content-list-item menu-drawer__featured-content-list-item--product">
                     {% render 'resource-card',
                       resource: product,
                       resource_type: 'product',

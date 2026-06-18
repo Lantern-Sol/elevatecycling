@@ -30,10 +30,6 @@
     border-style
     spacing-style
     size-style
-    {% if settings.inherit_color_scheme == false %} color-{{ settings.color_scheme }}{% endif %}
-    {% if settings.use_mobile_appearance and settings.inherit_color_scheme-mobile == false %} color-{{ settings.color_scheme-mobile }}-mobile{% endif %}
-    {% if settings.use_color_on_hover %} hover-color-{{ settings.color_scheme_on_hover }}{% endif %}
-    {% if settings.use_mobile_appearance and settings.use_color_on_hover-mobile %} hover-color-{{ settings.color_scheme_on_hover-mobile }}-mobile{% endif %}
     {% if settings.hide_on_mobile %} hidden--mobile{% endif %}
     {% if settings.hide_on_desktop %} hidden--desktop{% endif %}
     {{ class }}
