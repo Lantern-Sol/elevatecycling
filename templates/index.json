@@ -10,291 +10,553 @@
 {
   "sections": {
     "hero_jVaWmY": {
-      "type": "hero",
+      "type": "elevate-hero",
+      "settings": {
+        "media_type": "video",
+        "video": "shopify://files/videos/hero-desktop.mp4",
+        "toggle_overlay": true,
+        "overlay_color": "#121212",
+        "overlay_style": "gradient",
+        "gradient_direction": "to top",
+        "show_reviews": true,
+        "reviews_rating": "4.9 out of 5",
+        "reviews_count": "2,400+ verified reviews",
+        "heading_line_1": "THE SMARTEST WAY",
+        "heading_line_2": "TO RIDE BETTER GEAR",
+        "heading_accent_text": "RIDE BETTER GEAR",
+        "heading_accent_color": "#e31e24",
+        "subtitle": "Brand-new and certified pre-owned road, gravel, and CX equipment — every item inspected, fully spec'd, and priced up to 80% below retail. New inventory drops daily.",
+        "primary_button_label": "Shop Bikes & Gear",
+        "primary_button_link": "shopify://collections/all",
+        "secondary_button_label": "Get a cash offer for your bike",
+        "secondary_button_link": "",
+        "show_scroll_indicator": true,
+        "padding_top": 100,
+        "padding_bottom": 24
+      }
+    },
+    "brand_logos_marquee": {
+      "type": "marquee",
       "blocks": {
-        "text_YLPk4p": {
-          "type": "text",
-          "name": "t:names.heading",
+        "brand_specialized": {
+          "type": "icon",
           "settings": {
-            "text": "<p>Browse our latest products</p>",
-            "mobile_text": "",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h1",
-            "font": "var(--font-body--family)",
-            "enable_custom_font_weight": false,
-            "weight": "400",
-            "font_size": "1rem",
-            "line_height": "custom",
-            "custom_line_height": 1,
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "text_color": "{{ settings.color_palette.background }}",
-            "use_mobile_settings": false,
-            "mobile_font_size": "1rem",
-            "mobile_custom_line_height": 1.5,
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0,
-            "use_mobile_padding": false,
-            "padding-block-start-mobile": 0,
-            "padding-block-end-mobile": 0,
-            "padding-inline-start-mobile": 0,
-            "padding-inline-end-mobile": 0
+            "icon": "none",
+            "theme_asset": "brand-specialized.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
           },
           "blocks": {}
         },
-        "button_H9gpTf": {
-          "type": "button",
-          "name": "t:names.button",
+        "brand_sram": {
+          "type": "icon",
           "settings": {
-            "label": "Shop all",
-            "link": "shopify://collections/all",
+            "icon": "none",
+            "theme_asset": "brand-sram.svg",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
             "open_in_new_tab": false,
-            "style_class": "button-custom",
-            "custom_button_background": "rgba(0, 0, 0, 0)",
-            "custom_button_text": "{{ settings.color_palette.background }}",
-            "custom_button_border": "{{ settings.color_palette.background }}",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_shimano": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-shimano.svg",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_campagnolo": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-campagnolo.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_colnago": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-colnago.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_zipp": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-zipp.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_roval": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-roval.png",
+            "invert_colors": false,
+            "width": 100,
+            "width-mobile": 80,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
           },
           "blocks": {}
         }
       },
       "block_order": [
-        "text_YLPk4p",
-        "button_H9gpTf"
+        "brand_specialized",
+        "brand_sram",
+        "brand_shimano",
+        "brand_campagnolo",
+        "brand_colnago",
+        "brand_zipp",
+        "brand_roval"
       ],
-      "name": "t:names.hero",
       "settings": {
-        "media_type_1": "image",
-        "parallax_effect": false,
-        "hide_media_on_mobile": false,
-        "media_type_2": "image",
-        "link": "",
-        "open_in_new_tab": false,
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "space-between",
-        "vertical_alignment": "flex-end",
-        "align_baseline": true,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "flex-end",
-        "gap": 24,
-        "section_width": "page-width",
-        "section_width-mobile": "page-width",
-        "section_height": "medium",
-        "section_height_custom": 50,
-        "toggle_overlay": true,
-        "overlay_color": "#12121266",
-        "overlay_style": "solid",
-        "gradient_direction": "to bottom",
-        "blurred_reflection": false,
-        "reflection_opacity": 75,
-        "padding-block-start": 100,
-        "padding-block-end": 72,
-        "use_mobile_padding": false,
-        "padding-block-start-mobile": 0,
-        "padding-block-end-mobile": 0
+        "movement_direction": "normal",
+        "background_color": "#ffffff",
+        "padding-block-start": 24,
+        "padding-block-end": 24,
+        "gap_between_elements": 48
       }
     },
-    "product_list_fa6P9H": {
-      "type": "product-list",
+    "elevate_usps": {
+      "type": "elevate-usps",
       "blocks": {
-        "static-header": {
-          "type": "_product-list-content",
-          "name": "t:names.header",
-          "static": true,
+        "usp_shipping": {
+          "type": "usp",
           "settings": {
-            "content_direction": "row",
-            "vertical_on_mobile": false,
-            "horizontal_alignment": "space-between",
-            "vertical_alignment": "flex-end",
-            "align_baseline": true,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_list_text_YFtzcL": {
-              "type": "_product-list-text",
-              "name": "t:names.collection_title",
-              "settings": {
-                "text": "<h3>{{ closest.collection.title }}</h3>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h4",
-                "font": "var(--font-body--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_list_button_MWeP9V": {
-              "type": "_product-list-button",
-              "name": "t:names.product_list_button",
-              "settings": {
-                "label": "View all",
-                "open_in_new_tab": false,
-                "style_class": "button-unstyled",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_list_text_YFtzcL",
-            "product_list_button_MWeP9V"
-          ]
+            "icon": "shipping-fast",
+            "title": "FREE US SHIPPING",
+            "description": "On every order, no minimum."
+          }
         },
-        "static-product-card": {
-          "type": "_product-card",
-          "name": "t:names.product_card",
-          "static": true,
+        "usp_returns": {
+          "type": "usp",
           "settings": {
-            "product_card_gap": 4,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "product_card_gallery_677WP3": {
-              "type": "_product-card-gallery",
-              "name": "t:names.product_card_media",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_YXxMTj": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "paragraph",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_JQzVV4": {
-              "type": "price",
-              "name": "t:names.product_price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "product_card_gallery_677WP3",
-            "product_title_YXxMTj",
-            "price_JQzVV4"
-          ]
+            "icon": "return",
+            "title": "30-DAY RETURNS",
+            "description": "Ride it. If it's not right, send it back."
+          }
+        },
+        "usp_inspected": {
+          "type": "usp",
+          "settings": {
+            "icon": "search-solid",
+            "title": "INSPECTED & CLEANED",
+            "description": "Every item checked and documented before it lists."
+          }
+        },
+        "usp_pictures": {
+          "type": "usp",
+          "settings": {
+            "icon": "camera-solid",
+            "title": "DETAILED PICTURES",
+            "description": "Every angle, every imperfection — nothing hidden."
+          }
+        },
+        "usp_selection": {
+          "type": "usp",
+          "settings": {
+            "icon": "cart-plus-solid",
+            "title": "WIDE SELECTION",
+            "description": "New arrivals every day. Check back often."
+          }
         }
       },
-      "name": "t:names.featured_collection",
+      "block_order": [
+        "usp_shipping",
+        "usp_returns",
+        "usp_inspected",
+        "usp_pictures",
+        "usp_selection"
+      ],
       "settings": {
-        "collection": "all",
-        "layout_type": "grid",
-        "carousel_on_mobile": false,
-        "max_products": 8,
-        "columns": 4,
-        "mobile_columns": "2",
-        "mobile_card_size": "60cqw",
-        "columns_gap": 8,
-        "rows_gap": 24,
-        "icons_style": "arrow",
-        "icons_shape": "none",
-        "section_width": "page-width",
-        "horizontal_alignment": "flex-start",
-        "gap": 28,
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "heading": "NO GUESSWORK\nNO SURPRISES",
+        "heading_color": "#36393f",
+        "background_color": "#ffffff",
+        "badge_bg_color": "#141517",
+        "icon_color": "#e31e24",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "elevate_intent_blocks": {
+      "type": "elevate-intent-blocks",
+      "blocks": {
+        "intent_bikes": {
+          "type": "intent_card",
+          "settings": {
+            "eyebrow": "READY TO RIDE",
+            "heading": "Looking for a complete build?",
+            "button_label": "Shop Complete Bikes",
+            "button_link": "",
+            "description": "Full bikes and framesets — road, gravel, CX. Every one inspected, spec'd, and priced"
+          }
+        },
+        "intent_parts": {
+          "type": "intent_card",
+          "settings": {
+            "eyebrow": "BUILDING YOUR RIG",
+            "heading": "Hunting a\nspecific part?",
+            "button_label": "Shop Parts & Components",
+            "button_link": "",
+            "description": "Groupsets, wheelsets, cockpit, and components. Mechanic-verified specs, daily drops."
+          }
+        },
+        "intent_sell": {
+          "type": "intent_card",
+          "settings": {
+            "eyebrow": "SELL OR TRADE",
+            "heading": "Your gear\nhas value",
+            "button_label": "Get a Free Offer",
+            "button_link": "",
+            "description": "Cash or store credit — fair offer within 24hrs. No auctions, no strangers, no lowball DMs."
+          }
+        }
+      },
+      "block_order": [
+        "intent_bikes",
+        "intent_parts",
+        "intent_sell"
+      ],
+      "settings": {
+        "background_color": "#ffffff",
+        "show_top_divider": true,
+        "show_bottom_divider": true,
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "elevate_parallax_banner": {
+      "type": "elevate-parallax-banner",
+      "settings": {
+        "background_color": "#fdfcfc",
+        "padding_top": 0,
+        "padding_bottom": 0,
+        "word_1": "FRESH",
+        "word_2": "STOCK",
+        "word_3": "EVERY",
+        "word_4": "DAY",
+        "word_color_gray": "#aeb2b8",
+        "word_color_red": "#e31e24",
+        "image": "shopify://shop_images/d85c20b1ae92b32f11a73aaaeb06e79c02c4dd6e.webp",
+        "cta_heading": "One-of-a-kind inventory\nwhen it's gone, it's gone.",
+        "cta_subtitle": "Bookmark this page or Subscribe to get notified.",
+        "input_placeholder": "johndoe@email.com",
+        "button_label": "Subscribe to Newsletter"
+      }
+    },
+    "elevate_what_we_carry": {
+      "type": "elevate-what-we-carry",
+      "blocks": {
+        "card_new": {
+          "type": "inventory_card",
+          "settings": {
+            "badge_icon": "star",
+            "badge_text": "NEW · BELOW RETAIL",
+            "description": "We source directly from brands — overstock, closeouts, and bulk deals — so you get current-model gear at prices you won't find at a standard retailer.",
+            "feature_1": "100% brand new, never ridden",
+            "feature_2": "Direct from the brand, not gray market",
+            "feature_3": "Full manufacturer's warranty applies",
+            "feature_4": "Inspected and packaged before it ships",
+            "cta_label": "SHOP NEW STOCK",
+            "cta_link": ""
+          }
+        },
+        "card_cpo": {
+          "type": "inventory_card",
+          "settings": {
+            "badge_icon": "certificate-solid",
+            "badge_text": "CERTIFIED PRE-OWNED",
+            "description": "Every used item goes through our in-house inspection process — cleaned, photographed, condition-graded, and fully spec'd — so there are no surprises when it arrives.",
+            "feature_1": "Mechanic-inspected and condition-graded",
+            "feature_2": "Full spec sheet on every listing",
+            "feature_3": "Honest condition descriptions, no fluff",
+            "feature_4": "30-day returns if it's not as described",
+            "cta_label": "SHOP CERTIFIED PRE-OWNED",
+            "cta_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "card_new",
+        "card_cpo"
+      ],
+      "settings": {
+        "background_color": "#e2e3e5",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "eyebrow": "OUR INVENTORY",
+        "heading": "WHAT WE CARRY",
+        "subtitle": "Two types of inventory. One standard: every item inspected, spec'd, and priced right before it ships."
+      }
+    },
+    "elevate_cpo_process": {
+      "type": "elevate-cpo-process",
+      "blocks": {
+        "step_sourced": {
+          "type": "step",
+          "settings": {
+            "title": "Sourced",
+            "description": "<p>Bought directly from cyclists. <strong>Every piece is evaluated on arrival</strong> — if it doesn't meet the bar, it doesn't come in.</p>"
+          }
+        },
+        "step_inspected": {
+          "type": "step",
+          "settings": {
+            "title": "Inspected",
+            "description": "<p>Frame integrity, drivetrain, brakes, component wear — all checked and documented line by line. <strong>Nothing assumed.</strong></p>"
+          }
+        },
+        "step_photographed": {
+          "type": "step",
+          "settings": {
+            "title": "Photographed",
+            "description": "<p>20 studio shots per item. Every angle, every scratch. <strong>You see exactly what you're getting</strong> before you decide.</p>"
+          }
+        },
+        "step_listed": {
+          "type": "step",
+          "settings": {
+            "title": "Listed",
+            "description": "<p>Full spec sheet, geometry, and Mechanic's Notes attached. <strong>Goes live only when fully documented.</strong></p>"
+          }
+        }
+      },
+      "block_order": [
+        "step_sourced",
+        "step_inspected",
+        "step_photographed",
+        "step_listed"
+      ],
+      "settings": {
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "eyebrow": "CERTIFIED PRE-OWNED",
+        "heading": "Every item earns its listing.",
+        "subtitle": "Four steps. Same process, every time. No shortcuts.",
+        "primary_label": "Shop CPO Bikes & Gear",
+        "primary_link": "",
+        "secondary_label": "Learn more about CPO",
+        "secondary_link": ""
+      }
+    },
+    "elevate_shop_by_category": {
+      "type": "elevate-shop-by-category",
+      "blocks": {
+        "cat_bikes": {
+          "type": "category",
+          "settings": {
+            "label": "COMPLETE BIKES",
+            "label_mobile": "FULL BIKES",
+            "link": "",
+            "position_x": 6,
+            "position_y": 19,
+            "line_direction": "right",
+            "line_length": 90,
+            "position_x_mobile": 39,
+            "position_y_mobile": 11,
+            "line_direction_mobile": "down",
+            "line_length_mobile": 40
+          }
+        },
+        "cat_groupsets": {
+          "type": "category",
+          "settings": {
+            "label": "GROUPSETS",
+            "link": "",
+            "position_x": 0,
+            "position_y": 58,
+            "line_direction": "right",
+            "line_length": 130,
+            "position_x_mobile": 22,
+            "position_y_mobile": 62,
+            "line_direction_mobile": "up",
+            "line_length_mobile": 40
+          }
+        },
+        "cat_cockpit": {
+          "type": "category",
+          "settings": {
+            "label": "COCKPIT",
+            "link": "",
+            "position_x": 66,
+            "position_y": 21,
+            "line_direction": "left",
+            "line_length": 70,
+            "position_x_mobile": 68,
+            "position_y_mobile": 8,
+            "line_direction_mobile": "down",
+            "line_length_mobile": 24
+          }
+        },
+        "cat_components": {
+          "type": "category",
+          "settings": {
+            "label": "COMPONENTS",
+            "link": "",
+            "position_x": 41,
+            "position_y": 50,
+            "line_direction": "up",
+            "line_length": 195,
+            "position_x_mobile": 50,
+            "position_y_mobile": 52,
+            "line_direction_mobile": "up",
+            "line_length_mobile": 24
+          }
+        },
+        "cat_wheelsets": {
+          "type": "category",
+          "settings": {
+            "label": "WHEELSETS",
+            "link": "",
+            "position_x": 72,
+            "position_y": 73,
+            "line_direction": "left",
+            "line_length": 135,
+            "position_x_mobile": 78,
+            "position_y_mobile": 65,
+            "line_direction_mobile": "up",
+            "line_length_mobile": 32
+          }
+        }
+      },
+      "block_order": [
+        "cat_bikes",
+        "cat_groupsets",
+        "cat_cockpit",
+        "cat_components",
+        "cat_wheelsets"
+      ],
+      "settings": {
+        "padding_top": 24,
+        "padding_bottom": 24,
+        "heading": "Shop By Category",
+        "image": "shopify://shop_images/7a4976b575a6437e6daf5ba47d979d66508abad5.png",
+        "button_label": "BROWSE ALL CATEGORIES",
+        "button_link": ""
+      }
+    },
+    "elevate_faq": {
+      "type": "elevate-faq",
+      "blocks": {
+        "faq_inventory": {
+          "type": "faq",
+          "settings": {
+            "question": "What types of inventory does Elevate carry?",
+            "answer": "Elevate carries two types of inventory: brand-new gear sourced directly from brands at below-retail prices, and certified pre-owned gear bought from cyclists. Every item — new or pre-owned — is inspected, cleaned, and fully documented by our in-house mechanics before it goes live. We list condition honestly so you know exactly what you're getting before you decide."
+          }
+        },
+        "faq_condition": {
+          "type": "faq",
+          "settings": {
+            "question": "How accurate are the condition descriptions?",
+            "answer": "Every listing includes Mechanic's Notes written by the tech who inspected the item — specific, honest, and not filtered through a marketing lens. If there's a scratch on the chainstay or wear on the cassette, it'll say so. We'd rather lose a sale than have a customer surprised by something we didn't disclose."
+          }
+        },
+        "faq_returns": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I return an item if it doesn't match the description?",
+            "answer": "Yes — we offer a 30-day satisfaction guarantee on all purchases. If the item doesn't match what was described, contact us and we'll make it right. Free return shipping is included for condition discrepancies. We stand behind every listing."
+          }
+        },
+        "faq_geometry": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I know if the geometry fits me?",
+            "answer": "Every complete bike listing includes the full geometry table — top tube, stack, reach, head tube angle, and more. If you're unsure, contact our mechanics before you buy. We're familiar with most frames in our catalog and can help you compare to what you're currently riding."
+          }
+        },
+        "faq_sell": {
+          "type": "faq",
+          "settings": {
+            "question": "How does the sell or trade program work?",
+            "answer": "Submit your gear details through our sell form — takes about 2 minutes. We'll send a fair cash or store credit offer within 24hrs. Store credit runs 15–20% higher than cash and can be applied to anything in the catalog. If you accept, we send a free shipping label. Payment is processed within 48hrs of inspection."
+          }
+        },
+        "faq_international": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "Yes. We ship to most countries outside the US. International shipping rates are calculated at checkout based on destination and item weight. Complete bikes ship fully assembled and boxed by our mechanics. All international orders are fully insured and tracked."
+          }
+        }
+      },
+      "block_order": [
+        "faq_inventory",
+        "faq_condition",
+        "faq_returns",
+        "faq_geometry",
+        "faq_sell",
+        "faq_international"
+      ],
+      "settings": {
+        "padding_top": 72,
+        "padding_bottom": 40,
+        "show_divider": true,
+        "heading_line_1": "Questions?",
+        "heading_line_2": "we got the answers",
+        "phone_label": "Call or text us",
+        "phone": "(714) 248-5066",
+        "phone_note": "Mon–Fri, 9AM–5PM PST",
+        "email_label": "Email support",
+        "email": "support@elevatecycling.com",
+        "email_note": "Response within 24hrs",
+        "location_label": "Visit us",
+        "location": "Santa Ana, CA",
+        "location_note": "Warehouse order pickup available",
+        "help_eyebrow": "NEED MORE HELP?",
+        "help_text": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is.",
+        "primary_label": "Visit FAQs",
+        "secondary_label": "Contact Our Mechanics"
       }
     }
   },
   "order": [
     "hero_jVaWmY",
-    "product_list_fa6P9H"
+    "brand_logos_marquee",
+    "elevate_usps",
+    "elevate_intent_blocks",
+    "elevate_parallax_banner",
+    "elevate_what_we_carry",
+    "elevate_cpo_process",
+    "elevate_shop_by_category",
+    "elevate_faq"
   ]
 }

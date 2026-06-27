@@ -93,6 +93,23 @@
       transform: translate3d(calc(-50% - (var(--marquee-gap) / 2)), 0, 0);
     }
   }
+
+  /* ── Mobile: brand logos compact style ── */
+  @media (max-width: 749px) {
+    .marquee__repeated-items {
+      opacity: 0.5;
+      gap: 1.5rem;
+    }
+
+    .marquee__wrapper,
+    .marquee__content {
+      gap: 1.5rem;
+    }
+
+    marquee-component {
+      padding-block: 0.25rem;
+    }
+  }
 {% endstylesheet %}
 
 {% schema %}

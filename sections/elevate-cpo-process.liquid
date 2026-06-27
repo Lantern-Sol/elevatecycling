@@ -1,0 +1,465 @@
+{%- doc -%}
+  Elevate Cycling — CPO Process section.
+  4-step horizontal cards showing how every item earns its listing.
+  Arrow connectors between cards. Two CTA buttons centered below.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width elevate-process"
+  style="
+    --page-content-width: 75rem;
+    --page-width: calc(75rem + var(--page-margin) * 2);
+    padding-block-start: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    padding-block-end: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+  "
+>
+  {%- comment -%} ── Header ── {%- endcomment -%}
+  <div class="elevate-process__header">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="elevate-process__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+    <div class="elevate-process__title-group">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-process__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subtitle != blank -%}
+        <p class="elevate-process__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} ── Steps ── {%- endcomment -%}
+  <div class="elevate-process__steps">
+    {%- for block in section.blocks -%}
+      {%- if block.type == 'step' -%}
+        <div class="elevate-process__step" {{ block.shopify_attributes }}>
+          {%- comment -%} Arrow connector (cards 2+) {%- endcomment -%}
+          {%- if forloop.first == false -%}
+            <div class="elevate-process__arrow" aria-hidden="true">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                {%- render 'icon', icon: 'arrow-right-solid' -%}
+              </svg>
+            </div>
+          {%- endif -%}
+
+          <div class="elevate-process__top-row">
+            <div class="elevate-process__badge">
+              <span>{{ forloop.index }}</span>
+            </div>
+            {%- if block.settings.title != blank -%}
+              <h3 class="elevate-process__step-title">{{ block.settings.title }}</h3>
+            {%- endif -%}
+          </div>
+
+          {%- if block.settings.description != blank -%}
+            <div class="elevate-process__step-desc">
+              {{ block.settings.description }}
+            </div>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} ── CTA row ── {%- endcomment -%}
+  {%- if section.settings.primary_label != blank or section.settings.secondary_label != blank -%}
+    <div class="elevate-process__cta-row">
+      {%- if section.settings.primary_label != blank -%}
+        <a
+          class="elevate-process__btn elevate-process__btn--primary"
+          {% if section.settings.primary_link != blank %}href="{{ section.settings.primary_link }}"{% endif %}
+        >
+          {{ section.settings.primary_label }}
+        </a>
+      {%- endif -%}
+      {%- if section.settings.secondary_label != blank -%}
+        <a
+          class="elevate-process__btn elevate-process__btn--secondary"
+          {% if section.settings.secondary_link != blank %}href="{{ section.settings.secondary_link }}"{% endif %}
+        >
+          {{ section.settings.secondary_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  /* ─── CPO Process ─── */
+
+  /* ── Header — left-aligned on mobile ── */
+  .elevate-process__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: left;
+    margin-bottom: 1rem;
+  }
+
+  .elevate-process__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-process__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.25rem;
+  }
+
+  .elevate-process__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3.5625rem;
+    line-height: 1.2;
+    color: #141517;
+    margin: 0;
+  }
+
+  .elevate-process__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Steps grid ── */
+  .elevate-process__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  /* ── Step card ── */
+  .elevate-process__step {
+    position: relative;
+    background-color: #250A0A;
+    border-radius: 1.5rem;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .elevate-process__top-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ── Number badge ── */
+  .elevate-process__badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    background-color: #E31E24;
+    border-radius: 1rem;
+    flex-shrink: 0;
+  }
+
+  .elevate-process__badge span {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #FDFCFC;
+  }
+
+  /* ── Step title ── */
+  .elevate-process__step-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  /* ── Step description ── */
+  .elevate-process__step-desc,
+  .elevate-process__step-desc p {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  .elevate-process__step-desc strong,
+  .elevate-process__step-desc b {
+    font-weight: 700;
+    color: #FDFCFC;
+  }
+
+  /* ── Arrow connector — visible on mobile as down arrow ── */
+  .elevate-process__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 1rem;
+    top: -1.625rem;
+    z-index: 2;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #141517;
+    border: 0.25rem solid #FDFCFC;
+    border-radius: 999px;
+    padding: 0.5rem;
+    color: #FDFCFC;
+  }
+
+  .elevate-process__arrow svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+    transform: rotate(90deg);
+  }
+
+  /* ── CTA row ── */
+  .elevate-process__cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin-top: 1rem;
+  }
+
+  .elevate-process__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .elevate-process__btn:hover {
+    opacity: 0.9;
+  }
+
+  .elevate-process__btn--primary {
+    background-color: #E31E24;
+    color: #FDFCFC;
+    border: none;
+  }
+
+  .elevate-process__btn--secondary {
+    background-color: transparent;
+    color: #141517;
+    border: 0.03125rem solid #141517;
+  }
+
+  /* ─── Desktop (48rem / 768px) ─── */
+  @media (min-width: 48rem) {
+    .elevate-process__header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .elevate-process__steps {
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    .elevate-process__step {
+      flex: 1;
+      min-width: 0;
+      padding: 1.5rem 2rem;
+    }
+
+    .elevate-process__badge {
+      border-radius: 0.5rem;
+    }
+
+    /* ── Arrow connector — horizontal on desktop ── */
+    .elevate-process__arrow {
+      right: auto;
+      top: 50%;
+      left: -1.75rem;
+      transform: translateY(-50%);
+    }
+
+    .elevate-process__arrow svg {
+      transform: none;
+    }
+
+    /* ── CTA row horizontal ── */
+    .elevate-process__cta-row {
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .elevate-process__btn {
+      width: auto;
+      min-width: 17rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "CPO Process",
+  "tag": "section",
+  "class": "elevate-process-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "CERTIFIED PRE-OWNED"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Every item earns its listing."
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Four steps. Same process, every time. No shortcuts."
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Shop CPO Bikes & Gear"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Learn more about CPO"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step title",
+          "default": "Step"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description (bold text renders white)",
+          "default": "<p>Step description goes here. <strong>Bold text will appear white.</strong></p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CPO Process",
+      "settings": {
+        "eyebrow": "CERTIFIED PRE-OWNED",
+        "heading": "Every item earns its listing.",
+        "subtitle": "Four steps. Same process, every time. No shortcuts."
+      },
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "Sourced",
+            "description": "<p>Bought directly from cyclists. <strong>Every piece is evaluated on arrival</strong> — if it doesn't meet the bar, it doesn't come in.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Inspected",
+            "description": "<p>Frame integrity, drivetrain, brakes, component wear — all checked and documented line by line. <strong>Nothing assumed.</strong></p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Photographed",
+            "description": "<p>20 studio shots per item. Every angle, every scratch. <strong>You see exactly what you're getting</strong> before you decide.</p>"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Listed",
+            "description": "<p>Full spec sheet, geometry, and Mechanic's Notes attached. <strong>Goes live only when fully documented.</strong></p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

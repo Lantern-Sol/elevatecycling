@@ -8,7 +8,24 @@
   @param {object} [attributes] - Additional HTML attributes to add to the element
 {%- enddoc -%}
 
-{%- if icon != 'none' and image_upload == blank -%}
+{%- if theme_asset != blank -%}
+  {%- assign width_rem = width | divided_by: 16.0 -%}
+  {%- assign mobile_width_rem = mobile_width | divided_by: 16.0 -%}
+  {%- assign asset_class = class_name | append: ' icon-theme-asset' -%}
+  {%- if invert_colors -%}
+    {%- assign asset_class = asset_class | append: ' icon-theme-asset--inverted' -%}
+  {%- endif -%}
+  <img
+    class="{{ asset_class | strip }}"
+    src="{{ theme_asset | asset_url }}"
+    alt=""
+    loading="lazy"
+    width="{{ width }}"
+    height="auto"
+    style="--width: {{ width_rem }}rem; --mobile-width: {{ mobile_width_rem }}rem;"
+    {% if attributes %}{{ attributes }}{% endif %}
+  >
+{%- elsif icon != 'none' and image_upload == blank -%}
   <svg
     class="{{ class_name | append: ' icon-default' | strip }}"
     aria-hidden="true"

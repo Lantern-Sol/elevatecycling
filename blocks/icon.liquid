@@ -13,6 +13,8 @@
   {% render 'icon-or-image',
     icon: block_settings.icon,
     image_upload: block_settings.image_upload,
+    theme_asset: block_settings.theme_asset,
+    invert_colors: block_settings.invert_colors,
     width: block_settings.width,
     mobile_width: block_settings.width-mobile,
     class_name: icon_block_class,
@@ -48,6 +50,14 @@
     .icon-block__media {
       width: var(--mobile-width);
     }
+  }
+
+  .icon-theme-asset {
+    opacity: 0.5;
+  }
+
+  .icon-theme-asset--inverted {
+    filter: brightness(0) invert(1);
   }
 {% endstylesheet %}
 
@@ -304,6 +314,19 @@
       "type": "image_picker",
       "id": "image_upload",
       "label": "t:settings.image_icon"
+    },
+    {
+      "type": "text",
+      "id": "theme_asset",
+      "label": "Theme asset",
+      "info": "Filename from assets/ folder (e.g. brand-sram.svg). Overrides icon & image."
+    },
+    {
+      "type": "checkbox",
+      "id": "invert_colors",
+      "label": "Invert colors",
+      "info": "Inverts dark logos to white for dark backgrounds.",
+      "default": false
     },
     {
       "type": "range",

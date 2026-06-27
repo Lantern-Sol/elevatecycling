@@ -1,45 +1,24 @@
 {%- assign block_settings = block.settings -%}
 {%- assign plain_text = block_settings.text | strip_newlines | strip_html | strip -%}
-{%- assign block_index = section.blocks | find_index: 'id', block.id -%}
 
 {%- unless plain_text == '' -%}
-  <slideshow-slide
-    ref="slides[]"
-    class="
-      announcement-bar__slide
-      text-block
-      text-block--{{ block.id }}
-      text-block--align-center
-      text-block--full-width
-      custom-typography
-      {% if block_settings.font_size != "" %}custom-font-size{% endif %}
-      {% if block_settings.weight != "" %}custom-font-weight{% endif %}
-    "
-    style="
-      {% render 'typography-style', settings: block_settings, preset: 'custom' %}
-      {% if block_settings.text_color != blank %}--color: {{ block_settings.text_color }}; --color-rgb: {{ block_settings.text_color.rgb }};{% endif %}
-      --width: 100%;
-      --text-align: center;
-      --line-height: 1;
-    "
-    {{ block.shopify_attributes }}
-    aria-hidden="{% if block_index == 0 %}false{% else %}true{% endif %}"
-  >
-    <p class="announcement-bar__text">
-      {{ block.settings.text }}
-    </p>
-
-    {% if block_settings.link != blank %}
-      <a
-        class="announcement-bar__link"
-        href="{{ block_settings.link }}"
+  <div class="usps-bar__item" {{ block.shopify_attributes }}>
+    {%- if block_settings.icon != blank and block_settings.icon != 'none' -%}
+      <svg
+        class="usps-bar__icon"
+        aria-hidden="true"
+        focusable="false"
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="currentColor"
       >
-        <span class="visually-hidden">
-          {{ block_settings.text | strip_html }}
-        </span>
-      </a>
-    {% endif %}
-  </slideshow-slide>
+        {%- render 'icon', icon: block_settings.icon -%}
+      </svg>
+    {%- endif -%}
+    <span class="usps-bar__text">{{ block_settings.text }}</span>
+  </div>
 {%- endunless -%}
 
 {% stylesheet %}
@@ -118,6 +97,19 @@
   "name": "t:names.announcement",
   "tag": null,
   "settings": [
+    {
+      "type": "select",
+      "id": "icon",
+      "label": "Icon",
+      "options": [
+        { "value": "none", "label": "None" },
+        { "value": "certified", "label": "Certified" },
+        { "value": "tags-solid", "label": "Price tags" },
+        { "value": "shipping-fast", "label": "Shipping" },
+        { "value": "eye-solid", "label": "Full specs" }
+      ],
+      "default": "none"
+    },
     {
       "type": "inline_richtext",
       "id": "text",
