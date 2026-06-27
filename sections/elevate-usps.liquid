@@ -283,30 +283,29 @@
 
 {% javascript %}
   (function () {
-    var btn = document.querySelector('[data-usps-scroll]');
-    if (!btn) return;
+    document.querySelectorAll('[data-usps-scroll]').forEach(function (btn) {
+      var wrap = btn.closest('.elevate-usps__wrap');
+      if (!wrap) return;
 
-    var wrap = btn.closest('.elevate-usps__wrap');
-    if (!wrap) return;
+      btn.addEventListener('click', function () {
+        var badges = wrap.querySelectorAll('.elevate-usps__badge');
+        var scrollLeft = wrap.scrollLeft;
+        var wrapRect = wrap.getBoundingClientRect();
+        var center = scrollLeft + wrapRect.width / 2;
 
-    btn.addEventListener('click', function () {
-      var badges = wrap.querySelectorAll('.elevate-usps__badge');
-      var scrollLeft = wrap.scrollLeft;
-      var wrapRect = wrap.getBoundingClientRect();
-      var center = scrollLeft + wrapRect.width / 2;
-
-      /* Find the first badge whose center is past the current center */
-      for (var i = 0; i < badges.length; i++) {
-        var badgeCenter = badges[i].offsetLeft + badges[i].offsetWidth / 2;
-        if (badgeCenter > center + 10) {
-          badges[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-          return;
+        /* Find the first badge whose center is past the current center */
+        for (var i = 0; i < badges.length; i++) {
+          var badgeCenter = badges[i].offsetLeft + badges[i].offsetWidth / 2;
+          if (badgeCenter > center + 10) {
+            badges[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            return;
+          }
         }
-      }
-      /* If at the end, loop back to first */
-      if (badges[0]) {
-        badges[0].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-      }
+        /* If at the end, loop back to first */
+        if (badges[0]) {
+          badges[0].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+      });
     });
   })();
 {% endjavascript %}

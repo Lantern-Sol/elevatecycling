@@ -21,8 +21,7 @@
     alt=""
     loading="lazy"
     width="{{ width }}"
-    height="auto"
-    style="--width: {{ width_rem }}rem; --mobile-width: {{ mobile_width_rem }}rem;"
+    style="--width: {{ width_rem }}rem; --mobile-width: {{ mobile_width_rem }}rem; height: auto;"
     {% if attributes %}{{ attributes }}{% endif %}
   >
 {%- elsif icon != 'none' and image_upload == blank -%}

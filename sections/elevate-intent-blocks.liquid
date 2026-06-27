@@ -351,48 +351,47 @@
 {% javascript %}
   /* ─── Intent Blocks — stepper dot sync ─── */
   (function () {
-    var section = document.querySelector('.elevate-intent');
-    if (!section) return;
+    document.querySelectorAll('.elevate-intent').forEach(function (section) {
+      var row = section.querySelector('.elevate-intent__row');
+      var dots = section.querySelectorAll('.elevate-intent__dot');
+      if (!row || dots.length < 2) return;
 
-    var row = section.querySelector('.elevate-intent__row');
-    var dots = section.querySelectorAll('.elevate-intent__dot');
-    if (!row || dots.length < 2) return;
+      /* Scroll → update active dot */
+      var ticking = false;
+      row.addEventListener('scroll', function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () {
+          var cols = row.querySelectorAll('.elevate-intent__col');
+          var scrollLeft = row.scrollLeft;
+          var rowRect = row.getBoundingClientRect();
+          var center = scrollLeft + rowRect.width / 2;
+          var closest = 0;
+          var minDist = Infinity;
+          cols.forEach(function (col, i) {
+            var colCenter = col.offsetLeft + col.offsetWidth / 2;
+            var dist = Math.abs(colCenter - center);
+            if (dist < minDist) {
+              minDist = dist;
+              closest = i;
+            }
+          });
+          dots.forEach(function (dot, i) {
+            dot.classList.toggle('elevate-intent__dot--active', i === closest);
+          });
+          ticking = false;
+        });
+      });
 
-    /* Scroll → update active dot */
-    var ticking = false;
-    row.addEventListener('scroll', function () {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () {
-        var cols = row.querySelectorAll('.elevate-intent__col');
-        var scrollLeft = row.scrollLeft;
-        var rowRect = row.getBoundingClientRect();
-        var center = scrollLeft + rowRect.width / 2;
-        var closest = 0;
-        var minDist = Infinity;
-        cols.forEach(function (col, i) {
-          var colCenter = col.offsetLeft + col.offsetWidth / 2;
-          var dist = Math.abs(colCenter - center);
-          if (dist < minDist) {
-            minDist = dist;
-            closest = i;
+      /* Dot click → scroll to card */
+      dots.forEach(function (dot) {
+        dot.addEventListener('click', function () {
+          var index = parseInt(dot.getAttribute('data-slide-index'), 10);
+          var cols = row.querySelectorAll('.elevate-intent__col');
+          if (cols[index]) {
+            cols[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
           }
         });
-        dots.forEach(function (dot, i) {
-          dot.classList.toggle('elevate-intent__dot--active', i === closest);
-        });
-        ticking = false;
-      });
-    });
-
-    /* Dot click → scroll to card */
-    dots.forEach(function (dot) {
-      dot.addEventListener('click', function () {
-        var index = parseInt(dot.getAttribute('data-slide-index'), 10);
-        var cols = row.querySelectorAll('.elevate-intent__col');
-        if (cols[index]) {
-          cols[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
-        }
       });
     });
   })();

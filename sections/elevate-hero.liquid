@@ -95,15 +95,17 @@
 
     {%- comment -%} Two-tone heading {%- endcomment -%}
     {%- if section.settings.heading_line_1 != blank or section.settings.heading_line_2 != blank -%}
-      {%- assign h1_words = section.settings.heading_line_1 | split: ' ' -%}
       {%- assign accent = section.settings.heading_accent_text -%}
       <h1 class="elevate-hero__heading">
-        {{- h1_words.first -}}
-        <br class="elevate-hero__br--mb">
-        {%- for word in h1_words -%}
-          {%- unless forloop.first -%}{{ ' ' }}{{ word }}{%- endunless -%}
-        {%- endfor -%}
-        {{ ' ' }}<br class="elevate-hero__br--dt">
+        {%- if section.settings.heading_line_1 != blank -%}
+          {%- assign h1_words = section.settings.heading_line_1 | split: ' ' -%}
+          {{- h1_words.first -}}
+          <br class="elevate-hero__br--mb">
+          {%- for word in h1_words -%}
+            {%- unless forloop.first -%}{{ ' ' }}{{ word }}{%- endunless -%}
+          {%- endfor -%}
+          {{ ' ' }}<br class="elevate-hero__br--dt">
+        {%- endif -%}
         {%- if accent != blank and section.settings.heading_line_2 contains accent -%}
           {%- assign parts = section.settings.heading_line_2 | split: accent -%}
           {{- parts[0] -}}
@@ -444,16 +446,15 @@
 
 {% javascript %}
   (function () {
-    var btn = document.querySelector('[data-scroll-next]');
-    if (!btn) return;
-
-    btn.addEventListener('click', function () {
-      var hero = btn.closest('.shopify-section');
-      if (!hero) return;
-      var next = hero.nextElementSibling;
-      if (next) {
-        next.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
+    document.querySelectorAll('[data-scroll-next]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var hero = btn.closest('.shopify-section');
+        if (!hero) return;
+        var next = hero.nextElementSibling;
+        if (next) {
+          next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
     });
   })();
 {% endjavascript %}

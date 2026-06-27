@@ -111,13 +111,13 @@
           {%- endif -%}
         </div>
         <div class="elevate-parallax__cta-form">
-          {%- form 'customer', id: 'parallax-newsletter' -%}
+          {%- form 'customer', id: 'parallax-newsletter-' | append: section.id -%}
             <input type="hidden" name="contact[tags]" value="newsletter">
             <div class="elevate-parallax__form-fields">
               <div class="elevate-parallax__field">
-                <label for="parallax-email" class="elevate-parallax__label">Email</label>
+                <label for="parallax-email-{{ section.id }}" class="elevate-parallax__label">Email</label>
                 <input
-                  id="parallax-email"
+                  id="parallax-email-{{ section.id }}"
                   type="email"
                   name="contact[email]"
                   class="elevate-parallax__input"
