@@ -1,0 +1,922 @@
+{%- comment -%}
+  Elevate Cycling — Sell or Trade section.
+  Two-column layout: left sticky wheel animation (sprite + CSS rotate),
+  right dark panel with 3-step process, two offer cards, and CTA.
+{%- endcomment -%}
+
+<div
+  class="section section--page-width elevate-sell"
+  style="
+    --page-content-width: 75rem;
+    --page-width: calc(75rem + var(--page-margin) * 2);
+    padding-block-start: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    padding-block-end: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+  "
+>
+  <div
+    class="elevate-sell__container"
+    data-sell-section
+    data-sprite-src="{{ 'wheel-sprite.webp' | asset_url }}"
+    data-sprite-cols="10"
+    data-sprite-rows="5"
+    data-sprite-total="50"
+    data-frame-size="480"
+  >
+    {%- comment -%}
+      Background layer — carries the gradient + border-radius + overflow clip.
+      Separated from the layout so that overflow:clip doesn't kill sticky.
+    {%- endcomment -%}
+    <div class="elevate-sell__bg" aria-hidden="true"></div>
+
+    {%- comment -%} ── Left column: wheel animation ── {%- endcomment -%}
+    <div class="elevate-sell__media">
+      <canvas
+        class="elevate-sell__canvas"
+        width="480"
+        height="480"
+        role="img"
+        tabindex="-1"
+        aria-label="{{ section.settings.heading | default: 'Wheel transition animation' | strip_newlines | escape }}"
+      ></canvas>
+
+      {%- comment -%} Static fallback while sprite loads / if JS disabled {%- endcomment -%}
+      {%- if section.settings.image != blank -%}
+        <noscript>
+          {{
+            section.settings.image
+            | image_url: width: 900
+            | image_tag:
+              loading: 'lazy',
+              class: 'elevate-sell__img',
+              widths: '400, 600, 900',
+              sizes: '(min-width: 48rem) 40vw, 80vw',
+              alt: section.settings.image.alt | default: section.settings.heading
+          }}
+        </noscript>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Right column: content panel ── {%- endcomment -%}
+    <div
+      class="elevate-sell__panel"
+      {%- if section.settings.panel_image != blank %}
+        style="background-image: url('{{ section.settings.panel_image | image_url: width: 1200 }}')"
+      {%- endif %}
+    >
+      {%- comment -%} Header ── {%- endcomment -%}
+      <div class="elevate-sell__header">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="elevate-sell__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+
+        <div class="elevate-sell__title-group">
+          {%- if section.settings.heading != blank -%}
+            <h2 class="elevate-sell__heading">{{ section.settings.heading | newline_to_br }}</h2>
+          {%- endif -%}
+          {%- if section.settings.subtitle != blank -%}
+            <p class="elevate-sell__subtitle">{{ section.settings.subtitle }}</p>
+          {%- endif -%}
+        </div>
+      </div>
+
+      {%- comment -%} ── Steps ── {%- endcomment -%}
+      {%- assign steps = section.blocks | where: 'type', 'step' -%}
+      {%- if steps.size > 0 -%}
+        <ol class="elevate-sell__steps" role="list">
+          {%- for block in steps -%}
+            <li class="elevate-sell__step" {{ block.shopify_attributes }}>
+              <div class="elevate-sell__dot-col">
+                <span class="elevate-sell__dot" aria-hidden="true">
+                  {{ forloop.index | prepend: '00' | slice: -2, 2 }}
+                </span>
+                {%- unless forloop.last -%}
+                  <span class="elevate-sell__connector" aria-hidden="true"></span>
+                {%- endunless -%}
+              </div>
+              <div class="elevate-sell__step-text">
+                {%- if block.settings.title != blank -%}
+                  <h3 class="elevate-sell__step-title">{{ block.settings.title }}</h3>
+                {%- endif -%}
+                {%- if block.settings.description != blank -%}
+                  <p class="elevate-sell__step-desc">{{ block.settings.description }}</p>
+                {%- endif -%}
+              </div>
+            </li>
+          {%- endfor -%}
+        </ol>
+      {%- endif -%}
+
+      {%- comment -%} ── Offer cards ── {%- endcomment -%}
+      {%- assign offers = section.blocks | where: 'type', 'offer_card' -%}
+      {%- if offers.size > 0 -%}
+        <div class="elevate-sell__offers">
+          {%- for block in offers -%}
+            <div class="elevate-sell__offer" {{ block.shopify_attributes }}>
+              <div class="elevate-sell__offer-top">
+                <span class="elevate-sell__offer-badge">
+                  <span class="elevate-sell__offer-dot" aria-hidden="true"></span>
+                  {{ block.settings.badge_label }}
+                </span>
+                {%- if block.settings.hint != blank -%}
+                  <span class="elevate-sell__offer-hint">{{ block.settings.hint }}</span>
+                {%- endif -%}
+              </div>
+              {%- if block.settings.title != blank -%}
+                <p class="elevate-sell__offer-title">{{ block.settings.title }}</p>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <p class="elevate-sell__offer-desc">{{ block.settings.description }}</p>
+              {%- endif -%}
+            </div>
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} ── Footer + CTA ── {%- endcomment -%}
+      <div class="elevate-sell__footer">
+        {%- if section.settings.footer_text != blank -%}
+          <p class="elevate-sell__footer-text">{{ section.settings.footer_text }}</p>
+        {%- endif -%}
+        {%- if section.settings.cta_label != blank -%}
+          <a
+            class="elevate-sell__btn"
+            {% if section.settings.cta_link != blank %}href="{{ section.settings.cta_link }}"{% endif %}
+          >
+            {{ section.settings.cta_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Sell or Trade ─── */
+
+  .elevate-sell__container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+
+  /* Background layer — gradient + rounded corners, positioned behind content.
+     On mobile: hidden (panel IS the visible container).
+     On desktop: carries the gradient behind the two-column layout. */
+  .elevate-sell__bg {
+    display: none;
+  }
+
+  /* ── Media — mobile: small white circle at top-right ── */
+  .elevate-sell__media {
+    position: absolute;
+    top: -6.875rem; /* -110px — overflows above container */
+    right: 0;
+    width: 13.5rem; /* 216px */
+    height: 13.5rem;
+    background-color: #FDFCFC;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    padding: 0;
+  }
+
+  .elevate-sell__canvas {
+    width: 11.25rem; /* 180px */
+    max-width: none;
+    aspect-ratio: 1 / 1;
+    filter: drop-shadow(0 1.25rem 0.78rem rgba(0, 0, 0, 0.1))
+            drop-shadow(0 0.5rem 0.3125rem rgba(0, 0, 0, 0.1));
+    will-change: transform;
+  }
+
+  .elevate-sell__img {
+    width: 11.25rem;
+    max-width: none;
+    height: auto;
+    object-fit: contain;
+    filter: drop-shadow(0 1.25rem 0.78rem rgba(0, 0, 0, 0.1))
+            drop-shadow(0 0.5rem 0.3125rem rgba(0, 0, 0, 0.1));
+  }
+
+  /* ── Content panel — mobile: full-width visible container ── */
+  .elevate-sell__panel {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2.5rem 2rem;
+    background-color: #141517;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 0;
+    position: relative;
+    z-index: 1;
+    margin-inline: calc(-1 * var(--page-margin, 1.5rem));
+    padding-inline: var(--page-margin, 1.5rem);
+  }
+
+  /* ── Header ── */
+  .elevate-sell__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    /* Extra top padding to clear the overlapping wheel circle */
+    padding-block-start: 2rem;
+  }
+
+  .elevate-sell__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-sell__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-sell__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-sell__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  /* ── Steps ── */
+  .elevate-sell__steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .elevate-sell__step {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .elevate-sell__dot-col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-block-start: 0.0625rem;
+    flex-shrink: 0;
+    align-self: stretch;
+  }
+
+  .elevate-sell__dot {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: #E31E24;
+    border-radius: 6.25rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #FDFCFC;
+    flex-shrink: 0;
+  }
+
+  .elevate-sell__connector {
+    display: block;
+    width: 0.0625rem;
+    flex: 1;
+    min-height: 1rem;
+    background-color: #E31E24;
+  }
+
+  .elevate-sell__step-text {
+    display: flex;
+    flex-direction: column;
+    padding-block-end: 0.75rem;
+    min-width: 0;
+  }
+
+  .elevate-sell__step:last-child .elevate-sell__step-text {
+    padding-block-end: 0;
+  }
+
+  .elevate-sell__step-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    letter-spacing: -0.0125rem;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-sell__step-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  /* ── Offer cards ── */
+  .elevate-sell__offers {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-sell__offer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+    border-radius: 1.5rem;
+    background: radial-gradient(
+      ellipse at bottom left,
+      #6D1316 0%,
+      #490E10 50%,
+      #250A0A 100%
+    );
+  }
+
+  .elevate-sell__offer-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .elevate-sell__offer-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3125rem;
+    padding: 0.25rem 1rem;
+    background-color: #6D1316;
+    border-radius: 6.25rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+  }
+
+  .elevate-sell__offer-dot {
+    display: block;
+    width: 0.25rem;
+    height: 0.25rem;
+    background-color: #E31E24;
+    border-radius: 50%;
+  }
+
+  .elevate-sell__offer-hint {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #AEB2B8;
+  }
+
+  .elevate-sell__offer-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 400;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-sell__offer-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  /* ── Footer + CTA ── */
+  .elevate-sell__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-sell__footer-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  .elevate-sell__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background-color: #E31E24;
+    border: none;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    color: #FDFCFC;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .elevate-sell__btn:hover {
+    opacity: 0.9;
+  }
+
+  .elevate-sell__btn:focus-visible {
+    outline: 0.125rem solid #FDFCFC;
+    outline-offset: 0.125rem;
+  }
+
+  /* ─── Desktop (48rem / 768px) ─── */
+  @media (min-width: 48rem) {
+    .elevate-sell__container {
+      flex-direction: row;
+      align-items: stretch;
+      height: 59.3125rem; /* 949px — fixed like Figma */
+      width: 63rem; /* 418 media + 590 panel = ~1008px */
+      max-width: 100%;
+      margin-inline: auto;
+    }
+
+    /* Show bg layer on desktop */
+    .elevate-sell__bg {
+      display: block;
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, #250A0A, #6D1316);
+      border-radius: 2rem;
+      overflow: hidden;
+      z-index: 0;
+      pointer-events: none;
+    }
+
+    /* Desktop media: side column, not absolute circle */
+    .elevate-sell__media {
+      position: relative;
+      top: auto;
+      right: auto;
+      width: 26.125rem; /* 418px */
+      height: auto;
+      flex-shrink: 0;
+      flex-grow: 0;
+      padding: 0 0 2rem 2rem;
+      background-color: transparent;
+      border-radius: 0;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .elevate-sell__canvas,
+    .elevate-sell__img {
+      width: 24.125rem; /* 386px */
+      position: sticky;
+      top: 6rem;
+      margin-top: -35%;
+      margin-bottom: -35%;
+    }
+
+    .elevate-sell__panel {
+      width: 36.875rem;
+      flex-shrink: 0;
+      padding: 2.5rem 2rem 2.5rem 4.5rem;
+      border-radius: 0 2rem 2rem 0;
+      margin-inline: 0;
+      padding-inline: 0;
+      padding-left: 4.5rem;
+      padding-right: 2rem;
+    }
+
+    .elevate-sell__header {
+      padding-block-start: 0;
+    }
+
+    .elevate-sell__heading {
+      font-size: 3rem;
+    }
+
+    .elevate-sell__offers {
+      gap: 0.75rem;
+    }
+
+    .elevate-sell__offer {
+      padding: 1rem;
+    }
+
+    .elevate-sell__btn {
+      width: 100%;
+    }
+  }
+
+  /* ─── Reduced motion ─── */
+  @media (prefers-reduced-motion: reduce) {
+    .elevate-sell__btn {
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /*
+   * Sprite-sheet scroll-driven animation for the wheel transition.
+   *
+   * Sprite: 10×5 grid (50 frames at 480px each) in wheel-sprite.webp.
+   * Desktop (≥768px): draws the frame matching scroll progress.
+   * Mobile (<768px): auto-animates in a loop (~15fps).
+   * Reduced motion: shows frame 0 only.
+   *
+   * NOTE: Horizon theme uses .page-wrapper with overflow-y:auto as the
+   * scroll container on desktop (≥990px). We detect and bind to whichever
+   * element actually scrolls.
+   */
+  /* Defer init so browser scroll restoration completes first */
+  (function () {
+    function init() {
+    var DESKTOP_MQ = '(min-width: 48rem)';
+    var REDUCED_MOTION_MQ = '(prefers-reduced-motion: reduce)';
+
+    /* Horizon's .page-wrapper is the scroll container on desktop.
+       Fall back to window if not found or if it doesn't scroll. */
+    function getScrollContainer() {
+      var pw = document.querySelector('.page-wrapper');
+      if (pw) {
+        var style = window.getComputedStyle(pw);
+        var ov = style.overflowY;
+        if (ov === 'auto' || ov === 'scroll') return pw;
+      }
+      return window;
+    }
+
+    document.querySelectorAll('[data-sell-section]').forEach(function (section) {
+      var canvas = section.querySelector('.elevate-sell__canvas');
+      if (!canvas) return;
+
+      var ctx = canvas.getContext('2d');
+      var cols = parseInt(section.dataset.spriteCols, 10);
+      var total = parseInt(section.dataset.spriteTotal, 10);
+      var frameSize = parseInt(section.dataset.frameSize, 10);
+      var spriteSrc = section.dataset.spriteSrc;
+
+      var sprite = new Image();
+      var loaded = false;
+      var currentFrame = -1;
+      var ticking = false;
+      var mobileRaf = null;
+      var scrollTarget = null;
+
+      var prefersReduced = window.matchMedia(REDUCED_MOTION_MQ).matches;
+      var isDesktop = window.matchMedia(DESKTOP_MQ);
+
+      function drawFrame(index) {
+        if (!loaded || index === currentFrame) return;
+        currentFrame = index;
+
+        var col = index % cols;
+        var row = Math.floor(index / cols);
+        var sx = col * frameSize;
+        var sy = row * frameSize;
+
+        ctx.clearRect(0, 0, frameSize, frameSize);
+        ctx.drawImage(sprite, sx, sy, frameSize, frameSize, 0, 0, frameSize, frameSize);
+      }
+
+      /* How many full rotations the wheel makes across the scroll range */
+      var ROTATIONS = 0.25;
+
+      /* ── Desktop: scroll-driven ── */
+      function scrubOnScroll() {
+        if (ticking) return;
+        ticking = true;
+
+        requestAnimationFrame(function () {
+          ticking = false;
+
+          var rect = section.getBoundingClientRect();
+          var viewH = window.innerHeight;
+
+          /* progress: 0 when section top enters viewport bottom,
+             1 when section bottom exits viewport top.
+             The wheel starts spinning immediately as the section scrolls in. */
+          var scrolled = viewH - rect.top;
+          var range = rect.height + viewH;
+          var progress = Math.max(0, Math.min(1, scrolled / range));
+          var frame = Math.min(total - 1, Math.floor(progress * total));
+
+          drawFrame(frame);
+
+          /* Rotate the canvas element so the wheel spins as you scroll */
+          var degrees = progress * 360 * ROTATIONS;
+          canvas.style.transform = 'rotate(' + degrees + 'deg)';
+        });
+      }
+
+      function enableDesktop() {
+        if (mobileRaf) {
+          cancelAnimationFrame(mobileRaf);
+          mobileRaf = null;
+        }
+
+        scrollTarget = getScrollContainer();
+        scrollTarget.addEventListener('scroll', scrubOnScroll, { passive: true });
+        scrubOnScroll();
+      }
+
+      function disableDesktop() {
+        if (scrollTarget) {
+          scrollTarget.removeEventListener('scroll', scrubOnScroll);
+          scrollTarget = null;
+        }
+      }
+
+      /* ── Mobile: auto-animate loop ── */
+      function enableMobile() {
+        disableDesktop();
+        canvas.style.transform = '';
+
+        var fps = 15;
+        var interval = 1000 / fps;
+        var last = 0;
+        var frame = 0;
+        var rotation = 0;
+        var degreesPerFrame = (360 * ROTATIONS) / total;
+
+        function loop(timestamp) {
+          mobileRaf = requestAnimationFrame(loop);
+          if (timestamp - last < interval) return;
+          last = timestamp;
+          drawFrame(frame);
+          frame = (frame + 1) % total;
+          rotation = (rotation + degreesPerFrame) % 360;
+          canvas.style.transform = 'rotate(' + rotation + 'deg)';
+        }
+
+        mobileRaf = requestAnimationFrame(loop);
+      }
+
+      function handleBreakpoint() {
+        if (!loaded) return;
+        if (isDesktop.matches) {
+          enableDesktop();
+        } else {
+          enableMobile();
+        }
+      }
+
+      /* ── Load sprite ── */
+      sprite.onload = function () {
+        loaded = true;
+        drawFrame(0);
+
+        if (prefersReduced) return;
+        handleBreakpoint();
+      };
+      sprite.src = spriteSrc;
+
+      isDesktop.addEventListener('change', handleBreakpoint);
+    });
+    }
+
+    /* Wait for scroll restoration to finish before initializing */
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(init);
+    } else {
+      setTimeout(init, 200);
+    }
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Sell or Trade",
+  "tag": "section",
+  "class": "elevate-sell-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "header",
+      "content": "Wheel media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Fallback image (if JS disabled)",
+      "info": "Recommended: transparent PNG, 900×900 px. The wheel animation uses the sprite sheet (wheel-sprite.webp) automatically."
+    },
+    {
+      "type": "image_picker",
+      "id": "panel_image",
+      "label": "Panel background image",
+      "info": "Optional texture or photo behind the content panel."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "SELL OR TRADE"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Upgrading?\nYour gear has value."
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Get a fair cash offer or store credit toward your next build — no auctions, no strangers."
+    },
+    {
+      "type": "header",
+      "content": "Footer & CTA"
+    },
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Footer benefits line",
+      "default": "Free shipping label included · No obligation to accept · Payment within 48hrs"
+    },
+    {
+      "type": "text",
+      "id": "cta_label",
+      "label": "Button label",
+      "default": "Get a free offer on your gear"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Step title",
+          "default": "Step"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Step description",
+          "default": "Step description goes here."
+        }
+      ]
+    },
+    {
+      "type": "offer_card",
+      "name": "Offer card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "badge_label",
+          "label": "Badge label",
+          "default": "STORE CREDIT"
+        },
+        {
+          "type": "text",
+          "id": "hint",
+          "label": "Hint (top-right)",
+          "default": "+15–20% vs cash"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Get more for your gear."
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Store credit runs 15–20% higher than cash. Apply it toward anything in the catalog."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Sell or Trade",
+      "settings": {
+        "eyebrow": "SELL OR TRADE",
+        "heading": "Upgrading?\nYour gear has value.",
+        "subtitle": "Get a fair cash offer or store credit toward your next build — no auctions, no strangers.",
+        "footer_text": "Free shipping label included · No obligation to accept · Payment within 48hrs",
+        "cta_label": "Get a free offer on your gear"
+      },
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "Tell us what you have",
+            "description": "Submit your gear details online. Takes 2 minutes."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Get your offer",
+            "description": "Fair cash or store credit offer within 24hrs."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Ship it or drop off",
+            "description": "Free shipping label or visit our Santa Ana warehouse."
+          }
+        },
+        {
+          "type": "offer_card",
+          "settings": {
+            "badge_label": "STORE CREDIT",
+            "hint": "+15–20% vs cash",
+            "title": "Get more for your gear.",
+            "description": "Store credit runs 15–20% higher than cash. Apply it toward anything in the catalog."
+          }
+        },
+        {
+          "type": "offer_card",
+          "settings": {
+            "badge_label": "CASH OFFER",
+            "hint": "Fast payment",
+            "title": "Get paid directly.",
+            "description": "We'll make a fair offer and send payment within 48hrs of gear inspection."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

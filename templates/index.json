@@ -262,6 +262,20 @@
         "padding_bottom": 40
       }
     },
+    "elevate_new_arrivals": {
+      "type": "elevate-new-arrivals",
+      "settings": {
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "collection": "frontpage",
+        "max_products": 6,
+        "eyebrow": "NEW ARRIVALS",
+        "heading": "Check what Just Dropped!",
+        "footer_text": "Stock moves fast. New items drop every weekday.",
+        "cta_label": "View All Arrivals",
+        "cta_link": ""
+      }
+    },
     "elevate_parallax_banner": {
       "type": "elevate-parallax-banner",
       "settings": {
@@ -399,6 +413,7 @@
           "type": "category",
           "settings": {
             "label": "GROUPSETS",
+            "label_mobile": "",
             "link": "",
             "position_x": 0,
             "position_y": 58,
@@ -414,6 +429,7 @@
           "type": "category",
           "settings": {
             "label": "COCKPIT",
+            "label_mobile": "",
             "link": "",
             "position_x": 66,
             "position_y": 21,
@@ -429,6 +445,7 @@
           "type": "category",
           "settings": {
             "label": "COMPONENTS",
+            "label_mobile": "",
             "link": "",
             "position_x": 41,
             "position_y": 50,
@@ -444,6 +461,7 @@
           "type": "category",
           "settings": {
             "label": "WHEELSETS",
+            "label_mobile": "",
             "link": "",
             "position_x": 72,
             "position_y": 73,
@@ -470,6 +488,68 @@
         "image": "shopify://shop_images/7a4976b575a6437e6daf5ba47d979d66508abad5.png",
         "button_label": "BROWSE ALL CATEGORIES",
         "button_link": ""
+      }
+    },
+    "elevate_sell_or_trade": {
+      "type": "elevate-sell-or-trade",
+      "blocks": {
+        "step_tell": {
+          "type": "step",
+          "settings": {
+            "title": "Tell us what you have",
+            "description": "Submit your gear details online. Takes 2 minutes."
+          }
+        },
+        "step_offer": {
+          "type": "step",
+          "settings": {
+            "title": "Get your offer",
+            "description": "Fair cash or store credit offer within 24hrs."
+          }
+        },
+        "step_ship": {
+          "type": "step",
+          "settings": {
+            "title": "Ship it or drop off",
+            "description": "Free shipping label or visit our Santa Ana warehouse."
+          }
+        },
+        "offer_credit": {
+          "type": "offer_card",
+          "settings": {
+            "badge_label": "STORE CREDIT",
+            "hint": "+15–20% vs cash",
+            "title": "Get more for your gear.",
+            "description": "Store credit runs 15–20% higher than cash. Apply it toward anything in the catalog."
+          }
+        },
+        "offer_cash": {
+          "type": "offer_card",
+          "settings": {
+            "badge_label": "CASH OFFER",
+            "hint": "Fast payment",
+            "title": "Get paid directly.",
+            "description": "We'll make a fair offer and send payment within 48hrs of gear inspection."
+          }
+        }
+      },
+      "block_order": [
+        "step_tell",
+        "step_offer",
+        "step_ship",
+        "offer_credit",
+        "offer_cash"
+      ],
+      "settings": {
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "panel_image": "shopify://shop_images/Frame_2147228001.png",
+        "eyebrow": "SELL OR TRADE",
+        "heading": "Upgrading?\nYour gear has value.",
+        "subtitle": "Get a fair cash offer or store credit toward your next build — no auctions, no strangers.",
+        "footer_text": "Free shipping label included · No obligation to accept · Payment within 48hrs",
+        "cta_label": "Get a free offer on your gear",
+        "cta_link": ""
       }
     },
     "elevate_faq": {
@@ -535,16 +615,21 @@
         "phone_label": "Call or text us",
         "phone": "(714) 248-5066",
         "phone_note": "Mon–Fri, 9AM–5PM PST",
+        "phone_link": "",
         "email_label": "Email support",
         "email": "support@elevatecycling.com",
         "email_note": "Response within 24hrs",
+        "email_link": "",
         "location_label": "Visit us",
         "location": "Santa Ana, CA",
         "location_note": "Warehouse order pickup available",
+        "location_link": "",
         "help_eyebrow": "NEED MORE HELP?",
         "help_text": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is.",
         "primary_label": "Visit FAQs",
-        "secondary_label": "Contact Our Mechanics"
+        "primary_link": "",
+        "secondary_label": "Contact Our Mechanics",
+        "secondary_link": ""
       }
     }
   },
@@ -553,10 +638,12 @@
     "brand_logos_marquee",
     "elevate_usps",
     "elevate_intent_blocks",
+    "elevate_new_arrivals",
     "elevate_parallax_banner",
     "elevate_what_we_carry",
     "elevate_cpo_process",
     "elevate_shop_by_category",
+    "elevate_sell_or_trade",
     "elevate_faq"
   ]
 }

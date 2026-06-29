@@ -111,7 +111,8 @@
           {%- endif -%}
         </div>
         <div class="elevate-parallax__cta-form">
-          {%- form 'customer', id: 'parallax-newsletter-' | append: section.id -%}
+          {%- assign parallax_form_id = 'parallax-newsletter-' | append: section.id -%}
+          {%- form 'contact', id: parallax_form_id -%}
             <input type="hidden" name="contact[tags]" value="newsletter">
             <div class="elevate-parallax__form-fields">
               <div class="elevate-parallax__field">
