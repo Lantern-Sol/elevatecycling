@@ -1,0 +1,713 @@
+{%- doc -%}
+  Elevate Cycling — FAQ section.
+  Desktop: two-column layout — sticky left sidebar (heading, contacts, CTA)
+  + right accordion. Mobile: heading → accordion → divider → contacts → CTA.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width elevate-faq"
+  style="
+    --page-content-width: 75rem;
+    --page-width: calc(75rem + var(--page-margin) * 2);
+    padding-block-start: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    padding-block-end: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+  "
+>
+  {%- comment -%} ── Top divider ── {%- endcomment -%}
+  {%- if section.settings.show_divider -%}
+    <div class="elevate-faq__divider"></div>
+  {%- endif -%}
+
+  {%- comment -%} ── Two-column layout ── {%- endcomment -%}
+  <div class="elevate-faq__layout">
+
+    {%- comment -%} ── Heading — always first ── {%- endcomment -%}
+    {%- if section.settings.heading_line_1 != blank or section.settings.heading_line_2 != blank -%}
+      <h2 class="elevate-faq__heading">
+        {%- if section.settings.heading_line_1 != blank -%}
+          <span class="elevate-faq__heading-line1">{{ section.settings.heading_line_1 }}</span>
+        {%- endif -%}
+        {%- if section.settings.heading_line_2 != blank -%}
+          <span class="elevate-faq__heading-line2">{{ section.settings.heading_line_2 }}</span>
+        {%- endif -%}
+      </h2>
+    {%- endif -%}
+
+    {%- comment -%} ── FAQ accordion ── {%- endcomment -%}
+    <div class="elevate-faq__accordion">
+      {%- for block in section.blocks -%}
+        {%- if block.type == 'faq' -%}
+          <details class="elevate-faq__item" {{ block.shopify_attributes }}>
+            <summary class="elevate-faq__question">
+              <span class="elevate-faq__question-text">{{ block.settings.question }}</span>
+              <svg class="elevate-faq__chevron" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                {%- render 'icon', icon: 'angle-down-solid' -%}
+              </svg>
+            </summary>
+            <div class="elevate-faq__answer">
+              <p>{{ block.settings.answer }}</p>
+            </div>
+          </details>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} ── Bottom section: divider (mobile), contacts, help ── {%- endcomment -%}
+    <div class="elevate-faq__bottom">
+      <div class="elevate-faq__divider elevate-faq__divider--bottom"></div>
+
+      {%- comment -%} Contact cards {%- endcomment -%}
+      <div class="elevate-faq__contacts">
+        {%- if section.settings.phone != blank -%}
+          <a class="elevate-faq__contact" {% if section.settings.phone_link != blank %}href="{{ section.settings.phone_link }}"{% endif %}>
+            <div class="elevate-faq__contact-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                {%- render 'icon', icon: 'phone-solid' -%}
+              </svg>
+            </div>
+            <div class="elevate-faq__contact-text">
+              <span class="elevate-faq__contact-label">{{ section.settings.phone_label }}</span>
+              <span class="elevate-faq__contact-value">{{ section.settings.phone }}</span>
+              <span class="elevate-faq__contact-note">{{ section.settings.phone_note }}</span>
+            </div>
+            <svg class="elevate-faq__contact-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.email != blank -%}
+          <a class="elevate-faq__contact" {% if section.settings.email_link != blank %}href="{{ section.settings.email_link }}"{% endif %}>
+            <div class="elevate-faq__contact-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                {%- render 'icon', icon: 'mail-solid' -%}
+              </svg>
+            </div>
+            <div class="elevate-faq__contact-text">
+              <span class="elevate-faq__contact-label">{{ section.settings.email_label }}</span>
+              <span class="elevate-faq__contact-value">{{ section.settings.email }}</span>
+              <span class="elevate-faq__contact-note">{{ section.settings.email_note }}</span>
+            </div>
+            <svg class="elevate-faq__contact-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.location != blank -%}
+          <a class="elevate-faq__contact" {% if section.settings.location_link != blank %}href="{{ section.settings.location_link }}"{% endif %}>
+            <div class="elevate-faq__contact-icon">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                {%- render 'icon', icon: 'map-pin-solid' -%}
+              </svg>
+            </div>
+            <div class="elevate-faq__contact-text">
+              <span class="elevate-faq__contact-label">{{ section.settings.location_label }}</span>
+              <span class="elevate-faq__contact-value">{{ section.settings.location }}</span>
+              <span class="elevate-faq__contact-note">{{ section.settings.location_note }}</span>
+            </div>
+            <svg class="elevate-faq__contact-arrow" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Need more help {%- endcomment -%}
+      <div class="elevate-faq__help">
+        {%- if section.settings.help_eyebrow != blank -%}
+          <p class="elevate-faq__help-eyebrow">{{ section.settings.help_eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.help_text != blank -%}
+          <p class="elevate-faq__help-text">{{ section.settings.help_text }}</p>
+        {%- endif -%}
+        <div class="elevate-faq__help-buttons">
+          {%- if section.settings.primary_label != blank -%}
+            <a
+              class="elevate-faq__btn elevate-faq__btn--primary"
+              {% if section.settings.primary_link != blank %}href="{{ section.settings.primary_link }}"{% endif %}
+            >
+              {{ section.settings.primary_label }}
+            </a>
+          {%- endif -%}
+          {%- if section.settings.secondary_label != blank -%}
+            <a
+              class="elevate-faq__btn elevate-faq__btn--secondary"
+              {% if section.settings.secondary_link != blank %}href="{{ section.settings.secondary_link }}"{% endif %}
+            >
+              {{ section.settings.secondary_label }}
+            </a>
+          {%- endif -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── FAQ Section ─── */
+
+  /* ── Divider ── */
+  .elevate-faq__divider {
+    width: 100%;
+    height: 1px;
+    background-color: #E2E3E5;
+    margin-bottom: 2rem;
+  }
+
+  /* ── Layout — mobile: stacked column ── */
+  .elevate-faq__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* ── Heading ── */
+  .elevate-faq__heading {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+  }
+
+  .elevate-faq__heading-line1 {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #E31E24;
+  }
+
+  .elevate-faq__heading-line2 {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #E31E24;
+  }
+
+  /* ── Accordion ── */
+  .elevate-faq__accordion {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-faq__item {
+    background-color: rgba(226, 227, 229, 0.4);
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .elevate-faq__question {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    padding: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .elevate-faq__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .elevate-faq__question-text {
+    flex: 1;
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    color: #1C2D38;
+  }
+
+  .elevate-faq__chevron {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    color: #36393F;
+    transition: transform 0.3s ease;
+  }
+
+  .elevate-faq__item[open] .elevate-faq__chevron {
+    transform: rotate(180deg);
+  }
+
+  .elevate-faq__answer {
+    padding: 0 1rem 1rem 1.5rem;
+  }
+
+  .elevate-faq__answer p {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Bottom section (contacts + help) ── */
+  .elevate-faq__bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-faq__divider--bottom {
+    margin-bottom: 1rem;
+  }
+
+  /* ── Contact cards ── */
+  .elevate-faq__contacts {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-faq__contact {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    border: 0.03125rem solid #AEB2B8;
+    border-radius: 1rem;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+  }
+
+  .elevate-faq__contact:hover {
+    background-color: rgba(226, 227, 229, 0.3);
+  }
+
+  .elevate-faq__contact-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background-color: #F1DBDC;
+    border-radius: 0.625rem;
+    flex-shrink: 0;
+  }
+
+  .elevate-faq__contact-icon svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #E31E24;
+  }
+
+  .elevate-faq__contact-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .elevate-faq__contact-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #141517;
+  }
+
+  .elevate-faq__contact-value {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #D61D18;
+  }
+
+  .elevate-faq__contact-note {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #6B7280;
+  }
+
+  .elevate-faq__contact-arrow {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+    color: #AEB2B8;
+  }
+
+  /* ── Need more help ── */
+  .elevate-faq__help {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-faq__help-eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-faq__help-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #6B7280;
+    margin: 0;
+  }
+
+  .elevate-faq__help-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-faq__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.875rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+
+  .elevate-faq__btn:hover {
+    opacity: 0.9;
+  }
+
+  .elevate-faq__btn--primary {
+    background-color: #E31E24;
+    color: #FDFCFC;
+    border: none;
+  }
+
+  .elevate-faq__btn--secondary {
+    background-color: transparent;
+    color: #141517;
+    border: 0.03125rem solid #141517;
+  }
+
+  /* ─── Desktop (48rem / 768px) ─── */
+  @media (min-width: 48rem) {
+    .elevate-faq__divider {
+      width: 49.375rem;
+      margin-inline: auto;
+    }
+
+    .elevate-faq__layout {
+      display: grid;
+      grid-template-columns: 24rem 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 1.5rem 2rem;
+      align-items: start;
+    }
+
+    /* Heading top-left */
+    .elevate-faq__heading {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    /* Accordion spans entire right column */
+    .elevate-faq__accordion {
+      grid-column: 2;
+      grid-row: 1 / -1;
+    }
+
+    /* Bottom section (contacts + help) under heading */
+    .elevate-faq__bottom {
+      grid-column: 1;
+      grid-row: 2;
+      position: sticky;
+      top: 6rem;
+    }
+
+    /* Hide mobile-only bottom divider on desktop */
+    .elevate-faq__divider--bottom {
+      display: none;
+    }
+
+    .elevate-faq__heading-line1 {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-faq__heading-line2 {
+      font-size: 3rem;
+    }
+
+    .elevate-faq__question-text {
+      font-size: 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ",
+  "tag": "section",
+  "class": "elevate-faq-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "checkbox",
+      "id": "show_divider",
+      "label": "Show top divider",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Heading line 1",
+      "default": "Questions?"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading line 2",
+      "default": "we got the answers"
+    },
+    {
+      "type": "header",
+      "content": "Contact — Phone"
+    },
+    {
+      "type": "text",
+      "id": "phone_label",
+      "label": "Label",
+      "default": "Call or text us"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone number",
+      "default": "(714) 248-5066"
+    },
+    {
+      "type": "text",
+      "id": "phone_note",
+      "label": "Note",
+      "default": "Mon–Fri, 9AM–5PM PST"
+    },
+    {
+      "type": "url",
+      "id": "phone_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Contact — Email"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Label",
+      "default": "Email support"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email address",
+      "default": "support@elevatecycling.com"
+    },
+    {
+      "type": "text",
+      "id": "email_note",
+      "label": "Note",
+      "default": "Response within 24hrs"
+    },
+    {
+      "type": "url",
+      "id": "email_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Contact — Location"
+    },
+    {
+      "type": "text",
+      "id": "location_label",
+      "label": "Label",
+      "default": "Visit us"
+    },
+    {
+      "type": "text",
+      "id": "location",
+      "label": "Location",
+      "default": "Santa Ana, CA"
+    },
+    {
+      "type": "text",
+      "id": "location_note",
+      "label": "Note",
+      "default": "Warehouse order pickup available"
+    },
+    {
+      "type": "url",
+      "id": "location_link",
+      "label": "Link"
+    },
+    {
+      "type": "header",
+      "content": "Need More Help"
+    },
+    {
+      "type": "text",
+      "id": "help_eyebrow",
+      "label": "Eyebrow",
+      "default": "NEED MORE HELP?"
+    },
+    {
+      "type": "textarea",
+      "id": "help_text",
+      "label": "Description",
+      "default": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is."
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Visit FAQs"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Contact Our Mechanics"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question",
+          "default": "Frequently asked question"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer",
+          "default": "Answer to the question goes here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ",
+      "settings": {
+        "heading_line_1": "Questions?",
+        "heading_line_2": "we got the answers",
+        "help_eyebrow": "NEED MORE HELP?",
+        "help_text": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is.",
+        "primary_label": "Visit FAQs",
+        "secondary_label": "Contact Our Mechanics"
+      },
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "question": "What types of inventory does Elevate carry?",
+            "answer": "Elevate carries two types of inventory: brand-new gear sourced directly from brands at below-retail prices, and certified pre-owned gear bought from cyclists. Every item — new or pre-owned — is inspected, cleaned, and fully documented by our in-house mechanics before it goes live. We list condition honestly so you know exactly what you're getting before you decide."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How accurate are the condition descriptions?",
+            "answer": "Every listing includes Mechanic's Notes written by the tech who inspected the item — specific, honest, and not filtered through a marketing lens. If there's a scratch on the chainstay or wear on the cassette, it'll say so. We'd rather lose a sale than have a customer surprised by something we didn't disclose."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Can I return an item if it doesn't match the description?",
+            "answer": "Yes — we offer a 30-day satisfaction guarantee on all purchases. If the item doesn't match what was described, contact us and we'll make it right. Free return shipping is included for condition discrepancies. We stand behind every listing."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How do I know if the geometry fits me?",
+            "answer": "Every complete bike listing includes the full geometry table — top tube, stack, reach, head tube angle, and more. If you're unsure, contact our mechanics before you buy. We're familiar with most frames in our catalog and can help you compare to what you're currently riding."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "How does the sell or trade program work?",
+            "answer": "Submit your gear details through our sell form — takes about 2 minutes. We'll send a fair cash or store credit offer within 24hrs. Store credit runs 15–20% higher than cash and can be applied to anything in the catalog. If you accept, we send a free shipping label. Payment is processed within 48hrs of inspection."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "Yes. We ship to most countries outside the US. International shipping rates are calculated at checkout based on destination and item weight. Complete bikes ship fully assembled and boxed by our mechanics. All international orders are fully insured and tracked."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

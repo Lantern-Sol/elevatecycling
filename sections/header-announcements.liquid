@@ -1,126 +1,118 @@
-{% if section.blocks.size > 1 %}
-  <script
-    src="{{ 'announcement-bar.js' | asset_url }}"
-    type="module"
-    fetchpriority="low"
-  ></script>
-{% endif %}
+{%- comment -%}
+  Elevate Cycling — USP announcement bar.
+  Desktop: all items in a row.
+  Mobile: horizontal CSS marquee (items cloned via JS for seamless loop).
+{%- endcomment -%}
 
-{% render 'contrast-override', background_color: section.settings.background_color, section_id: section.id %}
+{%- liquid
+  assign bg = section.settings.background_color | default: '#E31E24'
+  assign fg = section.settings.text_color | default: '#FDFCFC'
+-%}
+
+{% render 'contrast-override', background_color: bg, text_color: fg, section_id: section.id %}
 
 <div class="section-background color-custom-{{ section.id }}"></div>
 <aside
-  class="announcement-bar spacing-style section section--{{ section.settings.section_width }} color-custom-{{ section.id }}"
-  style="{% render 'spacing-padding', settings: section.settings %}; --border-bottom-width: {{ section.settings.divider_width }}px;{% if section.settings.divider_color != blank %} --color-border: {{ section.settings.divider_color }};{% endif %}"
+  class="usps-bar spacing-style section section--full-width color-custom-{{ section.id }}"
+  style="
+    {% render 'spacing-padding', settings: section.settings %};
+    --usps-speed: {{ section.settings.marquee_speed }}s;
+  "
+  aria-label="Store highlights"
 >
-  {% liquid
-    assign autoplay = false
-    assign show_arrows = false
-    if section.blocks.size > 1
-      assign autoplay = true
-      assign show_arrows = true
-    endif
-  %}
-
-  <announcement-bar-component
-    class="announcement-bar__slider"
-    {% if autoplay == true %}
-      autoplay="{{ section.settings.speed }}" aria-live="polite"
-    {% endif %}
-  >
-    {% if show_arrows %}
-      {% render 'slideshow-arrows', icon_style: 'chevron' %}
-    {% endif %}
-
-    <div class="announcement-bar__slides">
-      {% content_for 'blocks' %}
-    </div>
-  </announcement-bar-component>
+  <div class="usps-bar__track">
+    {% content_for 'blocks' %}
+  </div>
 </aside>
 
+<script>
+  (function () {
+    var track = document.querySelector(
+      '#shopify-section-{{ section.id }} .usps-bar__track'
+    );
+    if (!track) return;
+
+    var items = track.querySelectorAll('.usps-bar__item');
+    if (!items.length) return;
+
+    items.forEach(function (item) {
+      var clone = item.cloneNode(true);
+      clone.classList.add('usps-bar__item--clone');
+      clone.setAttribute('aria-hidden', 'true');
+      clone.removeAttribute('data-shopify-editor-block');
+      track.appendChild(clone);
+    });
+  })();
+</script>
+
 {% stylesheet %}
-  .announcement-bar {
-    border-block-end: var(--border-bottom-width) solid var(--color-border);
-  }
-
-  .announcement-bar__slider {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+  .usps-bar {
+    overflow: hidden;
     position: relative;
-
-    @media screen and (max-width: 749px) {
-      grid-column: 1 / -1;
-    }
   }
 
-  .announcement-bar__slides {
-    display: grid;
-    grid: [stack] auto / [stack] auto;
-    width: calc(100% - var(--button-size) * 2);
-    max-width: 680px;
-    margin-inline: auto;
-  }
-
-  .announcement-bar__slides > * {
-    grid-area: stack;
-  }
-
-  .announcement-bar__slide {
-    transition: opacity 0.5s ease-in-out, visibility 0.5s ease-in-out;
-    content-visibility: visible;
-
-    &[aria-hidden='true'] {
-      opacity: 0;
-      visibility: hidden;
-    }
-  }
-
-  .announcement-bar__slider slideshow-arrows {
-    padding: 0;
-    mix-blend-mode: normal;
-  }
-
-  .announcement-bar__slider slideshow-arrows .slideshow-control {
-    color: var(--color-foreground);
-    display: none;
-  }
-
-  .announcement-bar__slider .slideshow-control {
+  /* ── Track — mobile marquee ── */
+  .usps-bar__track {
     display: flex;
-    padding: 0;
-    width: var(--button-size);
-    height: var(--button-size);
     align-items: center;
-    justify-content: center;
-    opacity: 1;
-    animation: none;
+    gap: 2.5rem;
+    width: max-content;
+    animation: usps-marquee var(--usps-speed, 20s) linear infinite;
+  }
 
-    @media screen and (min-width: 750px) {
-      --slideshow-control-offset: calc((var(--button-size) - var(--icon-size-xs)) / 2);
-
-      .section--page-width &.slideshow-control--previous {
-        transform: translateX(var(--slideshow-control-offset));
-      }
+  @keyframes usps-marquee {
+    to {
+      translate: -50% 0;
     }
   }
 
-  .announcement-bar__slider .slideshow-control .svg-wrapper {
-    width: var(--icon-size-xs);
-    height: var(--icon-size-xs);
+  @media (prefers-reduced-motion: reduce) {
+    .usps-bar__track {
+      animation: none;
+      width: 100%;
+      overflow-x: auto;
+    }
   }
 
-  .announcement-bar__slide {
-    place-content: center;
+  /* ── Individual item ── */
+  .usps-bar__item {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+    white-space: nowrap;
   }
 
-  .announcement-bar__text:first-child {
+  .usps-bar__icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .usps-bar__text {
+    font-family: var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+  }
+
+  .usps-bar__text p {
     margin: 0;
   }
 
-  .announcement-bar__link {
-    position: absolute;
-    inset: 0;
+  /* ── Desktop — static row ── */
+  @media screen and (min-width: 61.9375rem) {
+    .usps-bar__track {
+      animation: none;
+      width: 100%;
+      justify-content: space-between;
+      padding-inline: 4.5rem;
+    }
+
+    .usps-bar__item--clone {
+      display: none;
+    }
   }
 {% endstylesheet %}
 
@@ -137,56 +129,30 @@
   },
   "settings": [
     {
-      "type": "range",
-      "id": "speed",
-      "label": "t:settings.scroll_speed",
-      "min": 2,
-      "max": 10,
-      "default": 5,
-      "unit": "sec"
-    },
-    {
       "type": "header",
       "content": "t:content.appearance"
-    },
-    {
-      "type": "select",
-      "id": "section_width",
-      "label": "t:settings.section_width",
-      "options": [
-        {
-          "value": "page-width",
-          "label": "t:options.page"
-        },
-        {
-          "value": "full-width",
-          "label": "t:options.full"
-        }
-      ],
-      "default": "page-width"
     },
     {
       "type": "color",
       "id": "background_color",
       "label": "t:settings.background_color",
-      "placeholder": "t:settings.default"
-    },
-    {
-      "type": "range",
-      "id": "divider_width",
-      "label": "t:settings.divider_thickness",
-      "min": 0,
-      "max": 5,
-      "step": 0.5,
-      "unit": "px",
-      "default": 0
+      "default": "#E31E24"
     },
     {
       "type": "color",
-      "id": "divider_color",
-      "label": "t:settings.divider_color",
-      "placeholder": "t:settings.default",
-      "visible_if": "{{ section.settings.divider_width > 0 }}"
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#FDFCFC"
+    },
+    {
+      "type": "range",
+      "id": "marquee_speed",
+      "label": "Mobile scroll speed",
+      "min": 10,
+      "max": 60,
+      "step": 5,
+      "unit": "s",
+      "default": 20
     },
     {
       "type": "header",
@@ -200,7 +166,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 15
+      "default": 8
     },
     {
       "type": "range",
@@ -210,7 +176,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 15
+      "default": 8
     },
     {
       "type": "checkbox",
@@ -226,7 +192,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 15,
+      "default": 8,
       "visible_if": "{{ section.settings.use_mobile_padding }}"
     },
     {
@@ -237,7 +203,7 @@
       "max": 100,
       "step": 1,
       "unit": "px",
-      "default": 15,
+      "default": 8,
       "visible_if": "{{ section.settings.use_mobile_padding }}"
     }
   ],

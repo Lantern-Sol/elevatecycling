@@ -1,0 +1,693 @@
+{%- doc -%}
+  Elevate Cycling — Shop By Category section.
+  Large bike image with category labels positioned around it,
+  dark red radial gradient background, Bebas Neue labels.
+{%- enddoc -%}
+
+{%- comment -%} Bebas Neue font {%- endcomment -%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap"
+  media="print"
+  onload="this.media='all'"
+>
+<noscript>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap">
+</noscript>
+
+<div
+  class="elevate-category"
+  style="
+    padding-block-start: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    padding-block-end: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+  "
+>
+  {%- comment -%} ── Heading ── {%- endcomment -%}
+  {%- if section.settings.heading != blank -%}
+    <h2 class="elevate-category__heading">{{ section.settings.heading }}</h2>
+  {%- endif -%}
+
+  {%- comment -%} ── Background "E" watermark ── {%- endcomment -%}
+  <img
+    src="{{ 'elevate-e-watermark.png' | asset_url }}"
+    alt=""
+    aria-hidden="true"
+    loading="lazy"
+    class="elevate-category__watermark"
+    width="751"
+    height="576"
+  >
+
+  {%- comment -%} ── Image + labels container ── {%- endcomment -%}
+  <div class="elevate-category__visual">
+    {%- if section.settings.image != blank -%}
+      {{
+        section.settings.image
+        | image_url: width: 1400
+        | image_tag:
+          widths: '600, 900, 1200, 1400',
+          sizes: '(min-width: 75rem) 1200px, calc(100vw - 2rem)',
+          loading: 'lazy',
+          class: 'elevate-category__image',
+          alt: section.settings.image.alt | default: 'Shop by category'
+      }}
+    {%- else -%}
+      <div class="elevate-category__image-placeholder"></div>
+    {%- endif -%}
+
+    {%- comment -%} Desktop labels — positioned over image with connector lines {%- endcomment -%}
+    {%- for block in section.blocks -%}
+      <div
+        class="elevate-category__pin elevate-category__pin--{{ block.settings.line_direction }} elevate-category__pin--m-{{ block.settings.line_direction_mobile }}"
+        style="
+          --pin-left: {{ block.settings.position_x }}%;
+          --pin-top: {{ block.settings.position_y }}%;
+          --line-len: {{ block.settings.line_length | divided_by: 16.0 }}rem;
+          --pin-left-m: {{ block.settings.position_x_mobile }}%;
+          --pin-top-m: {{ block.settings.position_y_mobile }}%;
+          --line-len-m: {{ block.settings.line_length_mobile | divided_by: 16.0 }}rem;
+        "
+        {{ block.shopify_attributes }}
+      >
+        <a
+          class="elevate-category__label"
+          {% if block.settings.link != blank %}href="{{ block.settings.link }}"{% endif %}
+        >
+          {%- if block.settings.label_mobile != blank -%}
+            <span class="elevate-category__label-text elevate-category__label-text--dt">{{ block.settings.label }}</span>
+            <span class="elevate-category__label-text elevate-category__label-text--mb">{{ block.settings.label_mobile }}</span>
+          {%- else -%}
+            <span class="elevate-category__label-text">{{ block.settings.label }}</span>
+          {%- endif -%}
+        </a>
+        {%- if block.settings.line_direction != 'none' -%}
+          <span class="elevate-category__line" aria-hidden="true"></span>
+        {%- endif -%}
+      </div>
+    {%- endfor -%}
+  </div>
+
+  {%- comment -%} ── Bottom CTA ── {%- endcomment -%}
+  {%- if section.settings.button_label != blank -%}
+    <a
+      class="elevate-category__btn"
+      {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% endif %}
+    >
+      {{ section.settings.button_label }}
+    </a>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  /* ─── Shop By Category ─── */
+  .elevate-category {
+    background: radial-gradient(
+      ellipse at center,
+      #E31E24 0%,
+      #AC171B 25%,
+      #740F12 50%,
+      #580C0E 62.5%,
+      #3D080A 75%,
+      #210405 87.5%,
+      #130203 93.75%,
+      #050101 100%
+    );
+    border-radius: 1.5rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow: clip;
+    padding-inline: 1.5rem;
+    min-height: 28.125rem;
+    justify-content: center;
+    gap: 0;
+  }
+
+  /* ── Background "E" watermark ── */
+  .elevate-category__watermark {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: clamp(18rem, 52vw, 47rem);
+    height: auto;
+    z-index: 0;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  /* ── Heading ── */
+  .elevate-category__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3.5625rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* ── Visual container (image + labels) ── */
+  .elevate-category__visual {
+    position: relative;
+    width: 100%;
+    max-width: 75rem;
+    height: 18.125rem;
+    flex-shrink: 0;
+  }
+
+  .elevate-category__image {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    position: relative;
+    z-index: 1;
+  }
+
+  .elevate-category__image-placeholder {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 1rem;
+  }
+
+  /* ── Label pill ── */
+  .elevate-category__label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background-color: #FDFCFC;
+    border-radius: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .elevate-category__label:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.3);
+  }
+
+  .elevate-category__label-text {
+    font-family: 'Bebas Neue', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: #E31E24;
+    text-transform: uppercase;
+  }
+
+  /* Mobile: show mobile label, hide desktop label */
+  .elevate-category__label-text--dt {
+    display: none;
+  }
+
+  .elevate-category__label-text--mb {
+    display: inline;
+  }
+
+  /* ── Pin (label + line) — mobile-first, positioned over image ── */
+  .elevate-category__pin {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: absolute;
+    z-index: 3;
+    left: var(--pin-left-m, 50%);
+    top: var(--pin-top-m, 50%);
+    transform: translateX(-50%);
+  }
+
+  /* ── Mobile connector line — always vertical dashed ── */
+  .elevate-category__line {
+    display: block;
+    flex-shrink: 0;
+    position: relative;
+    width: 1px;
+    height: var(--line-len-m, 1.75rem);
+    background: repeating-linear-gradient(
+      to bottom,
+      #FDFCFC 0, #FDFCFC 2px,
+      transparent 2px, transparent 4px
+    );
+  }
+
+  /* End dot */
+  .elevate-category__line::after {
+    content: '';
+    position: absolute;
+    width: 0.375rem;
+    height: 0.375rem;
+    border-radius: 50%;
+    background-color: #FDFCFC;
+  }
+
+  /* Mobile down: label on top, line below — dot at bottom */
+  .elevate-category__pin--m-down .elevate-category__line::after {
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 50%);
+  }
+
+  /* Mobile up: line above label — dot at top */
+  .elevate-category__pin--m-up .elevate-category__line {
+    order: -1;
+  }
+  .elevate-category__pin--m-up .elevate-category__line::after {
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  /* ── Bottom CTA ── */
+  .elevate-category__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1rem;
+    border: 0.03125rem solid #FDFCFC;
+    border-radius: 0.75rem;
+    color: #FDFCFC;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    text-decoration: none;
+    text-transform: uppercase;
+    white-space: nowrap;
+    margin-top: 1rem;
+    transition: background-color 0.2s ease;
+    position: relative;
+    z-index: 2;
+  }
+
+  .elevate-category__btn:hover {
+    background-color: rgba(253, 252, 252, 0.1);
+  }
+
+  /* ─── Desktop (48rem / 768px) ─── */
+  @media (min-width: 48rem) {
+    .elevate-category {
+      border-radius: 2rem;
+      min-height: auto;
+    }
+
+    .elevate-category__heading {
+      font-size: clamp(3.5rem, 7vw, 6.25rem);
+      line-height: 1;
+      margin-bottom: -2.5rem;
+    }
+
+    /* Desktop pin positioning */
+    .elevate-category__pin {
+      left: var(--pin-left, 50%);
+      top: var(--pin-top, 50%);
+      transform: none;
+    }
+
+    .elevate-category__label {
+      padding: 0.75rem 1.5rem 0.25rem;
+      border-radius: 0.75rem;
+    }
+
+    .elevate-category__label-text {
+      font-size: clamp(1.5rem, 3.3vw, 3rem);
+    }
+
+    .elevate-category__label-text--dt {
+      display: inline;
+    }
+
+    .elevate-category__label-text--mb {
+      display: none;
+    }
+
+    /* Reset mobile line + direction */
+    .elevate-category__line {
+      width: auto;
+      height: auto;
+      background: none;
+    }
+    .elevate-category__pin--m-up .elevate-category__line {
+      order: 0;
+    }
+
+    /* ── Horizontal lines ── */
+    .elevate-category__pin--right .elevate-category__line,
+    .elevate-category__pin--left .elevate-category__line {
+      height: 1px;
+      width: var(--line-len, 5rem);
+      background: repeating-linear-gradient(
+        to right,
+        #FDFCFC 0, #FDFCFC 2px,
+        transparent 2px, transparent 4px
+      );
+    }
+
+    /* ── Vertical lines ── */
+    .elevate-category__pin--up .elevate-category__line,
+    .elevate-category__pin--down .elevate-category__line {
+      width: 1px;
+      height: var(--line-len, 5rem);
+      background: repeating-linear-gradient(
+        to bottom,
+        #FDFCFC 0, #FDFCFC 2px,
+        transparent 2px, transparent 4px
+      );
+    }
+
+    /* Pill LEFT, line extends RIGHT */
+    .elevate-category__pin--right {
+      flex-direction: row;
+    }
+    .elevate-category__pin--right .elevate-category__line::after {
+      right: 0;
+      top: 50%;
+      left: auto;
+      bottom: auto;
+      transform: translate(50%, -50%);
+    }
+
+    /* Line extends LEFT, pill RIGHT */
+    .elevate-category__pin--left {
+      flex-direction: row-reverse;
+    }
+    .elevate-category__pin--left .elevate-category__line::after {
+      left: 0;
+      top: 50%;
+      right: auto;
+      bottom: auto;
+      transform: translate(-50%, -50%);
+    }
+
+    /* Pill on top, line DOWN */
+    .elevate-category__pin--down {
+      flex-direction: column;
+      align-items: center;
+    }
+    .elevate-category__pin--down .elevate-category__line::after {
+      bottom: 0;
+      left: 50%;
+      top: auto;
+      right: auto;
+      transform: translate(-50%, 50%);
+    }
+
+    /* Line UP, pill at bottom */
+    .elevate-category__pin--up {
+      flex-direction: column;
+      align-items: center;
+    }
+    .elevate-category__pin--up .elevate-category__line {
+      order: -1;
+    }
+    .elevate-category__pin--up .elevate-category__line::after {
+      top: 0;
+      left: 50%;
+      bottom: auto;
+      right: auto;
+      transform: translate(-50%, -50%);
+    }
+
+    .elevate-category__visual {
+      height: auto;
+      margin-bottom: -2.5rem;
+    }
+
+    .elevate-category__image {
+      height: auto;
+    }
+
+    .elevate-category__btn {
+      margin-top: 1.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Shop By Category",
+  "tag": "section",
+  "class": "elevate-category-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shop By Category"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Bike image"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "BROWSE ALL CATEGORIES"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category Label",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label text (desktop)",
+          "default": "CATEGORY"
+        },
+        {
+          "type": "text",
+          "id": "label_mobile",
+          "label": "Label text (mobile)",
+          "info": "Leave blank to use the desktop label on both."
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Link"
+        },
+        {
+          "type": "range",
+          "id": "position_x",
+          "label": "Horizontal position (%)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50,
+          "info": "Desktop only. 0 = left, 100 = right."
+        },
+        {
+          "type": "range",
+          "id": "position_y",
+          "label": "Vertical position (%)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50,
+          "info": "Desktop only. 0 = top, 100 = bottom."
+        },
+        {
+          "type": "select",
+          "id": "line_direction",
+          "label": "Connector line direction",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "right", "label": "Right →" },
+            { "value": "left", "label": "← Left" },
+            { "value": "down", "label": "↓ Down" },
+            { "value": "up", "label": "↑ Up" }
+          ],
+          "default": "right",
+          "info": "Desktop only. Direction the line extends from the label."
+        },
+        {
+          "type": "range",
+          "id": "line_length",
+          "label": "Connector line length",
+          "min": 0,
+          "max": 250,
+          "step": 5,
+          "unit": "px",
+          "default": 90,
+          "info": "Desktop only."
+        },
+        {
+          "type": "header",
+          "content": "Mobile position"
+        },
+        {
+          "type": "range",
+          "id": "position_x_mobile",
+          "label": "Mobile horizontal (%)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50,
+          "info": "0 = left, 100 = right."
+        },
+        {
+          "type": "range",
+          "id": "position_y_mobile",
+          "label": "Mobile vertical (%)",
+          "min": 0,
+          "max": 100,
+          "step": 1,
+          "unit": "%",
+          "default": 50,
+          "info": "0 = top, 100 = bottom."
+        },
+        {
+          "type": "select",
+          "id": "line_direction_mobile",
+          "label": "Mobile line direction",
+          "options": [
+            { "value": "down", "label": "↓ Down" },
+            { "value": "up", "label": "↑ Up" },
+            { "value": "none", "label": "None" }
+          ],
+          "default": "down"
+        },
+        {
+          "type": "range",
+          "id": "line_length_mobile",
+          "label": "Mobile line length",
+          "min": 0,
+          "max": 100,
+          "step": 2,
+          "unit": "px",
+          "default": 28
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Shop By Category",
+      "settings": {
+        "heading": "Shop By Category"
+      },
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "label": "COMPLETE BIKES",
+            "position_x": 6,
+            "position_y": 19,
+            "line_direction": "right",
+            "line_length": 90,
+            "position_x_mobile": 34,
+            "position_y_mobile": 10,
+            "line_direction_mobile": "down",
+            "line_length_mobile": 40
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "GROUPSETS",
+            "position_x": 0,
+            "position_y": 58,
+            "line_direction": "right",
+            "line_length": 130,
+            "position_x_mobile": 22,
+            "position_y_mobile": 62,
+            "line_direction_mobile": "up",
+            "line_length_mobile": 40
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "COCKPIT",
+            "position_x": 66,
+            "position_y": 21,
+            "line_direction": "left",
+            "line_length": 70,
+            "position_x_mobile": 68,
+            "position_y_mobile": 3,
+            "line_direction_mobile": "down",
+            "line_length_mobile": 24
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "COMPONENTS",
+            "position_x": 41,
+            "position_y": 50,
+            "line_direction": "up",
+            "line_length": 195,
+            "position_x_mobile": 50,
+            "position_y_mobile": 52,
+            "line_direction_mobile": "up",
+            "line_length_mobile": 24
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "label": "WHEELSETS",
+            "position_x": 72,
+            "position_y": 73,
+            "line_direction": "left",
+            "line_length": 135,
+            "position_x_mobile": 78,
+            "position_y_mobile": 65,
+            "line_direction_mobile": "up",
+            "line_length_mobile": 32
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

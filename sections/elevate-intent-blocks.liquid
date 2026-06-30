@@ -1,0 +1,525 @@
+{%- doc -%}
+  Elevate Cycling — Intent Blocks section.
+  3 tall image cards guiding users to key store areas (bikes, parts, sell/trade).
+  Each card has an eyebrow label, heading, background image, CTA button, and description.
+{%- enddoc -%}
+
+<div
+  class="section-background"
+  style="background-color: {{ section.settings.background_color }};"
+></div>
+<div
+  class="section section--page-width elevate-intent"
+  style="
+    --page-content-width: 75rem;
+    --page-width: calc(75rem + var(--page-margin) * 2);
+    --intent-pad-top: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    --intent-pad-bottom: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+  "
+>
+  {%- if section.settings.show_top_divider -%}
+    <div class="elevate-intent__divider"></div>
+  {%- endif -%}
+
+  <div class="elevate-intent__content">
+    <div class="elevate-intent__row">
+      {%- for block in section.blocks -%}
+        <div class="elevate-intent__col" {{ block.shopify_attributes }}>
+          {%- if block.settings.eyebrow != blank -%}
+            <p class="elevate-intent__eyebrow">{{ block.settings.eyebrow }}</p>
+          {%- endif -%}
+
+          <div class="elevate-intent__card">
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 800
+                | image_tag:
+                  class: 'elevate-intent__card-img',
+                  loading: 'lazy',
+                  widths: '400,600,800',
+                  sizes: '(min-width: 750px) 33vw, 100vw'
+              }}
+            {%- else -%}
+              <div class="elevate-intent__card-placeholder"></div>
+            {%- endif -%}
+
+            <div class="elevate-intent__card-content">
+              {%- if block.settings.heading != blank -%}
+                <div class="elevate-intent__card-heading">
+                  <h3>{{ block.settings.heading }}</h3>
+                </div>
+              {%- endif -%}
+
+              {%- if block.settings.button_label != blank -%}
+                <a
+                  class="elevate-intent__btn"
+                  {% if block.settings.button_link != blank %}
+                    href="{{ block.settings.button_link }}"
+                  {% endif %}
+                >
+                  <span>{{ block.settings.button_label }}</span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    {%- render 'icon', icon: 'arrow-right-solid' -%}
+                  </svg>
+                </a>
+              {%- endif -%}
+            </div>
+          </div>
+
+          {%- if block.settings.description != blank -%}
+            <p class="elevate-intent__desc">{{ block.settings.description }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} ── Stepper dots (mobile only) ── {%- endcomment -%}
+    {%- if section.blocks.size > 1 -%}
+      <div class="elevate-intent__dots" aria-label="Carousel navigation">
+        {%- for block in section.blocks -%}
+          <button
+            class="elevate-intent__dot{% if forloop.first %} elevate-intent__dot--active{% endif %}"
+            type="button"
+            aria-label="Go to slide {{ forloop.index }}"
+            data-slide-index="{{ forloop.index0 }}"
+          ></button>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- if section.settings.show_bottom_divider -%}
+    <div class="elevate-intent__divider"></div>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  /* ─── Section padding ─── */
+  .elevate-intent {
+    padding-block-start: 0;
+    padding-block-end: var(--intent-pad-bottom);
+  }
+
+  /* ─── Layout ─── */
+  .elevate-intent__content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+  }
+
+  /* ─── Divider ─── */
+  .elevate-intent__divider {
+    width: 49.375rem;
+    max-width: 100%;
+    height: 0.0625rem;
+    background-color: #E2E3E5;
+    justify-self: center;
+  }
+
+  .elevate-intent__divider:last-child {
+    display: none;
+  }
+
+  /* ─── Row of cards — mobile: horizontal scroll carousel ─── */
+  .elevate-intent__row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    width: 100%;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-top: 1.3125rem;
+    padding-inline: var(--page-margin, 1rem);
+    margin-inline: calc(-1 * var(--page-margin, 1rem));
+    width: calc(100% + var(--page-margin, 1rem) * 2);
+  }
+
+  .elevate-intent__row::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ─── Column (eyebrow + card + desc) ─── */
+  .elevate-intent__col {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 21.375rem;
+    min-width: 21.375rem;
+    scroll-snap-align: center;
+    flex-shrink: 0;
+  }
+
+  /* ─── Stepper dots ─── */
+  .elevate-intent__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 1.25rem;
+  }
+
+  .elevate-intent__dot {
+    width: 0.75rem;
+    height: 0.25rem;
+    border-radius: 999px;
+    background-color: #6B7280;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .elevate-intent__dot--active {
+    background-color: #E31E24;
+  }
+
+  /* ─── Eyebrow ─── */
+  .elevate-intent__eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-align: center;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ─── Card ─── */
+  .elevate-intent__card {
+    position: relative;
+    width: 100%;
+    height: 30rem; /* 480px */
+    border-radius: 1.5rem;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem;
+  }
+
+  .elevate-intent__card-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    pointer-events: none;
+  }
+
+  .elevate-intent__card-placeholder {
+    position: absolute;
+    inset: 0;
+    background-color: #1a1b1e;
+  }
+
+  .elevate-intent__card-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ─── Card heading ─── */
+  .elevate-intent__card-heading h3 {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+    white-space: pre-line;
+  }
+
+  /* ─── CTA button ─── */
+  .elevate-intent__btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background-color: #E31E24;
+    border-radius: 0.75rem;
+    color: #FDFCFC;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+    overflow: hidden;
+  }
+
+  .elevate-intent__btn:hover {
+    background-color: #c9191e;
+  }
+
+  .elevate-intent__btn span {
+    font-family: 'Host Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    white-space: nowrap;
+  }
+
+  .elevate-intent__btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  /* ─── Description ─── */
+  .elevate-intent__desc {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #36393F;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* ─── Desktop (750px+) ─── */
+  @media (min-width: 750px) {
+    .elevate-intent {
+      padding-block-start: var(--intent-pad-top);
+    }
+
+    .elevate-intent__row {
+      flex-direction: row;
+      gap: 2rem;
+      align-items: stretch;
+      padding-top: 0;
+      overflow-x: visible;
+      scroll-snap-type: none;
+      padding-inline: 0;
+      margin-inline: 0;
+      width: 100%;
+    }
+
+    .elevate-intent__col {
+      flex: 1;
+      min-width: 0;
+      scroll-snap-align: none;
+      flex-shrink: 1;
+    }
+
+    .elevate-intent__card {
+      height: 35rem;
+    }
+
+    .elevate-intent__card-heading h3 {
+      font-size: 3rem;
+    }
+
+    .elevate-intent__desc {
+      font-size: 1rem;
+    }
+
+    .elevate-intent__content {
+      gap: 2rem;
+    }
+
+    .elevate-intent__col {
+      padding-block: 0.5rem;
+    }
+
+    .elevate-intent__dots {
+      display: none;
+    }
+
+    .elevate-intent__divider:last-child {
+      display: block;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  /* ─── Intent Blocks — stepper dot sync ─── */
+  (function () {
+    document.querySelectorAll('.elevate-intent').forEach(function (section) {
+      var row = section.querySelector('.elevate-intent__row');
+      var dots = section.querySelectorAll('.elevate-intent__dot');
+      if (!row || dots.length < 2) return;
+
+      /* Scroll → update active dot */
+      var ticking = false;
+      row.addEventListener('scroll', function () {
+        if (ticking) return;
+        ticking = true;
+        requestAnimationFrame(function () {
+          var cols = row.querySelectorAll('.elevate-intent__col');
+          var scrollLeft = row.scrollLeft;
+          var rowRect = row.getBoundingClientRect();
+          var center = scrollLeft + rowRect.width / 2;
+          var closest = 0;
+          var minDist = Infinity;
+          cols.forEach(function (col, i) {
+            var colCenter = col.offsetLeft + col.offsetWidth / 2;
+            var dist = Math.abs(colCenter - center);
+            if (dist < minDist) {
+              minDist = dist;
+              closest = i;
+            }
+          });
+          dots.forEach(function (dot, i) {
+            dot.classList.toggle('elevate-intent__dot--active', i === closest);
+          });
+          ticking = false;
+        });
+      });
+
+      /* Dot click → scroll to card */
+      dots.forEach(function (dot) {
+        dot.addEventListener('click', function () {
+          var index = parseInt(dot.getAttribute('data-slide-index'), 10);
+          var cols = row.querySelectorAll('.elevate-intent__col');
+          if (cols[index]) {
+            cols[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          }
+        });
+      });
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Elevate Intent Blocks",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_divider",
+      "label": "Show top divider",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bottom_divider",
+      "label": "Show bottom divider",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 40,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "intent_card",
+      "name": "Intent Card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Eyebrow label",
+          "default": "CATEGORY"
+        },
+        {
+          "type": "textarea",
+          "id": "heading",
+          "label": "Card heading",
+          "default": "Card heading"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image"
+        },
+        {
+          "type": "text",
+          "id": "button_label",
+          "label": "Button label",
+          "default": "Shop Now"
+        },
+        {
+          "type": "url",
+          "id": "button_link",
+          "label": "Button link"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description below card",
+          "default": "Short description of this category."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Elevate Intent Blocks",
+      "settings": {
+        "show_top_divider": true,
+        "show_bottom_divider": true
+      },
+      "blocks": [
+        {
+          "type": "intent_card",
+          "settings": {
+            "eyebrow": "READY TO RIDE",
+            "heading": "Looking for a complete build?",
+            "button_label": "Shop Complete Bikes",
+            "description": "Full bikes and framesets — road, gravel, CX. Every one inspected, spec'd, and priced"
+          }
+        },
+        {
+          "type": "intent_card",
+          "settings": {
+            "eyebrow": "BUILDING YOUR RIG",
+            "heading": "Hunting a\nspecific part?",
+            "button_label": "Shop Parts & Components",
+            "description": "Groupsets, wheelsets, cockpit, and components. Mechanic-verified specs, daily drops."
+          }
+        },
+        {
+          "type": "intent_card",
+          "settings": {
+            "eyebrow": "SELL OR TRADE",
+            "heading": "Your gear\nhas value",
+            "button_label": "Get a Free Offer",
+            "description": "Cash or store credit — fair offer within 24hrs. No auctions, no strangers, no lowball DMs."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

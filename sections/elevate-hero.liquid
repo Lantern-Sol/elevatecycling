@@ -1,0 +1,657 @@
+{%- doc -%}
+  Elevate Cycling — custom hero section.
+  Full-viewport background media (image or video) with overlay,
+  two-tone heading, subtitle, dual CTA buttons, reviews badge,
+  and scroll-down indicator.
+{%- enddoc -%}
+
+{%- liquid
+  assign has_image = false
+  assign has_video = false
+
+  if section.settings.media_type == 'video' and section.settings.video != blank
+    assign has_video = true
+  elsif section.settings.image != blank
+    assign has_image = true
+  endif
+-%}
+
+{%- comment -%} Google Fonts — only the weights we need {%- endcomment -%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Host+Grotesk:wght@700&display=swap"
+  media="print"
+  onload="this.media='all'"
+>
+<noscript>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Host+Grotesk:wght@700&display=swap"
+  >
+</noscript>
+
+<div
+  class="section section--page-width page-width-normal elevate-hero"
+  style="
+    --elevate-hero-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-hero-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+    --elevate-hero-accent: {{ section.settings.heading_accent_color }};
+  "
+>
+  {%- comment -%} ── Background media ── {%- endcomment -%}
+  <div class="elevate-hero__media">
+    {%- if has_video -%}
+      {{
+        section.settings.video
+        | video_tag:
+          autoplay: true,
+          muted: true,
+          loop: true,
+          controls: false,
+          playsinline: true,
+          class: 'elevate-hero__video'
+      }}
+    {%- elsif has_image -%}
+      {%- assign img = section.settings.image -%}
+      {{
+        img
+        | image_url: width: 3840
+        | image_tag:
+          widths: '375, 750, 1080, 1440, 1920, 2560, 3840',
+          sizes: '100vw',
+          fetchpriority: 'high',
+          loading: 'eager',
+          class: 'elevate-hero__image',
+          alt: ''
+      }}
+    {%- else -%}
+      <div class="elevate-hero__placeholder"></div>
+    {%- endif -%}
+
+    {%- if section.settings.toggle_overlay -%}
+      {% render 'overlay', settings: section.settings, layer: 'var(--layer-flat)' %}
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ── Content ── {%- endcomment -%}
+  <div class="elevate-hero__content">
+    {%- comment -%} Reviews badge — desktop position (above heading) {%- endcomment -%}
+    {%- if section.settings.show_reviews -%}
+      <div class="elevate-hero__reviews elevate-hero__reviews--top" aria-label="{{ section.settings.reviews_rating }}. {{ section.settings.reviews_count }}">
+        <span class="elevate-hero__stars" aria-hidden="true">
+          {%- for i in (1..5) -%}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 1.33L10.06 5.5L14.67 6.18L11.33 9.43L12.12 14.02L8 11.85L3.88 14.02L4.67 9.43L1.33 6.18L5.94 5.5L8 1.33Z" fill="#FACC15"/>
+            </svg>
+          {%- endfor -%}
+        </span>
+        <span class="elevate-hero__reviews-text">
+          {{ section.settings.reviews_rating }} · {{ section.settings.reviews_count }}
+        </span>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Two-tone heading {%- endcomment -%}
+    {%- if section.settings.heading_line_1 != blank or section.settings.heading_line_2 != blank -%}
+      {%- assign accent = section.settings.heading_accent_text -%}
+      <h1 class="elevate-hero__heading">
+        {%- if section.settings.heading_line_1 != blank -%}
+          {%- assign h1_words = section.settings.heading_line_1 | split: ' ' -%}
+          {{- h1_words.first -}}
+          <br class="elevate-hero__br--mb">
+          {%- for word in h1_words -%}
+            {%- unless forloop.first -%}{{ ' ' }}{{ word }}{%- endunless -%}
+          {%- endfor -%}
+          {{ ' ' }}<br class="elevate-hero__br--dt">
+        {%- endif -%}
+        {%- if accent != blank and section.settings.heading_line_2 contains accent -%}
+          {%- assign parts = section.settings.heading_line_2 | split: accent -%}
+          {{- parts[0] -}}
+          <br class="elevate-hero__br--mb">
+          <span class="elevate-hero__heading-accent">{{ accent }}</span>
+          {%- if parts.size > 1 -%}{{ parts[1] }}{%- endif -%}
+        {%- else -%}
+          {{- section.settings.heading_line_2 -}}
+        {%- endif -%}
+      </h1>
+    {%- endif -%}
+
+    {%- comment -%} Subtitle {%- endcomment -%}
+    {%- if section.settings.subtitle != blank -%}
+      <p class="elevate-hero__subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+
+    {%- comment -%} CTA buttons {%- endcomment -%}
+    {%- if section.settings.primary_button_label != blank or section.settings.secondary_button_label != blank -%}
+      <div class="elevate-hero__buttons">
+        {%- if section.settings.primary_button_label != blank -%}
+          <a
+            href="{{ section.settings.primary_button_link }}"
+            class="elevate-hero__btn elevate-hero__btn--primary"
+          >
+            <span>{{ section.settings.primary_button_label }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </a>
+        {%- endif -%}
+        {%- if section.settings.secondary_button_label != blank -%}
+          <a
+            href="{{ section.settings.secondary_button_link }}"
+            class="elevate-hero__btn elevate-hero__btn--secondary"
+          >
+            {{ section.settings.secondary_button_label }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Reviews badge — mobile position (below buttons) {%- endcomment -%}
+    {%- if section.settings.show_reviews -%}
+      <div class="elevate-hero__reviews elevate-hero__reviews--bottom" aria-label="{{ section.settings.reviews_rating }}. {{ section.settings.reviews_count }}">
+        <span class="elevate-hero__stars" aria-hidden="true">
+          {%- for i in (1..5) -%}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M8 1.33L10.06 5.5L14.67 6.18L11.33 9.43L12.12 14.02L8 11.85L3.88 14.02L4.67 9.43L1.33 6.18L5.94 5.5L8 1.33Z" fill="#FACC15"/>
+            </svg>
+          {%- endfor -%}
+        </span>
+        <span class="elevate-hero__reviews-text">
+          {{ section.settings.reviews_rating }} · {{ section.settings.reviews_count }}
+        </span>
+      </div>
+    {%- endif -%}
+  </div>
+
+  {%- comment -%} ── Scroll indicator ── {%- endcomment -%}
+  {%- if section.settings.show_scroll_indicator -%}
+    <button class="elevate-hero__scroll" type="button" aria-label="Scroll to next section" data-scroll-next>
+      <svg class="elevate-hero__scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        {%- render 'icon', icon: 'arrow-down-solid' -%}
+      </svg>
+      <span class="elevate-hero__scroll-text">Scroll Down</span>
+      <svg class="elevate-hero__scroll-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+        {%- render 'icon', icon: 'arrow-down-solid' -%}
+      </svg>
+    </button>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  /* ─── Elevate Hero ─── */
+  .elevate-hero {
+    position: relative;
+    min-height: min(100svh, 43.75rem);
+    overflow: hidden;
+    padding-block-start: var(--elevate-hero-pt);
+    padding-block-end: 1rem;
+    align-content: end;
+    row-gap: 1rem;
+  }
+
+  /* ── Media layer — spans full grid, absolute fill ── */
+  .elevate-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-lowest);
+    grid-column: 1 / -1;
+  }
+
+  .elevate-hero__image,
+  .elevate-hero__video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-hero__placeholder {
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+  }
+
+  /* ── Content — placed in grid column 2, pushed to bottom ── */
+  .elevate-hero__content {
+    position: relative;
+    z-index: var(--layer-flat);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    max-width: 50rem;
+  }
+
+  /* ── Reviews badge ── */
+  .elevate-hero__reviews {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.25rem 1rem;
+    border-radius: 62.5rem;
+    background: rgba(226, 227, 229, 0.4);
+  }
+
+  .elevate-hero__stars {
+    display: inline-flex;
+    gap: 0.125rem;
+  }
+
+  .elevate-hero__reviews-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #FDFCFC;
+    white-space: nowrap;
+  }
+
+  /* Mobile: show bottom badge, hide top */
+  .elevate-hero__reviews--top {
+    display: none;
+  }
+
+  .elevate-hero__reviews--bottom {
+    display: inline-flex;
+    width: 100%;
+    justify-content: center;
+  }
+
+  /* ── Heading ── */
+  .elevate-hero__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: #fff;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* Mobile: show mobile breaks, hide desktop breaks */
+  .elevate-hero__br--mb {
+    display: block;
+  }
+
+  .elevate-hero__br--dt {
+    display: none;
+  }
+
+  .elevate-hero__heading-accent {
+    color: var(--elevate-hero-accent, #E31E24);
+  }
+
+  /* ── Subtitle ── */
+  .elevate-hero__subtitle {
+    font-family: var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #AEB2B8;
+    margin: 0;
+    max-width: 40rem;
+  }
+
+  /* ── Buttons ── */
+  .elevate-hero__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .elevate-hero__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1;
+    text-decoration: none;
+    padding: 1rem 2rem;
+    border-radius: 0.75rem;
+    transition:
+      background-color var(--animation-speed-slow, 0.2s) var(--animation-easing, ease-in-out),
+      border-color var(--animation-speed-slow, 0.2s) var(--animation-easing, ease-in-out),
+      opacity var(--animation-speed-slow, 0.2s) var(--animation-easing, ease-in-out);
+    cursor: pointer;
+    white-space: nowrap;
+  }
+
+  .elevate-hero__btn:focus-visible {
+    outline: 0.125rem solid #fff;
+    outline-offset: 0.125rem;
+  }
+
+  .elevate-hero__btn--primary {
+    background: #E31E24;
+    color: #fff;
+    border: none;
+    gap: 0.5rem;
+  }
+
+  .elevate-hero__btn--primary svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .elevate-hero__btn--primary:hover {
+    background: #c8191e;
+  }
+
+  .elevate-hero__btn--secondary {
+    background: transparent;
+    color: #fff;
+    border: 0.03125rem solid rgba(255, 255, 255, 0.5);
+  }
+
+  .elevate-hero__btn--secondary:hover {
+    border-color: #fff;
+  }
+
+  /* ── Scroll indicator ── */
+  .elevate-hero__scroll {
+    position: relative;
+    z-index: var(--layer-flat);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    animation: elevate-hero-bounce 2s ease-in-out infinite;
+  }
+
+  @keyframes elevate-hero-bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(0.375rem); }
+  }
+
+  .elevate-hero__scroll:hover {
+    opacity: 0.7;
+  }
+
+  .elevate-hero__scroll-icon {
+    width: 1rem;
+    height: 1rem;
+    color: #36393F;
+    flex-shrink: 0;
+  }
+
+  .elevate-hero__scroll-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #36393F;
+    white-space: nowrap;
+  }
+
+  /* ── Desktop (990px+) ── */
+  @media (min-width: 61.9375rem) {
+    .elevate-hero {
+      row-gap: 1.5rem;
+      padding-block-end: var(--elevate-hero-pb);
+    }
+
+    .elevate-hero__heading {
+      font-size: 5.5rem;
+    }
+
+    .elevate-hero__br--mb {
+      display: none;
+    }
+
+    .elevate-hero__br--dt {
+      display: block;
+    }
+
+    .elevate-hero__subtitle {
+      font-size: 1rem;
+    }
+
+    .elevate-hero__buttons {
+      flex-direction: row;
+      width: auto;
+      gap: 1rem;
+    }
+
+    .elevate-hero__btn {
+      width: 19.125rem;
+    }
+
+    .elevate-hero__content {
+      gap: 1.5rem;
+    }
+
+    /* Desktop: show top badge, hide bottom */
+    .elevate-hero__reviews--top {
+      display: inline-flex;
+    }
+
+    .elevate-hero__reviews--bottom {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    document.querySelectorAll('[data-scroll-next]').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var hero = btn.closest('.shopify-section');
+        if (!hero) return;
+        var next = hero.nextElementSibling;
+        if (next) {
+          next.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Elevate Hero",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media type",
+      "options": [
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Background video"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle_overlay",
+      "label": "Show overlay",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "overlay_color",
+      "label": "Overlay color",
+      "default": "#121212"
+    },
+    {
+      "type": "select",
+      "id": "overlay_style",
+      "label": "Overlay style",
+      "options": [
+        { "value": "solid", "label": "Solid" },
+        { "value": "gradient", "label": "Gradient" }
+      ],
+      "default": "gradient"
+    },
+    {
+      "type": "select",
+      "id": "gradient_direction",
+      "label": "Gradient direction",
+      "options": [
+        { "value": "to top", "label": "Bottom to top" },
+        { "value": "to bottom", "label": "Top to bottom" },
+        { "value": "to right", "label": "Left to right" }
+      ],
+      "default": "to top"
+    },
+    {
+      "type": "header",
+      "content": "Reviews badge"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_reviews",
+      "label": "Show reviews badge",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "reviews_rating",
+      "label": "Rating text",
+      "default": "4.9 out of 5"
+    },
+    {
+      "type": "text",
+      "id": "reviews_count",
+      "label": "Reviews count text",
+      "default": "2,400+ verified reviews"
+    },
+    {
+      "type": "header",
+      "content": "Heading"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_1",
+      "label": "Heading line 1",
+      "default": "THE SMARTEST WAY"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading line 2",
+      "default": "TO RIDE BETTER GEAR"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent_text",
+      "label": "Accent text",
+      "info": "Part of line 2 to highlight in the accent color",
+      "default": "RIDE BETTER GEAR"
+    },
+    {
+      "type": "color",
+      "id": "heading_accent_color",
+      "label": "Accent color",
+      "default": "#E31E24"
+    },
+    {
+      "type": "header",
+      "content": "Subtitle"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Brand-new and certified pre-owned road, gravel, and CX equipment — every item inspected, fully spec'd, and priced up to 80% below retail. New inventory drops daily."
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "primary_button_label",
+      "label": "Primary button label",
+      "default": "Shop Bikes & Gear"
+    },
+    {
+      "type": "url",
+      "id": "primary_button_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "Secondary button label",
+      "default": "Get a cash offer for your bike"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Scroll indicator"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_scroll_indicator",
+      "label": "Show scroll indicator",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 100
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "presets": [
+    {
+      "name": "Elevate Hero"
+    }
+  ]
+}
+{% endschema %}

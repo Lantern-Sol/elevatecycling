@@ -1,0 +1,453 @@
+{%- doc -%}
+  Elevate Cycling — USPs (Unique Selling Propositions) section.
+  Bold heading on the left with dark badge cards in a wrapped grid layout.
+{%- enddoc -%}
+
+<div
+  class="section-background"
+  style="background-color: {{ section.settings.background_color }};"
+></div>
+<div
+  class="section section--page-width elevate-usps"
+  style="
+    --page-content-width: 63rem;
+    --page-width: calc(63rem + var(--page-margin) * 2);
+    --usps-heading-color: {{ section.settings.heading_color }};
+    --usps-badge-bg: {{ section.settings.badge_bg_color }};
+    --usps-icon-bg: {{ section.settings.icon_color }};
+    --usps-pad-top: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    --usps-pad-bottom: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+  "
+>
+  <div class="elevate-usps__wrap">
+    {%- if section.settings.heading != blank -%}
+      <div class="elevate-usps__heading">
+        <h2>{{ section.settings.heading }}</h2>
+        <button class="elevate-usps__heading-arrow" type="button" aria-label="Scroll to next card" data-usps-scroll>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+            {%- render 'icon', icon: 'arrow-left-solid' -%}
+          </svg>
+        </button>
+      </div>
+    {%- endif -%}
+
+    {%- for block in section.blocks -%}
+      <div class="elevate-usps__badge" {{ block.shopify_attributes }}>
+        <div class="elevate-usps__badge-icon-slot">
+          <div class="elevate-usps__badge-icon">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              {%- render 'icon', icon: block.settings.icon -%}
+            </svg>
+          </div>
+        </div>
+        <div class="elevate-usps__badge-text">
+          <p class="elevate-usps__badge-title">{{ block.settings.title }}</p>
+          <p class="elevate-usps__badge-desc">{{ block.settings.description }}</p>
+        </div>
+      </div>
+    {%- endfor -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Section padding ─── */
+  .elevate-usps {
+    padding-block-start: var(--usps-pad-top);
+    padding-block-end: 1.5rem;
+  }
+
+  /* ─── Mobile: horizontal scroll ─── */
+
+  .elevate-usps__wrap {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-inline-end: calc(-1 * var(--page-margin, 1.5rem));
+    padding-top: 1.75rem;
+    padding-bottom: 1rem;
+  }
+
+  .elevate-usps__wrap::-webkit-scrollbar {
+    display: none;
+  }
+
+  .elevate-usps__wrap::after {
+    content: '';
+    flex-shrink: 0;
+    width: -0.1rem;
+  }
+
+  /* ─── Heading ─── */
+  .elevate-usps__heading {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+  }
+
+  .elevate-usps__heading h2 {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: var(--usps-heading-color, #36393F);
+    text-transform: uppercase;
+    margin: 0;
+    white-space: pre-line;
+    text-align: left;
+  }
+
+  /* ─── Heading arrow ─── */
+  .elevate-usps__heading-arrow {
+    width: 2rem;
+    height: 2rem;
+    color: #E31E24;
+    background: none;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .elevate-usps__heading-arrow:hover {
+    transform: translateX(-0.25rem);
+  }
+
+  .elevate-usps__heading-arrow svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ─── Badge card — mobile: vertical layout, 208×auto ─── */
+  .elevate-usps__badge {
+    background-color: var(--usps-badge-bg, #141517);
+    border-radius: 1rem;
+    padding: 0 1rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 13rem;
+    min-width: 13rem;
+    flex-shrink: 0;
+    scroll-snap-align: start;
+    filter:
+      drop-shadow(0 0.625rem 0.9375rem rgba(0, 0, 0, 0.1))
+      drop-shadow(0 0.25rem 0.375rem rgba(0, 0, 0, 0.1));
+  }
+
+  /* Icon slot — 28px tall, icon circle 56px overflows top by 28px */
+  .elevate-usps__badge-icon-slot {
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    width: 100%;
+    height: 1.75rem;
+    flex-shrink: 0;
+  }
+
+  .elevate-usps__badge-icon {
+    width: 3.5rem;
+    height: 3.5rem;
+    min-width: 3.5rem;
+    background-color: var(--usps-icon-bg, #E31E24);
+    border-radius: 0.875rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    filter:
+      drop-shadow(0 0.25rem 0.375rem rgba(0, 0, 0, 0.1))
+      drop-shadow(0 0.125rem 0.125rem rgba(0, 0, 0, 0.1));
+  }
+
+  .elevate-usps__badge-icon svg {
+    width: 2rem;
+    height: 2rem;
+  }
+
+  /* ─── Badge text ─── */
+  .elevate-usps__badge-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .elevate-usps__badge-title {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-usps__badge-desc {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #AEB2B8;
+    margin: 0;
+    white-space: normal;
+  }
+
+  /* First badge desc — force line break on mobile */
+  .elevate-usps__heading + .elevate-usps__badge .elevate-usps__badge-desc {
+    max-width: 7.5rem;
+  }
+
+  /* ─── Desktop (750px+) ─── */
+  @media (min-width: 750px) {
+    .elevate-usps {
+      padding-block-end: var(--usps-pad-bottom);
+    }
+
+    .elevate-usps__wrap {
+      flex-wrap: wrap;
+      justify-content: space-between;
+      row-gap: 1rem;
+      column-gap: 0;
+      overflow-x: visible;
+      scroll-snap-type: none;
+      margin-inline-end: 0;
+      padding-top: 0;
+      padding-bottom: 0;
+    }
+
+    .elevate-usps__wrap::after {
+      display: none;
+    }
+
+    .elevate-usps__heading {
+      width: 19.625rem;
+      flex: 0 0 19.625rem;
+    }
+
+    .elevate-usps__heading h2 {
+      font-size: 3.5625rem;
+      white-space: pre-line;
+    }
+
+    .elevate-usps__heading-arrow {
+      display: none;
+    }
+
+    .elevate-usps__badge {
+      flex-direction: row;
+      width: 18.125rem;
+      min-width: 18.125rem;
+      flex: 0 0 18.125rem;
+      padding: 1rem 1rem 1rem 0;
+      scroll-snap-align: none;
+    }
+
+    .elevate-usps__badge-icon-slot {
+      flex: 0 0 1.75rem;
+      width: 1.75rem;
+      height: 3.5rem;
+      justify-content: flex-end;
+    }
+
+    .elevate-usps__badge-text {
+      text-align: left;
+    }
+
+    .elevate-usps__badge-desc {
+      font-size: 0.875rem;
+      letter-spacing: -0.00875rem;
+    }
+
+    .elevate-usps__heading + .elevate-usps__badge .elevate-usps__badge-desc {
+      max-width: none;
+    }
+  }
+{% endstylesheet %}
+
+{% javascript %}
+  (function () {
+    document.querySelectorAll('[data-usps-scroll]').forEach(function (btn) {
+      var wrap = btn.closest('.elevate-usps__wrap');
+      if (!wrap) return;
+
+      btn.addEventListener('click', function () {
+        var badges = wrap.querySelectorAll('.elevate-usps__badge');
+        var scrollLeft = wrap.scrollLeft;
+        var wrapRect = wrap.getBoundingClientRect();
+        var center = scrollLeft + wrapRect.width / 2;
+
+        /* Find the first badge whose center is past the current center */
+        for (var i = 0; i < badges.length; i++) {
+          var badgeCenter = badges[i].offsetLeft + badges[i].offsetWidth / 2;
+          if (badgeCenter > center + 10) {
+            badges[i].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            return;
+          }
+        }
+        /* If at the end, loop back to first */
+        if (badges[0]) {
+          badges[0].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+        }
+      });
+    });
+  })();
+{% endjavascript %}
+
+{% schema %}
+{
+  "name": "Elevate USPs",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "NO GUESSWORK\nNO SURPRISES"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#36393F"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FFFFFF"
+    },
+    {
+      "type": "color",
+      "id": "badge_bg_color",
+      "label": "Badge background color",
+      "default": "#141517"
+    },
+    {
+      "type": "color",
+      "id": "icon_color",
+      "label": "Icon circle color",
+      "default": "#E31E24"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "USP",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "shipping-fast", "label": "Shipping" },
+            { "value": "return", "label": "Return" },
+            { "value": "search-solid", "label": "Search" },
+            { "value": "camera-solid", "label": "Camera" },
+            { "value": "cart-plus-solid", "label": "Cart plus" },
+            { "value": "certified", "label": "Certified" },
+            { "value": "tags-solid", "label": "Tags" },
+            { "value": "eye-solid", "label": "Eye" }
+          ],
+          "default": "shipping-fast"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "USP Title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Short description of this selling point."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Elevate USPs",
+      "blocks": [
+        {
+          "type": "usp",
+          "settings": {
+            "icon": "shipping-fast",
+            "title": "FREE US SHIPPING",
+            "description": "On every order, no minimum."
+          }
+        },
+        {
+          "type": "usp",
+          "settings": {
+            "icon": "return",
+            "title": "30-DAY RETURNS",
+            "description": "Ride it. If it's not right, send it back."
+          }
+        },
+        {
+          "type": "usp",
+          "settings": {
+            "icon": "search-solid",
+            "title": "INSPECTED & CLEANED",
+            "description": "Every item checked and documented before it lists."
+          }
+        },
+        {
+          "type": "usp",
+          "settings": {
+            "icon": "camera-solid",
+            "title": "DETAILED PICTURES",
+            "description": "Every angle, every imperfection — nothing hidden."
+          }
+        },
+        {
+          "type": "usp",
+          "settings": {
+            "icon": "cart-plus-solid",
+            "title": "WIDE SELECTION",
+            "description": "New arrivals every day. Check back often."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,664 @@
+{%- doc -%}
+  Elevate Cycling — Parallax Banner section.
+  Each word is its own sticky layer. Scroll spacers control timing,
+  different `top` values control final composition position.
+  FRESH/STOCK stick at top:0, EVERY/DAY at ~27vw, CTA at ~47vw.
+  Result: gray text top → bike middle → red text lower → CTA bottom.
+{%- enddoc -%}
+
+{%- comment -%} Google Fonts — Big Shoulders Display + Host Grotesk {%- endcomment -%}
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Host+Grotesk:wght@700&display=swap"
+  media="print"
+  onload="this.media='all'"
+>
+<noscript>
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Host+Grotesk:wght@700&display=swap"
+  >
+</noscript>
+
+<div
+  class="section-background"
+  style="background-color: {{ section.settings.background_color }};"
+></div>
+<div
+  class="elevate-parallax"
+  style="
+    --parallax-gray: {{ section.settings.word_color_gray }};
+    --parallax-red: {{ section.settings.word_color_red }};
+    --parallax-bg: {{ section.settings.background_color }};
+    padding-block-start: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+  "
+>
+  <div class="elevate-parallax__content">
+    {%- comment -%} ── Spacer ── {%- endcomment -%}
+    <div class="elevate-parallax__layer elevate-parallax__spacer"></div>
+
+    {%- comment -%} ── FRESH — sticks at top:0, left-aligned ── {%- endcomment -%}
+    <div class="elevate-parallax__layer">
+      <p class="elevate-parallax__word elevate-parallax__word--gray">
+        {{ section.settings.word_1 }}
+      </p>
+    </div>
+
+    {%- comment -%} ── STOCK — sticks at top:0, right-aligned ── {%- endcomment -%}
+    <div class="elevate-parallax__layer elevate-parallax__layer--stock">
+      <p class="elevate-parallax__word elevate-parallax__word--gray elevate-parallax__word--right">
+        {{ section.settings.word_2 }}
+      </p>
+    </div>
+
+    {%- comment -%} ── Bike image — sticks at top:0 with padding ── {%- endcomment -%}
+    <div class="elevate-parallax__layer elevate-parallax__layer--image" data-parallax-bike>
+      {%- if section.settings.image != blank -%}
+        {{
+          section.settings.image
+          | image_url: width: 1200
+          | image_tag:
+            widths: '375, 750, 1080, 1200',
+            sizes: '(min-width: 75rem) 864px, calc(100vw - 2rem)',
+            loading: 'lazy',
+            class: 'elevate-parallax__image',
+            alt: section.settings.image.alt | default: 'Featured bike'
+        }}
+      {%- else -%}
+        <div class="elevate-parallax__image-placeholder"></div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Scroll gap before EVERY ── {%- endcomment -%}
+    <div class="elevate-parallax__scroll-gap"></div>
+
+    {%- comment -%} ── EVERY — sticks lower (~27vw), left-aligned ── {%- endcomment -%}
+    <div class="elevate-parallax__layer elevate-parallax__layer--red-word elevate-parallax__layer--every">
+      <p class="elevate-parallax__word elevate-parallax__word--red elevate-parallax__word--right-m">
+        {{ section.settings.word_3 }}
+      </p>
+    </div>
+
+    {%- comment -%} ── Scroll gap before DAY ── {%- endcomment -%}
+    <div class="elevate-parallax__scroll-gap"></div>
+
+    {%- comment -%} ── ↓ DAY — sticks lower (~27vw), right-aligned ── {%- endcomment -%}
+    <div class="elevate-parallax__layer elevate-parallax__layer--red-word elevate-parallax__layer--day">
+      <div class="elevate-parallax__arrow" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" width="268" height="268" viewBox="0 0 268 268" fill="none">
+          <path d="M146.375 29.5V191.867L196.34 141.902L199.168 139.073L201.996 141.902L214.035 153.941L216.864 156.77L214.035 159.598L142.816 230.816L142.784 230.848L136.765 236.605L134 239.25L131.235 236.605L125.216 230.848L125.184 230.816L53.9648 159.598L51.1357 156.77L53.9648 153.941L66.0039 141.902L68.832 139.073L71.6602 141.902L121.625 191.867V29.5H146.375Z" fill="#E31E24" stroke="#E31E24" stroke-width="8"/>
+        </svg>
+      </div>
+      <p class="elevate-parallax__word elevate-parallax__word--red elevate-parallax__word--no-shrink">
+        {{ section.settings.word_4 }}
+      </p>
+    </div>
+
+    {%- comment -%} ── Scroll gap before CTA ── {%- endcomment -%}
+    <div class="elevate-parallax__scroll-gap"></div>
+
+    {%- comment -%} ── CTA bar — sticks near bottom, gradient + form ── {%- endcomment -%}
+    <div class="elevate-parallax__layer elevate-parallax__cta">
+      <div class="elevate-parallax__cta-inner">
+        <div class="elevate-parallax__cta-text">
+          {%- if section.settings.cta_heading != blank -%}
+            <h2 class="elevate-parallax__cta-heading">{{ section.settings.cta_heading }}</h2>
+          {%- endif -%}
+          {%- if section.settings.cta_subtitle != blank -%}
+            <p class="elevate-parallax__cta-subtitle">{{ section.settings.cta_subtitle }}</p>
+          {%- endif -%}
+        </div>
+        <div class="elevate-parallax__cta-form">
+          {%- assign parallax_form_id = 'parallax-newsletter-' | append: section.id -%}
+          {%- form 'contact', id: parallax_form_id -%}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <div class="elevate-parallax__form-fields">
+              <div class="elevate-parallax__field">
+                <label for="parallax-email-{{ section.id }}" class="elevate-parallax__label">Email</label>
+                <input
+                  id="parallax-email-{{ section.id }}"
+                  type="email"
+                  name="contact[email]"
+                  class="elevate-parallax__input"
+                  placeholder="{{ section.settings.input_placeholder }}"
+                  autocomplete="email"
+                  autocorrect="off"
+                  autocapitalize="off"
+                  required
+                >
+              </div>
+              <button type="submit" class="elevate-parallax__submit">
+                {{ section.settings.button_label }}
+              </button>
+            </div>
+            {%- if form.errors -%}
+              <p class="elevate-parallax__form-msg elevate-parallax__form-msg--error" role="alert">
+                {{ form.errors.translated_fields['email'] | capitalize }}
+                {{ form.errors.messages['email'] }}
+              </p>
+            {%- endif -%}
+            {%- if form.posted_successfully? -%}
+              <p class="elevate-parallax__form-msg elevate-parallax__form-msg--success" role="status">
+                {{ 'general.newsletter.thank_you' | t | default: "Thanks for subscribing!" }}
+              </p>
+            {%- endif -%}
+          {%- endform -%}
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} ── Bottom spacer — extends scroll range so CTA can settle ── {%- endcomment -%}
+    <div class="elevate-parallax__scroll-end"></div>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var bike = document.querySelector('[data-parallax-bike]');
+    if (!bike) return;
+    var gap = bike.nextElementSibling;
+    if (!gap) return;
+
+    bike.addEventListener('animationend', function () {
+      bike.classList.remove('is-bouncing');
+    });
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting && !bike.classList.contains('is-bouncing')) {
+          bike.classList.add('is-bouncing');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    io.observe(gap);
+  })();
+</script>
+
+{% stylesheet %}
+  /* ─── Elevate Parallax Banner ─── */
+  .elevate-parallax {
+    overflow: clip;
+  }
+
+  .elevate-parallax__content {
+    max-width: 75rem;
+    margin-inline: auto;
+    padding-inline: var(--page-margin, 1rem);
+  }
+
+  /* ── Spacer ── */
+  .elevate-parallax__spacer {
+    height: 1.3125rem;
+  }
+
+  /* ── Scroll gaps — NOT sticky, create scroll distance between reveals ── */
+  .elevate-parallax__scroll-gap {
+    height: clamp(4rem, 8vw, 8rem);
+  }
+
+  /* ── Bottom spacer — extends section so final composition holds on screen ── */
+  .elevate-parallax__scroll-end {
+    height: clamp(2rem, 5vw, 8rem);
+  }
+
+  /* ── Sticky layers ── */
+  .elevate-parallax__layer {
+    position: sticky;
+    top: 0;
+    width: 100%;
+  }
+
+  /* ── Mobile layer offsets — padding-top pushes content down within sticky ── */
+  .elevate-parallax__layer--stock {
+    padding-top: 8.75rem;
+  }
+
+  .elevate-parallax__layer--every {
+    padding-top: 21.5rem;
+  }
+
+  .elevate-parallax__layer--day {
+    padding-top: 30.25rem;
+  }
+
+  /* ── Red word layers — same top:0 on mobile, desktop overrides ── */
+  .elevate-parallax__layer--red-word {
+    top: 0;
+  }
+
+  /* ── CTA — sticks at top:0 on mobile, desktop overrides ── */
+  .elevate-parallax__cta {
+    top: 0;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    background: linear-gradient(to bottom, rgba(242, 242, 243, 0), #F2F2F3 16%);
+    padding: 5.5rem var(--page-margin, 1rem) 2rem;
+  }
+
+  /* Cover parallax below CTA on mobile */
+  .elevate-parallax__cta::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 100%;
+    height: 100vh;
+    background: #F2F2F3;
+    pointer-events: none;
+  }
+
+  /* ── Word typography ── */
+  .elevate-parallax__word {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 10.625rem;
+    line-height: 1;
+    letter-spacing: -0.53125rem;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-parallax__word--gray {
+    color: var(--parallax-gray, #AEB2B8);
+  }
+
+  .elevate-parallax__word--red {
+    color: var(--parallax-red, #E31E24);
+  }
+
+  .elevate-parallax__word--right {
+    /* right-aligned on desktop only */
+  }
+
+  .elevate-parallax__word--right-m {
+    text-align: right;
+  }
+
+  .elevate-parallax__word--no-shrink {
+    flex-shrink: 0;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  /* ── Image layer ── */
+  .elevate-parallax__layer--image {
+    padding-top: 9.5rem;
+    padding-inline: 0;
+  }
+
+  .elevate-parallax__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* ── Bike drop-bounce ── */
+  @keyframes bikeBounce {
+    0%   { transform: translateY(-3rem); }
+    25%  { transform: translateY(0); }
+    45%  { transform: translateY(-1.2rem); }
+    65%  { transform: translateY(0); }
+    80%  { transform: translateY(-0.35rem); }
+    100% { transform: translateY(0); }
+  }
+
+  .elevate-parallax__layer--image.is-bouncing .elevate-parallax__image,
+  .elevate-parallax__layer--image.is-bouncing .elevate-parallax__image-placeholder {
+    animation: bikeBounce 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+  }
+
+  .elevate-parallax__image-placeholder {
+    width: 100%;
+    aspect-ratio: 754 / 503;
+    background: #e5e5e5;
+    border-radius: 0.5rem;
+  }
+
+  /* ── DAY row — arrow + word, right-aligned ── */
+  .elevate-parallax__layer--day {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+  }
+
+  /* ── Arrow (matches text size) ── */
+  .elevate-parallax__arrow {
+    flex-shrink: 0;
+    width: clamp(8.5rem, 18.6vw, 16.75rem);
+    height: clamp(8.5rem, 18.6vw, 16.75rem);
+    color: var(--parallax-red, #E31E24);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: -1rem;
+    padding-bottom: 1rem;
+  }
+
+  .elevate-parallax__arrow svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ── CTA inner ── */
+  .elevate-parallax__cta-inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 62rem;
+    margin: 0 auto;
+  }
+
+  .elevate-parallax__cta-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    text-align: center;
+  }
+
+  .elevate-parallax__cta-heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+    white-space: pre-line;
+    text-align: center;
+  }
+
+  .elevate-parallax__cta-subtitle {
+    font-family: var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #000;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  /* ── Form ── */
+  .elevate-parallax__form-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-parallax__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .elevate-parallax__label {
+    font-family: var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #141517;
+    padding-left: 0.5rem;
+  }
+
+  .elevate-parallax__input {
+    width: 100%;
+    height: 2.875rem;
+    padding: 0.75rem 1rem;
+    border: 0.0625rem solid #AEB2B8;
+    border-radius: 0.5rem;
+    font-family: var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #36393F;
+    background: var(--parallax-bg, #FDFCFC);
+    outline: none;
+    transition: border-color 0.2s ease;
+  }
+
+  .elevate-parallax__input::placeholder {
+    color: #36393F;
+  }
+
+  .elevate-parallax__input:focus {
+    border-color: #36393F;
+  }
+
+  .elevate-parallax__submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 2.875rem;
+    padding: 0.75rem 1.5rem;
+    background: #E31E24;
+    color: #FDFCFC;
+    border: none;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+  }
+
+  .elevate-parallax__submit:hover {
+    opacity: 0.9;
+  }
+
+  .elevate-parallax__submit:focus-visible {
+    outline: 0.125rem solid #E31E24;
+    outline-offset: 0.125rem;
+  }
+
+  .elevate-parallax__form-msg {
+    margin: 0.5rem 0 0;
+    font-family: var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.4;
+  }
+
+  .elevate-parallax__form-msg--error {
+    color: #E31E24;
+  }
+
+  .elevate-parallax__form-msg--success {
+    color: #16a34a;
+  }
+
+  /* ─── Desktop (48rem / 768px) ─── */
+  @media (min-width: 48rem) {
+    .elevate-parallax__word {
+      font-size: 18.75rem;
+      letter-spacing: -0.9375rem;
+    }
+
+    .elevate-parallax__word--right {
+      text-align: right;
+    }
+
+    .elevate-parallax__word--right-m {
+      text-align: left;
+    }
+
+    /* Remove mobile padding offsets */
+    .elevate-parallax__layer--stock {
+      padding-top: 0;
+    }
+
+    .elevate-parallax__layer--image {
+      padding-top: clamp(1.5rem, 6vw, 5.5rem);
+      padding-inline: 10.5rem;
+    }
+
+    .elevate-parallax__layer--red-word {
+      top: clamp(6rem, 27vw, 25rem);
+    }
+
+    .elevate-parallax__layer--every {
+      padding-top: 0;
+    }
+
+    .elevate-parallax__layer--day {
+      padding-top: 0;
+    }
+
+    .elevate-parallax__cta {
+      top: clamp(12rem, 47vw, 44rem);
+      padding: 5.5rem 2rem 2rem;
+    }
+
+    .elevate-parallax__cta::after {
+      background: #F2F2F3;
+    }
+
+    .elevate-parallax__cta-inner {
+      flex-direction: row;
+      align-items: flex-end;
+      gap: 2rem;
+      max-width: 75rem;
+      padding-inline: 6.5rem;
+      padding-bottom: 2.5rem;
+    }
+
+    .elevate-parallax__cta-heading {
+      font-size: 3rem;
+    }
+
+    .elevate-parallax__cta-text {
+      flex: 1 1 50%;
+      text-align: center;
+    }
+
+    .elevate-parallax__cta-form {
+      flex: 1 1 50%;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Parallax Banner",
+  "tag": "section",
+  "class": "elevate-parallax-section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Layout"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#FDFCFC"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Words"
+    },
+    {
+      "type": "text",
+      "id": "word_1",
+      "label": "Word 1 (left, gray)",
+      "default": "FRESH"
+    },
+    {
+      "type": "text",
+      "id": "word_2",
+      "label": "Word 2 (right, gray)",
+      "default": "STOCK"
+    },
+    {
+      "type": "text",
+      "id": "word_3",
+      "label": "Word 3 (left, red)",
+      "default": "EVERY"
+    },
+    {
+      "type": "text",
+      "id": "word_4",
+      "label": "Word 4 (right, red)",
+      "default": "DAY"
+    },
+    {
+      "type": "color",
+      "id": "word_color_gray",
+      "label": "Gray word color",
+      "default": "#AEB2B8"
+    },
+    {
+      "type": "color",
+      "id": "word_color_red",
+      "label": "Red word color",
+      "default": "#E31E24"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Featured image"
+    },
+    {
+      "type": "header",
+      "content": "CTA / Newsletter"
+    },
+    {
+      "type": "textarea",
+      "id": "cta_heading",
+      "label": "CTA heading",
+      "default": "One-of-a-kind inventory\nwhen it's gone, it's gone."
+    },
+    {
+      "type": "text",
+      "id": "cta_subtitle",
+      "label": "CTA subtitle",
+      "default": "Bookmark this page or Subscribe to get notified."
+    },
+    {
+      "type": "text",
+      "id": "input_placeholder",
+      "label": "Email placeholder",
+      "default": "johndoe@email.com"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Subscribe to Newsletter"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Parallax Banner"
+    }
+  ]
+}
+{% endschema %}
