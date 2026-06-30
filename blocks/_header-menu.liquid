@@ -112,10 +112,19 @@
           on:pointerenter="/activate"
           on:pointerleave="/deactivate"
         >
+          {%- liquid
+            assign is_cta_link = false
+            assign link_title_down = link.title | downcase
+            if link_title_down contains 'sell' or link_title_down contains 'trade'
+              if link.links == blank
+                assign is_cta_link = true
+              endif
+            endif
+          -%}
           <a
             href="{{ link.url }}"
             data-skip-node-update="true"
-            class="menu-list__link{% if link.active %} menu-list__link--active{% endif %}{% if link.links != blank %} menu-list__link--has-children{% endif %}"
+            class="menu-list__link{% if link.active %} menu-list__link--active{% endif %}{% if link.links != blank %} menu-list__link--has-children{% endif %}{% if is_cta_link %} ls-nav-cta{% endif %}"
             {%- if link.links != blank -%}
               aria-controls="submenu-{{ forloop.index }}"
               aria-haspopup="true"

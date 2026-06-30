@@ -211,8 +211,8 @@
         "background_color": "#ffffff",
         "badge_bg_color": "#141517",
         "icon_color": "#e31e24",
-        "padding_top": 48,
-        "padding_bottom": 48
+        "padding_top": 40,
+        "padding_bottom": 40
       }
     },
     "elevate_intent_blocks": {
@@ -258,14 +258,14 @@
         "background_color": "#ffffff",
         "show_top_divider": true,
         "show_bottom_divider": true,
-        "padding_top": 40,
-        "padding_bottom": 40
+        "padding_top": 0,
+        "padding_bottom": 0
       }
     },
     "elevate_new_arrivals": {
       "type": "elevate-new-arrivals",
       "settings": {
-        "padding_top": 48,
+        "padding_top": 0,
         "padding_bottom": 48,
         "collection": "frontpage",
         "max_products": 6,
@@ -333,7 +333,7 @@
       ],
       "settings": {
         "background_color": "#e2e3e5",
-        "padding_top": 72,
+        "padding_top": 0,
         "padding_bottom": 72,
         "eyebrow": "OUR INVENTORY",
         "heading": "WHAT WE CARRY",

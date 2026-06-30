@@ -24,6 +24,7 @@
 
 <div
   class="section section--full-width elevate-arrivals"
+  data-scroll-reveal
   style="
     --arrivals-pad-top: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
     --arrivals-pad-bottom: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
@@ -821,7 +822,7 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "default": 48
+      "default": 0
     },
     {
       "type": "range",
@@ -831,7 +832,7 @@
       "max": 100,
       "step": 4,
       "unit": "px",
-      "default": 48
+      "default": 0
     },
     {
       "type": "header",

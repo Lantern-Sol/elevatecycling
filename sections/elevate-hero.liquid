@@ -354,6 +354,45 @@
     border-color: #fff;
   }
 
+  /* ── Hero entrance animation ── */
+  @keyframes elevate-hero-fadeUp {
+    from {
+      opacity: 0;
+      transform: translateY(1.5rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes elevate-hero-fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  .elevate-hero__content > * {
+    animation: elevate-hero-fadeUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .elevate-hero__content > *:nth-child(1) { animation-delay: 0.15s; }
+  .elevate-hero__content > *:nth-child(2) { animation-delay: 0.3s; }
+  .elevate-hero__content > *:nth-child(3) { animation-delay: 0.45s; }
+  .elevate-hero__content > *:nth-child(4) { animation-delay: 0.6s; }
+  .elevate-hero__content > *:nth-child(5) { animation-delay: 0.75s; }
+
+  .elevate-hero__scroll {
+    animation: elevate-hero-fadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) 1s both,
+               elevate-hero-bounce 2s ease-in-out 1.6s infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .elevate-hero__content > *,
+    .elevate-hero__scroll {
+      animation: none;
+    }
+  }
+
   /* ── Scroll indicator ── */
   .elevate-hero__scroll {
     position: relative;
@@ -367,7 +406,6 @@
     border: none;
     padding: 0;
     cursor: pointer;
-    animation: elevate-hero-bounce 2s ease-in-out infinite;
   }
 
   @keyframes elevate-hero-bounce {
@@ -645,7 +683,7 @@
       "max": 200,
       "step": 4,
       "unit": "px",
-      "default": 72
+      "default": 24
     }
   ],
   "presets": [

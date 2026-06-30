@@ -1,0 +1,642 @@
+{%- doc -%}
+  Elevate Cycling — Custom footer section.
+  Logo + description + USPs on left, vertical divider, 4 link columns on right.
+  Bottom bar with copyright and policy links.
+{%- enddoc -%}
+
+<div
+  class="elevate-footer"
+  data-scroll-reveal
+  style="
+    --footer-bg: {{ section.settings.background_color }};
+    --footer-text: {{ section.settings.text_color }};
+    --footer-heading: {{ section.settings.heading_color }};
+    --footer-pad-top: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    --footer-pad-bottom: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+  "
+>
+  <div class="elevate-footer__inner">
+    {%- comment -%} Top row: brand info + divider + nav columns {%- endcomment -%}
+    <div class="elevate-footer__top">
+
+      {%- comment -%} Left: logo, description, USPs {%- endcomment -%}
+      <div class="elevate-footer__brand">
+        {%- if section.settings.logo != blank -%}
+          <img
+            class="elevate-footer__logo"
+            src="{{ section.settings.logo | image_url: width: 400 }}"
+            alt="{{ shop.name }}"
+            width="{{ section.settings.logo.width }}"
+            height="{{ section.settings.logo.height }}"
+            loading="lazy"
+          >
+        {%- else -%}
+          <span class="elevate-footer__logo-text">{{ shop.name }}</span>
+        {%- endif -%}
+
+        {%- if section.settings.description != blank -%}
+          <p class="elevate-footer__description">{{ section.settings.description }}</p>
+        {%- endif -%}
+
+        {%- assign usps = '' -%}
+        {%- for i in (1..4) -%}
+          {%- assign usp_key = 'usp_' | append: i -%}
+          {%- assign usp_val = section.settings[usp_key] -%}
+          {%- if usp_val != blank -%}
+            {%- assign usps = usps | append: usp_val | append: '|||' -%}
+          {%- endif -%}
+        {%- endfor -%}
+
+        {%- if usps != '' -%}
+          <ul class="elevate-footer__usps" aria-label="Why shop with us">
+            {%- assign usp_icons = 'certified|tags-solid|shipping-fast|eye-solid' | split: '|' -%}
+            {%- assign usp_list = usps | split: '|||' -%}
+            {%- for usp in usp_list -%}
+              {%- if usp != blank -%}
+                <li class="elevate-footer__usp">
+                  <svg class="elevate-footer__usp-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                    {%- render 'icon', icon: usp_icons[forloop.index0] -%}
+                  </svg>
+                  <span>{{ usp }}</span>
+                </li>
+              {%- endif -%}
+            {%- endfor -%}
+          </ul>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Vertical divider {%- endcomment -%}
+      <div class="elevate-footer__divider-v" aria-hidden="true"></div>
+
+      {%- comment -%} Right: nav link columns from blocks {%- endcomment -%}
+      <nav class="elevate-footer__nav" aria-label="Footer navigation">
+        {%- for block in section.blocks -%}
+          {%- assign menu = linklists[block.settings.menu] -%}
+          <div class="elevate-footer__col{% if block.settings.full_width_mobile %} elevate-footer__col--wide{% endif %}" {{ block.shopify_attributes }}>
+            {%- if block.settings.heading != blank -%}
+              <h2 class="elevate-footer__col-heading">{{ block.settings.heading }}</h2>
+            {%- endif -%}
+
+            {%- if menu != blank and menu.links.size > 0 -%}
+              <ul class="elevate-footer__col-links{% if block.settings.two_column %} elevate-footer__col-links--grid{% endif %}">
+                {%- for link in menu.links -%}
+                  <li>
+                    <a
+                      href="{{ link.url }}"
+                      class="elevate-footer__link{% if block.settings.highlight_first and forloop.first %} elevate-footer__link--highlight{% endif %}"
+                    >
+                      {{- link.title -}}
+                    </a>
+                  </li>
+                {%- endfor -%}
+              </ul>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </nav>
+    </div>
+
+    {%- comment -%} Horizontal divider {%- endcomment -%}
+    <hr class="elevate-footer__divider-h" aria-hidden="true">
+
+    {%- comment -%} Bottom bar: copyright + policies {%- endcomment -%}
+    <div class="elevate-footer__bottom">
+      <p class="elevate-footer__copyright">
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+      </p>
+
+      {%- assign policies = shop.policies | where: 'url' -%}
+      {%- if policies.size > 0 -%}
+        <nav class="elevate-footer__policies" aria-label="Legal policies">
+          {%- for policy in policies -%}
+            {%- if policy.url != blank -%}
+              <a href="{{ policy.url }}" class="elevate-footer__policy-link">
+                {{- policy.title -}}
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </nav>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ═══════════════════════════════════════════
+     Mobile-first — base styles (< 750px)
+     ═══════════════════════════════════════════ */
+
+  /* ─── Footer container ─── */
+  .elevate-footer {
+    background-color: var(--footer-bg, #141517);
+    padding-block: 2.5rem;
+    padding-inline: 1.5rem;
+  }
+
+  .elevate-footer__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    max-width: 63rem;
+    margin-inline: auto;
+  }
+
+  /* ─── Top row (stacks on mobile) ─── */
+  .elevate-footer__top {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* ─── Brand column ─── */
+  .elevate-footer__brand {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .elevate-footer__logo {
+    max-width: 12.5rem;
+    height: auto;
+  }
+
+  .elevate-footer__logo-text {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: var(--footer-heading, #FDFCFC);
+    text-transform: uppercase;
+  }
+
+  .elevate-footer__description {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: var(--footer-text, #AEB2B8);
+    margin: 0;
+  }
+
+  /* ─── USP list ─── */
+  .elevate-footer__usps {
+    list-style: none;
+    margin: 0;
+    padding-inline-start: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    opacity: 0.4;
+  }
+
+  .elevate-footer__usp {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: var(--footer-text, #AEB2B8);
+  }
+
+  .elevate-footer__usp-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  /* ─── Vertical divider (hidden on mobile) ─── */
+  .elevate-footer__divider-v {
+    display: none;
+  }
+
+  /* ─── Nav columns ─── */
+  .elevate-footer__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem 0.75rem;
+  }
+
+  /* Default: half-width columns (Support, About Us side by side) */
+  .elevate-footer__col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: calc(50% - 0.375rem);
+    min-width: 0;
+  }
+
+  /* Wide columns span full width on mobile (Shop, Sell & Trade) */
+  .elevate-footer__col--wide {
+    width: 100%;
+  }
+
+  .elevate-footer__col-heading {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: var(--footer-heading, #FDFCFC);
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-footer__col-links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* Two-column grid for links (desktop setting) */
+  .elevate-footer__col-links--grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+  }
+
+  .elevate-footer__col-links--grid > li {
+    width: calc(50% - 0.375rem);
+  }
+
+  /* Wide columns on mobile also get 2-column link layout */
+  .elevate-footer__col--wide .elevate-footer__col-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 0.75rem;
+  }
+
+  .elevate-footer__col--wide .elevate-footer__col-links > li {
+    width: calc(50% - 0.375rem);
+  }
+
+  .elevate-footer__link {
+    font-family: 'Host Grotesk', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    color: var(--footer-text, #AEB2B8);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .elevate-footer__link:hover {
+    color: var(--footer-heading, #FDFCFC);
+  }
+
+  /* Highlight link (red CTA with underline) */
+  .elevate-footer__link--highlight {
+    font-family: 'Host Grotesk', sans-serif;
+    font-weight: 700;
+    color: #E31E24;
+    text-decoration: underline;
+    text-underline-offset: 0.125rem;
+  }
+
+  .elevate-footer__link--highlight:hover {
+    color: #ff3338;
+  }
+
+  /* ─── Horizontal divider ─── */
+  .elevate-footer__divider-h {
+    border: none;
+    height: 0.0625rem;
+    background-color: #6B7280;
+    margin: 0;
+  }
+
+  /* ─── Bottom bar ─── */
+  .elevate-footer__bottom {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.5;
+  }
+
+  .elevate-footer__copyright {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: var(--footer-text, #AEB2B8);
+    margin: 0;
+    text-align: center;
+  }
+
+  .elevate-footer__policies {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1rem;
+  }
+
+  .elevate-footer__policy-link {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--footer-text, #AEB2B8);
+    text-decoration: underline;
+    text-underline-offset: 0.125rem;
+    transition: color 0.2s ease;
+  }
+
+  .elevate-footer__policy-link:hover {
+    color: var(--footer-heading, #FDFCFC);
+  }
+
+  /* ═══════════════════════════════════════════
+     Desktop (750px+)
+     ═══════════════════════════════════════════ */
+  @media (min-width: 750px) {
+    .elevate-footer {
+      padding-block-start: var(--footer-pad-top, 3rem);
+      padding-block-end: var(--footer-pad-bottom, 3rem);
+      padding-inline: 2rem;
+    }
+
+    .elevate-footer__inner {
+      gap: 0;
+    }
+
+    .elevate-footer__top {
+      flex-direction: row;
+      gap: 2rem;
+    }
+
+    .elevate-footer__brand {
+      width: 19.625rem;
+      flex-shrink: 0;
+      gap: 1rem;
+    }
+
+    .elevate-footer__description {
+      font-size: 0.875rem;
+      letter-spacing: -0.00875rem;
+    }
+
+    .elevate-footer__divider-v {
+      display: block;
+      width: 0.0625rem;
+      align-self: stretch;
+      background-color: #6B7280;
+      flex-shrink: 0;
+    }
+
+    .elevate-footer__nav {
+      flex: 1;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      gap: 1.5rem;
+    }
+
+    .elevate-footer__col {
+      width: auto;
+      gap: 1rem;
+    }
+
+    .elevate-footer__col--wide {
+      width: auto;
+    }
+
+    /* On desktop, wide columns don't force 2-col on their links */
+    .elevate-footer__col--wide .elevate-footer__col-links {
+      flex-wrap: nowrap;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .elevate-footer__col--wide .elevate-footer__col-links > li {
+      width: auto;
+    }
+
+    .elevate-footer__col-links {
+      gap: 0.75rem;
+    }
+
+    /* Grid override stays for explicitly two-column blocks */
+    .elevate-footer__col-links--grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .elevate-footer__col-links--grid > li {
+      width: auto;
+    }
+
+    /* Highlight on desktop: border-bottom instead of underline */
+    .elevate-footer__link--highlight {
+      text-decoration: none;
+      border-bottom: 0.5px solid #E31E24;
+      padding-bottom: 0.125rem;
+    }
+
+    .elevate-footer__link--highlight:hover {
+      border-bottom-color: #ff3338;
+    }
+
+    .elevate-footer__divider-h {
+      margin-block: 2rem;
+    }
+
+    .elevate-footer__bottom {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .elevate-footer__copyright {
+      font-size: 0.875rem;
+      letter-spacing: -0.00875rem;
+      text-align: left;
+    }
+
+    .elevate-footer__policies {
+      gap: 0.75rem;
+    }
+
+    .elevate-footer__policy-link {
+      font-family: 'Host Grotesk', sans-serif;
+      font-size: 1rem;
+      line-height: 1.4;
+    }
+
+    /* Dot separator between policy links (desktop only) */
+    .elevate-footer__policy-link + .elevate-footer__policy-link::before {
+      content: '·';
+      margin-inline-end: 0.75rem;
+      color: var(--footer-text, #AEB2B8);
+      text-decoration: none;
+      display: inline-block;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Elevate Footer",
+  "tag": "footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "The trusted marketplace where performance cyclists buy, sell, and trade brand-new and certified pre-owned gear — inspected, fully spec'd, and priced right."
+    },
+    {
+      "type": "text",
+      "id": "usp_1",
+      "label": "USP line 1",
+      "default": "Mechanic-certified. Every single item."
+    },
+    {
+      "type": "text",
+      "id": "usp_2",
+      "label": "USP line 2",
+      "default": "Retail price shown. Always."
+    },
+    {
+      "type": "text",
+      "id": "usp_3",
+      "label": "USP line 3",
+      "default": "30-day returns. Free US shipping."
+    },
+    {
+      "type": "text",
+      "id": "usp_4",
+      "label": "USP line 4",
+      "default": "Full specs. No surprises."
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#141517"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#AEB2B8"
+    },
+    {
+      "type": "color",
+      "id": "heading_color",
+      "label": "Heading color",
+      "default": "#FDFCFC"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 100,
+      "step": 4,
+      "default": 48,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "footer_menu",
+      "name": "Link column",
+      "settings": [
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Heading",
+          "default": "Links"
+        },
+        {
+          "type": "link_list",
+          "id": "menu",
+          "label": "Menu"
+        },
+        {
+          "type": "checkbox",
+          "id": "two_column",
+          "label": "Two-column grid",
+          "default": false,
+          "info": "Display links in a 2-column grid (e.g. for Shop column)."
+        },
+        {
+          "type": "checkbox",
+          "id": "full_width_mobile",
+          "label": "Full width on mobile",
+          "default": false,
+          "info": "Span full width on mobile with 2-column link grid (e.g. for Shop, Sell & Trade)."
+        },
+        {
+          "type": "checkbox",
+          "id": "highlight_first",
+          "label": "Highlight first link",
+          "default": false,
+          "info": "Style the first link as a red CTA (e.g. '→ Get a offer')."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Elevate Footer",
+      "blocks": [
+        {
+          "type": "footer_menu",
+          "settings": {
+            "heading": "Shop",
+            "menu": "footer-shop",
+            "two_column": true,
+            "full_width_mobile": true
+          }
+        },
+        {
+          "type": "footer_menu",
+          "settings": {
+            "heading": "Sell & Trade",
+            "menu": "footer-sell-trade",
+            "full_width_mobile": true,
+            "highlight_first": true
+          }
+        },
+        {
+          "type": "footer_menu",
+          "settings": {
+            "heading": "Support",
+            "menu": "footer-support"
+          }
+        },
+        {
+          "type": "footer_menu",
+          "settings": {
+            "heading": "About Us",
+            "menu": "footer-about"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
