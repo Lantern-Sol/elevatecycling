@@ -462,6 +462,36 @@
   type="module"
 ></script>
 
+<script type="module">
+  /**
+   * Elevate: Fix megamenu flickering.
+   *
+   * The theme's `on:pointerleave` binding uses pointerout semantics — it fires
+   * when the pointer moves to a *child* element (e.g. <li> → its own <a>).
+   * This starts a 200ms close timer that never gets cancelled because the
+   * component's `on:pointerenter` doesn't re-fire for the return trip.
+   *
+   * Fix: intercept deactivate and skip the timer when relatedTarget is a
+   * descendant of the same <li>.
+   */
+  customElements.whenDefined('header-menu').then(() => {
+    const menu = document.querySelector('header-menu');
+    if (!menu) return;
+
+    const origDeactivate = menu.deactivate.bind(menu);
+
+    menu.deactivate = function (event) {
+      if (event?.relatedTarget instanceof Node) {
+        const listItem = event.target?.closest?.('.menu-list__list-item');
+        if (listItem && listItem.contains(event.relatedTarget)) {
+          return;
+        }
+      }
+      origDeactivate(event);
+    };
+  });
+</script>
+
 {% stylesheet %}
   body {
     --header-height: 60px;
@@ -1197,7 +1227,7 @@
   .header .header__column--right {
     width: 100%;
     justify-content: flex-end;
-    gap: 1.5rem;
+    gap: 1rem;
   }
 
   /* Reset theme's negative margins that pull search & cart outside the grid cell */
@@ -1214,11 +1244,10 @@
     display: none;
   }
 
-  /* Box shadow per Figma */
+  /* Remove box-shadow from full-width underlay — shadow lives on the inner panel now */
   .header__underlay-closed,
   .header__underlay-open {
-    box-shadow: 0 0.25rem 0.1875rem rgba(0, 0, 0, 0.1),
-                0 0.125rem 0.125rem rgba(0, 0, 0, 0.1);
+    box-shadow: none;
   }
 
   /* Menu links: Elevate defaults fed through the theme's CSS var system.
@@ -1227,6 +1256,455 @@
   .header-menu .menu-list__link,
   .header-menu .overflow-menu__trigger {
     letter-spacing: 0.03rem;
+  }
+
+  /* Hide chevron from top-level nav links — not in Figma spec */
+  .header-menu .menu-list__link > .icon-chevron-down {
+    display: none;
+  }
+
+  /* ── Active indicator: red bar below hovered/expanded nav item ── */
+  .header-menu .menu-list__list-item:hover > .menu-list__link,
+  .header-menu .menu-list__list-item:focus-within > .menu-list__link,
+  .header-menu .menu-list__link[aria-expanded='true'] {
+    position: relative;
+  }
+
+  .header-menu .menu-list__list-item:hover > .menu-list__link::before,
+  .header-menu .menu-list__list-item:focus-within > .menu-list__link::before,
+  .header-menu .menu-list__link[aria-expanded='true']::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -1rem;
+    width: 100%;
+    height: 3px;
+    background: #E31E24;
+    border-radius: 1.5px;
+  }
+
+  .header-menu .menu-list__link.ls-nav-cta {
+    background-image: none;
+  }
+
+
+  /* ══════════════════════════════════════════════════════════════
+     Elevate: Megamenu dropdown — pixel-perfect per Figma
+     ══════════════════════════════════════════════════════════════ */
+
+  /* ── Kill the full-width submenu background painted by the underlay gradients.
+       The block's style tag sets --color-submenu on .header__underlay, so we
+       can't reliably override the variable — instead we override the gradient
+       backgrounds directly on the underlay elements with higher specificity. ── */
+  .header .header__underlay-closed,
+  .header .header__underlay-open {
+    background:
+      linear-gradient(
+        var(--color-background-top-row) 0 var(--top-row-height),
+        var(--color-background-bottom-row, var(--color-background-top-row)) var(--top-row-height) var(--header-height),
+        transparent var(--header-height) 100%
+      );
+  }
+
+  /* ── Dropdown panel: constrained width, rounded bottom corners, shadow ──
+       .header-menu prefix bumps specificity above the theme block CSS
+       which loads later and overrides same-specificity rules.            ── */
+  .header-menu .menu-list__submenu-inner {
+    background: #141517;
+    border-top: 1px solid #E31E24;
+    border-radius: 0 0 2rem 2rem;
+    box-shadow:
+      0 0.25rem 0.1875rem rgba(0, 0, 0, 0.1),
+      0 0.125rem 0.125rem rgba(0, 0, 0, 0.1);
+    gap: 1.5rem;
+
+    /* Force padding — theme block longhands override same-specificity shorthand */
+    padding-block-start: 2rem;
+    padding-block-end: 2rem;
+    padding-inline-start: 2rem;
+    padding-inline-end: 2rem;
+
+    /* Override theme defaults that clip taller megamenu content */
+    max-height: none;
+    overflow: visible;
+
+    /* Fixed width prevents reflow-triggered height recalculation mid-animation */
+    width: 65.5rem;
+    margin-inline: auto;
+  }
+
+  /* Shorter clip-path transition reduces visible jumps from mid-animation recalc */
+  .header-menu .menu-list__list-item > .menu-list__submenu {
+    transition: clip-path 200ms var(--ease-out-cubic);
+  }
+
+  /* Override theme grid → 2-column CSS grid: [non-brand groups | brand group].
+     Non-brand groups stack vertically on the left (grid-column: 1).
+     Brand group sits on the right spanning all rows (grid-column: 2). */
+  .header-menu .mega-menu__grid {
+    display: flex;
+    align-items: stretch;
+    gap: 1.5rem;
+    width: auto; /* override theme's width:100% that starves the cards of space */
+    min-width: 0;
+  }
+
+  .header-menu .mega-menu__list {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    flex: 1;
+    min-width: 0;
+    position: relative;
+  }
+
+  /* Spacing between left-column groups (26px per Figma) — ~ skips the brand column in DOM */
+  .header-menu .mega-menu__column:not(:has([data-brand-group])) ~ .mega-menu__column:not(:has([data-brand-group])) {
+    margin-block-start: 1.625rem;
+  }
+
+  /* Brand column → positioned to the right, full height */
+  .header-menu .mega-menu__column:has([data-brand-group]) {
+    position: absolute;
+    inset-block: 0;
+    inset-inline-end: 0;
+  }
+
+  /* ── Hide underlay ::after shadow (full-width popover shadow) ── */
+  .header .header__underlay-open::after {
+    display: none;
+  }
+
+  /* ── Mega-menu wrapper (grid is the flex parent now) ── */
+  .mega-menu.section {
+  }
+
+  /* Remove page-margin padding inherited from .section--full-width-margin */
+  .mega-menu.section > * {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  /* ── Category headers (BY TYPE, BY BRAND — level-2 parent links) ── */
+  .mega-menu__link.mega-menu__link--parent {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: rgba(174, 178, 184, 0.5);
+    padding-block: 0;
+    margin-block-end: 0;
+    pointer-events: none;
+  }
+
+  .mega-menu__link.mega-menu__link--parent:hover {
+    color: rgba(174, 178, 184, 0.5);
+  }
+
+  /* Hide the chevron icon on category headers */
+  .mega-menu__link.mega-menu__link--parent .svg-wrapper,
+  .mega-menu__link.mega-menu__link--parent .icon-chevron-down {
+    display: none;
+  }
+
+  /* ── Child links (level-3) ── */
+  .mega-menu__link:not(.mega-menu__link--parent) {
+    font-family: 'Host Grotesk', 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    color: #fdfcfc;
+    padding-block: 0.25rem;
+    transition: color 0.15s ease;
+  }
+
+  .mega-menu__link:not(.mega-menu__link--parent):hover {
+    color: #E31E24;
+  }
+
+  /* ── Star-icon links (☆ New Arrivals, ★ Brand New Items) ── */
+  .mega-menu__link.elevate-star-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .elevate-star-icon {
+    width: 0.875rem;
+    height: 0.875rem;
+    flex-shrink: 0;
+  }
+
+  /* Group spacing is handled by margin-block-start on .mega-menu__column siblings above */
+
+  /* Indent child links under group header — 16px both sides, 16px header-to-list gap, 4px between items */
+  [data-menu-group] > ul {
+    padding-inline: 1rem;
+    margin-block-start: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  /* ── Red accent links (→ All ..., → Browse all ...) ── */
+  .mega-menu__link.elevate-accent-link {
+    font-weight: 700;
+    color: #E31E24;
+    border-bottom: 0.5px solid #E31E24;
+    display: inline-flex;
+    padding-inline: 0;
+    padding-block: 0;
+    margin-block-start: 0.75rem; /* 12px + 4px gap = 16px matching Figma group gap */
+    margin-inline-start: -1rem;
+  }
+
+  .mega-menu__link.elevate-accent-link:hover {
+    color: #ff3a40;
+    border-color: #ff3a40;
+  }
+
+  /* ── 2-column brand grid — Figma: w-272px, grid 1fr 1fr, gap 8px/32px ── */
+  [data-brand-group] > ul {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 2rem;
+    row-gap: 0.5rem;
+    width: 17rem;
+  }
+
+  [data-brand-group] > ul > li {
+    min-width: 0;
+  }
+
+  /* Accent link spans full width of brand grid */
+  [data-brand-group] > ul > li:has(.elevate-accent-link) {
+    grid-column: 1 / -1;
+  }
+
+  /* ── Vertical divider: between non-brand and brand columns ── */
+  .mega-menu__list > .mega-menu__column:has([data-brand-group]) {
+    border-inline-start: 1px solid rgba(253, 252, 252, 0.08);
+    padding-inline-start: 1.5rem; /* 24px — matches Figma gap between columns */
+  }
+
+  /* ══════════════════════════════════════════════════
+     Elevate: Megamenu promo cards
+     ══════════════════════════════════════════════════ */
+
+  /* ── Cards container ── */
+  .elevate-megamenu-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 18.5rem;
+    flex-shrink: 0;
+    white-space: normal; /* override inherited nowrap from megamenu */
+    align-self: stretch;
+    border-inline-start: 1px solid rgba(253, 252, 252, 0.08);
+    padding-inline-start: 1.5rem;
+  }
+
+  /* ── Shared card base ── */
+  .elevate-megamenu-card {
+    display: flex;
+    flex-direction: column;
+    border-radius: 1.5rem;
+    text-decoration: none;
+    transition: opacity 0.2s ease;
+    overflow: visible;
+  }
+
+  .elevate-megamenu-card:hover {
+    opacity: 0.92;
+  }
+
+  /* ── CPO badge card ── */
+  .elevate-megamenu-card--cpo {
+    background: #322909;
+    gap: 0.5rem;
+    padding: 2rem 1.5rem 1.5rem;
+    overflow: visible; /* badge icon overflows its container */
+  }
+
+  /* CPO badge pill — full width of card content area */
+  .elevate-megamenu-card__badge-pill {
+    display: inline-flex;
+    align-items: center;
+    background: #F9D44E;
+    border-radius: 0.5rem;
+    padding: 0.375rem 0.75rem;
+    position: relative;
+    width: 100%;
+  }
+
+  .elevate-megamenu-card__badge-icon {
+    position: absolute;
+    left: -0.5625rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4rem;
+    height: 3rem;
+    overflow: visible;
+  }
+
+  .elevate-megamenu-card__badge-icon img {
+    width: 4.5rem;
+    height: 4.5rem;
+    object-fit: contain;
+    position: absolute;
+    left: -0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+
+  .elevate-megamenu-card__badge-text {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #141517;
+    white-space: nowrap;
+    margin: 0 auto;
+  }
+
+  /* CPO description */
+  .elevate-megamenu-card__desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #fdfcfc;
+    margin: 0;
+    padding-block-start: 0.75rem;
+  }
+
+  /* CPO "What's CPO?" link */
+  .elevate-megamenu-card__cpo-link {
+    display: flex;
+    width: fit-content;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Host Grotesk', 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    color: #fdfcfc;
+    padding-block-start: 0.75rem;
+    border-bottom: 0.5px solid #fdfcfc;
+    padding-block-end: 0;
+  }
+
+  .elevate-megamenu-card__cpo-link svg {
+    width: 1rem;
+    height: 1rem;
+    fill: #fdfcfc;
+  }
+
+  /* ── Trade / Sell card ── */
+  .elevate-megamenu-card--trade {
+    background: radial-gradient(
+      ellipse at bottom left,
+      rgba(109, 19, 22, 1) 0%,
+      rgba(73, 14, 16, 1) 50%,
+      rgba(37, 10, 10, 1) 100%
+    );
+    padding: 1rem;
+    gap: 0.75rem;
+    overflow: hidden;
+  }
+
+  .elevate-megamenu-card__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-megamenu-card__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #fdfcfc;
+    margin: 0;
+  }
+
+  .elevate-megamenu-card__title-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  /* CTA button */
+  .elevate-megamenu-card__cta-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    background: #fdfcfc;
+    color: #141517;
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    font-family: 'Host Grotesk', 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+
+  .elevate-megamenu-card__cta-btn:hover {
+    background: #e8e7e7;
+  }
+
+  .elevate-megamenu-card__cta-btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    fill: #141517;
+  }
+
+  /* CTA group: button + fine print */
+  .elevate-megamenu-card__cta-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  /* Subtext under CTA */
+  .elevate-megamenu-card__fine-print {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #aeb2b8;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* ── Hide promo cards on tablet and below ── */
+  @media screen and (max-width: 989px) {
+    .elevate-megamenu-cards {
+      display: none;
+    }
+
+    .mega-menu__column + .mega-menu__column {
+      border-inline-start: none;
+      padding-inline-start: 0;
+    }
   }
 
   /* ── Mobile header overrides ── */
@@ -1338,40 +1816,6 @@
   </script>
 {% endunless %}
 
-
-<script>
-  setTimeout(function() {
-    var cols = document.querySelector('.header__columns');
-    if (!cols) return;
-    var right = cols.querySelector('.header__column--right');
-    if (!right) return;
-    var rr = right.getBoundingClientRect();
-    var rs = getComputedStyle(right);
-    console.log('=== RIGHT COLUMN DEBUG ===');
-    console.log('column--right: w=' + Math.round(rr.width) + ' L=' + Math.round(rr.left) + ' R=' + Math.round(rr.right) + ' display=' + rs.display + ' justify=' + rs.justifyContent + ' gap=' + rs.gap + ' pad=' + rs.padding);
-
-    function logEl(el, depth) {
-      var r = el.getBoundingClientRect();
-      if (r.width === 0 && r.height === 0) return;
-      var s = getComputedStyle(el);
-      var tag = el.tagName.toLowerCase();
-      var cls = el.className ? (typeof el.className === 'string' ? el.className.split(' ').slice(0,3).join('.') : '') : '';
-      var indent = '  '.repeat(depth);
-      var ovL = r.left < rr.left ? ' OVERFLOW-LEFT=' + Math.round(rr.left - r.left) + 'px' : '';
-      var ovR = r.right > rr.right ? ' OVERFLOW-RIGHT=' + Math.round(r.right - rr.right) + 'px' : '';
-      console.log(indent + tag + '.' + cls + ': w=' + Math.round(r.width) + ' L=' + Math.round(r.left) + ' R=' + Math.round(r.right) + ' margin=[' + s.margin + '] pad=[' + s.padding + '] display=' + s.display + ovL + ovR);
-      if (depth < 3) {
-        Array.from(el.children).forEach(function(c) { logEl(c, depth + 1); });
-      }
-    }
-    Array.from(right.children).forEach(function(c) { logEl(c, 1); });
-
-    var cs = getComputedStyle(cols);
-    console.log('grid-template-columns: ' + cs.gridTemplateColumns);
-    console.log('grid gap: ' + cs.gap);
-    console.log('=== END ===');
-  }, 1000);
-</script>
 
 {% schema %}
 {

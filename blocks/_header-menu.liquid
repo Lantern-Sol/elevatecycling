@@ -136,9 +136,6 @@
             ref="menuitem"
           >
             <span class="menu-list__link-title">{{- link.title -}}</span>
-            {%- if link.links != blank -%}
-              {% render 'icon-chevron-down' %}
-            {%- endif -%}
           </a>
           {%- if link.links != blank -%}
             <div class="menu-list__submenu{{ background_color_classes }}" ref="submenu[]">
@@ -174,6 +171,7 @@
                       feature_button_label: block_settings.feature_button_label,
                       feature_button_style_class: block_settings.feature_button_style_class
                     %}
+                  {% render 'elevate-megamenu-cards', parent_title: link.title %}
                   </div>
                 </div>
               </div>

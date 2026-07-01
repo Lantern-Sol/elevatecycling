@@ -108,13 +108,26 @@
             assign span_class = 'mega-menu__column--wide-collection-image'
           endif
         else
+          # LS: brand groups get span 2 to accommodate 2-column flex-wrap layout
+          assign _link_title_slug = link.title | downcase | strip
+          if _link_title_slug contains 'brand'
+            assign column_span = 2
+            assign column_count = column_count | plus: 1
+          endif
           # For all other modes, column span is determined by the number of links in the parent link
           assign span_class = 'mega-menu__column--span-' | append: column_span
         endif
         echo '<li class="mega-menu__column ' | append: span_class | append: '">'
       endif
     %}
-    <div>
+    {%- liquid
+      assign _group_slug = link.title | downcase | strip
+      assign _is_brand_group = false
+      if _group_slug contains 'brand'
+        assign _is_brand_group = true
+      endif
+    -%}
+    <div data-menu-group="{{ _group_slug }}"{% if _is_brand_group %} data-brand-group{% endif %}>
       <a
         href="{{ link.url }}"
         class="mega-menu__link {% if link.links != blank %}mega-menu__link--parent{% endif %}"
@@ -155,6 +168,28 @@
         >
           {% for childLink in link.links %}
             {% assign break_after_modulo = forloop.index | modulo: links_before_wrap %}
+            {%- liquid
+              assign _child_title = childLink.title | strip
+              assign _child_down = _child_title | downcase
+              assign _is_accent = false
+              if _child_title contains '→' or _child_down contains 'browse all'
+                assign _is_accent = true
+              endif
+              if _child_down == 'all complete bikes' or _child_down == 'all framesets' or _child_down == 'all wheelsets' or _child_down == 'all groupsets' or _child_down == 'all components'
+                assign _is_accent = true
+              endif
+
+              assign _has_star_outline = false
+              assign _has_star_filled = false
+              assign _display_title = _child_title
+              if _child_title contains '☆'
+                assign _has_star_outline = true
+                assign _display_title = _child_title | remove: '☆' | strip
+              elsif _child_title contains '★'
+                assign _has_star_filled = true
+                assign _display_title = _child_title | remove: '★' | strip
+              endif
+            -%}
             <li
               {% if break_after_modulo == 0 and should_break_columns %}
                 style="break-after: column;"
@@ -162,9 +197,14 @@
             >
               <a
                 href="{{ childLink.url }}"
-                class="mega-menu__link"
+                class="mega-menu__link{% if _is_accent %} elevate-accent-link{% endif %}{% if _has_star_outline or _has_star_filled %} elevate-star-link{% endif %}"
               >
-                <span class="wrap-text">{{- childLink.title -}}</span>
+                {%- if _has_star_outline -%}
+                  <svg class="elevate-star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 21" fill="none" aria-hidden="true"><path d="M10.7578 0L10.0781 1.54688L7.64062 7.00781L1.6875 7.64062L0 7.82812L1.26562 8.95312L5.69531 12.9609L4.45312 18.8203L4.10156 20.4609L5.57812 19.6172L10.7578 16.6172L15.9375 19.6172L17.4141 20.4609L17.0625 18.8203L15.8203 12.9609L20.25 8.95312L21.5156 7.82812L19.8281 7.64062L13.875 7.00781L11.4375 1.54688L10.7578 0ZM10.7578 3.67969L12.6797 8.01562L12.8672 8.41406L13.2891 8.46094L18 8.95312L14.4844 12.1172L14.1562 12.4219L14.25 12.8438L15.2344 17.4609L11.1328 15.1172L10.7578 14.8828L10.3828 15.1172L6.28125 17.4609L7.26562 12.8438L7.35938 12.4219L7.03125 12.1172L3.51562 8.95312L8.22656 8.46094L8.64844 8.41406L8.83594 8.01562L10.7578 3.67969Z" fill="#FDFCFC"/></svg>
+                {%- elsif _has_star_filled -%}
+                  <svg class="elevate-star-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 22 21" fill="none" aria-hidden="true"><path d="M21.5039 7.81055L13.875 7.00488L10.752 0L7.62891 7.00488L0 7.81055L5.69824 12.9463L4.10742 20.4492L10.752 16.6172L17.3965 20.4492L15.8057 12.9463L21.5039 7.81055Z" fill="#F9D44E"/></svg>
+                {%- endif -%}
+                <span class="wrap-text">{{- _display_title -}}</span>
               </a>
             </li>
           {% endfor %}

@@ -27,6 +27,7 @@
     {%- render 'meta-tags' -%}
     {%- render 'stylesheets' -%}
     {%- render 'fonts' -%}
+    {%- render 'elevate-fonts' -%}
     {%- render 'scripts' -%}
     {%- render 'theme-styles-variables' -%}
     {%- render 'color-palette' -%}
@@ -141,5 +142,7 @@
     {% render 'quick-add-modal' %}
 
     <script src="{{ 'elevate-scroll-reveal.js' | asset_url }}"></script>
+    {% comment %} DEBUG — remove before deploy {% endcomment %}
+    <script src="{{ 'debug-megamenu.js' | asset_url }}" defer></script>
   </body>
 </html>

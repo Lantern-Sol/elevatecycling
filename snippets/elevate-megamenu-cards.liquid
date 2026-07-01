@@ -1,0 +1,71 @@
+{%- doc -%}
+  Renders two promotional cards inside the Elevate megamenu dropdown:
+  1. CPO badge card — dark brown bg (#322909), gold badge pill, description, "What's CPO?" link
+  2. Trade/Sell card — dark red gradient bg, dynamic heading per category, white CTA button
+
+  @param {string} parent_title - Title of the top-level menu item (e.g. "Complete Bikes")
+{%- enddoc -%}
+
+{%- liquid
+  assign _title_down = parent_title | downcase | strip
+  assign _trade_noun = 'GEAR'
+  assign _cpo_desc = "Every bike inspected. Mechanic's Notes on every listing."
+
+  if _title_down contains 'bike'
+    assign _trade_noun = 'YOUR BIKE'
+  elsif _title_down contains 'frameset'
+    assign _trade_noun = 'FRAMESETS'
+    assign _cpo_desc = 'Every frameset inspected for cracks, paint, and alignment.'
+  elsif _title_down contains 'wheelset'
+    assign _trade_noun = 'WHEELSETS'
+    assign _cpo_desc = 'Every wheelset checked for true, spoke tension, and brake track condition.'
+  elsif _title_down contains 'groupset'
+    assign _trade_noun = 'GEAR'
+    assign _cpo_desc = 'Every component inspected for wear, function, and compatibility.'
+  elsif _title_down contains 'component'
+    assign _trade_noun = 'COMPONENTS'
+    assign _cpo_desc = 'Every component inspected for wear, function, and compatibility.'
+  endif
+-%}
+
+<div class="elevate-megamenu-cards">
+  {%- comment -%} ── CPO Badge Card ── {%- endcomment -%}
+  <a href="/pages/cpo" class="elevate-megamenu-card elevate-megamenu-card--cpo">
+    <div class="elevate-megamenu-card__badge-pill" aria-hidden="true">
+      <div class="elevate-megamenu-card__badge-icon">
+        <img
+          src="{{ 'cpo-badge.png' | asset_url }}"
+          alt=""
+          width="72"
+          height="72"
+          loading="lazy"
+        >
+      </div>
+      <span class="elevate-megamenu-card__badge-text">CERTIFIED PRE-OWNED</span>
+    </div>
+    <p class="elevate-megamenu-card__desc">{{ _cpo_desc }}</p>
+    <span class="elevate-megamenu-card__cpo-link">
+      What's CPO?
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" aria-hidden="true">
+        <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+      </svg>
+    </span>
+  </a>
+
+  {%- comment -%} ── Trade / Sell Card ── {%- endcomment -%}
+  <a href="/pages/sell-trade" class="elevate-megamenu-card elevate-megamenu-card--trade">
+    <div class="elevate-megamenu-card__title-group">
+      <p class="elevate-megamenu-card__eyebrow">TRADE OR SALE</p>
+      <p class="elevate-megamenu-card__heading">GOT {{ _trade_noun }}<br>COLLECTING DUST?</p>
+    </div>
+    <div class="elevate-megamenu-card__cta-group">
+      <span class="elevate-megamenu-card__cta-btn">
+        Quote your gear
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" aria-hidden="true">
+          <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+        </svg>
+      </span>
+      <p class="elevate-megamenu-card__fine-print">$5.4M+ paid to sellers · Complete bikes and components accepted</p>
+    </div>
+  </a>
+</div>

@@ -223,6 +223,7 @@
           "settings": {
             "eyebrow": "READY TO RIDE",
             "heading": "Looking for a complete build?",
+            "image": "shopify://shop_images/Frame_2147227945_1.webp",
             "button_label": "Shop Complete Bikes",
             "button_link": "",
             "description": "Full bikes and framesets — road, gravel, CX. Every one inspected, spec'd, and priced"
@@ -233,6 +234,7 @@
           "settings": {
             "eyebrow": "BUILDING YOUR RIG",
             "heading": "Hunting a\nspecific part?",
+            "image": "shopify://shop_images/Frame_2147227945.webp",
             "button_label": "Shop Parts & Components",
             "button_link": "",
             "description": "Groupsets, wheelsets, cockpit, and components. Mechanic-verified specs, daily drops."
@@ -243,6 +245,7 @@
           "settings": {
             "eyebrow": "SELL OR TRADE",
             "heading": "Your gear\nhas value",
+            "image": "shopify://shop_images/Frame_2147227945_2.webp",
             "button_label": "Get a Free Offer",
             "button_link": "",
             "description": "Cash or store credit — fair offer within 24hrs. No auctions, no strangers, no lowball DMs."
@@ -267,7 +270,7 @@
       "settings": {
         "padding_top": 0,
         "padding_bottom": 48,
-        "collection": "frontpage",
+        "collection": "all-items",
         "max_products": 6,
         "eyebrow": "NEW ARRIVALS",
         "heading": "Check what Just Dropped!",
@@ -490,6 +493,37 @@
         "button_link": ""
       }
     },
+    "elevate_reviews": {
+      "type": "elevate-reviews",
+      "blocks": {
+        "ebay_reviews_carousel_widget_block_XUJmzT": {
+          "type": "shopify://apps/ebay-reviews/blocks/carousel-widget-block/6ae47d69-fff4-432b-a762-b178008c9165",
+          "settings": {
+            "themeId": "light",
+            "autoscroll": true,
+            "showReviewPhotos": true,
+            "showRating": true,
+            "showDate": true,
+            "showName": false,
+            "fixedReviewsHeight": false,
+            "textStyle": "plain",
+            "ratingStyle": "text",
+            "alignment": "left",
+            "infoPosition": "top"
+          }
+        }
+      },
+      "block_order": [
+        "ebay_reviews_carousel_widget_block_XUJmzT"
+      ],
+      "settings": {
+        "eyebrow": "TRUSTED BY CYCLIST",
+        "heading": "Don't take our word for it.",
+        "subtitle": "Real riders. Real builds. Real opinions.",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
     "elevate_sell_or_trade": {
       "type": "elevate-sell-or-trade",
       "blocks": {
@@ -643,6 +677,7 @@
     "elevate_what_we_carry",
     "elevate_cpo_process",
     "elevate_shop_by_category",
+    "elevate_reviews",
     "elevate_sell_or_trade",
     "elevate_faq"
   ]

@@ -1,0 +1,667 @@
+{%- comment -%}
+  Elevate Cycling — Reviews section.
+  Custom heading + Reputon eBay Reviews app block slot.
+{%- endcomment -%}
+
+<div
+  class="section section--page-width elevate-reviews"
+  data-scroll-reveal
+  style="
+    --reviews-pad-top: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    --reviews-pad-bottom: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+  "
+>
+  <div class="elevate-reviews__inner">
+    {%- comment -%} ── Section heading ── {%- endcomment -%}
+    <div class="elevate-reviews__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="elevate-reviews__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-reviews__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subtitle != blank -%}
+        <p class="elevate-reviews__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── App block (Reputon widget) ── {%- endcomment -%}
+    <div class="elevate-reviews__widget">
+      {%- for block in section.blocks -%}
+        {% render block %}
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<style>
+  .elevate-reviews {
+    background: #ffffff;
+    padding-block-start: var(--reviews-pad-top);
+    padding-block-end: var(--reviews-pad-bottom);
+  }
+
+  .elevate-reviews__inner {
+    grid-column: 1 / -1;
+    max-width: 75rem;
+    width: 100%;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  /* ── Header ── */
+  .elevate-reviews__header {
+    text-align: center;
+    margin-block-end: 2.5rem;
+  }
+
+  .elevate-reviews__eyebrow {
+    font-family: 'Host Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #e31e24;
+    margin: 0 0 0.75rem;
+  }
+
+  .elevate-reviews__heading {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 3.5625rem;
+    line-height: 1.05;
+    color: #141517;
+    margin: 0 0 0.5rem;
+  }
+
+  .elevate-reviews__subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #36393f;
+    margin: 0;
+  }
+
+  /* ── Widget wrapper ── */
+  .elevate-reviews__widget {
+    width: 100%;
+  }
+
+  /* ── Reputon widget overrides ── */
+
+  /* Constrain widget width and set base font */
+  .elevate-reviews .reputon-ebay-reviews-widget {
+    font-family: 'Inter', sans-serif;
+    max-width: 100%;
+  }
+
+  /* Inner wrapper — force full width, adjust padding */
+  .elevate-reviews .reputon-ebay-reviews-widget > div {
+    width: 100%;
+    max-width: 100%;
+    padding-bottom: 1.5rem !important;
+  }
+
+  .reputon-ebay-reviews-widget .kHUFvl {
+    padding: 40px 16px 0 !important;
+  }
+
+  /* Feedback header bar — double class for specificity over styled-components */
+  .elevate-reviews.elevate-reviews .reputon-ebay-reviews-widget .reputon-reviews-head {
+    background: #f3f3f3;
+    border-radius: 1rem;
+    padding: 1.25rem 2rem;
+    margin-block-end: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+  }
+
+  /* Feedback bar — left content group (text + count) */
+  .elevate-reviews.elevate-reviews .reputon-ebay-reviews-widget .reputon-info.reputon-content {
+    flex: 1;
+  }
+
+  /* Feedback bar — "Positive Feedback:" label */
+  .elevate-reviews.elevate-reviews .reputon-feedback-text {
+    color: #454444;
+    font-weight: 600;
+    font-size: 0.9375rem;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Feedback bar — percentage */
+  .elevate-reviews.elevate-reviews .reputon-feedback-counter {
+    color: #05823f;
+    font-weight: 700;
+    font-size: 1.125rem;
+  }
+
+  /* Feedback bar — review count */
+  .elevate-reviews.elevate-reviews .reputon-reviews-count {
+    color: #818181;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  /* eBay header logo SVG */
+  .elevate-reviews.elevate-reviews .reputon-header-logo {
+    max-width: 5rem;
+    height: auto;
+  }
+
+  /* ── Review cards (both regular and AI summary) ── */
+  .elevate-reviews.elevate-reviews .reputon-single-review {
+    background: #f6f5f4;
+    border-radius: 1.25rem;
+    padding: 1.5rem;
+    border: none;
+    box-shadow: none;
+  }
+
+  /* Card — "Positive" feedback label */
+  .elevate-reviews.elevate-reviews .reputon-single-review .reputon-feedback-text {
+    color: #454444;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  /* Card — eBay logo inside card */
+  .elevate-reviews.elevate-reviews .reputon-review-logo {
+    max-width: 3rem;
+    height: auto;
+  }
+
+  .elevate-reviews.elevate-reviews .reputon-review-logo svg {
+    max-width: 100%;
+    height: auto;
+  }
+
+  /* Card — date */
+  .elevate-reviews.elevate-reviews .reputon-date {
+    color: #818181;
+    font-size: 0.875rem;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Card — review text */
+  .elevate-reviews.elevate-reviews .reputon-text {
+    color: #454444;
+    font-size: 0.9375rem;
+    line-height: 1.4;
+    font-family: 'Inter', sans-serif;
+  }
+
+  /* Card — "Show more" link */
+  .elevate-reviews.elevate-reviews .reputon-show-more {
+    color: #818181;
+    font-size: 0.875rem;
+    text-decoration: underline;
+    font-family: 'Inter', sans-serif;
+    cursor: pointer;
+  }
+
+  /* Card — review photo */
+  .elevate-reviews.elevate-reviews .reputon--image img {
+    border-radius: 0.5rem;
+    max-height: 6rem;
+    object-fit: cover;
+  }
+
+  /* AI Summary card — name "AI Summary" */
+  .elevate-reviews.elevate-reviews .reputon-Summary .reputon-name {
+    color: #454444;
+    font-weight: 600;
+    font-size: 0.875rem;
+  }
+
+  /* AI Summary — stars icon */
+  .elevate-reviews.elevate-reviews .reputon-ai-stars {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* ── Reputon nav — hide originals, style replacements ── */
+  .elevate-reviews .reputon-carousel-holder > svg,
+  .elevate-reviews .reputon-bottom-navigation-btns > svg {
+    display: none !important;
+  }
+
+  .elevate-reviews .elevate-reviews__nav {
+    margin-block-start: 0;
+    margin-block-end: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .elevate-reviews__nav-btn {
+    width: 3rem;
+    height: 3rem;
+    border: 0.5px solid #141517 !important;
+    border-radius: 0.75rem;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .elevate-reviews__nav-btn svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .elevate-reviews__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .elevate-reviews .elevate-reviews__dot {
+    width: 0.75rem;
+    height: 0.25rem;
+    border-radius: 999px;
+    background: #6B7280;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .elevate-reviews .elevate-reviews__dot--active {
+    background: #E31E24;
+  }
+
+  /* ── Divider ── */
+  .elevate-reviews__divider {
+    width: 49.375rem;
+    max-width: 100%;
+    height: 1px;
+    background: #E2E3E5;
+    margin-inline: auto;
+  }
+
+  /* ── "Read all reviews" CTA wrapper ── */
+  .elevate-reviews__cta-wrap {
+    display: flex;
+    justify-content: center;
+    margin-block-start: 1.5rem;
+  }
+
+  /* ── Remove border from Reputon's original CTA link ── */
+  .elevate-reviews.elevate-reviews a.reputon-link[href*="ebay.com/fdbk"],
+  .elevate-reviews.elevate-reviews a.reputon-link[href*="ebay.com/usr"] {
+    border: none;
+  }
+
+  /* ── "Read all reviews" CTA link ── */
+  .elevate-reviews .elevate-reviews__cta-wrap a {
+    border: 1px solid #141517;
+    border-radius: 0.75rem;
+    background: transparent;
+    color: #141517;
+    font-family: 'Host Grotesk', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    padding: 0.75rem 1.5rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── Responsive ── */
+  @media (max-width: 48rem) {
+
+    .elevate-reviews__header {
+      text-align: left;
+      margin-block-end: 1rem;
+    }
+
+    .elevate-reviews.elevate-reviews .reputon-reviews-head {
+      padding: 1rem;
+    }
+
+    .elevate-reviews__nav-btn {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .elevate-reviews__dots {
+      display: none;
+    }
+
+    .elevate-reviews .elevate-reviews__nav {
+      gap: 1rem;
+    }
+
+    .elevate-reviews__divider {
+      width: 100%;
+    }
+
+    .elevate-reviews .elevate-reviews__cta-wrap a {
+      width: 100%;
+    }
+
+    .reputon-ebay-reviews-widget .kHUFvl {
+      padding: 0 !important;
+    }
+  }
+</style>
+
+<script>
+  (function elevateReviewsNav() {
+    var PREV_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M9.96094 5.08594L11.0391 6.16406L5.95312 11.25H21V12.75H5.95312L11.0391 17.8359L9.96094 18.9141L3.58594 12.5391L3.07031 12L3.58594 11.4609L9.96094 5.08594Z" fill="#141517"/></svg>';
+    var NEXT_SVG = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"><path d="M14.0391 5.08594L12.9609 6.16406L18.0469 11.25H3V12.75H18.0469L12.9609 17.8359L14.0391 18.9141L20.4141 12.5391L20.9297 12L20.4141 11.4609L14.0391 5.08594Z" fill="#141517"/></svg>';
+    var MAX_DOTS = 10;
+    var done = false;
+
+    function init() {
+      if (done) return;
+      var section = document.querySelector('.elevate-reviews');
+      if (!section) return;
+
+      var holder = section.querySelector('.reputon-carousel-holder');
+      var bottomNav = section.querySelector('.reputon-bottom-navigation-btns');
+      var swiperEl = section.querySelector('.swiper');
+      if (!holder || !bottomNav || !swiperEl) return;
+
+      var swiper = swiperEl.swiper;
+      if (!swiper) return;
+
+      done = true;
+
+      /* ── Hide all original Reputon arrows + bottom nav ── */
+      var origArrows = holder.querySelectorAll(':scope > svg');
+      origArrows.forEach(function(svg) { svg.style.display = 'none'; });
+      bottomNav.style.display = 'none';
+
+      /* ── Build custom nav row ── */
+      var nav = document.createElement('div');
+      nav.className = 'elevate-reviews__nav';
+
+      var prevBtn = document.createElement('button');
+      prevBtn.className = 'elevate-reviews__nav-btn';
+      prevBtn.setAttribute('aria-label', 'Previous reviews');
+      prevBtn.innerHTML = PREV_SVG;
+
+      var nextBtn = document.createElement('button');
+      nextBtn.className = 'elevate-reviews__nav-btn';
+      nextBtn.setAttribute('aria-label', 'Next reviews');
+      nextBtn.innerHTML = NEXT_SVG;
+
+      /* ── Build dots ── */
+      var dotsWrap = document.createElement('div');
+      dotsWrap.className = 'elevate-reviews__dots';
+
+      /* One dot per slide, capped at MAX_DOTS */
+      var totalSlides = swiperEl.querySelectorAll('.swiper-slide').length;
+      var slidesPerView = 1;
+      var pageCount = Math.max(1, Math.min(MAX_DOTS, totalSlides));
+
+      for (var i = 0; i < pageCount; i++) {
+        var dot = document.createElement('button');
+        dot.className = 'elevate-reviews__dot' + (i === 0 ? ' elevate-reviews__dot--active' : '');
+        dot.setAttribute('aria-label', 'Go to page ' + (i + 1));
+        dot.dataset.page = i;
+        dotsWrap.appendChild(dot);
+      }
+
+      var swiperWrapper = swiperEl.querySelector('.swiper-wrapper');
+      var slides = swiperEl.querySelectorAll('.swiper-slide');
+
+      function getActivePage() {
+        if (!swiperWrapper || slides.length === 0) return 0;
+
+        /* Read translateX from the wrapper transform */
+        var transform = swiperWrapper.style.transform || '';
+        var match = transform.match(/translate3d\(\s*(-?[\d.]+)px/);
+        var tx = match ? Math.abs(parseFloat(match[1])) : 0;
+
+        /* Get width of a single slide including gap */
+        var firstSlide = slides[0];
+        var slideRect = firstSlide.getBoundingClientRect();
+        var slideWidth = slideRect.width;
+        var gap = parseFloat(getComputedStyle(swiperWrapper).gap) || 0;
+        if (gap === 0 && slides.length > 1) {
+          var secondRect = slides[1].getBoundingClientRect();
+          gap = secondRect.left - slideRect.right;
+        }
+        var step = slideWidth + gap;
+        if (step <= 0) return 0;
+
+        var idx = Math.round(tx / step);
+        var page = Math.floor(idx / slidesPerView);
+        if (page >= pageCount) page = pageCount - 1;
+        if (page < 0) page = 0;
+        return page;
+      }
+
+      function updateDots() {
+        var page = getActivePage();
+        var dots = dotsWrap.querySelectorAll('.elevate-reviews__dot');
+        dots.forEach(function(d, j) {
+          d.classList.toggle('elevate-reviews__dot--active', j === page);
+        });
+      }
+
+      /* ── Events ── */
+      prevBtn.addEventListener('click', function() { swiper.slidePrev(); });
+      nextBtn.addEventListener('click', function() { swiper.slideNext(); });
+
+      dotsWrap.addEventListener('click', function(e) {
+        var dot = e.target.closest('.elevate-reviews__dot');
+        if (!dot) return;
+        var page = parseInt(dot.dataset.page, 10);
+        swiper.slideTo(page * slidesPerView);
+      });
+
+      /* Watch transform changes on swiper-wrapper via MutationObserver + poll */
+      var lastPage = 0;
+      function checkPage() {
+        var page = getActivePage();
+        if (page !== lastPage) {
+          lastPage = page;
+          updateDots();
+        }
+      }
+
+      var observer = new MutationObserver(checkPage);
+      if (swiperWrapper) {
+        observer.observe(swiperWrapper, { attributes: true, attributeFilter: ['style'] });
+      }
+      setInterval(checkPage, 500);
+
+      /* ── Assemble nav row ── */
+      nav.appendChild(prevBtn);
+      nav.appendChild(dotsWrap);
+      nav.appendChild(nextBtn);
+
+      /* ── Build divider ── */
+      var divider = document.createElement('div');
+      divider.className = 'elevate-reviews__divider';
+
+      /* ── Create fresh "Read all reviews" CTA ── */
+      var ctaWrap = document.createElement('div');
+      ctaWrap.className = 'elevate-reviews__cta-wrap';
+      var ctaLink = document.createElement('a');
+      ctaLink.href = 'https://www.ebay.com/fdbk/feedback_profile/elevatecycling?filter=feedback_page:RECEIVED_AS_SELLER&limit=50&sort=RELEVANCEV2';
+      ctaLink.target = '_blank';
+      ctaLink.rel = 'noopener';
+      ctaLink.textContent = 'Read all reviews';
+      ctaWrap.appendChild(ctaLink);
+
+      /* ── Insert nav inside carousel container ── */
+      var carouselContainer = bottomNav.parentNode;
+      carouselContainer.appendChild(nav);
+
+      /* ── Insert divider + CTA outside the widget, in .elevate-reviews__inner ── */
+      var inner = section.querySelector('.elevate-reviews__inner');
+      if (inner) {
+        inner.appendChild(divider);
+        inner.appendChild(ctaWrap);
+      }
+
+      /* ── Log for debug ── */
+      console.log('[elevate-reviews] Nav injected — slides:', totalSlides, 'perView:', slidesPerView, 'pages:', pageCount);
+    }
+
+    /* Poll until Reputon widget + Swiper are ready */
+    var attempts = 0;
+    var timer = setInterval(function() {
+      attempts++;
+      if (done || attempts > 100) { clearInterval(timer); return; }
+      init();
+    }, 200);
+  })();
+</script>
+
+{%- comment -%} ── Figma QA overlay (dev only) ── {%- endcomment -%}
+{%- if section.settings.figma_overlay != blank -%}
+  <div
+    class="elevate-reviews__figma-overlay"
+    id="figma-overlay-{{ section.id }}"
+    style="
+      position: absolute;
+      inset: 0;
+      z-index: 9999;
+      pointer-events: none;
+      opacity: 0.5;
+      mix-blend-mode: difference;
+      display: none;
+    "
+  >
+    <img
+      src="{{ section.settings.figma_overlay | image_url: width: 1920 }}"
+      alt="Figma overlay"
+      style="width: 100%; height: 100%; object-fit: contain; object-position: top center;"
+    >
+  </div>
+  <script>
+    (function() {
+      var overlay = document.getElementById('figma-overlay-{{ section.id }}');
+      if (!overlay) return;
+
+      // Make parent relative for overlay positioning
+      overlay.parentElement.style.position = 'relative';
+
+      var visible = false;
+      var opacity = 0.5;
+      var mode = 0; // 0=difference, 1=normal, 2=multiply
+
+      var modes = ['difference', 'normal', 'multiply'];
+      var badge = document.createElement('div');
+      badge.style.cssText = 'position:fixed;bottom:1rem;right:1rem;z-index:10000;background:#141517;color:#fff;font:700 0.75rem/1 Inter,sans-serif;padding:0.5rem 0.75rem;border-radius:0.5rem;display:none;pointer-events:none;';
+      document.body.appendChild(badge);
+
+      function updateBadge(msg) {
+        badge.textContent = msg;
+        badge.style.display = 'block';
+        clearTimeout(badge._t);
+        badge._t = setTimeout(function() { badge.style.display = 'none'; }, 1500);
+      }
+
+      document.addEventListener('keydown', function(e) {
+        // Shift+F → toggle overlay
+        if (e.shiftKey && e.key === 'F') {
+          visible = !visible;
+          overlay.style.display = visible ? 'block' : 'none';
+          updateBadge(visible ? 'Figma overlay ON' : 'Figma overlay OFF');
+        }
+        // Shift+ArrowUp / ArrowDown → adjust opacity
+        if (visible && e.shiftKey && e.key === 'ArrowUp') {
+          opacity = Math.min(1, opacity + 0.1);
+          overlay.style.opacity = opacity;
+          updateBadge('Opacity: ' + Math.round(opacity * 100) + '%');
+        }
+        if (visible && e.shiftKey && e.key === 'ArrowDown') {
+          opacity = Math.max(0, opacity - 0.1);
+          overlay.style.opacity = opacity;
+          updateBadge('Opacity: ' + Math.round(opacity * 100) + '%');
+        }
+        // Shift+M → cycle blend mode
+        if (visible && e.shiftKey && e.key === 'M') {
+          mode = (mode + 1) % modes.length;
+          overlay.style.mixBlendMode = modes[mode];
+          updateBadge('Blend: ' + modes[mode]);
+        }
+      });
+    })();
+  </script>
+{%- endif -%}
+
+{% schema %}
+{
+  "name": "Elevate Reviews",
+  "tag": "section",
+  "class": "elevate-reviews-section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "TRUSTED BY CYCLIST"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Don't take our word for it."
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Real riders. Real builds. Real opinions."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "header",
+      "content": "QA — Figma Overlay"
+    },
+    {
+      "type": "image_picker",
+      "id": "figma_overlay",
+      "label": "Figma screenshot",
+      "info": "Upload a Figma screenshot. Shift+F to toggle, Shift+↑↓ opacity, Shift+M blend mode."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "@app"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Elevate Reviews"
+    }
+  ]
+}
+{% endschema %}
