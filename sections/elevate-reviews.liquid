@@ -4,6 +4,7 @@
 {%- endcomment -%}
 
 <div
+  id="elevate-reviews-{{ section.id }}"
   class="section section--page-width elevate-reviews"
   data-scroll-reveal
   style="
@@ -366,7 +367,7 @@
 
     function init() {
       if (done) return;
-      var section = document.querySelector('.elevate-reviews');
+      var section = document.querySelector('#elevate-reviews-{{ section.id }}');
       if (!section) return;
 
       var holder = section.querySelector('.reputon-carousel-holder');
@@ -478,7 +479,6 @@
       if (swiperWrapper) {
         observer.observe(swiperWrapper, { attributes: true, attributeFilter: ['style'] });
       }
-      setInterval(checkPage, 500);
 
       /* ── Assemble nav row ── */
       nav.appendChild(prevBtn);
@@ -493,10 +493,10 @@
       var ctaWrap = document.createElement('div');
       ctaWrap.className = 'elevate-reviews__cta-wrap';
       var ctaLink = document.createElement('a');
-      ctaLink.href = 'https://www.ebay.com/fdbk/feedback_profile/elevatecycling?filter=feedback_page:RECEIVED_AS_SELLER&limit=50&sort=RELEVANCEV2';
+      ctaLink.href = {{ section.settings.reviews_cta_link | default: 'https://www.ebay.com/fdbk/feedback_profile/elevatecycling?filter=feedback_page:RECEIVED_AS_SELLER&limit=50&sort=RELEVANCEV2' | json }};
       ctaLink.target = '_blank';
       ctaLink.rel = 'noopener';
-      ctaLink.textContent = 'Read all reviews';
+      ctaLink.textContent = {{ section.settings.reviews_cta_text | default: 'Read all reviews' | json }};
       ctaWrap.appendChild(ctaLink);
 
       /* ── Insert nav inside carousel container ── */
@@ -641,6 +641,18 @@
       "step": 4,
       "default": 72,
       "unit": "px"
+    },
+    {
+      "type": "url",
+      "id": "reviews_cta_link",
+      "label": "CTA link",
+      "default": "https://www.ebay.com/fdbk/feedback_profile/elevatecycling?filter=feedback_page:RECEIVED_AS_SELLER&limit=50&sort=RELEVANCEV2"
+    },
+    {
+      "type": "text",
+      "id": "reviews_cta_text",
+      "label": "CTA text",
+      "default": "Read all reviews"
     },
     {
       "type": "header",

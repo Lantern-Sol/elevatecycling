@@ -475,19 +475,20 @@
    * descendant of the same <li>.
    */
   customElements.whenDefined('header-menu').then(() => {
-    const menu = document.querySelector('header-menu');
-    if (!menu) return;
+    const HeaderMenu = customElements.get('header-menu');
+    if (!HeaderMenu) return;
 
-    const origDeactivate = menu.deactivate.bind(menu);
+    const origDeactivate = HeaderMenu.prototype.deactivate;
+    if (!origDeactivate) return;
 
-    menu.deactivate = function (event) {
+    HeaderMenu.prototype.deactivate = function (event) {
       if (event?.relatedTarget instanceof Node) {
         const listItem = event.target?.closest?.('.menu-list__list-item');
         if (listItem && listItem.contains(event.relatedTarget)) {
           return;
         }
       }
-      origDeactivate(event);
+      origDeactivate.call(this, event);
     };
   });
 </script>
@@ -1030,18 +1031,6 @@
     margin-top: var(--header-height);
   }
 
-  /* Optimize layout performance for hidden menus */
-  .header-menu .menu-list__submenu {
-    content-visibility: auto;
-    contain-intrinsic-size: 0px 500px;
-  }
-
-  /* Force visibility when open/animating and in overflow submenu to prevent layout issues */
-  .header-menu details[open] .menu-list__submenu,
-  .header-menu .menu-list__submenu[data-active],
-  .header-menu .menu-list__list-item[slot='overflow'] .menu-list__submenu {
-    content-visibility: visible;
-  }
 
   /* Dropdown Localization Styles */
   .dropdown-localization__button {
@@ -1255,7 +1244,15 @@
      because the inline style on <nav.menu-list> has higher specificity. */
   .header-menu .menu-list__link,
   .header-menu .overflow-menu__trigger {
-    letter-spacing: 0.03rem;
+    letter-spacing: 0.01rem;
+  }
+
+  /* Tighter nav spacing — scales from 0.25rem (4px) at 990px to 0.75rem (12px) at 1440px */
+  .header-menu .menu-list__link-title {
+    padding-inline: clamp(0.25rem, -0.85rem + 1.778vw, 0.75rem);
+  }
+  .header-menu .menu-list .menu-list__list-item .menu-list__link.menu-list__link--has-children {
+    padding-inline: clamp(0.25rem, -0.85rem + 1.778vw, 0.75rem);
   }
 
   /* Hide chevron from top-level nav links — not in Figma spec */
@@ -1264,15 +1261,15 @@
   }
 
   /* ── Active indicator: red bar below hovered/expanded nav item ── */
-  .header-menu .menu-list__list-item:hover > .menu-list__link,
-  .header-menu .menu-list__list-item:focus-within > .menu-list__link,
-  .header-menu .menu-list__link[aria-expanded='true'] {
+  .header-menu .menu-list__list-item:hover > .menu-list__link:not(.ls-nav-cta),
+  .header-menu .menu-list__list-item:focus-within > .menu-list__link:not(.ls-nav-cta),
+  .header-menu .menu-list__link[aria-expanded='true']:not(.ls-nav-cta) {
     position: relative;
   }
 
-  .header-menu .menu-list__list-item:hover > .menu-list__link::before,
-  .header-menu .menu-list__list-item:focus-within > .menu-list__link::before,
-  .header-menu .menu-list__link[aria-expanded='true']::before {
+  .header-menu .menu-list__list-item:hover > .menu-list__link:not(.ls-nav-cta)::before,
+  .header-menu .menu-list__list-item:focus-within > .menu-list__link:not(.ls-nav-cta)::before,
+  .header-menu .menu-list__link[aria-expanded='true']:not(.ls-nav-cta)::before {
     content: '';
     position: absolute;
     left: 0;
@@ -1281,10 +1278,6 @@
     height: 3px;
     background: #E31E24;
     border-radius: 1.5px;
-  }
-
-  .header-menu .menu-list__link.ls-nav-cta {
-    background-image: none;
   }
 
 
@@ -1330,6 +1323,7 @@
 
     /* Fixed width prevents reflow-triggered height recalculation mid-animation */
     width: 65.5rem;
+    max-width: calc(100vw - 4rem);
     margin-inline: auto;
   }
 
@@ -1360,7 +1354,8 @@
   }
 
   /* Spacing between left-column groups (26px per Figma) — ~ skips the brand column in DOM */
-  .header-menu .mega-menu__column:not(:has([data-brand-group])) ~ .mega-menu__column:not(:has([data-brand-group])) {
+  /* Exclude Menu 4 (Groupsets) and Menu 5 (Components) which handle their own spacing via CSS columns */
+  .header-menu :not([data-menu-list-id="MegaMenuList-4"]):not([data-menu-list-id="MegaMenuList-5"]) > .mega-menu__column:not(:has([data-brand-group])) ~ .mega-menu__column:not(:has([data-brand-group])) {
     margin-block-start: 1.625rem;
   }
 
@@ -1369,6 +1364,77 @@
     position: absolute;
     inset-block: 0;
     inset-inline-end: 0;
+  }
+
+  /* ── Groupsets menu (4): 2-col layout — BY TYPE + BY BUDGET left, INDIVIDUAL PARTS + BY BRAND right ── */
+  .header-menu [data-menu-list-id="MegaMenuList-4"] {
+    display: block;
+    columns: 2;
+    column-gap: 3.125rem;
+    column-rule: 1px solid rgba(253, 252, 252, 0.08);
+  }
+
+  .header-menu [data-menu-list-id="MegaMenuList-4"] > .mega-menu__column,
+  .header-menu [data-menu-list-id="MegaMenuList-4"] > .mega-menu__column:has([data-brand-group]) {
+    break-inside: avoid;
+    position: static;
+    margin-block-start: 0;
+    border-inline-start: none;
+    padding-inline-start: 0;
+    overflow: hidden; /* establishes BFC — prevents column fragmentation of inner content */
+  }
+
+  /* Force INDIVIDUAL PARTS (3rd item) to start in second column */
+  .header-menu [data-menu-list-id="MegaMenuList-4"] > .mega-menu__column:nth-child(3) {
+    break-before: column;
+  }
+
+  /* First item in each column: no top margin */
+  .header-menu [data-menu-list-id="MegaMenuList-4"] > .mega-menu__column:nth-child(1),
+  .header-menu [data-menu-list-id="MegaMenuList-4"] > .mega-menu__column:nth-child(3) {
+    margin-block-start: 0;
+  }
+
+  /* Second item in each column: vertical gap */
+  .header-menu [data-menu-list-id="MegaMenuList-4"] > .mega-menu__column:nth-child(2),
+  .header-menu [data-menu-list-id="MegaMenuList-4"] > .mega-menu__column:nth-child(4) {
+    margin-block-start: 1.625rem;
+  }
+
+  /* ── Components menu (5): 2-col layout — COMPONENTS + COCKPIT + GROUPSET PARTS left, OTHER PARTS + BY BRAND right ── */
+  .header-menu [data-menu-list-id="MegaMenuList-5"] {
+    display: block;
+    columns: 2;
+    column-gap: 3.125rem;
+    column-rule: 1px solid rgba(253, 252, 252, 0.08);
+  }
+
+  .header-menu [data-menu-list-id="MegaMenuList-5"] > .mega-menu__column,
+  .header-menu [data-menu-list-id="MegaMenuList-5"] > .mega-menu__column:has([data-brand-group]) {
+    break-inside: avoid;
+    position: static;
+    margin-block-start: 0;
+    border-inline-start: none;
+    padding-inline-start: 0;
+    overflow: hidden;
+  }
+
+  /* Force OTHER PARTS (4th item) to start in second column */
+  .header-menu [data-menu-list-id="MegaMenuList-5"] > .mega-menu__column:nth-child(4) {
+    break-before: column;
+  }
+
+  /* First item in each column: no top margin */
+  .header-menu [data-menu-list-id="MegaMenuList-5"] > .mega-menu__column:nth-child(1),
+  .header-menu [data-menu-list-id="MegaMenuList-5"] > .mega-menu__column:nth-child(4) {
+    margin-block-start: 0;
+  }
+
+  /* Subsequent items in each column: vertical gap */
+  .header-menu [data-menu-list-id="MegaMenuList-5"] > .mega-menu__column:nth-child(2),
+  .header-menu [data-menu-list-id="MegaMenuList-5"] > .mega-menu__column:nth-child(3),
+  .header-menu [data-menu-list-id="MegaMenuList-5"] > .mega-menu__column:nth-child(5) {
+    margin-block-start: 1.625rem;
   }
 
   /* ── Hide underlay ::after shadow (full-width popover shadow) ── */

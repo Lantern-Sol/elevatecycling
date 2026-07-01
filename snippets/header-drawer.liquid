@@ -246,7 +246,7 @@
                                   {% endif %}
                                   <span class="menu-drawer__menu-item-text wrap-text">
                                     {%- if _drawer_has_star -%}★ {%- endif -%}
-                                    {{- _drawer_display_title -}}
+                                    {{- _drawer_display_title | escape -}}
                                   </span>
                                 </a>
                               {%- else -%}

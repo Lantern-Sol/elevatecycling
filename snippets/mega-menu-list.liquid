@@ -108,9 +108,9 @@
             assign span_class = 'mega-menu__column--wide-collection-image'
           endif
         else
-          # LS: brand groups get span 2 to accommodate 2-column flex-wrap layout
+          # LS: brand and individual-parts groups get span 2 for 2-column grid layout
           assign _link_title_slug = link.title | downcase | strip
-          if _link_title_slug contains 'brand'
+          if _link_title_slug contains 'brand' or _link_title_slug contains 'individual'
             assign column_span = 2
             assign column_count = column_count | plus: 1
           endif
