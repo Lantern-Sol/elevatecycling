@@ -33,7 +33,6 @@ class CartDrawerRecs extends HTMLElement {
       const viewedIds = this.getFilteredRecentlyViewed();
 
       if (viewedIds.length >= MIN_RECENTLY_VIEWED) {
-        this.titleEl.textContent = 'Recently Viewed';
         const products = await this.fetchRecentlyViewed(viewedIds);
         this.renderCards(products);
       } else if (this.firstProductId) {

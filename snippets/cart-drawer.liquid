@@ -27,15 +27,19 @@
       class="cart-drawer__content"
       aria-label="{{ 'accessibility.cart' | t }}"
     >
-      <h2
-        class="theme-drawer__title h4"
-        id="cart-drawer-heading"
-      >
-        {{ 'content.your_cart_is_empty' | t }}
-      </h2>
-
-      <div class="cart-drawer__items">
-        {% render 'cart-products', force_empty: true, context: 'drawer' %}
+      <div class="ls-cart-empty">
+        <svg class="ls-cart-empty__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+          <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+        </svg>
+        <h2 class="ls-cart-empty__heading" id="cart-drawer-heading">Your Cart is Empty</h2>
+        <p class="ls-cart-empty__text">Browse our collection and find your next ride.</p>
+        <a href="/collections/all" class="ls-cart-empty__cta" on:click="#cart-drawer/close">
+          <span>Continue Shopping</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M13.47 5.47a.75.75 0 0 1 1.06 0l6 6a.75.75 0 0 1 0 1.06l-6 6a.75.75 0 1 1-1.06-1.06l4.72-4.72H4a.75.75 0 0 1 0-1.5h14.19l-4.72-4.72a.75.75 0 0 1 0-1.06Z"/>
+          </svg>
+        </a>
       </div>
     </div>
     {% endcapture %}
@@ -53,11 +57,9 @@
       cart-summary-sticky="true"
     >
       <div class="ls-cart-drawer">
-        {%- unless cart.empty? -%}
-          <aside class="ls-cart-drawer__recs" aria-label="Recommended products">
-            {% render 'cart-drawer-recommendations' %}
-          </aside>
-        {%- endunless -%}
+        <aside class="ls-cart-drawer__recs" aria-label="Recommended products">
+          {% render 'cart-drawer-recommendations' %}
+        </aside>
 
         <div class="ls-cart-drawer__main">
           <cart-drawer-component
@@ -73,36 +75,21 @@
               class="cart-drawer__inner{% if cart.empty? %} cart-drawer--empty{% endif %}"
               data-hydration-key="cart-drawer-inner"
             >
-              {%- if cart.empty? -%}
-                <div class="theme-drawer__header">
-                  <button
-                    on:click="#cart-drawer/close"
-                    class="theme-drawer__close-button cart-drawer__close-button--empty"
-                    type="button"
-                    aria-label="{{ 'actions.close' | t }}"
-                  >
-                    <span class="svg-wrapper">
-                      {{- 'icon-close.svg' | inline_asset_content -}}
-                    </span>
-                  </button>
-                </div>
-              {%- else -%}
-                <div class="ls-cart-header">
-                  <button
-                    on:click="#cart-drawer/close"
-                    class="ls-cart-header__back"
-                    type="button"
-                  >
-                    <span class="svg-wrapper">
-                      {{- 'icon-arrow-left.svg' | inline_asset_content -}}
-                    </span>
-                    <span class="ls-cart-header__back-text">Continue Shopping</span>
-                  </button>
-                  <h2 class="ls-cart-header__title" id="cart-drawer-heading">
-                    MY CART
-                  </h2>
-                </div>
-              {%- endif -%}
+              <div class="ls-cart-header">
+                <button
+                  on:click="#cart-drawer/close"
+                  class="ls-cart-header__back"
+                  type="button"
+                >
+                  <span class="svg-wrapper">
+                    {{- 'icon-arrow-left.svg' | inline_asset_content -}}
+                  </span>
+                  <span class="ls-cart-header__back-text">Continue Shopping</span>
+                </button>
+                <h2 class="ls-cart-header__title" id="cart-drawer-heading">
+                  MY CART
+                </h2>
+              </div>
 
               {%- comment -%} Free Shipping Gamification Bar {%- endcomment -%}
               {%- if cart.empty? != true and settings.cart_free_shipping_enabled -%}
@@ -155,6 +142,9 @@
               {% capture cart_items_children %}
                 {%- if cart.empty? -%}
                   {{ empty_cart_drawer_content }}
+                  <div class="ls-cart-drawer__recs-mobile" aria-label="Recommended products">
+                    {% render 'cart-drawer-recommendations' %}
+                  </div>
                 {%- else -%}
                   <div
                     class="cart-drawer__content"
@@ -360,10 +350,6 @@
     margin-block-end: 0;
   }
 
-  .cart-drawer__close-button--empty {
-    margin-inline-start: auto;
-  }
-
   .cart-drawer__summary {
     --cart-drawer-summary-padding: var(--padding-lg);
 
@@ -412,25 +398,91 @@
     }
   }
 
-  .cart-drawer--empty .cart-drawer__content {
-    text-align: center;
+  /* ── Empty State ── */
+
+  .ls-cart-empty {
+    display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: auto;
+    gap: 1rem;
+    padding: 3rem 1.5rem;
+    text-align: center;
+    flex: 1;
   }
 
-  .cart-drawer--empty .cart-drawer__items {
-    padding-inline: 0;
+  .ls-cart-empty__icon {
+    width: 3rem;
+    height: 3rem;
+    color: #36393f;
   }
 
+  .ls-cart-empty__heading {
+    font-family: "Big Shoulders Display", var(--font-heading--family);
+    font-weight: 700;
+    font-size: 2rem;
+    color: #141517;
+    text-transform: uppercase;
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .ls-cart-empty__text {
+    font-family: Inter, var(--font-paragraph--family);
+    font-size: 0.875rem;
+    color: #36393f;
+    margin: 0;
+    line-height: 1.5;
+  }
+
+  .ls-cart-empty__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem 2rem;
+    background: #e31e24;
+    color: #fff;
+    border: none;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background-color var(--animation-speed-slow, 0.2s) var(--animation-easing, ease-in-out),
+      opacity var(--animation-speed-slow, 0.2s) var(--animation-easing, ease-in-out);
+  }
+
+  .ls-cart-empty__cta svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .ls-cart-empty__cta:hover {
+    background: #c8191e;
+  }
+
+  .ls-cart-empty__cta:focus-visible {
+    outline: 0.125rem solid #141517;
+    outline-offset: 0.125rem;
+  }
+
+  .cart-drawer--empty .cart-drawer__content,
   cart-drawer-component:not(:has(.cart-form)) .cart-drawer__content {
-    text-align: center;
-    align-items: center;
-    justify-content: center;
+    background-color: #e2e3e5;
+    height: auto;
+    flex: 1;
+    min-height: 0;
   }
 
-  cart-drawer-component:not(:has(.cart-form)) .cart-drawer__items {
-    padding-inline: 0;
+  .cart-drawer--empty .cart-items-component,
+  cart-drawer-component:not(:has(.cart-form)) .cart-items-component {
+    overflow-y: auto;
   }
 
   @media screen and (prefers-reduced-motion: no-preference) {
