@@ -43,91 +43,229 @@
   <theme-drawer
     id="cart-drawer"
     data-skip-node-update
+    no-persist
   >
+    <div class="ls-cart-backdrop" aria-hidden="true" onclick="this.closest('theme-drawer')?.close()"></div>
     <dialog
       ref="panel"
       class="theme-drawer__dialog color-custom-drawer"
       aria-labelledby="cart-drawer-heading"
       cart-summary-sticky="true"
     >
-      <cart-drawer-component
-        {% if settings.auto_open_cart_drawer and template.name != 'cart' %}
-          auto-open
-        {% endif %}
-      >
-        <template id="empty-cart-template">
-          {{ empty_cart_drawer_content }}
-        </template>
+      <div class="ls-cart-drawer">
+        {%- unless cart.empty? -%}
+          <aside class="ls-cart-drawer__recs" aria-label="Recommended products">
+            {% render 'cart-drawer-recommendations' %}
+          </aside>
+        {%- endunless -%}
 
-        <div
-          class="cart-drawer__inner{% if cart.empty? %} cart-drawer--empty{% endif %}"
-          data-hydration-key="cart-drawer-inner"
-        >
-          {%- if cart.empty? -%}
-            <div class="theme-drawer__header">
-              <button
-                on:click="#cart-drawer/close"
-                class="theme-drawer__close-button cart-drawer__close-button--empty"
-                type="button"
-                aria-label="{{ 'actions.close' | t }}"
-              >
-                <span class="svg-wrapper">
-                  {{- 'icon-close.svg' | inline_asset_content -}}
-                </span>
-              </button>
-            </div>
-          {%- else -%}
-            {% capture cart_badge_html %}
-              <span
-                class="theme-drawer__badge{% if cart.item_count == 0 %} visually-hidden{% endif %}"
-                aria-hidden="true"
-                {% if cart.item_count <= 99 %}
-                  data-maintain-ratio
-                {% endif %}
-              >
-                {{- cart.item_count -}}
-              </span>
-              {% if cart.item_count > 0 %}
-                <span class="visually-hidden">
-                  {{ 'accessibility.cart_count' | t }}: {{ cart.item_count }}
-                </span>
-              {% endif %}
-            {% endcapture %}
-            {% assign cart_drawer_title = 'content.cart_title' | t %}
-            {% render 'theme-drawer-header',
-              title: cart_drawer_title,
-              drawer_id: 'cart-drawer',
-              heading_id: 'cart-drawer-heading',
-              title_append: cart_badge_html
-            %}
-          {%- endif -%}
-
-          {% capture cart_items_children %}
-            {%- if cart.empty? -%}
+        <div class="ls-cart-drawer__main">
+          <cart-drawer-component
+            {% if settings.auto_open_cart_drawer and template.name != 'cart' %}
+              auto-open
+            {% endif %}
+          >
+            <template id="empty-cart-template">
               {{ empty_cart_drawer_content }}
-            {%- else -%}
-              <scroll-hint
-                class="cart-drawer__content"
-                aria-label="{{ 'accessibility.cart' | t }}"
-                style="--header-height: 60px;"
-              >
-                <scroll-hint class="cart-drawer__items">
-                  {% render 'cart-products', context: 'drawer' %}
-                </scroll-hint>
+            </template>
 
-                <div class="cart-drawer__summary">
-                  {% render 'cart-summary', section_id: 'cart-drawer-section' %}
+            <div
+              class="cart-drawer__inner{% if cart.empty? %} cart-drawer--empty{% endif %}"
+              data-hydration-key="cart-drawer-inner"
+            >
+              {%- if cart.empty? -%}
+                <div class="theme-drawer__header">
+                  <button
+                    on:click="#cart-drawer/close"
+                    class="theme-drawer__close-button cart-drawer__close-button--empty"
+                    type="button"
+                    aria-label="{{ 'actions.close' | t }}"
+                  >
+                    <span class="svg-wrapper">
+                      {{- 'icon-close.svg' | inline_asset_content -}}
+                    </span>
+                  </button>
                 </div>
-              </scroll-hint>
-            {%- endif -%}
-          {% endcapture %}
-          {% render 'cart-items-component',
-            children: cart_items_children,
-            is_drawer: true,
-            section_id: 'cart-drawer-section'
-          %}
+              {%- else -%}
+                <div class="ls-cart-header">
+                  <button
+                    on:click="#cart-drawer/close"
+                    class="ls-cart-header__back"
+                    type="button"
+                  >
+                    <span class="svg-wrapper">
+                      {{- 'icon-arrow-left.svg' | inline_asset_content -}}
+                    </span>
+                    <span class="ls-cart-header__back-text">Continue Shopping</span>
+                  </button>
+                  <h2 class="ls-cart-header__title" id="cart-drawer-heading">
+                    MY CART
+                  </h2>
+                </div>
+              {%- endif -%}
+
+              {%- comment -%} Free Shipping Gamification Bar {%- endcomment -%}
+              {%- if cart.empty? != true and settings.cart_free_shipping_enabled -%}
+                {%- assign free_shipping_threshold = settings.cart_free_shipping_threshold | default: '50' | plus: 0 -%}
+                {%- assign gift_pct = 47 -%}
+                {%- assign gift_threshold = free_shipping_threshold | times: gift_pct | divided_by: 100.0 -%}
+                {%- assign cart_total = cart.total_price | divided_by: 100.0 -%}
+                {%- assign progress_pct = cart_total | times: 100.0 | divided_by: free_shipping_threshold -%}
+                {%- if progress_pct > 100 -%}{%- assign progress_pct = 100 -%}{%- endif -%}
+
+                {%- assign gift_unlocked = false -%}
+                {%- assign shipping_unlocked = false -%}
+                {%- if cart_total >= gift_threshold -%}{%- assign gift_unlocked = true -%}{%- endif -%}
+                {%- if cart_total >= free_shipping_threshold -%}{%- assign shipping_unlocked = true -%}{%- endif -%}
+
+                {%- assign gift_remaining = gift_threshold | minus: cart_total -%}
+                {%- assign shipping_remaining = free_shipping_threshold | minus: cart_total -%}
+
+                <div class="ls-shipping-bar">
+                  <p class="ls-shipping-bar__text">
+                    {%- if shipping_unlocked -%}
+                      Congratulations! You've <strong class="ls-shipping-bar__highlight">Unlocked Free Gift + FREE SHIPPING</strong>
+                    {%- elsif gift_unlocked -%}
+                      <strong class="ls-shipping-bar__highlight">Free Gift Unlocked</strong>
+                      Add <strong>{{ shipping_remaining | times: 100 | money }}</strong> to
+                      <strong class="ls-shipping-bar__highlight">UNLOCK FREE SHIPPING</strong>
+                    {%- else -%}
+                      Add <strong>{{ gift_remaining | times: 100 | money }}</strong> more to
+                      <strong class="ls-shipping-bar__highlight">Unlock Free Gift $50 Value</strong>
+                    {%- endif -%}
+                  </p>
+                  <div class="ls-shipping-bar__track-wrapper">
+                    <div class="ls-shipping-bar__track" role="progressbar" aria-valuenow="{{ progress_pct | round }}" aria-valuemin="0" aria-valuemax="100" aria-label="Free shipping progress">
+                      <div class="ls-shipping-bar__fill" style="width: {{ progress_pct }}%;"></div>
+                    </div>
+                    <div class="ls-shipping-bar__milestone{% if gift_unlocked %} is-active{% endif %}" style="left: {{ gift_pct }}%;">
+                      <span class="svg-wrapper ls-shipping-bar__milestone-icon">
+                        {{- 'icon-gift.svg' | inline_asset_content -}}
+                      </span>
+                    </div>
+                    <div class="ls-shipping-bar__milestone{% if shipping_unlocked %} is-active{% endif %}" style="left: 100%;">
+                      <span class="svg-wrapper ls-shipping-bar__milestone-icon">
+                        {{- 'icon-shipping.svg' | inline_asset_content -}}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              {%- endif -%}
+
+              {% capture cart_items_children %}
+                {%- if cart.empty? -%}
+                  {{ empty_cart_drawer_content }}
+                {%- else -%}
+                  <div
+                    class="cart-drawer__content"
+                    aria-label="{{ 'accessibility.cart' | t }}"
+                  >
+                    <div class="cart-drawer__items">
+                      {% render 'cart-products', context: 'drawer' %}
+                    </div>
+
+                    <div class="ls-cart-drawer__recs-mobile" aria-label="Recommended products">
+                      {% render 'cart-drawer-recommendations' %}
+                    </div>
+
+                    <div class="cart-drawer__summary">
+                      <div class="ls-summary-shipping">
+                        <span class="ls-summary-shipping__label">Shipping</span>
+                        <span class="ls-summary-shipping__value">
+                          {%- if settings.cart_free_shipping_enabled -%}
+                            {%- assign ft = settings.cart_free_shipping_threshold | default: '50' | plus: 0 -%}
+                            {%- assign ct = cart.total_price | divided_by: 100.0 -%}
+                            {%- if ct >= ft -%}
+                              FREE SHIPPING UNLOCKED
+                            {%- else -%}
+                              Calculated at checkout
+                            {%- endif -%}
+                          {%- else -%}
+                            Calculated at checkout
+                          {%- endif -%}
+                        </span>
+                      </div>
+
+                      <div class="ls-summary-checkout-row">
+                        {% render 'cart-summary', section_id: 'cart-drawer-section' %}
+
+                        {%- assign compare_savings = 0 -%}
+                        {%- for item in cart.items -%}
+                          {%- if item.variant.compare_at_price > item.variant.price -%}
+                            {%- assign line_save = item.variant.compare_at_price | minus: item.variant.price | times: item.quantity -%}
+                            {%- assign compare_savings = compare_savings | plus: line_save -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+                        {%- assign discount_savings = cart.original_total_price | minus: cart.total_price -%}
+                        {%- assign savings_amount = compare_savings | plus: discount_savings -%}
+                        <div class="ls-summary-meta">
+                          <span class="ls-summary-meta__count">
+                            ({{ cart.item_count }} {{ cart.item_count | pluralize: 'ITEM', 'ITEMS' }})
+                          </span>
+                          {%- if savings_amount > 0 -%}
+                            <span class="ls-summary-meta__savings">
+                              You're saving <strong>{{ savings_amount | money }}</strong>
+                            </span>
+                          {%- endif -%}
+                        </div>
+                      </div>
+
+                      <div class="ls-trust-badges">
+                        <hr class="ls-trust-badges__divider">
+                        <div class="ls-trust-badges__grid">
+                          <div class="ls-trust-badge">
+                            <span class="svg-wrapper ls-trust-badge__icon">
+                              {{- 'icon-redo.svg' | inline_asset_content -}}
+                            </span>
+                            <span class="ls-trust-badge__text">
+                              Guaranteed<br>Buyback
+                            </span>
+                          </div>
+                          <div class="ls-trust-badge">
+                            <span class="svg-wrapper ls-trust-badge__icon">
+                              {{- 'icon-certificate.svg' | inline_asset_content -}}
+                            </span>
+                            <span class="ls-trust-badge__text">
+                              Certified<br>Pre-Owned
+                            </span>
+                          </div>
+                          <div class="ls-trust-badge">
+                            <span class="svg-wrapper ls-trust-badge__icon">
+                              {{- 'icon-reply.svg' | inline_asset_content -}}
+                            </span>
+                            <span class="ls-trust-badge__text">
+                              30-day free<br>returns*
+                            </span>
+                          </div>
+                          <div class="ls-trust-badge">
+                            <span class="svg-wrapper ls-trust-badge__icon">
+                              {{- 'icon-shipping.svg' | inline_asset_content -}}
+                            </span>
+                            <span class="ls-trust-badge__text">
+                              Free US<br>Shipping
+                            </span>
+                          </div>
+                        </div>
+                        <p class="ls-trust-badges__note">
+                          <span class="svg-wrapper ls-trust-badges__note-icon">
+                            {{- 'icon-info.svg' | inline_asset_content -}}
+                          </span>
+                          <em>Components ship within 1-2 business days via FedEx Ground</em>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                {%- endif -%}
+              {% endcapture %}
+              {% render 'cart-items-component',
+                children: cart_items_children,
+                is_drawer: true,
+                section_id: 'cart-drawer-section'
+              %}
+            </div>
+          </cart-drawer-component>
         </div>
-      </cart-drawer-component>
+      </div>
     </dialog>
   </theme-drawer>
 
@@ -137,6 +275,32 @@
 {%- endif -%}
 
 {% stylesheet %}
+  /* ── Cart Drawer Backdrop ── */
+
+  .ls-cart-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100dvh;
+    background: rgba(255, 255, 255, 0.6);
+    -webkit-backdrop-filter: brightness(0.75);
+    backdrop-filter: brightness(0.75);
+    z-index: var(--layer-menu-drawer);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity var(--drawer-animation-speed) ease;
+  }
+
+  #cart-drawer[open] .ls-cart-backdrop {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  #cart-drawer:has(.theme-drawer__dialog--closing) .ls-cart-backdrop {
+    opacity: 0;
+  }
+
   cart-drawer-component {
     --cart-drawer-padding: var(--theme-drawer-padding);
     --font-paragraph--line-height: 1;
@@ -148,6 +312,12 @@
     flex-direction: column;
     height: 100%;
     overflow: hidden;
+  }
+
+  @media screen and (min-width: 990px) {
+    .cart-drawer__inner {
+      border-radius: 2rem 0 0 2rem;
+    }
   }
 
   .cart-drawer__inner > .cart-items-component {
@@ -275,6 +445,760 @@
     .cart-drawer__header,
     .cart-drawer__content {
       background: transparent;
+    }
+  }
+
+  /* ═══════════════════════════════════════════════════
+     LS Cart Drawer — Two-Panel Layout
+     ═══════════════════════════════════════════════════ */
+
+  .ls-cart-drawer {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: #250a0a;
+  }
+
+  .ls-cart-drawer__recs {
+    display: none;
+  }
+
+  .ls-cart-drawer__main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  @media screen and (min-width: 990px) {
+    .ls-cart-drawer {
+      flex-direction: row;
+    }
+
+    .ls-cart-drawer__recs {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      min-width: 0;
+      min-height: 0;
+      overflow: hidden;
+      background-color: #250a0a;
+      border-radius: 2rem 0 0 2rem;
+      padding: 1.5rem 2rem;
+      gap: 1rem;
+    }
+
+    .ls-cart-drawer__main {
+      flex: 0 0 40.5rem; /* 648px fixed */
+      width: 40.5rem;
+      max-width: 40.5rem;
+      background-color: #250a0a;
+    }
+  }
+
+  /* ── Custom Header ── */
+
+  .ls-cart-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.5rem 1.5rem 0.5rem;
+    background-color: #fdfcfc;
+    flex-shrink: 0;
+  }
+
+  .ls-cart-header__back {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.25rem 0;
+    color: #141517;
+  }
+
+  .ls-cart-header__back:hover {
+    opacity: 0.7;
+  }
+
+  .ls-cart-header__back .svg-wrapper {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .ls-cart-header__back-text {
+    font-family: Inter, var(--font-paragraph--family);
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+  }
+
+  .ls-cart-header__title {
+    font-family: "Big Shoulders Display", var(--font-heading--family);
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #e31e24;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 0.25rem;
+    text-align: right;
+  }
+
+
+  /* ── Free Shipping Bar ── */
+
+  .ls-shipping-bar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.5rem 1.5rem;
+    background-color: #fdfcfc;
+    flex-shrink: 0;
+  }
+
+  .ls-shipping-bar__text {
+    font-family: Inter, var(--font-paragraph--family);
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #36393f;
+    margin: 0;
+    line-height: 0;
+    letter-spacing: -0.00875rem;
+  }
+
+  .ls-shipping-bar__text span,
+  .ls-shipping-bar__text strong {
+    font-size: 0.875rem;
+    line-height: 1.5;
+  }
+
+  .ls-shipping-bar__text strong {
+    font-weight: 700;
+  }
+
+  .ls-shipping-bar__highlight {
+    color: #e31e24;
+  }
+
+  .ls-shipping-bar__track-wrapper {
+    position: relative;
+    padding: 0.75rem 0;
+  }
+
+  .ls-shipping-bar__track {
+    position: relative;
+    height: 0.5rem;
+    background-color: #aeb2b8;
+    border-radius: 0.25rem;
+  }
+
+  .ls-shipping-bar__fill {
+    height: 100%;
+    background-color: #e31e24;
+    border-radius: 0.25rem;
+    transition: width 0.4s ease;
+  }
+
+  .ls-shipping-bar__milestone {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 2rem;
+    height: 2rem;
+    border-radius: 2.5rem;
+    background-color: #aeb2b8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease;
+  }
+
+  .ls-shipping-bar__milestone.is-active {
+    background-color: #e31e24;
+  }
+
+  .ls-shipping-bar__milestone-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #f4f7f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .ls-shipping-bar__milestone-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ── Cart Items — Card Overrides ── */
+
+  .ls-cart-drawer__main .cart-drawer__items {
+    gap: 1rem;
+    padding: 1rem 1.5rem;
+    background-color: #e2e3e5;
+    margin-bottom: auto;
+  }
+
+  .ls-cart-drawer__main .cart-drawer__items table,
+  .ls-cart-drawer__main .cart-drawer__items tbody {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* Reset the grid to a 2-column flex card */
+  .ls-cart-drawer__main .cart-items__table-row,
+  .ls-cart-drawer__main .cart-items__table-row--full-width-variants {
+    display: flex;
+    position: relative;
+    background-color: #fdfcfc;
+    border-radius: 1.5rem;
+    box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1),
+                0 0.0625rem 0.125rem -0.0625rem rgba(0, 0, 0, 0.1);
+    padding: 0;
+    border-bottom: none;
+    margin-bottom: 0;
+    overflow: hidden;
+    column-gap: 0;
+  }
+
+  /* Image: left panel, ~41% width (249px of ~600px card), stretch full height */
+  .ls-cart-drawer__main .cart-items__media {
+    flex: 0 0 41.5%;
+    max-width: 15.5625rem;
+    align-self: stretch;
+    padding: 0;
+  }
+
+  .ls-cart-drawer__main .cart-items__media-container {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: auto;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .ls-cart-drawer__main .cart-items__media-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 1rem;
+  }
+
+  /* Details: right panel, flex column */
+  .ls-cart-drawer__main .cart-items__details,
+  .ls-cart-drawer__main .cart-items__table-row--full-width-variants .cart-items__details {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    padding: 1rem 0.75rem;
+    gap: 0.5rem;
+  }
+
+  /* Title */
+  .ls-cart-drawer__main .cart-items__title {
+    font-family: Inter, var(--font-paragraph--family);
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #141517;
+    letter-spacing: -0.00875rem;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Vendor + Type info row */
+  .ls-cart-item-info-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .ls-cart-item__vendor {
+    font-family: Inter, var(--font-paragraph--family);
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #e31e24;
+    text-transform: uppercase;
+  }
+
+  .ls-cart-item__type {
+    font-family: Inter, var(--font-paragraph--family);
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #aeb2b8;
+    text-transform: uppercase;
+    text-align: right;
+  }
+
+  /* Vendor row (theme default) — red in drawer */
+  .ls-cart-drawer__main .cart-items__product-info > p {
+    font-family: Inter, var(--font-paragraph--family);
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #e31e24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* Price: bold 20px, pushed to bottom */
+  .ls-cart-drawer__main .cart-items__unit-price-wrapper {
+    font-family: Inter, var(--font-paragraph--family);
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #141517;
+    line-height: 1.5;
+    letter-spacing: -0.0125rem;
+    margin-top: auto;
+  }
+
+  /* Compare-at strikethrough */
+  .ls-cart-drawer__main .compare-at-price {
+    font-size: 0.875rem;
+    color: #aeb2b8;
+    font-weight: 400;
+    text-decoration: line-through;
+  }
+
+  /* Hide separate price column — price is already in details */
+  .ls-cart-drawer__main .cart-items__price {
+    display: none;
+  }
+
+  /* Quantity cell: position absolutely at bottom-right */
+  .ls-cart-drawer__main .cart-items__quantity {
+    position: absolute;
+    bottom: 0.75rem;
+    right: 0.75rem;
+    margin: 0;
+    width: auto;
+  }
+
+  /* Hide quantity selector (± buttons), keep only remove */
+  .ls-cart-drawer__main .quantity-selector-wrapper,
+  .ls-cart-drawer__main .volume-pricing-info {
+    display: none;
+  }
+
+  /* Remove button (trash icon) */
+  .ls-cart-drawer__main .cart-items__remove {
+    color: #141517;
+    padding: 0.5rem;
+  }
+
+  /* Hide error cell in drawer */
+  .ls-cart-drawer__main .cart-items__error {
+    display: none;
+  }
+
+  /* Hide disclosure tooltip in drawer */
+  .ls-cart-drawer__main .cart-disclosure-tooltip {
+    display: none;
+  }
+
+  /* Variants wrapper — hide when empty */
+  .ls-cart-drawer__main .cart-items__variants-wrapper:empty {
+    display: none;
+  }
+
+  /* ── Footer / Summary Overrides ── */
+
+  .ls-cart-drawer__main .cart-drawer__content {
+    background-color: #e2e3e5;
+    mask-image: none;
+  }
+
+  .ls-cart-drawer__main .cart-drawer__summary {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+    gap: 1rem;
+    padding: 1rem 1.5rem 1.5rem;
+    border-radius: 1.5rem 1.5rem 0 0;
+    background-color: #fdfcfc;
+    mask-image: none;
+    overflow: hidden;
+  }
+
+  /* ── Shipping status row ── */
+
+  .ls-summary-shipping {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    color: #36393f;
+    line-height: 1.5;
+  }
+
+  .ls-summary-shipping__label {
+    font-family: Inter, var(--font-paragraph--family);
+    font-weight: 700;
+    font-size: 1rem;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .ls-summary-shipping__value {
+    font-family: Inter, var(--font-paragraph--family);
+    font-weight: 400;
+    font-size: 0.875rem;
+    text-align: right;
+    flex: 1;
+  }
+
+  /* ── Checkout row: subtotal left + button right ── */
+
+  .ls-summary-checkout-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem 1.5rem;
+    width: 100%;
+    min-width: 0;
+    align-items: center;
+    box-sizing: border-box;
+  }
+
+  /* Cart totals: left column */
+  .ls-summary-checkout-row .cart-totals,
+  .ls-summary-checkout-row .cart-totals:not(:has(.cart-actions)) {
+    grid-column: 1;
+    grid-row: 1;
+    min-width: 0;
+    border: none;
+    border-block-start: none;
+    padding: 0;
+    padding-block-start: 0;
+    margin: 0;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  /* Hide elements not in the Figma design */
+  .ls-cart-drawer__main .cart-actions,
+  .ls-cart-drawer__main .cart-totals__original-container,
+  .ls-cart-drawer__main .cart-totals__installments,
+  .ls-cart-drawer__main .cart-totals__tax-note {
+    display: none;
+  }
+
+  .ls-cart-drawer__main .cart-totals__container {
+    gap: 0;
+  }
+
+  .ls-cart-drawer__main .cart__summary-totals {
+    border-block-start: none;
+    padding-block-start: 0;
+  }
+
+  /* Override "Estimated total" → "SUBTOTAL" */
+  .ls-cart-drawer__main .cart-totals__total-label {
+    font-size: 0;
+    line-height: 0;
+  }
+
+  .ls-cart-drawer__main .cart-totals__total-label::before {
+    content: "SUBTOTAL";
+    font-family: Inter, var(--font-paragraph--family);
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.5;
+    letter-spacing: -0.0125rem;
+    color: #36393f;
+  }
+
+  .ls-cart-drawer__main .cart-totals__total-value {
+    font-family: Inter, var(--font-paragraph--family);
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    color: #36393f;
+  }
+
+  .ls-cart-drawer__main .cart-totals__total {
+    border: none;
+    padding: 0;
+  }
+
+  /* Items count + Savings: left column row 2 */
+  .ls-summary-meta {
+    grid-column: 1;
+    grid-row: 2;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    line-height: 1.5;
+  }
+
+  .ls-summary-meta__count {
+    font-family: Inter, var(--font-paragraph--family);
+    font-weight: 400;
+    font-size: 1rem;
+    color: #36393f;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .ls-summary-meta__savings {
+    font-family: Inter, var(--font-paragraph--family);
+    font-weight: 400;
+    font-size: 1rem;
+    font-style: italic;
+    color: #e31e24;
+    text-align: right;
+    flex: 1;
+  }
+
+  .ls-summary-meta__savings strong {
+    font-weight: 700;
+  }
+
+  /* Checkout CTA: right column, spans both rows */
+  .ls-summary-checkout-row .cart__ctas {
+    grid-column: 2;
+    grid-row: 1 / 3;
+    display: flex;
+    align-self: stretch;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  .ls-cart-drawer__main .cart__checkout-button {
+    background-color: #e31e24;
+    color: #fdfcfc;
+    border-radius: 0.75rem;
+    border: none;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding-inline: 1.5rem;
+  }
+
+  .ls-cart-drawer__main .cart__checkout-button:hover {
+    background-color: #c9181d;
+  }
+
+  /* Override "Check out" → "Proceed To Checkout" */
+  .ls-cart-drawer__main .cart__checkout-button .button-text {
+    font-size: 0;
+    line-height: 0;
+  }
+
+  .ls-cart-drawer__main .cart__checkout-button .button-text::before {
+    content: "Proceed To Checkout";
+    font-family: Inter, var(--font-paragraph--family);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    line-height: 1.4;
+    white-space: nowrap;
+  }
+
+  /* Arrow-right icon on checkout button */
+  .ls-cart-drawer__main .cart__checkout-button::after {
+    content: "";
+    flex-shrink: 0;
+    display: inline-block;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: currentColor;
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14.04 5.09L20.41 11.46 20.93 12 20.41 12.54 14.04 18.91 12.96 17.84 18.05 12.75 3 12.75 3 11.25 18.05 11.25 12.96 6.16 14.04 5.09Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M14.04 5.09L20.41 11.46 20.93 12 20.41 12.54 14.04 18.91 12.96 17.84 18.05 12.75 3 12.75 3 11.25 18.05 11.25 12.96 6.16 14.04 5.09Z'/%3E%3C/svg%3E");
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+  }
+
+  /* Additional checkout buttons (Apple Pay, etc.) — hide in drawer */
+  .ls-cart-drawer__main .additional-checkout-buttons {
+    display: none;
+  }
+
+  /* ── Trust Badges ── */
+
+  .ls-trust-badges {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .ls-trust-badges__divider {
+    border: none;
+    border-top: 0.0625rem solid #aeb2b8;
+    margin: 0;
+  }
+
+  .ls-trust-badges__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: flex-start;
+    padding: 0 0.5rem;
+    gap: 0.75rem;
+  }
+
+  .ls-trust-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .ls-trust-badge__icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+    color: #6d1316;
+  }
+
+  .ls-trust-badge__icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ls-trust-badge__text {
+    font-size: 0.6875rem;
+    line-height: 1.4;
+    color: #6d1316;
+    font-weight: 600;
+  }
+
+  .ls-trust-badges__note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    margin: 0;
+  }
+
+  .ls-trust-badges__note-icon {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+    color: #36393f;
+  }
+
+  .ls-trust-badges__note-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  .ls-trust-badges__note em {
+    font-size: 0.75rem;
+    color: #36393f;
+    font-style: italic;
+  }
+
+  @media screen and (min-width: 990px) {
+    .ls-trust-badge__icon {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+
+    .ls-trust-badge__text {
+      font-size: 0.75rem;
+    }
+  }
+
+  /* ── Mobile Recommendations (inline between items & summary) ── */
+
+  .ls-cart-drawer__recs-mobile {
+    display: block;
+    background-color: #250a0a;
+    border-radius: 1rem 1rem 0 0;
+    padding: 1rem 1.5rem;
+  }
+
+  .ls-cart-drawer__recs-mobile cart-drawer-recs {
+    gap: 0.75rem;
+  }
+
+  @media screen and (min-width: 990px) {
+    .ls-cart-drawer__recs-mobile {
+      display: none;
+    }
+  }
+
+  /* ── Mobile Summary Overrides ── */
+
+  @media screen and (max-width: 989px) {
+    .ls-cart-drawer__main .cart-drawer__summary {
+      gap: 0.5rem;
+      padding: 1rem 1rem 1.5rem;
+      border-radius: 0;
+      margin-top: 0;
+    }
+
+    .ls-summary-checkout-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .ls-summary-checkout-row .cart__ctas {
+      order: 3;
+      width: 100%;
+    }
+
+    .ls-cart-drawer__main .cart__checkout-button {
+      padding: 0.75rem 1.5rem;
+      width: 100%;
+    }
+
+    .ls-summary-meta {
+      width: 100%;
+    }
+
+    .ls-summary-meta__count {
+      font-size: 0.875rem;
+    }
+
+    .ls-summary-meta__savings,
+    .ls-summary-meta__savings strong {
+      font-size: 1rem;
+    }
+
+    .ls-trust-badges__grid {
+      flex-wrap: nowrap;
+      gap: 0.25rem;
+      padding: 0;
+    }
+
+    .ls-trust-badge__icon {
+      width: 1.5rem;
+      height: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .ls-trust-badge__text {
+      font-size: 0.625rem;
+    }
+
+    .ls-trust-badges__note {
+      flex-wrap: nowrap;
+    }
+
+    .ls-trust-badges__note em {
+      font-size: 0.625rem;
+      white-space: nowrap;
     }
   }
 {% endstylesheet %}

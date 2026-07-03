@@ -2096,7 +2096,7 @@
         "id": "cart_free_shipping_threshold",
         "label": "Free shipping threshold",
         "info": "Amount in your store currency (e.g. 50 for $50). The bar fills as the cart subtotal approaches this amount.",
-        "default": "50",
+        "default": "19000",
         "visible_if": "{{ settings.cart_free_shipping_enabled == true }}"
       },
       {
@@ -2109,6 +2109,12 @@
         "label": "Show \"You might also like\" upsell",
         "info": "Recommends a related product based on the first item in the cart. Refreshes when cart changes.",
         "default": true
+      },
+      {
+        "type": "collection",
+        "id": "cart_recommendations_collection",
+        "label": "Drawer recommendations collection",
+        "info": "Products from this collection appear in the left panel of the cart drawer (desktop only). Products already in the cart are excluded."
       },
       {
         "type": "header",

@@ -18,7 +18,7 @@
   .theme-drawer__dialog {
     --theme-drawer-padding: var(--padding-xl);
 
-    z-index: calc(var(--layer-sticky) + var(--drawer-stack-order, 0));
+    z-index: calc(var(--layer-menu-drawer) + var(--drawer-stack-order, 0));
     position: fixed;
     inset: unset;
     top: 0;
@@ -184,5 +184,18 @@
     .theme-drawer__close-button:hover:not(:active) {
       background-color: color-mix(in srgb, var(--contrast-color) 6%, var(--color-background));
     }
+  }
+  /* ── Cart drawer: wider for two-panel layout ── */
+  @media screen and (min-width: 990px) {
+    #cart-drawer .theme-drawer__dialog {
+      --theme-drawer-width: 68rem;
+    }
+  }
+
+  #cart-drawer .theme-drawer__dialog {
+    border-left: none;
+    border-radius: 2rem 0 0 2rem;
+    overflow: hidden;
+    background-color: transparent;
   }
 {% endstylesheet %}
