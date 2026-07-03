@@ -125,23 +125,26 @@ class CartDrawerRecs extends HTMLElement {
    * @returns {Promise<Array>}
    */
   async fetchCollectionProducts() {
-    const url = `/collections/all/products.json?limit=${MAX_CARDS}&sort_by=best-selling`;
+    const url = `/collections/all/products.json?limit=10&sort_by=best-selling`;
     const res = await fetch(url);
     if (!res.ok) return [];
 
     const data = await res.json();
     const products = data?.products || [];
 
-    return products.slice(0, MAX_CARDS).map((p) => ({
-      id: p.id,
-      title: p.title,
-      url: `/products/${p.handle}`,
-      image: p.images?.[0]?.src || '',
-      vendor: p.vendor,
-      price: p.variants?.[0]?.price ? Number(p.variants[0].price) * 100 : 0,
-      available: p.available,
-      variantId: p.variants?.[0]?.id,
-    }));
+    return products
+      .filter((p) => !this.cartProductIds.has(String(p.id)))
+      .slice(0, MAX_CARDS)
+      .map((p) => ({
+        id: p.id,
+        title: p.title,
+        url: `/products/${p.handle}`,
+        image: p.images?.[0]?.src || '',
+        vendor: p.vendor,
+        price: p.variants?.[0]?.price ? Math.round(Number(p.variants[0].price) * 100) : 0,
+        available: p.available,
+        variantId: p.variants?.[0]?.id,
+      }));
   }
 
   /** @param {Array} products */
