@@ -529,11 +529,16 @@
     if (headerMenu && !headerMenu.__elevateObserved) {
       headerMenu.__elevateObserved = true;
       const menuObserver = new MutationObserver(() => {
-        /* Only show backdrop for items that actually have a submenu */
-        const hasOpen = headerMenu.querySelector(
-          '.menu-list__list-item:has([ref="submenu[]"]) [aria-expanded="true"]'
-        );
-        backdrop.classList.toggle('is-visible', !!hasOpen);
+        /* Only show backdrop for items that actually have a submenu.
+           Uses DOM traversal instead of :has() in querySelector to
+           avoid DOMException in browsers that don't support it. */
+        const hasOpen = Array.from(
+          headerMenu.querySelectorAll('[aria-expanded="true"]')
+        ).some((el) => {
+          const listItem = el.closest('.menu-list__list-item');
+          return listItem && listItem.querySelector('[ref="submenu[]"]');
+        });
+        backdrop.classList.toggle('is-visible', hasOpen);
       });
       menuObserver.observe(headerMenu, {
         attributes: true,
@@ -545,12 +550,15 @@
          because its 200ms timer gets cancelled by activate() while the
          pointer is still over the menu item. */
       let scrollTicking = false;
+      let isClosing = false;
       window.addEventListener('scroll', () => {
-        if (scrollTicking) return;
+        if (scrollTicking || isClosing) return;
+        if (!backdrop.classList.contains('is-visible')) return;
         scrollTicking = true;
         requestAnimationFrame(() => {
           const expandedLink = headerMenu.querySelector('a[aria-expanded="true"]');
           if (expandedLink) {
+            isClosing = true;
             const headerComponent = headerMenu.closest('header-component');
             const listItem = expandedLink.closest('.menu-list__list-item');
             const submenu = listItem?.querySelector('[ref="submenu[]"]');
@@ -567,9 +575,10 @@
 
             /* Delay aria/data cleanup so clip-path transition plays out */
             setTimeout(() => {
-              headerMenu.ariaExpanded = 'false';
-              expandedLink.ariaExpanded = 'false';
+              headerMenu.setAttribute('aria-expanded', 'false');
+              expandedLink.setAttribute('aria-expanded', 'false');
               if (submenu) delete submenu.dataset.active;
+              isClosing = false;
             }, 200);
           }
           scrollTicking = false;
