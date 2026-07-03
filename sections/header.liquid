@@ -461,10 +461,7 @@
   /* ── Backdrop overlay when megamenu is open ── */
   .elevate-megamenu-backdrop {
     position: fixed;
-    top: var(--header-group-height, 100px);
-    left: 0;
-    right: 0;
-    bottom: 0;
+    inset: 0;
     background: rgba(255, 255, 255, 0.6);
     z-index: 17;
     pointer-events: none;
@@ -477,7 +474,6 @@
   }
 
   .elevate-megamenu-backdrop.is-visible--search {
-    top: 0;
     z-index: 19;
     opacity: 1;
   }
@@ -533,12 +529,61 @@
     if (headerMenu && !headerMenu.__elevateObserved) {
       headerMenu.__elevateObserved = true;
       const menuObserver = new MutationObserver(() => {
-        const hasOpen = headerMenu.querySelector('[aria-expanded="true"]');
-        backdrop.classList.toggle('is-visible', !!hasOpen);
+        /* Only show backdrop for items that actually have a submenu.
+           Uses DOM traversal instead of :has() in querySelector to
+           avoid DOMException in browsers that don't support it. */
+        const hasOpen = Array.from(
+          headerMenu.querySelectorAll('[aria-expanded="true"]')
+        ).some((el) => {
+          const listItem = el.closest('.menu-list__list-item');
+          return listItem && listItem.querySelector('[ref="submenu[]"]');
+        });
+        backdrop.classList.toggle('is-visible', hasOpen);
       });
-      headerMenu.querySelectorAll('[aria-expanded]').forEach((el) => {
-        menuObserver.observe(el, { attributes: true, attributeFilter: ['aria-expanded'] });
+      menuObserver.observe(headerMenu, {
+        attributes: true,
+        attributeFilter: ['aria-expanded'],
+        subtree: true,
       });
+
+      /* Close megamenu on scroll — force-close bypassing deactivate()
+         because its 200ms timer gets cancelled by activate() while the
+         pointer is still over the menu item. */
+      let scrollTicking = false;
+      let isClosing = false;
+      window.addEventListener('scroll', () => {
+        if (scrollTicking || isClosing) return;
+        if (!backdrop.classList.contains('is-visible')) return;
+        scrollTicking = true;
+        requestAnimationFrame(() => {
+          const expandedLink = headerMenu.querySelector('a[aria-expanded="true"]');
+          if (expandedLink) {
+            isClosing = true;
+            const headerComponent = headerMenu.closest('header-component');
+            const listItem = expandedLink.closest('.menu-list__list-item');
+            const submenu = listItem?.querySelector('[ref="submenu[]"]');
+
+            /* Animate close: set CSS vars first (triggers clip-path
+               transition), then remove visibility after animation. */
+            if (headerComponent) {
+              headerComponent.style.setProperty('--submenu-height', '0px');
+              headerComponent.style.setProperty('--full-open-header-height', '0px');
+            }
+            headerMenu.style.setProperty('--submenu-opacity', '0');
+            headerMenu.dataset.overflowExpanded = 'false';
+            backdrop.classList.remove('is-visible');
+
+            /* Delay aria/data cleanup so clip-path transition plays out */
+            setTimeout(() => {
+              headerMenu.setAttribute('aria-expanded', 'false');
+              expandedLink.setAttribute('aria-expanded', 'false');
+              if (submenu) delete submenu.dataset.active;
+              isClosing = false;
+            }, 200);
+          }
+          scrollTicking = false;
+        });
+      }, { passive: true });
     }
 
     const searchDialog = document.querySelector('#search-modal dialog');
@@ -710,6 +755,12 @@
   }
 
   .header-section {
+    position: relative;
+    z-index: var(--layer-menu-drawer);
+  }
+
+  /* Keep the announcement bar above the megamenu backdrop (z-index: 17) */
+  .usps-bar {
     position: relative;
     z-index: var(--layer-menu-drawer);
   }
@@ -1401,9 +1452,28 @@
     margin-inline: auto;
   }
 
-  /* Shorter clip-path transition reduces visible jumps from mid-animation recalc */
+  /* The submenu wrapper is width:100% (full viewport) but only
+     submenu-inner has visible content. Disable pointer-events on the
+     wrapper so hovering the transparent gutters doesn't keep the menu
+     open via the theme's :hover CSS rule. Re-enable on the inner. */
+  /* Close: fade out, no clip-path (avoids the 80px top-jump cut). */
   .header-menu .menu-list__list-item > .menu-list__submenu {
-    transition: clip-path 200ms var(--ease-out-cubic);
+    opacity: 0;
+    clip-path: none;
+    transition: opacity 200ms ease,
+                visibility 0s 200ms;
+    pointer-events: none;
+  }
+  /* Open: clip-path reveal + fade in. */
+  .header-menu .menu-list__list-item:has([aria-expanded='true']) > .menu-list__submenu {
+    opacity: 1;
+    clip-path: rect(var(--header-height) 100% var(--full-open-header-height) 0);
+    transition: clip-path 200ms var(--ease-out-cubic),
+                opacity 150ms ease,
+                visibility 0s 0s;
+  }
+  .header-menu .menu-list__submenu-inner {
+    pointer-events: auto;
   }
 
   /* Override theme grid → 2-column CSS grid: [non-brand groups | brand group].
