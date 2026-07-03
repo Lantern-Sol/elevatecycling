@@ -81,7 +81,7 @@ class CartDrawerRecs extends HTMLElement {
         url: p.url,
         image: p.image,
         vendor: p.vendor,
-        price: Number(p.price),
+        price: Number(p.price || 0) * 100,
         available: p.available,
         variantId: p.variants?.[0]?.id,
       }));

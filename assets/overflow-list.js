@@ -259,6 +259,7 @@ export class OverflowList extends DeclarativeShadowElement {
    */
   #reflowItems = (listHeight = 0, lastVisibleElement = null) => {
     if (this.getAttribute('disabled') === 'true') return;
+    if (!this.#refs) return;
     const { defaultSlot, overflowSlot, moreSlot, list, placeholder } = this.#refs;
 
     this.#unobserveChanges();

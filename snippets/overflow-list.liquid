@@ -38,7 +38,22 @@
         {% if more-attributes %}
           {{ more-attributes }}
         {% endif %}
-      ></slot>
+      >
+        <li
+          part="more"
+        >
+          <button
+            class="button"
+            type="button"
+            tabindex="0"
+            {% if more-button-attributes %}
+              {{ more-button-attributes }}
+            {% endif %}
+          >
+            {{ 'actions.more' | t }}
+          </button>
+        </li>
+      </slot>
       <li
         part="placeholder"
         hidden
