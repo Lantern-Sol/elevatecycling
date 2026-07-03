@@ -205,7 +205,16 @@
                         mode: 'trigger'
                       %}
                     </div>
-                    {% if item.product.vendor and block_settings.vendor %}
+                    {% if context == 'drawer' %}
+                      <div class="ls-cart-item-info-row">
+                        {% if item.product.vendor != blank %}
+                          <span class="ls-cart-item__vendor">{{ item.product.vendor }}</span>
+                        {% endif %}
+                        {% if item.product.type != blank %}
+                          <span class="ls-cart-item__type">{{ item.product.type }}</span>
+                        {% endif %}
+                      </div>
+                    {% elsif item.product.vendor and block_settings.vendor %}
                       <p>
                         {{ item.product.vendor }}
                       </p>

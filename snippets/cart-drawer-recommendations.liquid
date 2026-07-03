@@ -1,0 +1,331 @@
+{% doc %}
+  Cart Drawer Recommendations Panel
+
+  Renders a product recommendations panel on the left side of the cart drawer
+  (desktop only — hidden on mobile via `.ls-cart-drawer__recs`).
+
+  Source priority:
+  1. Recently viewed products (≥ 3 in localStorage after filtering out cart items)
+  2. Search & Discovery app recommendations (based on first cart item)
+
+  A `<cart-drawer-recs>` custom element handles fetching and rendering client-side.
+
+  @example
+  {% render 'cart-drawer-recommendations' %}
+{% enddoc %}
+
+<cart-drawer-recs
+  data-cart-product-ids='[{%- for item in cart.items -%}"{{ item.product.id }}"{%- unless forloop.last -%},{%- endunless -%}{%- endfor -%}]'
+  data-first-product-id="{{ cart.items.first.product.id }}"
+  data-money-format="{{ shop.money_format | escape }}"
+  data-currency="{{ cart.currency.iso_code }}"
+  data-cart-add-url="{{ routes.cart_add_url }}"
+  data-recommendations-url="{{ routes.product_recommendations_url }}"
+>
+  <h2 class="ls-recs__title">You might also want</h2>
+  <div class="ls-recs__scroll"></div>
+</cart-drawer-recs>
+
+<script src="{{ 'cart-drawer-recommendations.js' | asset_url }}" type="module"></script>
+
+{% stylesheet %}
+  cart-drawer-recs {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-height: 0;
+  }
+
+  .ls-recs__title {
+    font-family: "Big Shoulders Display", var(--font-heading--family);
+    font-weight: 400;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #fdfcfc;
+    text-align: center;
+    margin: 0;
+    padding-block: 0.5rem;
+  }
+
+  @media screen and (min-width: 990px) {
+    .ls-recs__title {
+      font-size: 3rem;
+    }
+  }
+
+  .ls-recs__scroll {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-block-end: 1rem;
+  }
+
+  .ls-recs__scroll > .ls-rec-card {
+    flex-shrink: 0;
+  }
+
+  /* ── Rec card — matches elevate-arrivals card design ── */
+
+  .ls-rec-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background-color: #fdfcfc;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    color: #141517;
+    box-shadow:
+      0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1),
+      0 0.0625rem 0.125rem -0.0625rem rgba(0, 0, 0, 0.1);
+  }
+
+  .ls-rec-card__image-wrap {
+    position: relative;
+    display: block;
+    aspect-ratio: 342 / 228;
+    overflow: hidden;
+    border-radius: 1rem;
+    background-color: #f2f2f3;
+    text-decoration: none;
+  }
+
+  .ls-rec-card__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* ── Meta: vendor brand ── */
+
+  .ls-rec-card__meta {
+    display: flex;
+    align-items: center;
+    padding-inline: 0.75rem;
+    font-family: "Inter", var(--font-paragraph--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+  }
+
+  .ls-rec-card__vendor {
+    color: #e31e24;
+  }
+
+  /* ── Title ── */
+
+  .ls-rec-card__name {
+    padding-inline: 0.75rem;
+  }
+
+  .ls-rec-card__title {
+    font-family: "Big Shoulders Display", var(--font-heading--family), sans-serif;
+    font-weight: 400;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #141517;
+    text-decoration: none;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin: 0;
+  }
+
+  .ls-rec-card__title:hover {
+    text-decoration: underline;
+  }
+
+  /* ── Footer: price + CTAs ── */
+
+  .ls-rec-card__footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem 0.5rem 0.5rem 0.75rem;
+    margin-top: auto;
+  }
+
+  .ls-rec-card__price {
+    font-family: "Inter", var(--font-paragraph--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    letter-spacing: -0.0125rem;
+    color: #141517;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .ls-rec-card__ctas {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .ls-rec-card__btn-stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    border: 0.03125rem solid #141517;
+    background-color: transparent;
+    color: #141517;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .ls-rec-card__btn-stats:hover {
+    background-color: rgba(20, 21, 23, 0.06);
+  }
+
+  .ls-rec-card__btn-stats svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .ls-rec-card__add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem;
+    border-radius: 0.75rem;
+    border: none;
+    background-color: #e31e24;
+    color: #fdfcfc;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .ls-rec-card__add:hover {
+    background-color: #c9191e;
+  }
+
+  .ls-rec-card__add:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .ls-rec-card__add svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  /* ═══════════════════════════════════════════════════
+     Mobile Card Layout — horizontal scroll, compact cards
+     Figma: product-card/cart-mobile-extra (326px wide)
+     ═══════════════════════════════════════════════════ */
+
+  @media screen and (max-width: 989px) {
+    .ls-recs__title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      text-align: left;
+      padding-block: 0;
+    }
+
+    .ls-recs__scroll {
+      flex-direction: row;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      gap: 0.5rem;
+      padding-block-end: 0;
+      margin-right: -1.5rem;
+      padding-right: 1.5rem;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+
+    .ls-recs__scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* ── Card: 2-column grid so right side stacks ── */
+
+    .ls-rec-card {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr auto;
+      flex-shrink: 0;
+      width: 20.375rem; /* 326px */
+      border-radius: 1rem;
+      gap: 0;
+      overflow: hidden;
+      scroll-snap-align: start;
+    }
+
+    /* Image: left column, spans all rows */
+    .ls-rec-card__image-wrap {
+      grid-column: 1;
+      grid-row: 1 / -1;
+      aspect-ratio: auto;
+      border-radius: 0.5rem;
+    }
+
+    /* Vendor: hidden on mobile rec cards */
+    .ls-rec-card__meta {
+      display: none;
+    }
+
+    /* Title: right column, row 1 */
+    .ls-rec-card__name {
+      grid-column: 2;
+      grid-row: 1;
+      padding: 0.5rem 0.5rem 0;
+      display: flex;
+      align-items: flex-start;
+      min-width: 0;
+    }
+
+    .ls-rec-card__title {
+      font-family: Inter, var(--font-paragraph--family);
+      font-weight: 700;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      letter-spacing: -0.00875rem;
+      max-height: 2.625rem; /* 42px ≈ 2 lines at 14px × 1.5 */
+      -webkit-line-clamp: 2;
+    }
+
+    /* Footer: right column, row 2 */
+    .ls-rec-card__footer {
+      grid-column: 2;
+      grid-row: 2;
+      padding: 0.25rem 0.5rem 0.5rem;
+      align-items: flex-end;
+    }
+
+    .ls-rec-card__price {
+      font-size: 1rem;
+      letter-spacing: -0.01rem;
+    }
+
+    .ls-rec-card__btn-stats {
+      display: none;
+    }
+
+    .ls-rec-card__ctas {
+      gap: 0.5rem;
+    }
+
+    .ls-rec-card__add {
+      width: 2rem;
+      height: 2rem;
+      padding: 0.25rem;
+      border-radius: 0.75rem;
+    }
+
+    .ls-rec-card__add svg {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+{% endstylesheet %}

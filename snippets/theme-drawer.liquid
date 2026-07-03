@@ -82,29 +82,6 @@
 <script
   type="module"
 >
-  const pageWrapper = document.querySelector('.page-wrapper');
-  const squeezeQuery = window.matchMedia('(min-width: 990px)');
-
-  // ── Squeeze coordination ──
-  // Listens to all drawers. Only squeezes on wide viewports.
-  document.addEventListener('theme-drawer:open', () => {
-    if (squeezeQuery.matches) {
-      pageWrapper?.classList.add('page-wrapper--drawer-open');
-    }
-  });
-
-  document.addEventListener('theme-drawer:close', () => {
-    const openDrawer = document.querySelector('theme-drawer[open]');
-    if (!openDrawer) {
-      pageWrapper?.classList.remove('page-wrapper--drawer-open');
-    }
-  });
-
-  squeezeQuery.addEventListener('change', () => {
-    const openDrawer = document.querySelector('theme-drawer[open]');
-    pageWrapper?.classList.toggle('page-wrapper--drawer-open', Boolean(openDrawer) && squeezeQuery.matches);
-  });
-
   // ── State persistence ──
   // Store open drawer IDs sorted by their visual stack order so
   // the restore script can recreate the same z-index layering.
