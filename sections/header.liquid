@@ -369,7 +369,7 @@
       assign text_setting = 'text_color_' | append: row
       assign row_class_id = row | append: '-' | append: section.id
       assign row_class = ' color-custom-' | append: row_class_id
-      assign class = 'header__row header__row--[row] color-[row_background] section section--full-width-margin section--[section-width]' | replace: '[row]', row | replace: '[row_background]', section.settings[background] | replace: '[section-width]', section.settings.section_width
+      assign class = 'header__row header__row--[row] color-[row_background] section section--page-width page-width-normal' | replace: '[row]', row | replace: '[row_background]', section.settings[background]
 
       case row
         when 'top'
@@ -456,6 +456,7 @@
     </div>
   {% endif %}
 </header-component>
+
 
 <style>
   /* ── Backdrop overlay when megamenu is open ── */
@@ -629,7 +630,7 @@
     display: none;
   }
 
-  @media screen and (min-width: 750px) {
+  @media screen and (min-width: 1025px) {
     #header-component[data-menu-style='menu'] :is(.header-menu, .dropdown-localization) {
       display: flex;
     }
@@ -639,7 +640,7 @@
     display: contents;
   }
 
-  @media screen and (min-width: 750px) {
+  @media screen and (min-width: 1025px) {
     #header-component[data-menu-style='menu'] .header__navigation-bar-row {
       display: none;
     }
@@ -678,7 +679,7 @@
     }
 
     /* Mobile: when the menu drawer is open, fall back to the default (non-inverse) color scheme — mirrors the sticky-active treatment so header content stays legible against the open drawer */
-    @media screen and (max-width: 749px) {
+    @media screen and (max-width: 1024px) {
       &:has(#Details-menu-drawer-container[open]) {
         --header-logo-display: unset;
         --header-logo-inverse-display: unset;
@@ -900,7 +901,7 @@
     border-bottom: var(--border-bottom-width) solid var(--border-bottom-color, var(--color-border));
   }
 
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 1024px) {
     .header__row--top:not(.divider--page-width),
     .header__row--top.divider--page-width .header__columns {
       border-bottom-width: var(--border-bottom-width-mobile);
@@ -915,7 +916,7 @@
   }
 
   .header__row.divider--page-width:not(.section--page-width) .header__columns {
-    @media screen and (min-width: 750px) {
+    @media screen and (min-width: 1025px) {
       padding-inline-start: 0;
       padding-inline-end: 0;
       margin-inline-start: var(--page-margin);
@@ -927,8 +928,8 @@
     display: flex;
     align-items: center;
 
-    /* on mobile, header__column nodes are ignored to create a new grid-template-area based on all visible content */
-    @media screen and (max-width: 749px) {
+    /* on mobile/tablet, header__column nodes are ignored to create a new grid-template-area based on all visible content */
+    @media screen and (max-width: 1024px) {
       display: contents;
     }
   }
@@ -982,7 +983,7 @@
 
     /* If there is no center column, make the column the menu is in grow eagerly */
     &:where(:not(:has(.header__column--center))) {
-      @media screen and (min-width: 750px) {
+      @media screen and (min-width: 1025px) {
         --header-template-columns: var(--header-left) var(--header-right);
 
         grid-template-areas: 'left right';
@@ -1001,16 +1002,14 @@
       }
     }
 
-    @media screen and (max-width: 749px) {
+    @media screen and (max-width: 1024px) {
       --header-template-columns: 1fr auto 1fr;
 
       grid-template-areas: 'menu logo actions';
       grid-template-columns: var(--header-template-columns);
-      grid-column: span 3;
       column-gap: 0;
       align-items: center;
       padding-block: 0;
-      padding-inline: 1rem;
 
       header-drawer {
         grid-area: menu;
@@ -1031,11 +1030,9 @@
 
     grid-template-areas: 'menu logo actions';
     grid-template-columns: var(--header-template-columns);
-    grid-column: span 3;
     column-gap: 0;
     align-items: center;
     padding-block: 0;
-    padding-inline: 1rem;
 
     header-drawer {
       grid-area: menu;
@@ -1317,12 +1314,12 @@
   /* Header row: 32px horizontal padding, 24px gap per Figma.
      Height controlled by "Desktop height" setting → --elevate-header-height.
      When set to 0 the theme's compact/standard padding takes over. */
-  @media screen and (min-width: 750px) {
+  @media screen and (min-width: 1025px) {
     .header .header__columns {
-      padding-inline: 2rem;
+      padding-inline: 0;
       align-items: center;
       grid-gap: 1.5rem;
-      grid-template-columns: auto auto 1fr;
+      grid-template-columns: auto auto minmax(max-content, 1fr);
       height: var(--elevate-header-height, auto);
     }
   }
@@ -1786,7 +1783,7 @@
     display: none;
   }
 
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 1024px) {
     .elevate-mobile-br {
       display: block;
     }
@@ -1919,7 +1916,7 @@
   }
 
   /* ── Mobile promo cards: full width, no border, constrained card size ── */
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 1024px) {
     .elevate-megamenu-cards {
       width: 100%;
       border-inline-start: none;
@@ -1949,9 +1946,9 @@
   }
 
   /* ── Mobile header overrides ── */
-  @media screen and (max-width: 749px) {
+  @media screen and (max-width: 1024px) {
     .header__columns {
-      padding-inline: 1rem;
+      padding-inline: 0;
       min-height: 3.5rem;
     }
 

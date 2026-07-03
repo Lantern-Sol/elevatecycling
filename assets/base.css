@@ -524,7 +524,7 @@ p:empty {
   display: none !important;
 }
 
-@media screen and (max-width: 749px) {
+@media screen and (max-width: 1024px) {
 
   .hidden--mobile,
   .mobile\:hidden {
@@ -533,7 +533,7 @@ p:empty {
   }
 }
 
-@media screen and (min-width: 750px) {
+@media screen and (min-width: 1025px) {
 
   .hidden--desktop,
   .desktop\:hidden {
