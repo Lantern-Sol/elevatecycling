@@ -1,7 +1,7 @@
 import { formatMoney } from '@theme/money-formatting';
 
 const RECENTLY_VIEWED_KEY = 'viewedProducts';
-const MIN_RECENTLY_VIEWED = 3;
+const MIN_RECENTLY_VIEWED = 1;
 const MAX_CARDS = 4;
 
 class CartDrawerRecs extends HTMLElement {
@@ -34,11 +34,17 @@ class CartDrawerRecs extends HTMLElement {
 
       if (viewedIds.length >= MIN_RECENTLY_VIEWED) {
         const products = await this.fetchRecentlyViewed(viewedIds);
-        this.renderCards(products);
-      } else if (this.firstProductId) {
-        const products = await this.fetchRecommendations(this.firstProductId);
-        this.renderCards(products);
+        if (products.length) return this.renderCards(products);
       }
+
+      if (this.firstProductId) {
+        const products = await this.fetchRecommendations(this.firstProductId);
+        if (products.length) return this.renderCards(products);
+      }
+
+      // Fallback: fetch popular products from /collections/all
+      const products = await this.fetchCollectionProducts();
+      this.renderCards(products);
     } catch {
       // Fail silently — leave panel empty
     }
@@ -112,6 +118,30 @@ class CartDrawerRecs extends HTMLElement {
         available: p.available,
         variantId: p.variants?.[0]?.id,
       }));
+  }
+
+  /**
+   * Fallback: fetches products from /collections/all when no recently viewed or recommendations.
+   * @returns {Promise<Array>}
+   */
+  async fetchCollectionProducts() {
+    const url = `/collections/all/products.json?limit=${MAX_CARDS}&sort_by=best-selling`;
+    const res = await fetch(url);
+    if (!res.ok) return [];
+
+    const data = await res.json();
+    const products = data?.products || [];
+
+    return products.slice(0, MAX_CARDS).map((p) => ({
+      id: p.id,
+      title: p.title,
+      url: `/products/${p.handle}`,
+      image: p.images?.[0]?.src || '',
+      vendor: p.vendor,
+      price: p.variants?.[0]?.price ? Number(p.variants[0].price) * 100 : 0,
+      available: p.available,
+      variantId: p.variants?.[0]?.id,
+    }));
   }
 
   /** @param {Array} products */
