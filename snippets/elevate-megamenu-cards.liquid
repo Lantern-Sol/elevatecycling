@@ -11,11 +11,6 @@
   assign _show_cpo = card_settings.show_megamenu_cpo_card
   assign _show_trade = card_settings.show_megamenu_trade_card
 
-  # If neither card is enabled, bail out
-  if _show_cpo == false and _show_trade == false
-    break
-  endif
-
   # ── Adaptive text based on menu category ──
   assign _title_down = parent_title | downcase | strip
 
@@ -50,6 +45,7 @@
   endif
 -%}
 
+{%- if _show_cpo or _show_trade -%}
 <div class="elevate-megamenu-cards">
   {%- if _show_cpo -%}
     {%- comment -%} ── CPO Badge Card ── {%- endcomment -%}
@@ -78,7 +74,7 @@
         </div>
         <span class="elevate-megamenu-card__badge-text">{{ card_settings.cpo_badge_text }}</span>
       </div>
-      <p class="elevate-megamenu-card__desc">{{ _cpo_desc }}</p>
+      <p class="elevate-megamenu-card__desc">{{ _cpo_desc | replace: 'inspected.', 'inspected.<br class="elevate-mobile-br">' }}</p>
       <span class="elevate-megamenu-card__cpo-link">
         {{ card_settings.cpo_link_text }}
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" aria-hidden="true">
@@ -107,3 +103,4 @@
     </a>
   {%- endif -%}
 </div>
+{%- endif -%}

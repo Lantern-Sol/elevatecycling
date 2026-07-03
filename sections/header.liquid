@@ -504,27 +504,34 @@
     const HeaderMenu = customElements.get('header-menu');
     if (!HeaderMenu) return;
 
-    const origDeactivate = HeaderMenu.prototype.deactivate;
-    if (!origDeactivate) return;
+    if (!HeaderMenu.prototype.__elevatePatched) {
+      const origDeactivate = HeaderMenu.prototype.deactivate;
+      if (!origDeactivate) return;
 
-    HeaderMenu.prototype.deactivate = function (event) {
-      if (event?.relatedTarget instanceof Node) {
-        const listItem = event.target?.closest?.('.menu-list__list-item');
-        if (listItem && listItem.contains(event.relatedTarget)) {
-          return;
+      HeaderMenu.prototype.deactivate = function (event) {
+        if (event?.relatedTarget instanceof Node) {
+          const listItem = event.target?.closest?.('.menu-list__list-item');
+          if (listItem && listItem.contains(event.relatedTarget)) {
+            return;
+          }
         }
-      }
-      origDeactivate.call(this, event);
-    };
+        origDeactivate.call(this, event);
+      };
+      HeaderMenu.prototype.__elevatePatched = true;
+    }
 
     /* ── Megamenu & search backdrop ── */
-    const backdrop = document.createElement('div');
-    backdrop.className = 'elevate-megamenu-backdrop';
-    backdrop.setAttribute('aria-hidden', 'true');
-    document.body.appendChild(backdrop);
+    let backdrop = document.querySelector('.elevate-megamenu-backdrop');
+    if (!backdrop) {
+      backdrop = document.createElement('div');
+      backdrop.className = 'elevate-megamenu-backdrop';
+      backdrop.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(backdrop);
+    }
 
     const headerMenu = document.querySelector('header-menu');
-    if (headerMenu) {
+    if (headerMenu && !headerMenu.__elevateObserved) {
+      headerMenu.__elevateObserved = true;
       const menuObserver = new MutationObserver(() => {
         const hasOpen = headerMenu.querySelector('[aria-expanded="true"]');
         backdrop.classList.toggle('is-visible', !!hasOpen);
@@ -535,10 +542,12 @@
     }
 
     const searchDialog = document.querySelector('#search-modal dialog');
-    if (searchDialog) {
+    if (searchDialog && !searchDialog.__elevateObserved) {
+      searchDialog.__elevateObserved = true;
       const searchObserver = new MutationObserver(() => {
         const isOpen = searchDialog.hasAttribute('open');
-        backdrop.classList.toggle('is-visible--search', isOpen);
+        const bd = document.querySelector('.elevate-megamenu-backdrop');
+        if (bd) bd.classList.toggle('is-visible--search', isOpen);
       });
       searchObserver.observe(searchDialog, { attributes: true, attributeFilter: ['open'] });
     }
@@ -1049,13 +1058,19 @@
   }
 
   .header-actions__action:not(.account-button) .svg-wrapper {
-    height: var(--button-size);
-    width: var(--button-size);
+    height: auto;
+    width: auto;
+  }
+
+  .header-actions__action:not(.account-button) {
+    width: auto;
+    height: auto;
+    align-items: center;
   }
 
   .header-actions__action:not(.account-button) svg {
-    width: var(--icon-size-md);
-    height: var(--icon-size-md);
+    width: 1.25rem;
+    height: 1.25rem;
   }
 
   .header:has(#Details-menu-drawer-container[open]) {
@@ -1271,6 +1286,11 @@
     width: 100%;
     justify-content: flex-end;
     gap: 1rem;
+  }
+
+  /* Give the cart bubble room so it doesn't clip against the viewport edge */
+  .header .header-actions__cart-icon {
+    margin-inline-end: 0.25rem;
   }
 
   /* Reset theme's negative margins that pull search & cart outside the grid cell */
@@ -1691,6 +1711,17 @@
     margin-left: 50px;
   }
  
+  /* Mobile-only line break inside CPO description */
+  .elevate-mobile-br {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .elevate-mobile-br {
+      display: block;
+    }
+  }
+
   /* CPO description */
   .elevate-megamenu-card__desc {
     font-family: 'Inter', var(--font-body--family), sans-serif;
@@ -1817,9 +1848,27 @@
     margin: 0;
   }
 
-  /* ── Hide promo cards on tablet and below ── */
-  @media screen and (max-width: 989px) {
+  /* ── Mobile promo cards: full width, no border, constrained card size ── */
+  @media screen and (max-width: 749px) {
     .elevate-megamenu-cards {
+      width: 100%;
+      border-inline-start: none;
+      padding-inline-start: 0;
+    }
+
+    .elevate-megamenu-card__badge-pill {
+      max-width: 15.3125rem;
+    }
+
+    .elevate-megamenu-card__desc {
+      font-size: 0.75rem;
+      line-height: 1.4;
+    }
+  }
+
+  /* ── Hide promo cards on tablet and below (scoped to desktop megamenu only) ── */
+  @media screen and (max-width: 989px) {
+    .mega-menu__grid .elevate-megamenu-cards {
       display: none;
     }
 
@@ -1842,6 +1891,7 @@
       align-items: center;
       grid-area: actions;
       justify-self: end;
+      gap: 0.75rem;
     }
 
     /* Swap search visibility: show the right-column copy (inside the flex

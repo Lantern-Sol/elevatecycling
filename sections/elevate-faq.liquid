@@ -10,7 +10,6 @@
   style="
     --page-content-width: 75rem;
     --page-width: calc(75rem + var(--page-margin) * 2);
-    padding-block-start: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
     padding-block-end: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
   "
 >
@@ -144,6 +143,18 @@
     </div>
   </div>
 </div>
+
+{%- style -%}
+  #shopify-section-{{ section.id }} .elevate-faq {
+    padding-block-start: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+  }
+
+  @media (max-width: 47.9375rem) {
+    #shopify-section-{{ section.id }} .elevate-faq {
+      padding-block-start: 0;
+    }
+  }
+{%- endstyle -%}
 
 {% stylesheet %}
   /* ─── FAQ Section ─── */

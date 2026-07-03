@@ -78,7 +78,10 @@
             {%- endif -%}
 
             {%- if menu != blank and menu.links.size > 0 -%}
-              <ul class="elevate-footer__col-links{% if block.settings.two_column %} elevate-footer__col-links--grid{% endif %}">
+              {%- liquid
+                assign _half = menu.links.size | plus: 1 | divided_by: 2
+              -%}
+              <ul class="elevate-footer__col-links{% if block.settings.two_column %} elevate-footer__col-links--grid{% endif %}" {% if block.settings.two_column %}style="--footer-grid-rows: {{ _half }}"{% endif %}>
                 {%- for link in menu.links -%}
                   <li>
                     <a
@@ -256,7 +259,7 @@
   .elevate-footer__col-links--grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(4, auto);
+    grid-template-rows: repeat(var(--footer-grid-rows, 4), auto);
     grid-auto-flow: column;
     gap: 0.5rem 0.75rem;
   }
@@ -423,7 +426,7 @@
     .elevate-footer__col-links--grid {
       display: grid;
       grid-template-columns: max-content max-content;
-      grid-template-rows: repeat(4, auto);
+      grid-template-rows: repeat(var(--footer-grid-rows, 4), auto);
       grid-auto-flow: column;
       gap: 0.75rem;
     }

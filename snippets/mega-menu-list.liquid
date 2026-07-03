@@ -111,8 +111,8 @@
           # LS: brand and individual-parts groups get span 2 for 2-column grid layout
           assign _link_title_slug = link.title | downcase | strip
           if _link_title_slug contains 'brand' or _link_title_slug contains 'individual'
+            assign column_count = column_count | minus: column_span | plus: 2
             assign column_span = 2
-            assign column_count = column_count | plus: 1
           endif
           # For all other modes, column span is determined by the number of links in the parent link
           assign span_class = 'mega-menu__column--span-' | append: column_span
