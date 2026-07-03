@@ -69,6 +69,7 @@
       <span class="svg-wrapper header-drawer-icon header-drawer-icon--close">
         {{- 'icon-close.svg' | inline_asset_content -}}
       </span>
+      <span class="header-drawer-label">Menu</span>
     </summary>
     <div
       ref="menuDrawer"
@@ -691,6 +692,34 @@
     margin: auto;
     width: var(--icon-size-xs);
     height: var(--icon-size-xs);
+  }
+
+  /* Mobile: larger hamburger icon + "Menu" label */
+  @media screen and (max-width: 749px) {
+    .menu-drawer-container .header__icon--summary {
+      gap: 0.25rem;
+      padding: 0.5rem;
+    }
+
+    .header__icon--summary .header-drawer-icon {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+  }
+
+  .header-drawer-label {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+    color: var(--color-foreground);
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .header-drawer-label {
+      display: block;
+    }
   }
 
   .menu-drawer__featured-content {

@@ -4,69 +4,106 @@
   2. Trade/Sell card — dark red gradient bg, dynamic heading per category, white CTA button
 
   @param {string} parent_title - Title of the top-level menu item (e.g. "Complete Bikes")
+  @param {object} card_settings - section.settings from the header section
 {%- enddoc -%}
 
 {%- liquid
-  assign _title_down = parent_title | downcase | strip
-  assign _trade_noun = 'GEAR'
-  assign _cpo_desc = "Every bike inspected. Mechanic's Notes on every listing."
+  assign _show_cpo = card_settings.show_megamenu_cpo_card
+  assign _show_trade = card_settings.show_megamenu_trade_card
 
-  if _title_down contains 'bike'
-    assign _trade_noun = 'YOUR BIKE'
-  elsif _title_down contains 'frameset'
-    assign _trade_noun = 'FRAMESETS'
-    assign _cpo_desc = 'Every frameset inspected for cracks, paint, and alignment.'
-  elsif _title_down contains 'wheelset'
-    assign _trade_noun = 'WHEELSETS'
-    assign _cpo_desc = 'Every wheelset checked for true, spoke tension, and brake track condition.'
-  elsif _title_down contains 'groupset'
-    assign _trade_noun = 'GEAR'
-    assign _cpo_desc = 'Every component inspected for wear, function, and compatibility.'
-  elsif _title_down contains 'component'
-    assign _trade_noun = 'COMPONENTS'
-    assign _cpo_desc = 'Every component inspected for wear, function, and compatibility.'
+  # If neither card is enabled, bail out
+  if _show_cpo == false and _show_trade == false
+    break
+  endif
+
+  # ── Adaptive text based on menu category ──
+  assign _title_down = parent_title | downcase | strip
+
+  # CPO description per menu
+  if _show_cpo
+    assign _cpo_desc = card_settings.cpo_desc_bikes
+
+    if _title_down contains 'frameset'
+      assign _cpo_desc = card_settings.cpo_desc_framesets
+    elsif _title_down contains 'wheelset'
+      assign _cpo_desc = card_settings.cpo_desc_wheelsets
+    elsif _title_down contains 'groupset'
+      assign _cpo_desc = card_settings.cpo_desc_groupsets
+    elsif _title_down contains 'component'
+      assign _cpo_desc = card_settings.cpo_desc_components
+    endif
+  endif
+
+  # Trade heading noun per menu
+  if _show_trade
+    assign _trade_noun = card_settings.trade_noun_bikes
+
+    if _title_down contains 'frameset'
+      assign _trade_noun = card_settings.trade_noun_framesets
+    elsif _title_down contains 'wheelset'
+      assign _trade_noun = card_settings.trade_noun_wheelsets
+    elsif _title_down contains 'groupset'
+      assign _trade_noun = card_settings.trade_noun_groupsets
+    elsif _title_down contains 'component'
+      assign _trade_noun = card_settings.trade_noun_components
+    endif
   endif
 -%}
 
 <div class="elevate-megamenu-cards">
-  {%- comment -%} ── CPO Badge Card ── {%- endcomment -%}
-  <a href="/pages/cpo" class="elevate-megamenu-card elevate-megamenu-card--cpo">
-    <div class="elevate-megamenu-card__badge-pill" aria-hidden="true">
-      <div class="elevate-megamenu-card__badge-icon">
-        <img
-          src="{{ 'cpo-badge.png' | asset_url }}"
-          alt=""
-          width="72"
-          height="72"
-          loading="lazy"
-          fetchpriority="low"
-        >
+  {%- if _show_cpo -%}
+    {%- comment -%} ── CPO Badge Card ── {%- endcomment -%}
+    <a href="{{ card_settings.cpo_link_url }}" class="elevate-megamenu-card elevate-megamenu-card--cpo">
+      <div class="elevate-megamenu-card__badge-pill" aria-hidden="true">
+        <div class="elevate-megamenu-card__badge-icon">
+          {%- if card_settings.cpo_badge_image -%}
+            <img
+              src="{{ card_settings.cpo_badge_image | image_url: width: 144 }}"
+              alt=""
+              width="72"
+              height="72"
+              loading="lazy"
+              fetchpriority="low"
+            >
+          {%- else -%}
+            <img
+              src="{{ 'cpo-badge.png' | asset_url }}"
+              alt=""
+              width="72"
+              height="72"
+              loading="lazy"
+              fetchpriority="low"
+            >
+          {%- endif -%}
+        </div>
+        <span class="elevate-megamenu-card__badge-text">{{ card_settings.cpo_badge_text }}</span>
       </div>
-      <span class="elevate-megamenu-card__badge-text">CERTIFIED PRE-OWNED</span>
-    </div>
-    <p class="elevate-megamenu-card__desc">{{ _cpo_desc }}</p>
-    <span class="elevate-megamenu-card__cpo-link">
-      What's CPO?
-      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" aria-hidden="true">
-        <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
-      </svg>
-    </span>
-  </a>
-
-  {%- comment -%} ── Trade / Sell Card ── {%- endcomment -%}
-  <a href="/pages/sell-trade" class="elevate-megamenu-card elevate-megamenu-card--trade">
-    <div class="elevate-megamenu-card__title-group">
-      <p class="elevate-megamenu-card__eyebrow">TRADE OR SALE</p>
-      <p class="elevate-megamenu-card__heading">GOT {{ _trade_noun }}<br>COLLECTING DUST?</p>
-    </div>
-    <div class="elevate-megamenu-card__cta-group">
-      <span class="elevate-megamenu-card__cta-btn">
-        Quote your gear
+      <p class="elevate-megamenu-card__desc">{{ _cpo_desc }}</p>
+      <span class="elevate-megamenu-card__cpo-link">
+        {{ card_settings.cpo_link_text }}
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" aria-hidden="true">
           <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
         </svg>
       </span>
-      <p class="elevate-megamenu-card__fine-print">$5.4M+ paid to sellers · Complete bikes and components accepted</p>
-    </div>
-  </a>
+    </a>
+  {%- endif -%}
+
+  {%- if _show_trade -%}
+    {%- comment -%} ── Trade / Sell Card ── {%- endcomment -%}
+    <a href="{{ card_settings.trade_cta_url }}" class="elevate-megamenu-card elevate-megamenu-card--trade">
+      <div class="elevate-megamenu-card__title-group">
+        <p class="elevate-megamenu-card__eyebrow">{{ card_settings.trade_eyebrow }}</p>
+        <p class="elevate-megamenu-card__heading">GOT {{ _trade_noun }}<br>COLLECTING DUST?</p>
+      </div>
+      <div class="elevate-megamenu-card__cta-group">
+        <span class="elevate-megamenu-card__cta-btn">
+          {{ card_settings.trade_cta_text }}
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512" aria-hidden="true">
+            <path d="M438.6 278.6c12.5-12.5 12.5-32.8 0-45.3l-160-160c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3L338.8 224 32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l306.7 0L233.4 393.4c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0l160-160z"/>
+          </svg>
+        </span>
+        <p class="elevate-megamenu-card__fine-print">{{ card_settings.trade_fine_print }}</p>
+      </div>
+    </a>
+  {%- endif -%}
 </div>
