@@ -1,0 +1,39 @@
+{% comment %}
+  Self-hosted Google Fonts for Elevate Cycling.
+  Families: Big Shoulders Display, Host Grotesk, Bebas Neue, Inter.
+  Include once in layout/theme.liquid — do NOT load from fonts.googleapis.com.
+{% endcomment %}
+
+<style>
+  @font-face {
+    font-family: 'Big Shoulders Display';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url({{ 'big-shoulders-display.woff2' | asset_url }}) format('woff2');
+  }
+
+  @font-face {
+    font-family: 'Host Grotesk';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url({{ 'host-grotesk.woff2' | asset_url }}) format('woff2');
+  }
+
+  @font-face {
+    font-family: 'Bebas Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url({{ 'bebas-neue.woff2' | asset_url }}) format('woff2');
+  }
+
+  @font-face {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 400 700;
+    font-display: swap;
+    src: url({{ 'inter.woff2' | asset_url }}) format('woff2');
+  }
+</style>

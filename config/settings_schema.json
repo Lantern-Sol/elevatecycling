@@ -26,6 +26,12 @@
         "info": "t:content.inverse_logo_info"
       },
       {
+        "type": "image_picker",
+        "id": "logo_mobile",
+        "label": "Mobile logo",
+        "info": "Optional. Shown on mobile instead of the default logo (e.g. icon mark only)."
+      },
+      {
         "type": "range",
         "id": "logo_height",
         "label": "t:settings.desktop_height",

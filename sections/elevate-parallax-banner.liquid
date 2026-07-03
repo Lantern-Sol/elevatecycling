@@ -6,22 +6,6 @@
   Result: gray text top → bike middle → red text lower → CTA bottom.
 {%- enddoc -%}
 
-{%- comment -%} Google Fonts — Big Shoulders Display + Host Grotesk {%- endcomment -%}
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Host+Grotesk:wght@700&display=swap"
-  media="print"
-  onload="this.media='all'"
->
-<noscript>
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@700&family=Host+Grotesk:wght@700&display=swap"
-  >
-</noscript>
-
 <div
   class="section-background"
   style="background-color: {{ section.settings.background_color }};"
@@ -154,28 +138,6 @@
   </div>
 </div>
 
-<script>
-  (function () {
-    var bike = document.querySelector('[data-parallax-bike]');
-    if (!bike) return;
-    var gap = bike.nextElementSibling;
-    if (!gap) return;
-
-    bike.addEventListener('animationend', function () {
-      bike.classList.remove('is-bouncing');
-    });
-
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (e.isIntersecting && !bike.classList.contains('is-bouncing')) {
-          bike.classList.add('is-bouncing');
-        }
-      });
-    }, { threshold: 0.1 });
-
-    io.observe(gap);
-  })();
-</script>
 
 {% stylesheet %}
   /* ─── Elevate Parallax Banner ─── */
@@ -296,20 +258,6 @@
     object-fit: contain;
   }
 
-  /* ── Bike drop-bounce ── */
-  @keyframes bikeBounce {
-    0%   { transform: translateY(-3rem); }
-    25%  { transform: translateY(0); }
-    45%  { transform: translateY(-1.2rem); }
-    65%  { transform: translateY(0); }
-    80%  { transform: translateY(-0.35rem); }
-    100% { transform: translateY(0); }
-  }
-
-  .elevate-parallax__layer--image.is-bouncing .elevate-parallax__image,
-  .elevate-parallax__layer--image.is-bouncing .elevate-parallax__image-placeholder {
-    animation: bikeBounce 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
-  }
 
   .elevate-parallax__image-placeholder {
     width: 100%;

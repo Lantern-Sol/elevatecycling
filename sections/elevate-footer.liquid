@@ -78,7 +78,10 @@
             {%- endif -%}
 
             {%- if menu != blank and menu.links.size > 0 -%}
-              <ul class="elevate-footer__col-links{% if block.settings.two_column %} elevate-footer__col-links--grid{% endif %}">
+              {%- liquid
+                assign _half = menu.links.size | plus: 1 | divided_by: 2
+              -%}
+              <ul class="elevate-footer__col-links{% if block.settings.two_column %} elevate-footer__col-links--grid{% endif %}" {% if block.settings.two_column %}style="--footer-grid-rows: {{ _half }}"{% endif %}>
                 {%- for link in menu.links -%}
                   <li>
                     <a
@@ -137,7 +140,7 @@
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    max-width: 63rem;
+    max-width: var(--narrow-page-width, 90rem);
     margin-inline: auto;
   }
 
@@ -249,29 +252,31 @@
     padding: 0;
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
+    gap: 0.75rem;
   }
 
-  /* Two-column grid for links (desktop setting) */
+  /* Two-column grid for links — column-first flow (fills top→bottom, then next column) */
   .elevate-footer__col-links--grid {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(var(--footer-grid-rows, 4), auto);
+    grid-auto-flow: column;
     gap: 0.5rem 0.75rem;
   }
 
-  .elevate-footer__col-links--grid > li {
-    width: calc(50% - 0.375rem);
+  /* Shop grid links: Inter 14px on mobile (other columns use Host Grotesk 16px) */
+  .elevate-footer__col-links--grid .elevate-footer__link {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
   }
 
-  /* Wide columns on mobile also get 2-column link layout */
+  /* Wide columns on mobile: 2-column grid */
   .elevate-footer__col--wide .elevate-footer__col-links {
-    display: flex;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
     gap: 0.5rem 0.75rem;
-  }
-
-  .elevate-footer__col--wide .elevate-footer__col-links > li {
-    width: calc(50% - 0.375rem);
   }
 
   .elevate-footer__link {
@@ -406,15 +411,11 @@
       width: auto;
     }
 
-    /* On desktop, wide columns don't force 2-col on their links */
-    .elevate-footer__col--wide .elevate-footer__col-links {
-      flex-wrap: nowrap;
+    /* On desktop, wide columns revert to single column (unless --grid) */
+    .elevate-footer__col--wide .elevate-footer__col-links:not(.elevate-footer__col-links--grid) {
+      display: flex;
       flex-direction: column;
       gap: 0.75rem;
-    }
-
-    .elevate-footer__col--wide .elevate-footer__col-links > li {
-      width: auto;
     }
 
     .elevate-footer__col-links {
@@ -424,12 +425,18 @@
     /* Grid override stays for explicitly two-column blocks */
     .elevate-footer__col-links--grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: max-content max-content;
+      grid-template-rows: repeat(var(--footer-grid-rows, 4), auto);
+      grid-auto-flow: column;
       gap: 0.75rem;
     }
 
-    .elevate-footer__col-links--grid > li {
-      width: auto;
+    /* Reset grid links to match other columns on desktop */
+    .elevate-footer__col-links--grid .elevate-footer__link {
+      font-family: 'Host Grotesk', sans-serif;
+      font-size: 1rem;
+      line-height: 1.4;
+      letter-spacing: 0.03rem;
     }
 
     /* Highlight on desktop: border-bottom instead of underline */

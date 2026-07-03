@@ -10,18 +10,6 @@
   assign products = collection.products | default: empty
 -%}
 
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-  rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700&family=Inter:wght@400;700&family=Host+Grotesk:wght@700&display=swap"
-  media="print"
-  onload="this.media='all'"
->
-<noscript>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@400;700&family=Inter:wght@400;700&family=Host+Grotesk:wght@700&display=swap">
-</noscript>
-
 <div
   class="section section--full-width elevate-arrivals"
   data-scroll-reveal
@@ -151,11 +139,30 @@
                       <path d="M2.00004 21C2.00004 21.5523 2.44776 22 3.00004 22C3.55232 22 4.00004 21.5523 4.00004 21V2.99999C4.00004 2.44771 3.55232 2 3.00004 2C2.44776 2 2.00004 2.44771 2.00004 3L2.00002 15.3334L2.00004 21ZM11.7899 4.5C12.2585 4.5 12.6383 4.87985 12.6383 5.34842C12.6383 5.81698 12.2585 6.19683 11.7899 6.19683H6.84845C6.37989 6.19683 6.00004 5.81698 6.00004 5.34842C6.00004 4.87985 6.37989 4.5 6.84845 4.5H11.7899Z" fill="#141517"/>
                     </svg>
                   </a>
-                  <button type="button" class="elevate-arrivals__btn-atc" aria-label="Add {{ product.title }} to cart">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
-                      <path d="M7.5 0V7.5H0V9H7.5V16.5H9V9H16.5V7.5H9V0H7.5Z" fill="#FDFCFC"/>
-                    </svg>
-                  </button>
+                  {%- if product.available -%}
+                    <button
+                      type="button"
+                      class="elevate-arrivals__btn-atc"
+                      aria-label="Add {{ product.title }} to cart"
+                      data-variant-id="{{ product.selected_or_first_available_variant.id }}"
+                      data-arrivals-atc
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+                        <path d="M7.5 0V7.5H0V9H7.5V16.5H9V9H16.5V7.5H9V0H7.5Z" fill="#FDFCFC"/>
+                      </svg>
+                    </button>
+                  {%- else -%}
+                    <button
+                      type="button"
+                      class="elevate-arrivals__btn-atc"
+                      aria-label="{{ product.title }} is sold out"
+                      disabled
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
+                        <path d="M7.5 0V7.5H0V9H7.5V16.5H9V9H16.5V7.5H9V0H7.5Z" fill="#FDFCFC"/>
+                      </svg>
+                    </button>
+                  {%- endif -%}
                 </div>
               </div>
             </div>
@@ -537,6 +544,16 @@
     height: 1.5rem;
   }
 
+  .elevate-arrivals__btn-atc:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+
+  .elevate-arrivals__btn-atc.is-loading {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
   /* ── Nav row (arrows + dots) ── */
   .elevate-arrivals__nav {
     display: flex;
@@ -800,6 +817,64 @@
           }
         });
       });
+    });
+  })();
+
+  /* ─── New Arrivals — Add to Cart ─── */
+  (function () {
+    var plusSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true"><path d="M7.5 0V7.5H0V9H7.5V16.5H9V9H16.5V7.5H9V0H7.5Z" fill="#FDFCFC"/></svg>';
+    var checkSVG = '<svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true"><path d="M6.5 11.17L2.83 7.5L1.5 8.83L6.5 13.83L15.5 4.83L14.17 3.5L6.5 11.17Z" fill="#FDFCFC"/></svg>';
+
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('[data-arrivals-atc]');
+      if (!btn || btn.classList.contains('is-loading')) return;
+
+      var variantId = btn.getAttribute('data-variant-id');
+      if (!variantId) return;
+
+      btn.classList.add('is-loading');
+
+      /* Build a deferred promise the theme's cart-drawer / cart-icon can await */
+      var resolve, reject;
+      var promise = new Promise(function (res, rej) { resolve = res; reject = rej; });
+
+      /* Dispatch shopify:cart:lines-update so cart drawer auto-opens + cart icon updates */
+      var cartEvent = new Event('shopify:cart:lines-update', { bubbles: true, cancelable: false });
+      cartEvent.action = 'add';
+      cartEvent.context = 'product';
+      cartEvent.lines = [{ merchandiseId: variantId, quantity: 1 }];
+      cartEvent.promise = promise;
+      document.dispatchEvent(cartEvent);
+
+      fetch('/cart/add.js', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: parseInt(variantId, 10), quantity: 1 })
+      })
+        .then(function (res) {
+          if (!res.ok) throw new Error('ATC failed: ' + res.status);
+          return res.json();
+        })
+        .then(function () {
+          btn.innerHTML = checkSVG;
+          btn.classList.remove('is-loading');
+          setTimeout(function () { btn.innerHTML = plusSVG; }, 1500);
+
+          /* Fetch updated cart and resolve the promise so cart drawer + icon pick up the new count */
+          return fetch('/cart.js').then(function (r) { return r.json(); });
+        })
+        .then(function (cart) {
+          if (!cart) return;
+          resolve({
+            cart: { totalQuantity: cart.item_count },
+            detail: { itemCount: cart.item_count, items: cart.items, source: 'arrivals-atc' }
+          });
+        })
+        .catch(function (err) {
+          console.error('[arrivals-atc]', err);
+          btn.classList.remove('is-loading');
+          reject(err);
+        });
     });
   })();
 {% endjavascript %}

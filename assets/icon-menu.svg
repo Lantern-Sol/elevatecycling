@@ -1,4 +1,5 @@
-<svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M1 3.5H13" stroke="currentColor" stroke-width="var(--icon-stroke-width)" stroke-linecap="round"/>
-  <path d="M1 10.5H13" stroke="currentColor" stroke-width="var(--icon-stroke-width)" stroke-linecap="round"/>
+<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+  <path d="M20 4.25C20.4142 4.25 20.75 4.58579 20.75 5C20.75 5.41421 20.4142 5.75 20 5.75L10 5.75C9.58579 5.75 9.25 5.41421 9.25 5C9.25 4.58579 9.58579 4.25 10 4.25L20 4.25Z" fill="currentColor"/>
+  <path d="M20 11.25C20.4142 11.25 20.75 11.5858 20.75 12C20.75 12.4142 20.4142 12.75 20 12.75L4 12.75C3.58579 12.75 3.25 12.4142 3.25 12C3.25 11.5858 3.58579 11.25 4 11.25L20 11.25Z" fill="currentColor"/>
+  <path d="M14 18.25C14.4142 18.25 14.75 18.5858 14.75 19C14.75 19.4142 14.4142 19.75 14 19.75L4 19.75C3.58579 19.75 3.25 19.4142 3.25 19C3.25 18.5858 3.58579 18.25 4 18.25L14 18.25Z" fill="currentColor"/>
 </svg>

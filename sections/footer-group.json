@@ -18,7 +18,7 @@
           "type": "footer_menu",
           "settings": {
             "heading": "Shop",
-            "menu": "footer-shop",
+            "menu": "ls-shop-footer-menu",
             "two_column": true,
             "full_width_mobile": true,
             "highlight_first": false
@@ -28,7 +28,7 @@
           "type": "footer_menu",
           "settings": {
             "heading": "Sell & Trade",
-            "menu": "footer-sell-trade",
+            "menu": "ls-sell-trade-footer-menu",
             "two_column": false,
             "full_width_mobile": true,
             "highlight_first": true
@@ -38,7 +38,7 @@
           "type": "footer_menu",
           "settings": {
             "heading": "Support",
-            "menu": "footer-support",
+            "menu": "ls-sell-trade-footer-menu-copy",
             "two_column": false,
             "full_width_mobile": false,
             "highlight_first": false
@@ -48,7 +48,7 @@
           "type": "footer_menu",
           "settings": {
             "heading": "About Us",
-            "menu": "footer-about",
+            "menu": "ls-sell-trade-footer-menu-copy-1",
             "two_column": false,
             "full_width_mobile": false,
             "highlight_first": false
@@ -62,14 +62,15 @@
         "col_about"
       ],
       "settings": {
+        "logo": "shopify://shop_images/logo.svg",
         "description": "The trusted marketplace where performance cyclists buy, sell, and trade brand-new and certified pre-owned gear — inspected, fully spec'd, and priced right.",
         "usp_1": "Mechanic-certified. Every single item.",
         "usp_2": "Retail price shown. Always.",
         "usp_3": "30-day returns. Free US shipping.",
         "usp_4": "Full specs. No surprises.",
         "background_color": "#141517",
-        "text_color": "#AEB2B8",
-        "heading_color": "#FDFCFC",
+        "text_color": "#aeb2b8",
+        "heading_color": "#fdfcfc",
         "padding_top": 48,
         "padding_bottom": 48
       }
