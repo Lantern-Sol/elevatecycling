@@ -14,12 +14,15 @@
 >
   <div class="elevate-faq-contact__inner">
   {%- comment -%} ── Header ── {%- endcomment -%}
+  {%- if section.settings.show_header -%}
   <div class="elevate-faq-contact__header">
     <h2 class="elevate-faq-contact__title">{{ section.settings.heading }}</h2>
     <p class="elevate-faq-contact__subtitle">{{ section.settings.subheading }}</p>
   </div>
+  {%- endif -%}
 
   {%- comment -%} ── Contact cards ── {%- endcomment -%}
+  {%- if section.settings.show_cards -%}
   <div class="elevate-faq-contact__cards">
     {%- comment -%} Phone card {%- endcomment -%}
     <a href="tel:{{ section.settings.phone | remove: '(' | remove: ')' | remove: ' ' | remove: '-' }}" class="elevate-faq-contact__card">
@@ -78,6 +81,7 @@
       </span>
     </a>
   </div>
+  {%- endif -%}
 
   {%- comment -%} ── Contact form ── {%- endcomment -%}
   <div class="elevate-faq-contact__form-wrapper">
@@ -217,6 +221,7 @@
       </div>
     </form>
   </div>
+
   </div>
 </div>
 
@@ -743,6 +748,7 @@
     .elevate-faq-contact__disclaimer {
       text-align: left;
     }
+
   }
 {% endstylesheet %}
 
@@ -755,6 +761,18 @@
     {
       "type": "header",
       "content": "Header"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_header",
+      "label": "Show header",
+      "default": true
+    },
+    {
+      "type": "checkbox",
+      "id": "show_cards",
+      "label": "Show contact cards",
+      "default": true
     },
     {
       "type": "text",

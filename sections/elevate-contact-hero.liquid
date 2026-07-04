@@ -1,0 +1,424 @@
+{%- doc -%}
+  Elevate Cycling — Contact Us hero section.
+  Dark hero with background image, overlay, badge pill, heading,
+  subtitle, and two self-service shortcut cards (FAQ + CPO Explained).
+{%- enddoc -%}
+
+{%- liquid
+  assign has_image = false
+  if section.settings.image != blank
+    assign has_image = true
+  endif
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-contact-hero"
+  style="
+    --elevate-contact-hero-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-contact-hero-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+    --elevate-contact-hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  "
+>
+  {%- comment -%} ── Background media ── {%- endcomment -%}
+  <div class="elevate-contact-hero__media">
+    {%- if has_image -%}
+      {%- assign img = section.settings.image -%}
+      {{
+        img
+        | image_url: width: 3840
+        | image_tag:
+          widths: '375, 750, 1080, 1440, 1920, 2560, 3840',
+          sizes: '100vw',
+          fetchpriority: 'high',
+          loading: 'eager',
+          class: 'elevate-contact-hero__image',
+          alt: ''
+      }}
+    {%- else -%}
+      <div class="elevate-contact-hero__placeholder"></div>
+    {%- endif -%}
+
+    {%- if section.settings.toggle_overlay -%}
+      <div class="elevate-contact-hero__overlay"></div>
+    {%- endif -%}
+  </div>
+
+  <div class="elevate-contact-hero__inner">
+    {%- comment -%} ── Content ── {%- endcomment -%}
+    <div class="elevate-contact-hero__content">
+      {%- if section.settings.badge_text != blank -%}
+        <span class="elevate-contact-hero__badge">{{ section.settings.badge_text }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="elevate-contact-hero__heading">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="elevate-contact-hero__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+
+      {%- comment -%} ── Self-service cards ── {%- endcomment -%}
+      <div class="elevate-contact-hero__cards-wrap">
+        <p class="elevate-contact-hero__cards-label">{{ section.settings.cards_label }}</p>
+
+        <div class="elevate-contact-hero__cards">
+          {%- for block in section.blocks -%}
+            <a
+              href="{{ block.settings.url }}"
+              class="elevate-contact-hero__card"
+              {{ block.shopify_attributes }}
+            >
+              <p class="elevate-contact-hero__card-title">{{ block.settings.title }}</p>
+              <p class="elevate-contact-hero__card-desc">{{ block.settings.description }}</p>
+              <span class="elevate-contact-hero__card-link">→ {{ block.settings.link_text }}</span>
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Contact Hero ─── */
+  .elevate-contact-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block-start: var(--elevate-contact-hero-pt);
+    padding-block-end: var(--elevate-contact-hero-pb);
+  }
+
+  .elevate-contact-hero__inner {
+    grid-column: 2;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 24rem;
+  }
+
+  /* ── Media layer ── */
+  .elevate-contact-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-lowest);
+    grid-column: 1 / -1;
+  }
+
+  .elevate-contact-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-contact-hero__placeholder {
+    width: 100%;
+    height: 100%;
+    background: #0a0a0a;
+  }
+
+  .elevate-contact-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--elevate-contact-hero-overlay-opacity, 0.95));
+    pointer-events: none;
+  }
+
+  /* ── Content ── */
+  .elevate-contact-hero__content {
+    position: relative;
+    z-index: var(--layer-flat);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    width: 100%;
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+
+  /* ── Badge ── */
+  .elevate-contact-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3125rem 0.75rem;
+    background: #E31E24;
+    border-radius: 62.4375rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #FDFCFC;
+    text-transform: uppercase;
+  }
+
+  /* ── Heading ── */
+  .elevate-contact-hero__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  /* ── Subtitle ── */
+  .elevate-contact-hero__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #E2E3E5;
+    margin: 0;
+    max-width: 36rem;
+  }
+
+  /* ── Self-service cards wrap ── */
+  .elevate-contact-hero__cards-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    max-width: 36.875rem;
+  }
+
+  .elevate-contact-hero__cards-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #AEB2B8;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ── Cards grid ── */
+  .elevate-contact-hero__cards {
+    display: flex;
+    gap: 1rem;
+    width: 100%;
+  }
+
+  .elevate-contact-hero__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 0.75rem;
+    background: #250A0A;
+    border: 0.0625rem solid #AEB2B8;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    text-align: left;
+    transition: border-color 0.2s ease, background-color 0.2s ease;
+  }
+
+  .elevate-contact-hero__card:hover {
+    border-color: #FDFCFC;
+    background: #301010;
+  }
+
+  .elevate-contact-hero__card:focus-visible {
+    outline: 0.125rem solid #FDFCFC;
+    outline-offset: 0.125rem;
+  }
+
+  .elevate-contact-hero__card-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-contact-hero__card-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.625rem;
+    line-height: 1.5;
+    letter-spacing: -0.00625rem;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-contact-hero__card-link {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #E31E24;
+    text-decoration: underline;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-contact-hero__inner {
+      min-height: 28rem;
+    }
+
+    .elevate-contact-hero__heading {
+      font-size: 4rem;
+    }
+
+    .elevate-contact-hero__card {
+      flex: 1 0 0;
+      min-width: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Contact Hero",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle_overlay",
+      "label": "Show overlay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 95
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "SUPPORT"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "We're here."
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Questions about a bike, an order, or selling your gear — we'll get back to you within one business day."
+    },
+    {
+      "type": "header",
+      "content": "Self-service cards"
+    },
+    {
+      "type": "text",
+      "id": "cards_label",
+      "label": "Cards label",
+      "default": "MIGHT SAVE YOU A WAIT"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Shortcut card",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "FAQ"
+        },
+        {
+          "type": "text",
+          "id": "description",
+          "label": "Description",
+          "default": "Common questions answered — condition, compatibility, shipping, and more."
+        },
+        {
+          "type": "text",
+          "id": "link_text",
+          "label": "Link text",
+          "default": "Browse FAQ"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Contact Hero",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "title": "FAQ",
+            "description": "Common questions answered — condition, compatibility, shipping, and more.",
+            "link_text": "Browse FAQ"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "title": "CPO Explained",
+            "description": "How every bike gets inspected, graded, and documented before it lists.",
+            "link_text": "Learn more"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
