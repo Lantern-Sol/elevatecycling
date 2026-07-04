@@ -4,7 +4,7 @@
 {%- endcomment -%}
 
 <div class="elevate-404" style="--elevate-404-pt: {{ section.settings.padding_top }}px; --elevate-404-pb: {{ section.settings.padding_bottom }}px;">
-  <div class="elevate-404__inner">
+  <div class="elevate-404__inner" data-scroll-reveal="children">
     {%- comment -%} Error code ── "404" {%- endcomment -%}
     {%- if section.settings.error_code != blank -%}
       <p class="elevate-404__code">

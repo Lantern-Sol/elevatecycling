@@ -51,7 +51,7 @@
   </div>
 
   <div class="elevate-about-hero__inner">
-    <div class="elevate-about-hero__content" data-scroll-reveal="children">
+    <div class="elevate-about-hero__content">
       {%- if section.settings.badge_text != blank -%}
         <span class="elevate-about-hero__badge">{{ section.settings.badge_text }}</span>
       {%- endif -%}
@@ -246,7 +246,12 @@
     letter-spacing: -0.0075rem;
     color: #6B7280;
     margin: 0;
-    white-space: nowrap;
+  }
+
+  @media (min-width: 20.0625rem) {
+    .elevate-about-hero__stat-label {
+      white-space: nowrap;
+    }
   }
 
   /* ─── Desktop (990px+) ─── */

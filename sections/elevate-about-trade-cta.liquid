@@ -13,35 +13,41 @@
     --elevate-about-trade-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
   "
 >
-  {%- comment -%} ── Background image (desktop) ── {%- endcomment -%}
-  {%- if section.settings.background_image != blank -%}
-    <div class="elevate-about-trade__bg elevate-about-trade__bg--desktop" aria-hidden="true">
+  {%- comment -%} ── Background image (art-directed <picture>) ── {%- endcomment -%}
+  {%- assign desktop_bg = section.settings.background_image -%}
+  {%- assign mobile_bg = section.settings.background_image_mobile | default: desktop_bg -%}
+  {%- if desktop_bg != blank or mobile_bg != blank -%}
+    <picture class="elevate-about-trade__bg" aria-hidden="true">
+      {%- if section.settings.background_image_mobile != blank -%}
+        <source
+          media="(max-width: 61.875rem)"
+          srcset="
+            {{ mobile_bg | image_url: width: 400 }} 400w,
+            {{ mobile_bg | image_url: width: 600 }} 600w,
+            {{ mobile_bg | image_url: width: 800 }} 800w
+          "
+          sizes="100vw"
+        >
+      {%- endif -%}
+      {%- assign fallback_bg = desktop_bg | default: mobile_bg -%}
+      <source
+        media="(min-width: 61.9375rem)"
+        srcset="
+          {{ fallback_bg | image_url: width: 800 }} 800w,
+          {{ fallback_bg | image_url: width: 1200 }} 1200w,
+          {{ fallback_bg | image_url: width: 1920 }} 1920w
+        "
+        sizes="100vw"
+      >
       {{
-        section.settings.background_image
+        fallback_bg
         | image_url: width: 1920
         | image_tag:
-          widths: '800, 1200, 1920',
-          sizes: '100vw',
           loading: 'lazy',
-          class: 'elevate-about-trade__bg-img'
+          class: 'elevate-about-trade__bg-img',
+          alt: ''
       }}
-    </div>
-  {%- endif -%}
-
-  {%- comment -%} ── Background image (mobile) ── {%- endcomment -%}
-  {%- assign mobile_bg = section.settings.background_image_mobile | default: section.settings.background_image -%}
-  {%- if mobile_bg != blank -%}
-    <div class="elevate-about-trade__bg elevate-about-trade__bg--mobile" aria-hidden="true">
-      {{
-        mobile_bg
-        | image_url: width: 800
-        | image_tag:
-          widths: '400, 600, 800',
-          sizes: '100vw',
-          loading: 'lazy',
-          class: 'elevate-about-trade__bg-img'
-      }}
-    </div>
+    </picture>
   {%- endif -%}
 
   {%- comment -%} ── Center gradient overlay ── {%- endcomment -%}
@@ -109,15 +115,6 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-  }
-
-  .elevate-about-trade__bg--desktop {
-    display: none;
-  }
-
-  .elevate-about-trade__bg--mobile {
-    display: block;
-    bottom: auto;
   }
 
   /* ── Gradient overlay ── */
@@ -234,14 +231,6 @@
     .elevate-about-trade {
       padding-block-start: var(--elevate-about-trade-pt);
       padding-block-end: var(--elevate-about-trade-pb);
-    }
-
-    .elevate-about-trade__bg--desktop {
-      display: block;
-    }
-
-    .elevate-about-trade__bg--mobile {
-      display: none;
     }
 
     .elevate-about-trade__gradient {
