@@ -108,18 +108,18 @@
         &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
       </p>
 
-      {%- assign policies = shop.policies | where: 'url' -%}
-      {%- if policies.size > 0 -%}
-        <nav class="elevate-footer__policies" aria-label="Legal policies">
-          {%- for policy in policies -%}
-            {%- if policy.url != blank -%}
-              <a href="{{ policy.url }}" class="elevate-footer__policy-link">
-                {{- policy.title -}}
-              </a>
-            {%- endif -%}
-          {%- endfor -%}
-        </nav>
-      {%- endif -%}
+      {%- assign legal_page_url = pages['legal'].url | default: '/pages/legal' -%}
+      <nav class="elevate-footer__policies" aria-label="Legal policies">
+        <a href="{{ legal_page_url }}#legal-privacy" class="elevate-footer__policy-link">
+          Privacy policy
+        </a>
+        <a href="{{ legal_page_url }}#legal-terms-of-service" class="elevate-footer__policy-link">
+          Terms of service
+        </a>
+        <a href="{{ legal_page_url }}#legal-returns" class="elevate-footer__policy-link">
+          Refund policy
+        </a>
+      </nav>
     </div>
   </div>
 </div>

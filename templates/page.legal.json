@@ -1,205 +1,299 @@
-/*
- * ------------------------------------------------------------
- * IMPORTANT: The contents of this file are auto-generated.
- *
- * This file may be updated by the Shopify admin theme editor
- * or related systems. Please exercise caution as any changes
- * made to this file may be overwritten.
- * ------------------------------------------------------------
- */
 {
   "sections": {
-    "breadcrumbs": {
-      "type": "breadcrumbs",
+    "hero": {
+      "type": "elevate-contact-hero",
       "settings": {
-        "home_label": "Home",
-        "product_category_source": "auto",
-        "separator": "/",
-        "section_width": "page-width",
-        "padding-block-start": 24,
-        "padding-block-end": 8,
-        "padding-inline-start": 0,
-        "padding-inline-end": 0,
-        "use_mobile_padding": false,
-        "padding-block-start-mobile": 16,
-        "padding-block-end-mobile": 16,
-        "padding-inline-start-mobile": 0,
-        "padding-inline-end-mobile": 0
+        "toggle_overlay": true,
+        "overlay_opacity": 95,
+        "badge_text": "LEGAL & POLICIES",
+        "heading": "Everything in writing",
+        "subtitle": "Our policies on returns, privacy, shipping, and more — plain language, no surprises.",
+        "caption": "Last updated: June 3, 2025",
+        "cards_label": "",
+        "padding_top": 48,
+        "padding_bottom": 48
       }
     },
     "main": {
-      "type": "main-page-legal",
-      "custom_css": [
-        ".legal-page__body {max-width: 720px; margin-inline: auto;}"
-      ],
+      "type": "elevate-legal-page",
       "settings": {
-        "section_width": "page-width",
-        "padding-block-start": 32,
-        "padding-block-end": 64,
-        "use_mobile_padding": true,
-        "padding-block-start-mobile": 16,
-        "padding-block-end-mobile": 0
-      }
-    },
-    "section_yg6mTc": {
-      "type": "section",
+        "filters_label": "Quick Filters",
+        "last_updated": "June 3, 2025",
+        "padding_top": 16,
+        "padding_bottom": 72
+      },
       "blocks": {
-        "text_xn3TbH": {
-          "type": "text",
-          "name": "t:names.heading",
+        "return_1": {
+          "type": "article",
           "settings": {
-            "text": "<p>Heading</p>",
-            "mobile_text": "",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "height_mode": "auto",
-            "desktop_height": "",
-            "mobile_height": "",
-            "type_preset": "h4",
-            "font": "var(--font-body--family)",
-            "enable_custom_font_weight": false,
-            "weight": "400",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "custom_line_height": 1.5,
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "type_preset_mobile": "h6",
-            "mobile_font_size": "1rem",
-            "mobile_custom_line_height": 1.5,
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0,
-            "use_mobile_padding": false,
-            "padding-block-start-mobile": 0,
-            "padding-block-end-mobile": 0,
-            "padding-inline-start-mobile": 0,
-            "padding-inline-end-mobile": 0
-          },
-          "blocks": {}
+            "category": "Returns",
+            "title": "Return Eligibility",
+            "body": "<p>Items must be returned within 30 days of delivery. To be eligible for a return, your item must be unused and in the same condition that you received it. It must also be in the original packaging. Perishable goods, custom products, and personal care items cannot be returned.</p><p>To start a return, contact us at support@elevatecycling.com with your order number and reason for return. We will provide you with a return shipping label and instructions.</p>"
+          }
         },
-        "text_iePdtL": {
-          "type": "text",
-          "name": "t:names.text",
+        "return_2": {
+          "type": "article",
           "settings": {
-            "text": "<p>Add a short supporting line below the heading.</p>",
-            "mobile_text": "",
-            "width": "fit-content",
-            "max_width": "none",
-            "alignment": "left",
-            "height_mode": "auto",
-            "desktop_height": "",
-            "mobile_height": "",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "enable_custom_font_weight": false,
-            "weight": "400",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "custom_line_height": 1.5,
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "type_preset_mobile": "rte",
-            "mobile_font_size": "1rem",
-            "mobile_custom_line_height": 1.5,
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 8,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0,
-            "use_mobile_padding": false,
-            "padding-block-start-mobile": 0,
-            "padding-block-end-mobile": 0,
-            "padding-inline-start-mobile": 0,
-            "padding-inline-end-mobile": 0
-          },
-          "blocks": {}
+            "category": "Returns",
+            "title": "Refund Process",
+            "body": "<p>Once we receive and inspect your return, we will notify you of the approval or rejection of your refund. If approved, your refund will be processed and a credit will automatically be applied to your original method of payment within 5–10 business days.</p><p>Please note that your bank or credit card company may take additional time to post the refund to your account.</p>"
+          }
         },
-        "button_TCz6wh": {
-          "type": "button",
-          "name": "t:names.button",
+        "return_3": {
+          "type": "article",
           "settings": {
-            "label": "Shop now",
-            "link": "shopify://collections/all",
-            "open_in_new_tab": false,
-            "style_class": "button",
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fit-content",
-            "custom_width_mobile": 100
-          },
-          "blocks": {}
+            "category": "Returns",
+            "title": "Exchanges",
+            "body": "<p>We only replace items if they are defective or damaged. If you need to exchange a defective item for the same item, contact us at support@elevatecycling.com. Once your exchange is approved, we will ship the replacement item at no additional cost.</p>"
+          }
+        },
+        "return_4": {
+          "type": "article",
+          "settings": {
+            "category": "Returns",
+            "title": "Non-Returnable Items",
+            "body": "<p>The following items cannot be returned or exchanged:</p><ul><li>Gift cards</li><li>Downloadable software or digital products</li><li>Items marked as final sale or clearance</li><li>Items that have been used, installed, or modified</li><li>Personal care items (helmets, chamois, etc.) that have been worn</li></ul>"
+          }
+        },
+        "return_5": {
+          "type": "article",
+          "settings": {
+            "category": "Returns",
+            "title": "Return Shipping",
+            "body": "<p>Return shipping costs are the responsibility of the customer unless the item arrived damaged, defective, or was incorrectly shipped. In those cases, we will provide a prepaid return shipping label.</p><p>We recommend using a trackable shipping service and purchasing shipping insurance for returns over $75, as we cannot guarantee that we will receive your returned item.</p>"
+          }
+        },
+        "shipping_1": {
+          "type": "article",
+          "settings": {
+            "category": "Shipping",
+            "title": "Domestic Shipping",
+            "body": "<p>All orders are processed within 1–3 business days. Orders placed on weekends or holidays will be processed the next business day. You will receive a shipping confirmation email with a tracking number once your order has shipped.</p><p>Standard shipping (3–7 business days): Free on orders over $100, otherwise $7.95. Expedited shipping (2–3 business days): $14.95. Overnight shipping (1 business day): $29.95.</p>"
+          }
+        },
+        "shipping_2": {
+          "type": "article",
+          "settings": {
+            "category": "Shipping",
+            "title": "International Shipping",
+            "body": "<p>We ship to most countries worldwide. International shipping rates are calculated at checkout based on destination, package weight, and dimensions. Delivery typically takes 7–21 business days depending on the destination and customs processing.</p><p>International customers are responsible for any duties, taxes, or import fees charged by their country. These fees are not included in the item price or shipping cost.</p>"
+          }
+        },
+        "shipping_3": {
+          "type": "article",
+          "settings": {
+            "category": "Shipping",
+            "title": "Bike Shipping",
+            "body": "<p>Complete bikes are professionally packed by our mechanics in custom shipping boxes. Due to the oversized nature of these packages, bike shipping is calculated separately at checkout. All bike shipments are fully insured and require a signature upon delivery.</p><p>Bikes ship within 3–5 business days as additional preparation time is needed for final assembly checks and packing.</p>"
+          }
+        },
+        "shipping_4": {
+          "type": "article",
+          "settings": {
+            "category": "Shipping",
+            "title": "Lost or Damaged Packages",
+            "body": "<p>If your package appears to be lost in transit (no tracking updates for 7+ business days) or arrives damaged, contact us immediately at support@elevatecycling.com. We will work with the carrier to resolve the issue and ensure you receive your order or a full refund.</p><p>Please save all packaging materials and take photos of any damage for the claims process.</p>"
+          }
+        },
+        "shipping_5": {
+          "type": "article",
+          "settings": {
+            "category": "Shipping",
+            "title": "Order Tracking",
+            "body": "<p>Once your order ships, you will receive an email with tracking information. You can also track your order by logging into your account and viewing your order history. If you checked out as a guest, use the tracking link in your shipping confirmation email.</p>"
+          }
+        },
+        "terms_1": {
+          "type": "article",
+          "settings": {
+            "category": "Terms of Service",
+            "title": "Acceptance of Terms",
+            "body": "<p>By accessing and using the Elevate Cycling website (elevatecycling.com), you accept and agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our website or services.</p><p>We reserve the right to update or modify these terms at any time without prior notice. Your continued use of the website following any changes constitutes acceptance of those changes.</p>"
+          }
+        },
+        "terms_2": {
+          "type": "article",
+          "settings": {
+            "category": "Terms of Service",
+            "title": "Account Responsibilities",
+            "body": "<p>When you create an account with us, you must provide accurate, complete, and current information. You are responsible for maintaining the confidentiality of your account and password, and for restricting access to your computer or device.</p><p>You agree to accept responsibility for all activities that occur under your account. You must notify us immediately of any unauthorized use of your account.</p>"
+          }
+        },
+        "terms_3": {
+          "type": "article",
+          "settings": {
+            "category": "Terms of Service",
+            "title": "Product Descriptions & Pricing",
+            "body": "<p>We strive to provide accurate product descriptions, images, and pricing. However, we do not warrant that product descriptions, pricing, or other content on this site is accurate, complete, reliable, current, or error-free. Pre-owned items are described based on our mechanic's inspection, and minor variations in condition may exist.</p><p>We reserve the right to correct any errors in pricing or product descriptions and to cancel any orders placed at incorrect prices.</p>"
+          }
+        },
+        "terms_4": {
+          "type": "article",
+          "settings": {
+            "category": "Terms of Service",
+            "title": "Intellectual Property",
+            "body": "<p>All content on this website — including text, graphics, logos, images, and software — is the property of Elevate Cycling or its content suppliers and is protected by United States and international copyright laws. You may not reproduce, distribute, modify, or create derivative works from any content without our express written permission.</p>"
+          }
+        },
+        "terms_5": {
+          "type": "article",
+          "settings": {
+            "category": "Terms of Service",
+            "title": "Limitation of Liability",
+            "body": "<p>Elevate Cycling shall not be liable for any indirect, incidental, special, consequential, or punitive damages arising from your use of our website or services. Our total liability for any claim arising from these terms shall not exceed the amount you paid for the specific product or service giving rise to the claim.</p><p>This limitation applies to all causes of action, including breach of contract, negligence, and other torts.</p>"
+          }
+        },
+        "terms_6": {
+          "type": "article",
+          "settings": {
+            "category": "Terms of Service",
+            "title": "Governing Law",
+            "body": "<p>These Terms of Service and any disputes arising from them shall be governed by the laws of the State of Utah, without regard to its conflict of law provisions. Any legal action or proceeding relating to your access to or use of the website shall be instituted in a state or federal court located in Utah.</p>"
+          }
+        },
+        "privacy_1": {
+          "type": "article",
+          "settings": {
+            "category": "Privacy",
+            "title": "Information We Collect",
+            "body": "<p>We collect information you provide directly to us, such as when you create an account, make a purchase, subscribe to our newsletter, or contact us. This includes your name, email address, mailing address, phone number, and payment information.</p><p>We also automatically collect certain information when you visit our website, including your IP address, browser type, operating system, referring URLs, and information about how you interact with our site.</p>"
+          }
+        },
+        "privacy_2": {
+          "type": "article",
+          "settings": {
+            "category": "Privacy",
+            "title": "How We Use Your Information",
+            "body": "<p>We use the information we collect to:</p><ul><li>Process and fulfill your orders</li><li>Communicate with you about orders, products, and services</li><li>Send promotional emails (you can opt out at any time)</li><li>Improve our website and customer experience</li><li>Detect and prevent fraud</li><li>Comply with legal obligations</li></ul>"
+          }
+        },
+        "privacy_3": {
+          "type": "article",
+          "settings": {
+            "category": "Privacy",
+            "title": "Information Sharing",
+            "body": "<p>We do not sell, trade, or rent your personal information to third parties. We may share your information with trusted service providers who assist us in operating our website, conducting our business, or servicing you — as long as those parties agree to keep this information confidential.</p><p>We may also release your information when required by law, to enforce our site policies, or to protect our or others' rights, property, or safety.</p>"
+          }
+        },
+        "privacy_4": {
+          "type": "article",
+          "settings": {
+            "category": "Privacy",
+            "title": "Data Security",
+            "body": "<p>We implement a variety of security measures to maintain the safety of your personal information. All sensitive information (such as credit card data) is transmitted via Secure Socket Layer (SSL) technology and encrypted in our payment processor's database. We do not store your full credit card information on our servers.</p>"
+          }
+        },
+        "privacy_5": {
+          "type": "article",
+          "settings": {
+            "category": "Privacy",
+            "title": "Your Rights",
+            "body": "<p>You have the right to access, correct, or delete your personal information at any time. You can update your account information by logging into your account settings. To request deletion of your data, contact us at support@elevatecycling.com.</p><p>California residents have additional rights under the CCPA, including the right to know what personal information is collected, the right to request deletion, and the right to opt out of the sale of personal information.</p>"
+          }
+        },
+        "cookies_1": {
+          "type": "article",
+          "settings": {
+            "category": "Cookies",
+            "title": "What Are Cookies",
+            "body": "<p>Cookies are small text files stored on your device when you visit a website. They help the website remember your preferences, understand how you use the site, and improve your experience. Cookies do not contain personal information unless you have provided it to the site.</p>"
+          }
+        },
+        "cookies_2": {
+          "type": "article",
+          "settings": {
+            "category": "Cookies",
+            "title": "How We Use Cookies",
+            "body": "<p>We use cookies for the following purposes:</p><ul><li>Essential cookies: Required for the website to function properly (shopping cart, checkout, account login)</li><li>Analytics cookies: Help us understand how visitors use our site (Google Analytics)</li><li>Marketing cookies: Used to deliver relevant advertisements and track campaign performance</li><li>Preference cookies: Remember your settings and preferences for future visits</li></ul>"
+          }
+        },
+        "cookies_3": {
+          "type": "article",
+          "settings": {
+            "category": "Cookies",
+            "title": "Managing Cookies",
+            "body": "<p>Most web browsers allow you to control cookies through their settings. You can set your browser to refuse all cookies or to indicate when a cookie is being sent. However, if you disable cookies, some features of our website may not function properly.</p><p>To learn more about cookies and how to manage them, visit aboutcookies.org or your browser's help documentation.</p>"
+          }
+        },
+        "cookies_4": {
+          "type": "article",
+          "settings": {
+            "category": "Cookies",
+            "title": "Third-Party Cookies",
+            "body": "<p>Some cookies on our site are set by third-party services such as Google Analytics, Facebook Pixel, and Shopify. These third parties may use cookies to collect information about your online activities across different websites. We do not control these third-party cookies and recommend reviewing their respective privacy policies.</p>"
+          }
         }
       },
       "block_order": [
-        "text_xn3TbH",
-        "text_iePdtL",
-        "button_TCz6wh"
+        "return_1",
+        "return_2",
+        "return_3",
+        "return_4",
+        "return_5",
+        "shipping_1",
+        "shipping_2",
+        "shipping_3",
+        "shipping_4",
+        "shipping_5",
+        "terms_1",
+        "terms_2",
+        "terms_3",
+        "terms_4",
+        "terms_5",
+        "terms_6",
+        "privacy_1",
+        "privacy_2",
+        "privacy_3",
+        "privacy_4",
+        "privacy_5",
+        "cookies_1",
+        "cookies_2",
+        "cookies_3",
+        "cookies_4"
+      ]
+    },
+    "contact": {
+      "type": "elevate-faq-contact",
+      "blocks": {
+        "topic_1": {
+          "type": "topic",
+          "settings": { "label": "Pre-purchase question" }
+        },
+        "topic_2": {
+          "type": "topic",
+          "settings": { "label": "Order status" }
+        },
+        "topic_3": {
+          "type": "topic",
+          "settings": { "label": "Return or exchange" }
+        },
+        "topic_4": {
+          "type": "topic",
+          "settings": { "label": "Sell or trade" }
+        },
+        "topic_5": {
+          "type": "topic",
+          "settings": { "label": "Something else" }
+        }
+      },
+      "block_order": [
+        "topic_1",
+        "topic_2",
+        "topic_3",
+        "topic_4",
+        "topic_5"
       ],
-      "name": "t:names.rich_text_section",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 8,
-        "use_mobile_gap": false,
-        "mobile_gap": 12,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "floating_media_width": 120,
-        "floating_media_anchor": "top-right",
-        "floating_media_offset_x": 0,
-        "floating_media_offset_y": 0,
-        "floating_media_rotation": 0,
-        "floating_media_hide_mobile": false,
-        "use_floating_media_mobile_settings": false,
-        "floating_media_width_mobile": 120,
-        "floating_media_anchor_mobile": "",
-        "floating_media_offset_x_mobile": 0,
-        "floating_media_offset_y_mobile": 0,
-        "padding-block-start": 80,
-        "padding-block-end": 80,
-        "padding-inline-start": 0,
-        "padding-inline-end": 0,
-        "use_mobile_padding": true,
-        "padding-block-start-mobile": 60,
-        "padding-block-end-mobile": 60,
-        "padding-inline-start-mobile": 0,
-        "padding-inline-end-mobile": 0
+        "show_header": true,
+        "show_cards": true,
+        "padding_top": 0,
+        "padding_bottom": 64
       }
     }
   },
   "order": [
-    "breadcrumbs",
+    "hero",
     "main",
-    "section_yg6mTc"
+    "contact"
   ]
 }

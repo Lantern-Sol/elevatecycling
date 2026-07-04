@@ -1,0 +1,462 @@
+{%- doc -%}
+  Elevate Cycling — Legal / Terms & Conditions page section.
+  Two-column layout with sticky sidebar category filters (desktop) /
+  horizontal scrollable pills (mobile) and legal article content.
+{%- enddoc -%}
+
+{%- liquid
+  comment
+    Collect unique categories from blocks in order of first appearance.
+  endcomment
+  assign categories = ''
+  for block in section.blocks
+    assign cat = block.settings.category
+    if cat == blank
+      continue
+    endif
+    assign cat_check = categories | split: '|||'
+    assign already_exists = false
+    for existing in cat_check
+      if existing == cat
+        assign already_exists = true
+        break
+      endif
+    endfor
+    unless already_exists
+      if categories == ''
+        assign categories = cat
+      else
+        assign categories = categories | append: '|||' | append: cat
+      endif
+    endunless
+  endfor
+  assign category_list = categories | split: '|||'
+-%}
+
+<div
+  class="section elevate-legal"
+  data-legal-page
+  style="
+    --elevate-legal-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-legal-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-legal__layout">
+    {%- comment -%} ── Sidebar / Mobile filter row ── {%- endcomment -%}
+    <aside class="elevate-legal__sidebar" aria-label="Legal category filters">
+      <p class="elevate-legal__filters-label">{{ section.settings.filters_label }}</p>
+      <nav class="elevate-legal__filters" aria-label="Jump to category">
+        {%- for cat in category_list -%}
+          <button
+            type="button"
+            class="elevate-legal__filter{% if forloop.first %} is-active{% endif %}"
+            data-legal-filter="{{ cat | handleize }}"
+            aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+          >
+            {{ cat }}
+          </button>
+        {%- endfor -%}
+      </nav>
+    </aside>
+
+    {%- comment -%} ── Legal content grouped by category ── {%- endcomment -%}
+    <div class="elevate-legal__content">
+      {%- for cat in category_list -%}
+        <div
+          class="elevate-legal__group"
+          id="legal-{{ cat | handleize }}"
+          data-legal-group="{{ cat | handleize }}"
+        >
+          <h2 class="elevate-legal__category-heading">{{ cat }}</h2>
+          <div class="elevate-legal__articles">
+            {%- for block in section.blocks -%}
+              {%- if block.settings.category == cat -%}
+                <article class="elevate-legal__article" {{ block.shopify_attributes }}>
+                  <h3 class="elevate-legal__article-title">{{ block.settings.title }}</h3>
+                  {%- if section.settings.last_updated != blank -%}
+                    <p class="elevate-legal__article-date">Last updated {{ section.settings.last_updated }}</p>
+                  {%- endif -%}
+                  <div class="elevate-legal__article-body">
+                    {{ block.settings.body }}
+                  </div>
+                </article>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  (function () {
+    const section = document.querySelector('[data-legal-page]');
+    if (!section) return;
+
+    const filters = section.querySelectorAll('[data-legal-filter]');
+    const groups = section.querySelectorAll('[data-legal-group]');
+
+    function activateFilter(cat) {
+      filters.forEach(function (f) {
+        const isMatch = f.getAttribute('data-legal-filter') === cat;
+        f.classList.toggle('is-active', isMatch);
+        f.setAttribute('aria-current', isMatch ? 'true' : 'false');
+      });
+    }
+
+    /* ── Filter click → smooth scroll ── */
+    filters.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        const cat = btn.getAttribute('data-legal-filter');
+        const target = section.querySelector('#legal-' + cat);
+        if (!target) return;
+
+        activateFilter(cat);
+        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+
+    /* ── Handle hash on page load (from footer links) ── */
+    var hash = window.location.hash.replace('#', '');
+    if (hash) {
+      var target = document.getElementById(hash);
+      if (target) {
+        var cat = target.getAttribute('data-legal-group');
+        if (cat) {
+          activateFilter(cat);
+          setTimeout(function () {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 100);
+        }
+      }
+    }
+
+    /* ── IntersectionObserver → update active filter on scroll ── */
+    if ('IntersectionObserver' in window) {
+      const observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              const cat = entry.target.getAttribute('data-legal-group');
+              filters.forEach(function (f) {
+                const isMatch = f.getAttribute('data-legal-filter') === cat;
+                f.classList.toggle('is-active', isMatch);
+                f.setAttribute('aria-current', isMatch ? 'true' : 'false');
+              });
+            }
+          });
+        },
+        { rootMargin: '-20% 0px -60% 0px', threshold: 0 }
+      );
+
+      groups.forEach(function (g) {
+        observer.observe(g);
+      });
+    }
+  })();
+</script>
+
+{% stylesheet %}
+  /* ─── Legal Page ─── */
+  .elevate-legal {
+    grid-column: 2;
+    padding-block-start: var(--elevate-legal-pt);
+    padding-block-end: var(--elevate-legal-pb);
+  }
+
+  /* ── Layout ── */
+  .elevate-legal__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* ── Sidebar ── */
+  .elevate-legal__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: #FDFCFC;
+    padding: 1rem 0.75rem;
+  }
+
+  .elevate-legal__filters-label {
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    color: #141517;
+    margin: 0;
+  }
+
+  .elevate-legal__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .elevate-legal__filter {
+    flex-shrink: 0;
+    white-space: nowrap;
+    height: 2.125rem;
+    padding: 0 0.75rem;
+    border-radius: 0.5rem;
+    background: #FDFCFC;
+    border: 0.0625rem solid #E2E3E5;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .elevate-legal__filter:hover {
+    border-color: #AEB2B8;
+  }
+
+  .elevate-legal__filter.is-active {
+    background: #F1DBDC;
+    border: 0.125rem solid #E31E24;
+    color: #141517;
+  }
+
+  /* ── Content ── */
+  .elevate-legal__content {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .elevate-legal__group {
+    scroll-margin-top: 6rem;
+  }
+
+  .elevate-legal__category-heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3.5625rem;
+    line-height: 1.1;
+    color: #6D1316;
+    text-transform: uppercase;
+    margin: 0 0 0.5rem;
+  }
+
+  .elevate-legal__articles {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-legal__article {
+    padding: 1rem 1.5rem;
+  }
+
+  .elevate-legal__article-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0 0 0.25rem;
+  }
+
+  .elevate-legal__article-date {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #AEB2B8;
+    margin: 0 0 1rem;
+  }
+
+  .elevate-legal__article-body {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+  }
+
+  .elevate-legal__article-body p {
+    margin: 0 0 1rem;
+  }
+
+  .elevate-legal__article-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  .elevate-legal__article-body ul,
+  .elevate-legal__article-body ol {
+    margin: 0 0 1rem;
+    padding-inline-start: 1.5rem;
+  }
+
+  .elevate-legal__article-body li {
+    margin-bottom: 0.25rem;
+  }
+
+  /* ─── Desktop (768px+) ─── */
+  @media (min-width: 48rem) {
+    .elevate-legal {
+      padding-inline: 4rem;
+      padding-block-start: 4.5rem;
+    }
+
+    .elevate-legal__layout {
+      display: grid;
+      grid-template-columns: 14rem 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .elevate-legal__sidebar {
+      position: sticky;
+      top: 6rem;
+      background: transparent;
+      padding: 0;
+    }
+
+    .elevate-legal__filters {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      gap: 0.75rem;
+    }
+
+    .elevate-legal__filter {
+      white-space: normal;
+      font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+      font-size: 1.25rem;
+      line-height: 1.25;
+      letter-spacing: 0;
+    }
+
+    .elevate-legal__category-heading {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-legal__article-title {
+      font-size: 3rem;
+    }
+  }
+
+  /* ─── Large desktop (1200px+) ─── */
+  @media (min-width: 75rem) {
+    .elevate-legal {
+      padding-inline: 8rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Legal Page Content",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "filters_label",
+      "label": "Filters label",
+      "default": "Quick Filters"
+    },
+    {
+      "type": "text",
+      "id": "last_updated",
+      "label": "Last updated date",
+      "default": "June 3, 2025"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article",
+      "name": "Legal Article",
+      "settings": [
+        {
+          "type": "select",
+          "id": "category",
+          "label": "Category",
+          "options": [
+            { "value": "Returns", "label": "Returns" },
+            { "value": "Shipping", "label": "Shipping" },
+            { "value": "Terms of Service", "label": "Terms of Service" },
+            { "value": "Privacy", "label": "Privacy" },
+            { "value": "Cookies", "label": "Cookies" }
+          ],
+          "default": "Returns"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Article title"
+        },
+        {
+          "type": "richtext",
+          "id": "body",
+          "label": "Article body"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Legal Page Content",
+      "blocks": [
+        {
+          "type": "article",
+          "settings": {
+            "category": "Returns",
+            "title": "Return Policy",
+            "body": "<p>We offer a 30-day return policy on all unused items in original packaging. To initiate a return, contact our support team with your order number.</p>"
+          }
+        },
+        {
+          "type": "article",
+          "settings": {
+            "category": "Shipping",
+            "title": "Shipping Policy",
+            "body": "<p>We ship within 1–3 business days. Standard delivery takes 3–7 business days depending on your location.</p>"
+          }
+        },
+        {
+          "type": "article",
+          "settings": {
+            "category": "Terms of Service",
+            "title": "Terms of Service",
+            "body": "<p>By accessing and using this website, you agree to be bound by these Terms of Service.</p>"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
