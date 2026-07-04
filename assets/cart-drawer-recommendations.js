@@ -1,4 +1,6 @@
 import { formatMoney } from '@theme/money-formatting';
+import { CartLinesUpdateEvent } from '@shopify/events';
+import { fetchConfig } from '@theme/utilities';
 
 const RECENTLY_VIEWED_KEY = 'viewedProducts';
 const MIN_RECENTLY_VIEWED = 1;
@@ -34,12 +36,12 @@ class CartDrawerRecs extends HTMLElement {
 
       if (viewedIds.length >= MIN_RECENTLY_VIEWED) {
         const products = await this.fetchRecentlyViewed(viewedIds);
-        if (products.length) return this.renderCards(products);
+        if (products.length && this.renderCards(products)) return;
       }
 
       if (this.firstProductId) {
         const products = await this.fetchRecommendations(this.firstProductId);
-        if (products.length) return this.renderCards(products);
+        if (products.length && this.renderCards(products)) return;
       }
 
       // Fallback: fetch popular products from /collections/all
@@ -77,7 +79,7 @@ class CartDrawerRecs extends HTMLElement {
     const data = await res.json();
     const products = data?.resources?.results?.products || [];
 
-    return products
+    const mapped = products
       .filter((p) => !this.cartProductIds.has(String(p.id)))
       .slice(0, MAX_CARDS)
       .map((p) => ({
@@ -90,6 +92,23 @@ class CartDrawerRecs extends HTMLElement {
         available: p.available,
         variantId: p.variants?.[0]?.id,
       }));
+
+    // Search suggest API may omit variants — backfill via product JSON
+    const needsVariant = mapped.filter((p) => !p.variantId);
+    if (needsVariant.length) {
+      await Promise.all(
+        needsVariant.map(async (p) => {
+          try {
+            const res = await fetch(`${p.url}.json`);
+            if (!res.ok) return;
+            const data = await res.json();
+            p.variantId = data?.product?.variants?.[0]?.id;
+          } catch { /* skip */ }
+        })
+      );
+    }
+
+    return mapped;
   }
 
   /**
@@ -147,13 +166,17 @@ class CartDrawerRecs extends HTMLElement {
       }));
   }
 
-  /** @param {Array} products */
+  /**
+   * @param {Array} products
+   * @returns {boolean} Whether any cards were rendered
+   */
   renderCards(products) {
-    if (!products.length) return;
+    const valid = products.filter((p) => p.variantId);
+    if (!valid.length) return false;
 
     const fragment = document.createDocumentFragment();
 
-    for (const product of products) {
+    for (const product of valid) {
       const card = document.createElement('div');
       card.className = 'ls-rec-card';
 
@@ -190,7 +213,7 @@ class CartDrawerRecs extends HTMLElement {
                 type="submit"
                 class="ls-rec-card__add"
                 aria-label="Add ${titleEsc} to cart"
-                ${product.available ? '' : 'disabled'}
+                ${product.available !== false ? '' : 'disabled'}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none" aria-hidden="true">
                   <path d="M7.5 0V7.5H0V9H7.5V16.5H9V9H16.5V7.5H9V0H7.5Z" fill="#FDFCFC"/>
@@ -205,7 +228,88 @@ class CartDrawerRecs extends HTMLElement {
     }
 
     this.scrollEl.replaceChildren(fragment);
+    this.scrollEl.addEventListener('submit', this.handleAddToCart);
+    return true;
   }
+
+  /**
+   * Intercepts form submits to add via AJAX instead of navigating to /cart.
+   * Follows the same CartLinesUpdateEvent pattern as product-form.
+   * @param {SubmitEvent} e
+   */
+  handleAddToCart = async (e) => {
+    const form = /** @type {HTMLFormElement} */ (e.target);
+    if (!form.matches('form')) return;
+    e.preventDefault();
+
+    const btn = form.querySelector('button[type="submit"]');
+    if (btn) btn.disabled = true;
+
+    const formData = new FormData(form);
+    const variantId = /** @type {string} */ (formData.get('id'));
+    const quantity = Number(formData.get('quantity')) || 1;
+
+    // Collect section IDs so the Section Rendering API returns fresh HTML
+    const cartItemsComponents = document.querySelectorAll('cart-items-component');
+    const sectionIds = [];
+    cartItemsComponents.forEach((el) => {
+      if (el instanceof HTMLElement && el.dataset.sectionId) {
+        sectionIds.push(el.dataset.sectionId);
+      }
+    });
+    formData.append('sections', sectionIds.join(','));
+
+    const deferredEventPromise = CartLinesUpdateEvent.createPromise();
+
+    // Dispatch on document — cart-items-component and cart-drawer-component
+    // both listen on document for this event.
+    document.dispatchEvent(
+      new CartLinesUpdateEvent({
+        action: 'add',
+        context: 'product',
+        lines: [{ merchandiseId: variantId, quantity }],
+        promise: deferredEventPromise.promise,
+      })
+    );
+
+    const cfg = fetchConfig('javascript', { body: formData });
+
+    try {
+      const res = await fetch(Theme.routes.cart_add_url, {
+        ...cfg,
+        headers: { ...cfg.headers, Accept: 'text/html' },
+      });
+      const response = await res.json();
+
+      if (response.status) {
+        deferredEventPromise.reject(new Error(response.message || 'Add to cart failed'));
+        return;
+      }
+
+      // Fetch updated cart and resolve the event promise so cart-items-component morphs
+      const cartRes = await fetch(`${Theme.routes.cart_url}.json`, {
+        headers: { Accept: 'application/json' },
+        credentials: 'same-origin',
+      });
+      const ajaxCart = await cartRes.json();
+
+      deferredEventPromise.resolve({
+        cart: CartLinesUpdateEvent.createCartFromAjaxResponse(ajaxCart),
+        detail: {
+          items: ajaxCart.items,
+          source: 'cart-drawer-recs',
+          itemCount: quantity,
+          sections: response.sections,
+        },
+      });
+    } catch (err) {
+      deferredEventPromise.reject(err);
+      // Fallback: submit the form natively
+      form.submit();
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  };
 
   /**
    * @param {string} str
