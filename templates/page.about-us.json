@@ -9,888 +9,204 @@
  */
 {
   "sections": {
-    "section_WzEgGf": {
-      "type": "section",
+    "about_hero": {
+      "type": "elevate-about-hero",
       "blocks": {
-        "text_JKyRVG": {
-          "type": "text",
-          "name": "t:names.heading",
+        "stat_bikes": {
+          "type": "stat",
           "settings": {
-            "text": "<h2>Our Philosophy</h2>",
-            "width": "fit-content",
-            "max_width": "none",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 16
-          },
-          "blocks": {}
+            "value": "3,500+",
+            "label": "bikes bought"
+          }
         },
-        "divider_pDKtkw": {
-          "type": "_divider",
-          "name": "t:names.divider",
+        "stat_feedback": {
+          "type": "stat",
           "settings": {
-            "thickness": 1,
-            "corner_radius": "square",
-            "width_percent": 100,
-            "padding-block-start": 0,
-            "padding-block-end": 0
-          },
-          "blocks": {}
+            "value": "99.8%",
+            "label": "eBay feedback"
+          }
         },
-        "group_YaFWhJ": {
-          "type": "group",
-          "name": "t:names.group",
+        "stat_paid": {
+          "type": "stat",
           "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 0,
-            "width": "fit-content",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "shadow_blur": 10,
-            "shadow_spread": 0,
-            "shadow_color": "#00000012",
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "use_color_on_hover": false,
-            "color_scheme_on_hover": "",
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "text_AbmY7R": {
-              "type": "text",
-              "name": "t:names.text",
-              "settings": {
-                "text": "<p><em>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.</em></p><p><em>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.</em></p>",
-                "width": "fit-content",
-                "max_width": "none",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 34,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "text_AbmY7R"
-          ]
+            "value": "$5.4M",
+            "label": "paid out"
+          }
+        },
+        "stat_turnaround": {
+          "type": "stat",
+          "settings": {
+            "value": "24h",
+            "label": "turnaround"
+          }
         }
       },
       "block_order": [
-        "text_JKyRVG",
-        "divider_pDKtkw",
-        "group_YaFWhJ"
+        "stat_bikes",
+        "stat_feedback",
+        "stat_paid",
+        "stat_turnaround"
       ],
-      "name": "t:names.custom_section",
       "settings": {
-        "content_direction": "row",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "center",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 97,
-        "padding-block-end": 97
+        "image": "shopify://shop_images/hero.png",
+        "overlay_opacity": 0,
+        "badge_text": "SELL OR TRADE",
+        "heading": "\"Every great bike deserves a second owner\"",
+        "heading_accent": "second owner",
+        "subtitle": "We're the only place in used performance cycling where buyers know exactly what they're getting — and sellers know exactly what they'll be paid.",
+        "stats_label": "Elevate Cycling by the numbers",
+        "padding_top": 48,
+        "padding_bottom": 48
       }
     },
-    "section_iERgid": {
-      "type": "section",
+    "about_story": {
+      "type": "elevate-about-story",
       "blocks": {
-        "text_UMm3La": {
-          "type": "text",
-          "name": "t:names.heading",
+        "member_1": {
+          "type": "member",
           "settings": {
-            "text": "<h2>Our Story</h2>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "image": "shopify://shop_images/photo-Shot03A.png",
+            "name": "Troy [Last name]",
+            "role": "Founder & CEO"
+          }
         },
-        "text_VJkHfe": {
-          "type": "text",
-          "name": "t:names.text",
+        "member_2": {
+          "type": "member",
           "settings": {
-            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras vehicula, metus ac pretium lacinia, justo nisi fermentum nulla, at tincidunt eros urna vel dolor. Vivamus luctus, sapien nec ultricies tincidunt, velit velit bibendum dolor.</p><p>Praesent commodo cursus magna, vel scelerisque nisl consectetur et. Donec sed odio dui. Nullam quis risus eget urna mollis ornare vel eu leo. Cras mattis consectetur purus sit amet fermentum.</p>",
-            "width": "fit-content",
-            "max_width": "none",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "image": "shopify://shop_images/photo-Shot03B.png",
+            "name": "Kevin [Last name]",
+            "role": "COO"
+          }
+        },
+        "member_3": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03A.png",
+            "name": "Troy [Last name]",
+            "role": "Founder & CEO"
+          }
+        },
+        "member_4": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03B.png",
+            "name": "Kevin [Last name]",
+            "role": "COO"
+          }
+        },
+        "member_5": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03A.png",
+            "name": "Troy [Last name]",
+            "role": "Founder & CEO"
+          }
+        },
+        "member_6": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03B.png",
+            "name": "Kevin [Last name]",
+            "role": "COO"
+          }
+        },
+        "member_7": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03A.png",
+            "name": "Troy [Last name]",
+            "role": "Founder & CEO"
+          }
+        },
+        "member_8": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03B.png",
+            "name": "Kevin [Last name]",
+            "role": "COO"
+          }
         }
       },
       "block_order": [
-        "text_UMm3La",
-        "text_VJkHfe"
+        "member_1",
+        "member_2",
+        "member_3",
+        "member_4",
+        "member_5",
+        "member_6",
+        "member_7",
+        "member_8"
       ],
-      "name": "t:names.rich_text_section",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 25,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "label_text": "WHO WE ARE",
+        "heading": "Built by cyclists. Run like a business.",
+        "story_quote": "\"replace with Troy's founding story. Word count matched (~110 words)\"",
+        "story_text": "<p>Troy and Kevin started Elevate Cycling in 2021 with a straightforward premise: performance gear deserves a better second life than eBay listings and Facebook lowballers.</p><p>Based in Santa Ana, California, we operate two warehouses and a team of mechanics who ride the same bikes we sell. Every piece that comes through our doors gets inspected, graded, and documented before it goes anywhere near a listing.</p><p>We built this for the buyer who wants to know exactly what they're getting — and the seller who wants to be treated fairly. That's still the whole business.</p>",
+        "team_heading": "Meet the team",
+        "padding_top": 48,
+        "padding_bottom": 48
       }
     },
-    "section_Dm3GtU": {
-      "type": "section",
+    "about_cpo": {
+      "type": "elevate-about-cpo",
       "blocks": {
-        "group_tqPmDJ": {
-          "type": "group",
-          "name": "Column",
+        "step_1": {
+          "type": "step",
           "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "flex-start",
-            "gap": 8,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "shadow_blur": 10,
-            "shadow_spread": 0,
-            "shadow_color": "#00000012",
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "use_color_on_hover": false,
-            "color_scheme_on_hover": "",
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 10,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_GmjU4R": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/Group_1000001746.png",
-                "link": "",
-                "image_ratio": "adapt",
-                "custom_ratio": "1 / 1",
-                "image_fit": "cover",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_GmjU4R"
-          ]
+            "image": "shopify://shop_images/step-01.png",
+            "title": "Acquire",
+            "description": "We source bikes and parts from individual sellers and shops. Every submission is reviewed by our team before we commit."
+          }
         },
-        "group_cYxdM6": {
-          "type": "group",
-          "name": "Column",
+        "step_2": {
+          "type": "step",
           "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "flex-start",
-            "gap": 8,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "shadow_blur": 10,
-            "shadow_spread": 0,
-            "shadow_color": "#00000012",
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "use_color_on_hover": false,
-            "color_scheme_on_hover": "",
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 10,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_kHWhPD": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/Group_1000001747.png",
-                "link": "",
-                "image_ratio": "adapt",
-                "custom_ratio": "1 / 1",
-                "image_fit": "cover",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_kHWhPD"
-          ]
+            "image": "shopify://shop_images/step-01_a5c681f2-845b-49c0-91da-a572eddec38b.png",
+            "title": "Inspect & Grade",
+            "description": "Full mechanical check on every piece. Frame integrity, drivetrain, brakes, wheel true — nothing skipped."
+          }
         },
-        "group_4JBJcr": {
-          "type": "group",
-          "name": "Column",
+        "step_3": {
+          "type": "step",
           "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "flex-start",
-            "gap": 8,
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "shadow_blur": 10,
-            "shadow_spread": 0,
-            "shadow_color": "#00000012",
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "use_color_on_hover": false,
-            "color_scheme_on_hover": "",
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 10,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "image_an9tKg": {
-              "type": "image",
-              "name": "t:names.image",
-              "settings": {
-                "image": "shopify://shop_images/Group_1000001748.png",
-                "link": "",
-                "image_ratio": "adapt",
-                "custom_ratio": "1 / 1",
-                "image_fit": "cover",
-                "width": "fill",
-                "custom_width": 100,
-                "width_mobile": "fill",
-                "custom_width_mobile": 100,
-                "height": "fit",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "image_an9tKg"
-          ]
+            "image": "shopify://shop_images/step-01_851464ec-29c5-46ba-b2e4-78a6b34de653.png",
+            "title": "Detailed Photography",
+            "description": "~20 studio shots per listing. Every angle, every detail, every scratch. What you see in the listing is what ships."
+          }
+        },
+        "step_4": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/step-01_1caeb35b-48df-4865-9064-f3bab1928aa7.png",
+            "title": "List",
+            "description": "Full spec sheet and Mechanic's Notes built before anything lists. Year, groupset, brake type, condition. Nothing hidden."
+          }
         }
       },
       "block_order": [
-        "group_tqPmDJ",
-        "group_cYxdM6",
-        "group_4JBJcr"
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4"
       ],
-      "name": "t:names.multicolumn",
       "settings": {
-        "content_direction": "row",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "flex-start",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 16,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "label": "CERTIFIED PRE-OWNED",
+        "heading": "Four steps. Same process, every time. No shortcuts.",
+        "heading_accent": "every time.",
+        "subtitle": "Every bike earns its listing",
+        "primary_cta_text": "Shop Bikes & Gear",
+        "primary_cta_url": "",
+        "secondary_cta_text": "Learn more about CPO",
+        "secondary_cta_url": "",
+        "padding_top": 72,
+        "padding_bottom": 72
       }
     },
-    "section_eQ8CRK": {
-      "type": "section",
-      "blocks": {
-        "text_tK4yJt": {
-          "type": "text",
-          "name": "t:names.text",
-          "settings": {
-            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod.</p>",
-            "width": "fit-content",
-            "max_width": "none",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "font_size": "1rem",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "color": "var(--color-foreground)",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "text_tK4yJt"
-      ],
-      "name": "t:names.rich_text_section",
+    "about_trade_cta": {
+      "type": "elevate-about-trade-cta",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 25,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 48,
-        "padding-block-end": 48
-      }
-    },
-    "section_GTCRVK": {
-      "type": "section",
-      "blocks": {
-        "group_n3HKrF": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "custom",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "shadow_blur": 10,
-            "shadow_spread": 0,
-            "shadow_color": "#00000012",
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "use_color_on_hover": false,
-            "color_scheme_on_hover": "",
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "text_3YaRnh": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h5>Founding Principles</h5>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h3",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_ypBHDX": {
-              "type": "text",
-              "settings": {
-                "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas faucibus mollis interdum. Cras justo odio, dapibus ut facilisis in, egestas eget quam. Nullam id dolor id nibh ultricies vehicula ut id elit. Aenean lacinia bibendum nulla sed consectetur.</p>",
-                "width": "fit-content",
-                "max_width": "none",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "text_3YaRnh",
-            "text_ypBHDX"
-          ]
-        },
-        "image_67ydYA": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/Rectangle_194.png",
-            "link": "",
-            "image_ratio": "square",
-            "custom_ratio": "1 / 1",
-            "image_fit": "cover",
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 5,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "group_n3HKrF",
-        "image_67ydYA"
-      ],
-      "name": "t:names.image_with_text",
-      "settings": {
-        "content_direction": "row",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 32,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 40,
-        "padding-block-end": 40
-      }
-    },
-    "section_yiTqah": {
-      "type": "section",
-      "blocks": {
-        "image_yT6yb4": {
-          "type": "image",
-          "settings": {
-            "image": "shopify://shop_images/Group_1000001042_7e57637f-8b1b-435f-a2d5-df76ff915f7c.png",
-            "link": "",
-            "image_ratio": "square",
-            "custom_ratio": "1 / 1",
-            "image_fit": "cover",
-            "width": "fill",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 5,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "group_i6KAVx": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "align_baseline": false,
-            "horizontal_alignment_flex_direction_column": "flex-start",
-            "vertical_alignment_flex_direction_column": "center",
-            "gap": 12,
-            "width": "custom",
-            "custom_width": 100,
-            "width_mobile": "fill",
-            "custom_width_mobile": 100,
-            "height": "fit",
-            "custom_height": 100,
-            "color_scheme": "",
-            "background_media": "none",
-            "video_position": "cover",
-            "background_image_position": "cover",
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "shadow_blur": 10,
-            "shadow_spread": 0,
-            "shadow_color": "#00000012",
-            "border_radius": 0,
-            "toggle_overlay": false,
-            "overlay_color": "#00000026",
-            "overlay_style": "solid",
-            "gradient_direction": "to top",
-            "use_color_on_hover": false,
-            "color_scheme_on_hover": "",
-            "link": "",
-            "open_in_new_tab": false,
-            "placeholder": "",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "text_UH9jqe": {
-              "type": "text",
-              "name": "t:names.heading",
-              "settings": {
-                "text": "<h5>About Us</h5>",
-                "width": "fit-content",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "h3",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "text_CayPBB": {
-              "type": "text",
-              "settings": {
-                "text": "<ul><li>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</li><li>Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae.</li><li>Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.</li><li>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</li></ul>",
-                "width": "fit-content",
-                "max_width": "none",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "color": "var(--color-foreground)",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "text_UH9jqe",
-            "text_CayPBB"
-          ]
-        }
-      },
-      "block_order": [
-        "image_yT6yb4",
-        "group_i6KAVx"
-      ],
-      "name": "t:names.image_with_text",
-      "settings": {
-        "content_direction": "row",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 32,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "color_scheme": "",
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 40,
-        "padding-block-end": 40
+        "padding_top": 72,
+        "padding_bottom": 72
       }
     },
     "main": {
@@ -901,30 +217,47 @@
           "name": "Title",
           "settings": {
             "text": "<h1>{{ closest.page.title }}</h1>",
+            "mobile_text": "",
             "width": "100%",
             "max_width": "normal",
             "alignment": "left",
+            "height_mode": "auto",
+            "desktop_height": "",
+            "mobile_height": "",
             "type_preset": "h2",
             "font": "var(--font-primary--family)",
+            "enable_custom_font_weight": false,
+            "weight": "400",
             "font_size": "",
             "line_height": "normal",
+            "custom_line_height": 1.5,
             "letter_spacing": "normal",
             "case": "none",
             "wrap": "pretty",
-            "color": "",
+            "type_preset_mobile": "rte",
+            "mobile_font_size": "1rem",
+            "mobile_custom_line_height": 1.5,
+            "text_color": "",
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "use_mobile_padding": false,
+            "padding-block-start-mobile": 0,
+            "padding-block-end-mobile": 0,
+            "padding-inline-start-mobile": 0,
+            "padding-inline-end-mobile": 0
           },
           "blocks": {}
         },
         "page-content": {
           "type": "page-content",
-          "settings": {},
+          "settings": {
+            "text_color": ""
+          },
           "blocks": {}
         }
       },
@@ -936,19 +269,17 @@
       "settings": {
         "content_direction": "column",
         "gap": 32,
-        "color_scheme": "",
+        "background_color": "",
         "padding-block-start": 40,
         "padding-block-end": 80
       }
     }
   },
   "order": [
-    "section_WzEgGf",
-    "section_iERgid",
-    "section_Dm3GtU",
-    "section_eQ8CRK",
-    "section_GTCRVK",
-    "section_yiTqah",
+    "about_hero",
+    "about_story",
+    "about_cpo",
+    "about_trade_cta",
     "main"
   ]
 }

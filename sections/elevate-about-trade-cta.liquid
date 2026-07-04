@@ -1,0 +1,379 @@
+{%- doc -%}
+  Elevate Cycling — About Us Trade/Sale CTA banner.
+  Dark full-width banner with background image,
+  gradient overlay, centered text, red CTA button, and disclaimer.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-about-trade"
+  data-scroll-reveal
+  style="
+    background: #141517;
+    --elevate-about-trade-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-about-trade-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  {%- comment -%} ── Background image (desktop) ── {%- endcomment -%}
+  {%- if section.settings.background_image != blank -%}
+    <div class="elevate-about-trade__bg elevate-about-trade__bg--desktop" aria-hidden="true">
+      {{
+        section.settings.background_image
+        | image_url: width: 1920
+        | image_tag:
+          widths: '800, 1200, 1920',
+          sizes: '100vw',
+          loading: 'lazy',
+          class: 'elevate-about-trade__bg-img'
+      }}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ── Background image (mobile) ── {%- endcomment -%}
+  {%- assign mobile_bg = section.settings.background_image_mobile | default: section.settings.background_image -%}
+  {%- if mobile_bg != blank -%}
+    <div class="elevate-about-trade__bg elevate-about-trade__bg--mobile" aria-hidden="true">
+      {{
+        mobile_bg
+        | image_url: width: 800
+        | image_tag:
+          widths: '400, 600, 800',
+          sizes: '100vw',
+          loading: 'lazy',
+          class: 'elevate-about-trade__bg-img'
+      }}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ── Center gradient overlay ── {%- endcomment -%}
+  <div class="elevate-about-trade__gradient" aria-hidden="true"></div>
+
+  {%- comment -%} ── Content ── {%- endcomment -%}
+  <div class="elevate-about-trade__inner">
+    {%- if section.settings.label != blank -%}
+      <p class="elevate-about-trade__label">{{ section.settings.label }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="elevate-about-trade__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.body_1 != blank or section.settings.body_2 != blank -%}
+      <div class="elevate-about-trade__body-group">
+        {%- if section.settings.body_1 != blank -%}
+          <p class="elevate-about-trade__body">{{ section.settings.body_1 }}</p>
+        {%- endif -%}
+        {%- if section.settings.body_2 != blank -%}
+          <p class="elevate-about-trade__body">{{ section.settings.body_2 }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    <div class="elevate-about-trade__cta-group">
+      {%- if section.settings.cta_text != blank -%}
+        <a
+          href="{{ section.settings.cta_url }}"
+          class="elevate-about-trade__cta"
+        >
+          <span>{{ section.settings.cta_text }}</span>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.disclaimer != blank -%}
+        <p class="elevate-about-trade__disclaimer">{{ section.settings.disclaimer }}</p>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── About Trade/Sale CTA Banner ─── */
+  .elevate-about-trade {
+    position: relative;
+    overflow: hidden;
+    padding-block-start: 1.5rem;
+    padding-block-end: 1.5rem;
+  }
+
+  /* ── Background image ── */
+  .elevate-about-trade__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    grid-column: 1 / -1;
+  }
+
+  .elevate-about-trade__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-about-trade__bg--desktop {
+    display: none;
+  }
+
+  .elevate-about-trade__bg--mobile {
+    display: block;
+    bottom: auto;
+  }
+
+  /* ── Gradient overlay ── */
+  .elevate-about-trade__gradient {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    grid-column: 1 / -1;
+    background: linear-gradient(
+      to bottom,
+      rgba(20, 21, 23, 0) 60%,
+      #141517 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── Content ── */
+  .elevate-about-trade__inner {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1.5rem;
+    padding-inline: 0.5rem;
+  }
+
+  .elevate-about-trade__label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-about-trade__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-about-trade__body-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 15rem;
+  }
+
+  .elevate-about-trade__body {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #AEB2B8;
+    margin: 0;
+    max-width: 31rem;
+    text-align: left;
+  }
+
+  .elevate-about-trade__cta-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .elevate-about-trade__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    background: #E31E24;
+    color: #FDFCFC;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    width: 100%;
+  }
+
+  .elevate-about-trade__cta:hover {
+    opacity: 0.85;
+  }
+
+  .elevate-about-trade__disclaimer {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-about-trade {
+      padding-block-start: var(--elevate-about-trade-pt);
+      padding-block-end: var(--elevate-about-trade-pb);
+    }
+
+    .elevate-about-trade__bg--desktop {
+      display: block;
+    }
+
+    .elevate-about-trade__bg--mobile {
+      display: none;
+    }
+
+    .elevate-about-trade__gradient {
+      height: auto;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        transparent 25%,
+        rgba(0, 0, 0, 0.8) 40%,
+        rgba(0, 0, 0, 0.8) 60%,
+        transparent 75%
+      );
+    }
+
+    .elevate-about-trade__inner {
+      gap: 2.5rem;
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-about-trade__body-group {
+      margin-top: 0;
+    }
+
+    .elevate-about-trade__heading {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-about-trade__cta {
+      width: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About Trade CTA",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "TRADE OR SALE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "GOT GEAR COLLECTING DUST?"
+    },
+    {
+      "type": "textarea",
+      "id": "body_1",
+      "label": "Body text 1",
+      "default": "We pay fair market value, send a free shipping label, and turn around an offer within 24 hours."
+    },
+    {
+      "type": "textarea",
+      "id": "body_2",
+      "label": "Body text 2",
+      "default": "No haggling. No lowball after the fact. No FB Marketplace drama."
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Get a Quote for your gear"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Button link"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Disclaimer",
+      "default": "$5.4M+ paid to sellers · Complete bikes and components accepted"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "Background image (mobile)",
+      "info": "Optional. Falls back to the desktop image if empty."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Trade CTA"
+    }
+  ]
+}
+{% endschema %}

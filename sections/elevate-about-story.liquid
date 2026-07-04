@@ -1,0 +1,393 @@
+{%- doc -%}
+  Elevate Cycling — About Us founding-story + team section.
+  Dark section with label, heading, two-column founder story,
+  "Meet the team" sub-heading, and a responsive team-member grid.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-about-story"
+  style="
+    background: #141517;
+    --elevate-about-story-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-about-story-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-about-story__inner">
+    {%- comment -%} ── Header ── {%- endcomment -%}
+    {%- if section.settings.label_text != blank or section.settings.heading != blank -%}
+      <div class="elevate-about-story__header">
+        {%- if section.settings.label_text != blank -%}
+          <p class="elevate-about-story__label">{{ section.settings.label_text }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="elevate-about-story__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Two-column story ── {%- endcomment -%}
+    {%- if section.settings.story_quote != blank or section.settings.story_text != blank -%}
+      <div class="elevate-about-story__columns">
+        {%- if section.settings.story_quote != blank -%}
+          <blockquote class="elevate-about-story__quote">
+            <p class="elevate-about-story__quote-text">{{ section.settings.story_quote }}</p>
+          </blockquote>
+        {%- endif -%}
+
+        {%- if section.settings.story_text != blank -%}
+          <div class="elevate-about-story__body rte">
+            {{ section.settings.story_text }}
+          </div>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Team heading + grid ── {%- endcomment -%}
+    {%- if section.settings.team_heading != blank -%}
+      <h3 class="elevate-about-story__team-heading">{{ section.settings.team_heading }}</h3>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-about-story__grid" data-scroll-reveal="fade-children">
+        {%- for block in section.blocks -%}
+          <div class="elevate-about-story__member" {{ block.shopify_attributes }}>
+            <div class="elevate-about-story__member-photo">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 928
+                  | image_tag:
+                    widths: '232, 464, 696, 928',
+                    sizes: '(min-width: 62rem) 232px, (min-width: 48rem) 25vw, 50vw',
+                    loading: 'lazy',
+                    class: 'elevate-about-story__member-img',
+                    alt: block.settings.name
+                }}
+              {%- else -%}
+                <div class="elevate-about-story__member-placeholder"></div>
+              {%- endif -%}
+            </div>
+
+            {%- if block.settings.name != blank -%}
+              <p class="elevate-about-story__member-name">{{ block.settings.name }}</p>
+            {%- endif -%}
+
+            {%- if block.settings.role != blank -%}
+              <p class="elevate-about-story__member-role">{{ block.settings.role }}</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── About Story + Team ─── */
+  .elevate-about-story {
+    padding-block-start: var(--elevate-about-story-pt);
+    padding-block-end: var(--elevate-about-story-pb);
+  }
+
+  .elevate-about-story__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Header ── */
+  .elevate-about-story__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-about-story__label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-about-story__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.1;
+    color: #FDFCFC;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ── Two-column story ── */
+  .elevate-about-story__columns {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .elevate-about-story__quote {
+    border: 0.0625rem solid #6B7280;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    margin: 0;
+  }
+
+  .elevate-about-story__quote-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  .elevate-about-story__body {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #FDFCFC;
+  }
+
+  .elevate-about-story__body p {
+    margin: 0 0 1.5rem;
+  }
+
+  .elevate-about-story__body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ── Team heading ── */
+  .elevate-about-story__team-heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1;
+    color: #FDFCFC;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ── Team grid ── */
+  .elevate-about-story__grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    overflow: hidden;
+  }
+
+  .elevate-about-story__member {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: calc(50% - 0.375rem);
+    overflow: hidden;
+  }
+
+  .elevate-about-story__member-photo {
+    position: relative;
+    aspect-ratio: 232 / 317;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: #1F2023;
+  }
+
+  .elevate-about-story__member-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-about-story__member-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #1F2023;
+  }
+
+  .elevate-about-story__member-name {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-about-story__member-role {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: 0.015rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-about-story__inner {
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-about-story__heading {
+      font-size: 3rem;
+    }
+
+    .elevate-about-story__columns {
+      flex-direction: row;
+      gap: 2rem;
+    }
+
+    .elevate-about-story__quote {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .elevate-about-story__body {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .elevate-about-story__team-heading {
+      font-size: 3rem;
+    }
+
+    .elevate-about-story__member {
+      width: calc(25% - 0.5625rem);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About Story + Team",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Founding story"
+    },
+    {
+      "type": "text",
+      "id": "label_text",
+      "label": "Label",
+      "default": "WHO WE ARE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Built by cyclists. Run like a business."
+    },
+    {
+      "type": "textarea",
+      "id": "story_quote",
+      "label": "Founder quote (left column)",
+      "info": "Italic text inside a bordered card."
+    },
+    {
+      "type": "richtext",
+      "id": "story_text",
+      "label": "Story text (right column)"
+    },
+    {
+      "type": "header",
+      "content": "Team"
+    },
+    {
+      "type": "text",
+      "id": "team_heading",
+      "label": "Team heading",
+      "default": "Meet the team"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "member",
+      "name": "Team member",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Photo"
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Name",
+          "default": "First Last"
+        },
+        {
+          "type": "text",
+          "id": "role",
+          "label": "Role",
+          "default": "Role"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Story + Team",
+      "settings": {
+        "label_text": "WHO WE ARE",
+        "heading": "Built by cyclists. Run like a business.",
+        "team_heading": "Meet the team"
+      },
+      "blocks": [
+        {
+          "type": "member",
+          "settings": {
+            "name": "Troy [Last name]",
+            "role": "Founder & CEO"
+          }
+        },
+        {
+          "type": "member",
+          "settings": {
+            "name": "Kevin [Last name]",
+            "role": "COO"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
