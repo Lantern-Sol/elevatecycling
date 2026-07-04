@@ -60,7 +60,7 @@
     </a>
 
     {%- comment -%} Visit card {%- endcomment -%}
-    <div class="elevate-faq-contact__card">
+    <a href="https://www.google.com/maps/search/?api=1&query={{ section.settings.visit_location | url_encode }}" target="_blank" rel="noopener" class="elevate-faq-contact__card">
       <span class="elevate-faq-contact__card-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
           {%- render 'icon', icon: 'map-pin-solid' -%}
@@ -76,7 +76,7 @@
           {%- render 'icon', icon: 'arrow-right-solid' -%}
         </svg>
       </span>
-    </div>
+    </a>
   </div>
 
   {%- comment -%} ── Contact form ── {%- endcomment -%}
@@ -248,23 +248,34 @@
       var data = new FormData(form);
       data.append('form_type', 'contact');
       data.append('utf8', '✓');
+      var urlEncodedData = new URLSearchParams(data);
 
-      fetch('/contact#contact_form', {
+      fetch('/contact', {
         method: 'POST',
-        headers: { 'Accept': 'application/json' },
-        body: data
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: urlEncodedData.toString()
       })
         .then(function (res) {
-          if (res.ok) {
-            form.innerHTML = '<div class="elevate-faq-contact__success">' +
-              '<p class="elevate-faq-contact__success-title">Message sent!</p>' +
-              '<p class="elevate-faq-contact__success-text">We\'ll get back to you within 1 business day.</p>' +
-              '</div>';
-          } else {
-            btn.disabled = false;
-            btn.querySelector('span').textContent = '{{ section.settings.submit_text | default: "Submit" }}';
-            alert('Something went wrong. Please try again or email us directly.');
+          if (res.url && res.url.includes('/challenge')) {
+            window.location.href = res.url;
+            return;
           }
+          return res.text().then(function (html) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(html, 'text/html');
+            var hasErrors = doc.querySelector('.errors, .form-errors');
+
+            if (res.ok && !hasErrors) {
+              form.innerHTML = '<div class="elevate-faq-contact__success">' +
+                '<p class="elevate-faq-contact__success-title">Message sent!</p>' +
+                '<p class="elevate-faq-contact__success-text">We\'ll get back to you within 1 business day.</p>' +
+                '</div>';
+            } else {
+              btn.disabled = false;
+              btn.querySelector('span').textContent = '{{ section.settings.submit_text | default: "Submit" }}';
+              alert('Something went wrong. Please check your fields and try again.');
+            }
+          });
         })
         .catch(function () {
           btn.disabled = false;
