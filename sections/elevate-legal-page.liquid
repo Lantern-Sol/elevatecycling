@@ -41,6 +41,7 @@
     --elevate-legal-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
   "
 >
+  {%- if categories != blank -%}
   <div class="elevate-legal__layout">
     {%- comment -%} ── Sidebar / Mobile filter row ── {%- endcomment -%}
     <aside class="elevate-legal__sidebar" aria-label="Legal category filters">
@@ -87,6 +88,7 @@
       {%- endfor -%}
     </div>
   </div>
+  {%- endif -%}
 </div>
 
 <script type="module">
@@ -96,6 +98,8 @@
 
     const filters = section.querySelectorAll('[data-legal-filter]');
     const groups = section.querySelectorAll('[data-legal-group]');
+    let isScrolling = false;
+    let scrollTimeout;
 
     function activateFilter(cat) {
       filters.forEach(function (f) {
@@ -105,45 +109,54 @@
       });
     }
 
+    function scrollToGroup(cat) {
+      const target = section.querySelector('#legal-' + cat);
+      if (!target) return;
+
+      isScrolling = true;
+      activateFilter(cat);
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(function () {
+        isScrolling = false;
+      }, 800);
+    }
+
     /* ── Filter click → smooth scroll ── */
     filters.forEach(function (btn) {
       btn.addEventListener('click', function () {
-        const cat = btn.getAttribute('data-legal-filter');
-        const target = section.querySelector('#legal-' + cat);
-        if (!target) return;
-
-        activateFilter(cat);
-        target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        scrollToGroup(btn.getAttribute('data-legal-filter'));
       });
     });
 
-    /* ── Handle hash on page load (from footer links) ── */
-    var hash = window.location.hash.replace('#', '');
-    if (hash) {
+    /* ── Handle hash on page load & hashchange (from footer links) ── */
+    function handleHash() {
+      var hash = window.location.hash.replace('#', '');
+      if (!hash) return;
+
       var target = document.getElementById(hash);
-      if (target) {
-        var cat = target.getAttribute('data-legal-group');
-        if (cat) {
-          activateFilter(cat);
-          setTimeout(function () {
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-          }, 100);
-        }
+      if (!target) return;
+
+      var cat = target.getAttribute('data-legal-group');
+      if (cat) {
+        setTimeout(function () {
+          scrollToGroup(cat);
+        }, 100);
       }
     }
+
+    window.addEventListener('hashchange', handleHash);
+    handleHash();
 
     /* ── IntersectionObserver → update active filter on scroll ── */
     if ('IntersectionObserver' in window) {
       const observer = new IntersectionObserver(
         function (entries) {
+          if (isScrolling) return;
           entries.forEach(function (entry) {
             if (entry.isIntersecting) {
-              const cat = entry.target.getAttribute('data-legal-group');
-              filters.forEach(function (f) {
-                const isMatch = f.getAttribute('data-legal-filter') === cat;
-                f.classList.toggle('is-active', isMatch);
-                f.setAttribute('aria-current', isMatch ? 'true' : 'false');
-              });
+              activateFilter(entry.target.getAttribute('data-legal-group'));
             }
           });
         },
@@ -204,7 +217,7 @@
     padding: 0 0.75rem;
     border-radius: 0.5rem;
     background: #FDFCFC;
-    border: 0.0625rem solid #E2E3E5;
+    border: 0.125rem solid #E2E3E5;
     font-family: 'Inter', var(--font-body--family), sans-serif;
     font-weight: 700;
     font-size: 0.875rem;
@@ -221,7 +234,7 @@
 
   .elevate-legal__filter.is-active {
     background: #F1DBDC;
-    border: 0.125rem solid #E31E24;
+    border-color: #E31E24;
     color: #141517;
   }
 
