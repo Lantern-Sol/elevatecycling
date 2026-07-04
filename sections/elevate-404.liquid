@@ -6,20 +6,30 @@
 <div class="elevate-404" style="--elevate-404-pt: {{ section.settings.padding_top }}px; --elevate-404-pb: {{ section.settings.padding_bottom }}px;">
   <div class="elevate-404__inner">
     {%- comment -%} Error code ── "404" {%- endcomment -%}
-    <p class="elevate-404__code" aria-hidden="true">
-      {{ section.settings.error_code }}
-    </p>
+    {%- if section.settings.error_code != blank -%}
+      <p class="elevate-404__code">
+        {{ section.settings.error_code }}
+      </p>
+    {%- endif -%}
 
     {%- comment -%} Ghost / watermark heading ── "WRONG TURN" {%- endcomment -%}
-    <h1 class="elevate-404__heading">
-      {{ section.settings.heading }}
-    </h1>
+    {%- if section.settings.heading != blank -%}
+      <h1 class="elevate-404__heading">
+        {{ section.settings.heading }}
+      </h1>
+    {%- endif -%}
 
     {%- comment -%} Subtitle lines {%- endcomment -%}
-    <div class="elevate-404__subtitle">
-      <p>{{ section.settings.subtitle_line_1 }}</p>
-      <p>{{ section.settings.subtitle_line_2 }}</p>
-    </div>
+    {%- if section.settings.subtitle_line_1 != blank or section.settings.subtitle_line_2 != blank -%}
+      <div class="elevate-404__subtitle">
+        {%- if section.settings.subtitle_line_1 != blank -%}
+          <p>{{ section.settings.subtitle_line_1 }}</p>
+        {%- endif -%}
+        {%- if section.settings.subtitle_line_2 != blank -%}
+          <p>{{ section.settings.subtitle_line_2 }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
 
     {%- comment -%} CTA buttons {%- endcomment -%}
     <div class="elevate-404__buttons">
@@ -50,13 +60,18 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    padding-block: var(--elevate-404-pt) calc(var(--elevate-404-pb) + 2.5rem);
+    padding-block: var(--elevate-404-pt) var(--elevate-404-pb);
     background: radial-gradient(
       ellipse at bottom left,
       #6D1316 0%,
       #490E10 50%,
       #250A0A 100%
     );
+  }
+
+  /* Extra bottom padding only when followed by arrivals section */
+  .elevate-404-section:has(+ .elevate-arrivals-section) .elevate-404 {
+    padding-bottom: calc(var(--elevate-404-pb) + 2.5rem);
   }
 
   /* ── Pull new arrivals up so dark gradient shows behind border-radius ── */
@@ -152,7 +167,7 @@
   .elevate-404__btn--outline {
     background: transparent;
     color: var(--Text-on-dark, var(--Neutrals-Light-50, #FDFCFC));
-    border: 0.03125rem solid var(--Neutrals-Light-50, #FDFCFC);
+    border: 0.0625rem solid var(--Neutrals-Light-50, #FDFCFC);
   }
 
   .elevate-404__btn--outline:hover {
@@ -173,7 +188,7 @@
 
   .elevate-404__btn--primary svg {
     width: 1.25rem;
-    height: 1.25rem;
+    height: auto;
     flex-shrink: 0;
   }
 
@@ -214,13 +229,13 @@
       "default": "WRONG TURN"
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "subtitle_line_1",
       "label": "Subtitle — line 1",
       "default": "Looks like this bike took a different route."
     },
     {
-      "type": "text",
+      "type": "textarea",
       "id": "subtitle_line_2",
       "label": "Subtitle — line 2",
       "default": "The page you're looking for may have been sold, moved, is out of stock, or simply no longer exists."
