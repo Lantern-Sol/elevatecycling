@@ -18,61 +18,67 @@
 
     <div class="elevate-contact-cards__grid">
       {%- comment -%} Phone card {%- endcomment -%}
-      <a href="tel:{{ section.settings.phone | remove: '(' | remove: ')' | remove: ' ' | remove: '-' }}" class="elevate-contact-cards__card">
-        <span class="elevate-contact-cards__card-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-            {%- render 'icon', icon: 'phone-solid' -%}
-          </svg>
-        </span>
-        <span class="elevate-contact-cards__card-text">
-          <span class="elevate-contact-cards__card-label">{{ section.settings.phone_label }}</span>
-          <span class="elevate-contact-cards__card-value">{{ section.settings.phone }}</span>
-          <span class="elevate-contact-cards__card-meta">{{ section.settings.phone_hours }}</span>
-        </span>
-        <span class="elevate-contact-cards__card-arrow" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-            {%- render 'icon', icon: 'arrow-right-solid' -%}
-          </svg>
-        </span>
-      </a>
+      {%- if section.settings.phone != blank -%}
+        <a href="tel:{{ section.settings.phone | remove: '(' | remove: ')' | remove: ' ' | remove: '-' | remove: '.' }}" class="elevate-contact-cards__card">
+          <span class="elevate-contact-cards__card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" aria-hidden="true">
+              {%- render 'icon', icon: 'phone-solid' -%}
+            </svg>
+          </span>
+          <span class="elevate-contact-cards__card-text">
+            <span class="elevate-contact-cards__card-label">{{ section.settings.phone_label }}</span>
+            <span class="elevate-contact-cards__card-value">{{ section.settings.phone }}</span>
+            <span class="elevate-contact-cards__card-meta">{{ section.settings.phone_hours }}</span>
+          </span>
+          <span class="elevate-contact-cards__card-arrow" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </span>
+        </a>
+      {%- endif -%}
 
       {%- comment -%} Email card {%- endcomment -%}
-      <a href="mailto:{{ section.settings.email }}" class="elevate-contact-cards__card">
-        <span class="elevate-contact-cards__card-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-            {%- render 'icon', icon: 'mail-solid' -%}
-          </svg>
-        </span>
-        <span class="elevate-contact-cards__card-text">
-          <span class="elevate-contact-cards__card-label">{{ section.settings.email_label }}</span>
-          <span class="elevate-contact-cards__card-value">{{ section.settings.email }}</span>
-          <span class="elevate-contact-cards__card-meta">{{ section.settings.email_meta }}</span>
-        </span>
-        <span class="elevate-contact-cards__card-arrow" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-            {%- render 'icon', icon: 'arrow-right-solid' -%}
-          </svg>
-        </span>
-      </a>
+      {%- if section.settings.email != blank -%}
+        <a href="mailto:{{ section.settings.email }}" class="elevate-contact-cards__card">
+          <span class="elevate-contact-cards__card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" aria-hidden="true">
+              {%- render 'icon', icon: 'mail-solid' -%}
+            </svg>
+          </span>
+          <span class="elevate-contact-cards__card-text">
+            <span class="elevate-contact-cards__card-label">{{ section.settings.email_label }}</span>
+            <span class="elevate-contact-cards__card-value">{{ section.settings.email }}</span>
+            <span class="elevate-contact-cards__card-meta">{{ section.settings.email_meta }}</span>
+          </span>
+          <span class="elevate-contact-cards__card-arrow" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </span>
+        </a>
+      {%- endif -%}
 
       {%- comment -%} Visit card {%- endcomment -%}
-      <a href="https://www.google.com/maps/search/?api=1&query={{ section.settings.visit_location | url_encode }}" target="_blank" rel="noopener" class="elevate-contact-cards__card">
-        <span class="elevate-contact-cards__card-icon">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-            {%- render 'icon', icon: 'map-pin-solid' -%}
-          </svg>
-        </span>
-        <span class="elevate-contact-cards__card-text">
-          <span class="elevate-contact-cards__card-label">{{ section.settings.visit_label }}</span>
-          <span class="elevate-contact-cards__card-value">{{ section.settings.visit_location }}</span>
-          <span class="elevate-contact-cards__card-meta">{{ section.settings.visit_meta }}</span>
-        </span>
-        <span class="elevate-contact-cards__card-arrow" aria-hidden="true">
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-            {%- render 'icon', icon: 'arrow-right-solid' -%}
-          </svg>
-        </span>
-      </a>
+      {%- if section.settings.visit_location != blank -%}
+        <a href="https://www.google.com/maps/search/?api=1&query={{ section.settings.visit_location | url_encode }}" target="_blank" rel="noopener" class="elevate-contact-cards__card">
+          <span class="elevate-contact-cards__card-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" aria-hidden="true">
+              {%- render 'icon', icon: 'map-pin-solid' -%}
+            </svg>
+          </span>
+          <span class="elevate-contact-cards__card-text">
+            <span class="elevate-contact-cards__card-label">{{ section.settings.visit_label }}</span>
+            <span class="elevate-contact-cards__card-value">{{ section.settings.visit_location }}</span>
+            <span class="elevate-contact-cards__card-meta">{{ section.settings.visit_meta }}</span>
+          </span>
+          <span class="elevate-contact-cards__card-arrow" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </span>
+        </a>
+      {%- endif -%}
     </div>
   </div>
 </div>
