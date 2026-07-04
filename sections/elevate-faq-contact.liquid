@@ -1,0 +1,922 @@
+{%- doc -%}
+  Elevate Cycling — FAQ contact section.
+  "Still have questions?" header with contact cards (phone, email, visit)
+  and a contact form below.
+{%- enddoc -%}
+
+<div
+  class="section elevate-faq-contact"
+  data-faq-contact
+  style="
+    --elevate-faq-contact-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-faq-contact-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-faq-contact__inner">
+  {%- comment -%} ── Header ── {%- endcomment -%}
+  <div class="elevate-faq-contact__header">
+    <h2 class="elevate-faq-contact__title">{{ section.settings.heading }}</h2>
+    <p class="elevate-faq-contact__subtitle">{{ section.settings.subheading }}</p>
+  </div>
+
+  {%- comment -%} ── Contact cards ── {%- endcomment -%}
+  <div class="elevate-faq-contact__cards">
+    {%- comment -%} Phone card {%- endcomment -%}
+    <a href="tel:{{ section.settings.phone | remove: '(' | remove: ')' | remove: ' ' | remove: '-' }}" class="elevate-faq-contact__card">
+      <span class="elevate-faq-contact__card-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+          {%- render 'icon', icon: 'phone-solid' -%}
+        </svg>
+      </span>
+      <span class="elevate-faq-contact__card-text">
+        <span class="elevate-faq-contact__card-label">{{ section.settings.phone_label }}</span>
+        <span class="elevate-faq-contact__card-value">{{ section.settings.phone }}</span>
+        <span class="elevate-faq-contact__card-meta">{{ section.settings.phone_hours }}</span>
+      </span>
+      <span class="elevate-faq-contact__card-arrow" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+          {%- render 'icon', icon: 'arrow-right-solid' -%}
+        </svg>
+      </span>
+    </a>
+
+    {%- comment -%} Email card {%- endcomment -%}
+    <a href="mailto:{{ section.settings.email }}" class="elevate-faq-contact__card">
+      <span class="elevate-faq-contact__card-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+          {%- render 'icon', icon: 'mail-solid' -%}
+        </svg>
+      </span>
+      <span class="elevate-faq-contact__card-text">
+        <span class="elevate-faq-contact__card-label">{{ section.settings.email_label }}</span>
+        <span class="elevate-faq-contact__card-value">{{ section.settings.email }}</span>
+        <span class="elevate-faq-contact__card-meta">{{ section.settings.email_meta }}</span>
+      </span>
+      <span class="elevate-faq-contact__card-arrow" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+          {%- render 'icon', icon: 'arrow-right-solid' -%}
+        </svg>
+      </span>
+    </a>
+
+    {%- comment -%} Visit card {%- endcomment -%}
+    <a href="https://www.google.com/maps/search/?api=1&query={{ section.settings.visit_location | url_encode }}" target="_blank" rel="noopener" class="elevate-faq-contact__card">
+      <span class="elevate-faq-contact__card-icon">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+          {%- render 'icon', icon: 'map-pin-solid' -%}
+        </svg>
+      </span>
+      <span class="elevate-faq-contact__card-text">
+        <span class="elevate-faq-contact__card-label">{{ section.settings.visit_label }}</span>
+        <span class="elevate-faq-contact__card-value">{{ section.settings.visit_location }}</span>
+        <span class="elevate-faq-contact__card-meta">{{ section.settings.visit_meta }}</span>
+      </span>
+      <span class="elevate-faq-contact__card-arrow" aria-hidden="true">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+          {%- render 'icon', icon: 'arrow-right-solid' -%}
+        </svg>
+      </span>
+    </a>
+  </div>
+
+  {%- comment -%} ── Contact form ── {%- endcomment -%}
+  <div class="elevate-faq-contact__form-wrapper">
+    <p class="elevate-faq-contact__form-eyebrow">{{ section.settings.form_eyebrow }}</p>
+    <h3 class="elevate-faq-contact__form-heading">{{ section.settings.form_heading }}</h3>
+
+    <form class="elevate-faq-contact__form" data-faq-contact-form>
+      {%- comment -%} Topic selector {%- endcomment -%}
+      <div class="elevate-faq-contact__field">
+        <label class="elevate-faq-contact__label">
+          What is this about? <span class="elevate-faq-contact__required">*</span>
+        </label>
+        <div class="elevate-faq-contact__topics" role="radiogroup" aria-label="Topic">
+          {%- for block in section.blocks -%}
+            {%- if block.type == 'topic' -%}
+              <label class="elevate-faq-contact__topic" {{ block.shopify_attributes }}>
+                <input
+                  type="radio"
+                  name="contact[topic]"
+                  value="{{ block.settings.label }}"
+                  class="elevate-faq-contact__topic-input sr-only"
+                  {% if forloop.first %}checked{% endif %}
+                  required
+                >
+                <span class="elevate-faq-contact__topic-text">{{ block.settings.label }}</span>
+              </label>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- comment -%} Name row {%- endcomment -%}
+      <div class="elevate-faq-contact__row">
+        <div class="elevate-faq-contact__field">
+          <label class="elevate-faq-contact__label" for="faq-contact-name">
+            Name <span class="elevate-faq-contact__required">*</span>
+          </label>
+          <input
+            type="text"
+            id="faq-contact-name"
+            name="contact[name]"
+            class="elevate-faq-contact__input"
+            placeholder="John"
+            required
+          >
+        </div>
+        <div class="elevate-faq-contact__field">
+          <label class="elevate-faq-contact__label" for="faq-contact-lastname">
+            Last Name <span class="elevate-faq-contact__required">*</span>
+          </label>
+          <input
+            type="text"
+            id="faq-contact-lastname"
+            name="contact[last_name]"
+            class="elevate-faq-contact__input"
+            placeholder="Doe"
+            required
+          >
+        </div>
+      </div>
+
+      {%- comment -%} Email + Phone row {%- endcomment -%}
+      <div class="elevate-faq-contact__row">
+        <div class="elevate-faq-contact__field">
+          <label class="elevate-faq-contact__label" for="faq-contact-email">
+            Email <span class="elevate-faq-contact__required">*</span>
+          </label>
+          <input
+            type="email"
+            id="faq-contact-email"
+            name="contact[email]"
+            class="elevate-faq-contact__input"
+            placeholder="johndoe@example.com"
+            required
+          >
+        </div>
+        <div class="elevate-faq-contact__field">
+          <label class="elevate-faq-contact__label" for="faq-contact-phone">
+            Phone <span class="elevate-faq-contact__required">*</span>
+          </label>
+          <input
+            type="tel"
+            id="faq-contact-phone"
+            name="contact[phone]"
+            class="elevate-faq-contact__input"
+            placeholder="(123) 456-7890"
+            required
+          >
+        </div>
+      </div>
+
+      {%- comment -%} Order number {%- endcomment -%}
+      <div class="elevate-faq-contact__field">
+        <label class="elevate-faq-contact__label" for="faq-contact-order">
+          Order or Listing number (Optional)
+        </label>
+        <input
+          type="text"
+          id="faq-contact-order"
+          name="contact[order_number]"
+          class="elevate-faq-contact__input"
+          placeholder="13FQ32DS"
+        >
+      </div>
+
+      {%- comment -%} Message {%- endcomment -%}
+      <div class="elevate-faq-contact__field">
+        <label class="elevate-faq-contact__label" for="faq-contact-message">
+          Your Message
+        </label>
+        <textarea
+          id="faq-contact-message"
+          name="contact[body]"
+          class="elevate-faq-contact__textarea"
+          placeholder="Tell us what's on your mind..."
+          rows="4"
+          required
+          minlength="20"
+        ></textarea>
+      </div>
+
+      {%- comment -%} Consent + Submit {%- endcomment -%}
+      <div class="elevate-faq-contact__footer">
+        <label class="elevate-faq-contact__consent">
+          <input type="checkbox" name="contact[consent]" class="elevate-faq-contact__checkbox" required>
+          <span class="elevate-faq-contact__consent-text">{{ section.settings.consent_text }}</span>
+        </label>
+
+        <button type="submit" class="elevate-faq-contact__submit">
+          <span>{{ section.settings.submit_text }}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" aria-hidden="true">
+            {%- render 'icon', icon: 'arrow-right-solid' -%}
+          </svg>
+        </button>
+
+        <p class="elevate-faq-contact__disclaimer">{{ section.settings.disclaimer_text }}</p>
+      </div>
+    </form>
+  </div>
+  </div>
+</div>
+
+<script type="module">
+  (function () {
+    var form = document.querySelector('[data-faq-contact-form]');
+    if (!form) return;
+
+    /* Topic pill toggle */
+    var topics = form.querySelectorAll('.elevate-faq-contact__topic-input');
+    topics.forEach(function (radio) {
+      radio.addEventListener('change', function () {
+        form.querySelectorAll('.elevate-faq-contact__topic').forEach(function (t) {
+          t.classList.toggle('is-active', t.querySelector('input').checked);
+        });
+      });
+    });
+    /* Set initial active state */
+    var checked = form.querySelector('.elevate-faq-contact__topic-input:checked');
+    if (checked) checked.closest('.elevate-faq-contact__topic').classList.add('is-active');
+
+    /* Form submission via Shopify contact form endpoint */
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var btn = form.querySelector('.elevate-faq-contact__submit');
+      btn.disabled = true;
+      btn.querySelector('span').textContent = 'Sending…';
+
+      var data = new FormData(form);
+      data.append('form_type', 'contact');
+      data.append('utf8', '✓');
+      var urlEncodedData = new URLSearchParams(data);
+
+      fetch('/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: urlEncodedData.toString()
+      })
+        .then(function (res) {
+          if (res.url && res.url.includes('/challenge')) {
+            window.location.href = res.url;
+            return;
+          }
+          return res.text().then(function (html) {
+            var parser = new DOMParser();
+            var doc = parser.parseFromString(html, 'text/html');
+            var hasErrors = doc.querySelector('.errors, .form-errors');
+
+            if (res.ok && !hasErrors) {
+              form.innerHTML = '<div class="elevate-faq-contact__success">' +
+                '<p class="elevate-faq-contact__success-title">Message sent!</p>' +
+                '<p class="elevate-faq-contact__success-text">We\'ll get back to you within 1 business day.</p>' +
+                '</div>';
+            } else {
+              btn.disabled = false;
+              btn.querySelector('span').textContent = '{{ section.settings.submit_text | default: "Submit" }}';
+              alert('Something went wrong. Please check your fields and try again.');
+            }
+          });
+        })
+        .catch(function () {
+          btn.disabled = false;
+          btn.querySelector('span').textContent = '{{ section.settings.submit_text | default: "Submit" }}';
+          alert('Something went wrong. Please try again or email us directly.');
+        });
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  /* ─── FAQ Contact Section ─── */
+  .shopify-section .elevate-faq-contact.section {
+    background: #F2F2F3;
+    border-radius: 2rem 2rem 0 0;
+    padding-block-start: var(--elevate-faq-contact-pt);
+    padding-block-end: var(--elevate-faq-contact-pb);
+  }
+
+  .elevate-faq-contact__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* ── Header ── */
+  .elevate-faq-contact__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    overflow: hidden;
+    padding-block-start: 0.25rem;
+  }
+
+  .elevate-faq-contact__title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #141517;
+    margin: 0;
+  }
+
+  .elevate-faq-contact__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Contact cards ── */
+  .elevate-faq-contact__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-faq-contact__card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.5rem 1rem;
+    border: 0.03125rem solid #AEB2B8;
+    border-radius: 1rem;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s ease;
+  }
+
+  a.elevate-faq-contact__card:hover {
+    border-color: #36393F;
+  }
+
+  .elevate-faq-contact__card-icon {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.625rem;
+    background: #F1DBDC;
+    color: #E31E24;
+  }
+
+  .elevate-faq-contact__card-icon svg {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .elevate-faq-contact__card-text {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .elevate-faq-contact__card-label {
+    font-size: 0.875rem;
+    letter-spacing: -0.01em;
+    color: #141517;
+  }
+
+  .elevate-faq-contact__card-value {
+    font-size: 0.875rem;
+    letter-spacing: -0.01em;
+    color: #D61D18;
+  }
+
+  .elevate-faq-contact__card-meta {
+    font-size: 0.75rem;
+    letter-spacing: -0.01em;
+    color: #6B7280;
+  }
+
+  .elevate-faq-contact__card-arrow {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #AEB2B8;
+  }
+
+  .elevate-faq-contact__card-arrow svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* ── Form wrapper ── */
+  .elevate-faq-contact__form-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-block: 1rem;
+  }
+
+  .elevate-faq-contact__form-eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-faq-contact__form-heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #141517;
+    text-transform: uppercase;
+    margin: -0.75rem 0 0;
+  }
+
+  /* ── Form ── */
+  .elevate-faq-contact__form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-faq-contact__row {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-faq-contact__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .elevate-faq-contact__label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #141517;
+    padding-inline: 0.5rem;
+  }
+
+  .elevate-faq-contact__required {
+    color: #EB4343;
+  }
+
+  .elevate-faq-contact .elevate-faq-contact__input,
+  .elevate-faq-contact .elevate-faq-contact__textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 0.0625rem solid #AEB2B8;
+    border-radius: 0.5rem;
+    background: #FDFCFC;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+    transition: border-color 0.15s ease;
+  }
+
+  .elevate-faq-contact__input:focus,
+  .elevate-faq-contact__textarea:focus {
+    outline: none;
+    border-color: #E31E24;
+  }
+
+  .elevate-faq-contact__input::placeholder,
+  .elevate-faq-contact__textarea::placeholder {
+    color: #AEB2B8;
+  }
+
+  .elevate-faq-contact__textarea {
+    resize: vertical;
+    min-height: 5rem;
+  }
+
+  /* ── Topic pills ── */
+  .elevate-faq-contact__topics {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .elevate-faq-contact .elevate-faq-contact__topic {
+    cursor: pointer;
+    padding: 0.5rem 0.75rem;
+    min-width: 3rem;
+    border: 0.0625rem solid #E2E3E5;
+    border-radius: 0.5rem;
+    background: #FDFCFC;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+    gap: 0;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    user-select: none;
+  }
+
+  .elevate-faq-contact__topic:hover {
+    border-color: #AEB2B8;
+  }
+
+  .elevate-faq-contact__topic.is-active {
+    background: #F1DBDC;
+    border: 0.125rem solid #E31E24;
+    color: #141517;
+  }
+
+  /* ── Consent & footer ── */
+  .elevate-faq-contact__footer {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .elevate-faq-contact .elevate-faq-contact__consent {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    min-height: 3rem;
+    cursor: pointer;
+  }
+
+  .elevate-faq-contact__checkbox {
+    -webkit-appearance: none;
+    appearance: none;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    margin: 0.125rem 0 0;
+    border: 0.09375rem solid #6B7280;
+    border-radius: 0.25rem;
+    background: #FDFCFC;
+    cursor: pointer;
+    position: relative;
+    align-self: center;
+  }
+
+  .elevate-faq-contact__checkbox:checked {
+    background: #E31E24;
+    border-color: #E31E24;
+  }
+
+  .elevate-faq-contact__checkbox:checked::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.75rem;
+    height: 0.75rem;
+    transform: translate(-50%, -50%);
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") no-repeat center / contain;
+  }
+
+  .elevate-faq-contact__consent-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #250A0A;
+  }
+
+  .elevate-faq-contact__submit {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 0.75rem;
+    background: #E31E24;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+
+  .elevate-faq-contact__submit span {
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    color: #FDFCFC;
+    white-space: nowrap;
+  }
+
+  .elevate-faq-contact__submit svg {
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #FDFCFC;
+  }
+
+  .elevate-faq-contact__submit:hover {
+    background: #c4191e;
+  }
+
+  .elevate-faq-contact__submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .elevate-faq-contact__disclaimer {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #250A0A;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* ── Success state ── */
+  .elevate-faq-contact__success {
+    text-align: center;
+    padding: 3rem 1rem;
+  }
+
+  .elevate-faq-contact__success-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #141517;
+    margin: 0 0 0.5rem;
+  }
+
+  .elevate-faq-contact__success-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Screen reader only ── */
+  .elevate-faq-contact .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ─── Desktop (768px+) ─── */
+  @media (min-width: 48rem) {
+    .elevate-faq-contact__inner {
+      padding-inline: 13.5rem;
+      gap: 1.5rem;
+    }
+
+    .elevate-faq-contact__header {
+      text-align: center;
+      align-items: center;
+    }
+
+    .elevate-faq-contact__cards {
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    .elevate-faq-contact__card {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .elevate-faq-contact__form-wrapper {
+      gap: 1.5rem;
+      padding-block: 2.5rem;
+    }
+
+    .elevate-faq-contact__form {
+      gap: 1.5rem;
+    }
+
+    .elevate-faq-contact__row {
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    .elevate-faq-contact__row > .elevate-faq-contact__field {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .elevate-faq-contact__topic {
+      font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+      font-size: 1.25rem;
+      line-height: 1.2;
+      letter-spacing: 0;
+    }
+
+    .elevate-faq-contact__submit {
+      width: auto;
+      align-self: flex-start;
+    }
+
+    .elevate-faq-contact__disclaimer {
+      text-align: left;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ Contact Form",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Still have questions?"
+    },
+    {
+      "type": "text",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "We're a message away!"
+    },
+    {
+      "type": "header",
+      "content": "Phone"
+    },
+    {
+      "type": "text",
+      "id": "phone_label",
+      "label": "Phone label",
+      "default": "Call or text us"
+    },
+    {
+      "type": "text",
+      "id": "phone",
+      "label": "Phone number",
+      "default": "(714) 248-5066"
+    },
+    {
+      "type": "text",
+      "id": "phone_hours",
+      "label": "Phone hours",
+      "default": "Mon–Fri, 9AM–5PM PST"
+    },
+    {
+      "type": "header",
+      "content": "Email"
+    },
+    {
+      "type": "text",
+      "id": "email_label",
+      "label": "Email label",
+      "default": "Email support"
+    },
+    {
+      "type": "text",
+      "id": "email",
+      "label": "Email address",
+      "default": "support@elevatecycling.com"
+    },
+    {
+      "type": "text",
+      "id": "email_meta",
+      "label": "Email response time",
+      "default": "Response within 24hrs"
+    },
+    {
+      "type": "header",
+      "content": "Visit"
+    },
+    {
+      "type": "text",
+      "id": "visit_label",
+      "label": "Visit label",
+      "default": "Visit us"
+    },
+    {
+      "type": "text",
+      "id": "visit_location",
+      "label": "Location",
+      "default": "Santa Ana, CA"
+    },
+    {
+      "type": "text",
+      "id": "visit_meta",
+      "label": "Visit meta",
+      "default": "Warehouse pickup available"
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "text",
+      "id": "form_eyebrow",
+      "label": "Form eyebrow",
+      "default": "SEND A MESSAGE"
+    },
+    {
+      "type": "text",
+      "id": "form_heading",
+      "label": "Form heading",
+      "default": "TELL US WHAT YOU NEED"
+    },
+    {
+      "type": "text",
+      "id": "consent_text",
+      "label": "Consent checkbox text",
+      "default": "I confirm this gear is mine to sell. View full terms — we keep it simple."
+    },
+    {
+      "type": "text",
+      "id": "submit_text",
+      "label": "Submit button text",
+      "default": "Submit"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer_text",
+      "label": "Disclaimer text",
+      "default": "Your info is never shared or sold. We respond within 1 business day."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "topic",
+      "name": "Topic",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Topic label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Contact Form",
+      "blocks": [
+        { "type": "topic", "settings": { "label": "Pre-purchase question" } },
+        { "type": "topic", "settings": { "label": "Order status" } },
+        { "type": "topic", "settings": { "label": "Return or exchange" } },
+        { "type": "topic", "settings": { "label": "Sell or trade" } },
+        { "type": "topic", "settings": { "label": "Something else" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

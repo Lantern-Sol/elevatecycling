@@ -1,0 +1,421 @@
+{%- doc -%}
+  Elevate Cycling — FAQ hero section.
+  Dark hero with background image, overlay, badge pill, heading,
+  subtitle, and search input that filters FAQ items below.
+{%- enddoc -%}
+
+{%- liquid
+  assign has_image = false
+  if section.settings.image != blank
+    assign has_image = true
+  endif
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-faq-hero"
+  style="
+    --elevate-faq-hero-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-faq-hero-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+    --elevate-faq-hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  "
+>
+  {%- comment -%} ── Background media ── {%- endcomment -%}
+  <div class="elevate-faq-hero__media">
+    {%- if has_image -%}
+      {%- assign img = section.settings.image -%}
+      {{
+        img
+        | image_url: width: 3840
+        | image_tag:
+          widths: '375, 750, 1080, 1440, 1920, 2560, 3840',
+          sizes: '100vw',
+          fetchpriority: 'high',
+          loading: 'eager',
+          class: 'elevate-faq-hero__image',
+          alt: ''
+      }}
+    {%- else -%}
+      <div class="elevate-faq-hero__placeholder"></div>
+    {%- endif -%}
+
+    {%- if section.settings.toggle_overlay -%}
+      <div class="elevate-faq-hero__overlay"></div>
+    {%- endif -%}
+  </div>
+
+  <div class="elevate-faq-hero__inner">
+  {%- comment -%} ── Content ── {%- endcomment -%}
+  <div class="elevate-faq-hero__content">
+    {%- if section.settings.badge_text != blank -%}
+      <span class="elevate-faq-hero__badge">{{ section.settings.badge_text }}</span>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h1 class="elevate-faq-hero__heading">
+        {{- section.settings.heading | replace: '[br]', '<br class="elevate-faq-hero__mobile-br">' -}}
+      </h1>
+    {%- endif -%}
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="elevate-faq-hero__subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+
+    <div class="elevate-faq-hero__search" data-faq-search>
+      <div class="elevate-faq-hero__search-input-wrap">
+        <svg class="elevate-faq-hero__search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M14.25 2.25C10.1162 2.25 6.75 5.61621 6.75 9.75C6.75 11.5459 7.37988 13.1924 8.4375 14.4844L2.46094 20.4609L3.53906 21.5391L9.51562 15.5625C10.8076 16.6201 12.4541 17.25 14.25 17.25C18.3838 17.25 21.75 13.8838 21.75 9.75C21.75 5.61621 18.3838 2.25 14.25 2.25ZM14.25 3.75C17.5723 3.75 20.25 6.42773 20.25 9.75C20.25 13.0723 17.5723 15.75 14.25 15.75C10.9277 15.75 8.25 13.0723 8.25 9.75C8.25 6.42773 10.9277 3.75 14.25 3.75Z" fill="#FDFCFC"/>
+        </svg>
+        <input
+          type="search"
+          class="elevate-faq-hero__search-input"
+          placeholder="{{ section.settings.search_placeholder }}"
+          data-faq-search-input
+          aria-label="Search FAQs"
+        >
+      </div>
+      <button type="button" class="elevate-faq-hero__search-btn" data-faq-search-btn>
+        Search
+      </button>
+    </div>
+  </div>
+  </div>
+</div>
+
+<script type="module">
+  (function () {
+    const section = document.querySelector('[data-faq-search]');
+    if (!section) return;
+
+    const input = section.querySelector('[data-faq-search-input]');
+    const btn = section.querySelector('[data-faq-search-btn]');
+
+    function filterFAQ() {
+      const query = input.value.trim().toLowerCase();
+
+      /* Dispatch custom event for the FAQ page section to handle */
+      document.dispatchEvent(new CustomEvent('faq:search', { detail: { query: query } }));
+
+      /* Legacy support: also filter old-style .elevate-faq__item if present */
+      const legacyItems = document.querySelectorAll('.elevate-faq__item');
+      legacyItems.forEach(function (item) {
+        if (!query) {
+          item.style.display = '';
+          return;
+        }
+        const question = item.querySelector('.elevate-faq__question-text');
+        const answer = item.querySelector('.elevate-faq__answer');
+        const text = (question ? question.textContent : '') + ' ' + (answer ? answer.textContent : '');
+        item.style.display = text.toLowerCase().includes(query) ? '' : 'none';
+      });
+    }
+
+    input.addEventListener('input', filterFAQ);
+    btn.addEventListener('click', filterFAQ);
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        filterFAQ();
+      }
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  /* ─── FAQ Hero ─── */
+  .elevate-faq-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block-start: var(--elevate-faq-hero-pt);
+    padding-block-end: var(--elevate-faq-hero-pb);
+  }
+
+  .elevate-faq-hero__inner {
+    grid-column: 2;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 24rem;
+  }
+
+  /* ── Media layer ── */
+  .elevate-faq-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-lowest);
+    grid-column: 1 / -1;
+  }
+
+  .elevate-faq-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-faq-hero__placeholder {
+    width: 100%;
+    height: 100%;
+    background: #0a0a0a;
+  }
+
+  .elevate-faq-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--elevate-faq-hero-overlay-opacity, 0.95));
+    pointer-events: none;
+  }
+
+  /* ── Content ── */
+  .elevate-faq-hero__content {
+    position: relative;
+    z-index: var(--layer-flat);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+    width: 100%;
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+
+  /* ── Badge ── */
+  .elevate-faq-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 1rem;
+    background: #E31E24;
+    border-radius: 62.4375rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    color: #FDFCFC;
+    text-transform: uppercase;
+  }
+
+  /* ── Heading ── */
+  .elevate-faq-hero__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  /* ── Subtitle ── */
+  .elevate-faq-hero__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #E2E3E5;
+    margin: 0;
+    max-width: 36rem;
+  }
+
+  /* ── Search ── */
+  .elevate-faq-hero__search {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    margin-block-start: 0.5rem;
+  }
+
+  .elevate-faq-hero__search-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .elevate-faq-hero__search-icon {
+    position: absolute;
+    left: 1rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    color: #AEB2B8;
+    pointer-events: none;
+  }
+
+  .elevate-faq-hero__search-input {
+    --color-input-background: #000000;
+    --color-input-border: #FDFCFC;
+    width: 100%;
+    padding: 0.75rem 1.5rem 0.75rem 3rem;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #FDFCFC;
+  }
+
+  .elevate-faq-hero__search-input::placeholder {
+    color: #AEB2B8;
+  }
+
+  .elevate-faq-hero__search-input:focus {
+    outline: 0.125rem solid #FDFCFC;
+    outline-offset: 0.125rem;
+  }
+
+  .elevate-faq-hero__search-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    background: #E31E24;
+    border: none;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.4;
+    color: #FDFCFC;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .elevate-faq-hero__search-btn:hover {
+    background: #c8191e;
+  }
+
+  .elevate-faq-hero__search-btn:focus-visible {
+    outline: 0.125rem solid #FDFCFC;
+    outline-offset: 0.125rem;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-faq-hero__inner {
+      min-height: 28rem;
+    }
+
+    .elevate-faq-hero__heading {
+      font-size: 4rem;
+    }
+
+    .elevate-faq-hero__mobile-br {
+      display: none;
+    }
+
+    .elevate-faq-hero__search {
+      flex-direction: row;
+      margin-inline: auto;
+    }
+
+    .elevate-faq-hero__search-input-wrap {
+      flex: 1;
+    }
+
+    .elevate-faq-hero__search-btn {
+      flex-shrink: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ Hero",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "checkbox",
+      "id": "toggle_overlay",
+      "label": "Show overlay",
+      "default": true
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 95
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "SUPPORT"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Everything you[br] want to know[br] before you buy",
+      "info": "Use [br] to add a line break on mobile."
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "49 questions answered. If yours isn't here, we're one message away."
+    },
+    {
+      "type": "header",
+      "content": "Search"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search questions \u2014 try \u201ccarbon damage\u201d or \u201creturn policy\u201d"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Hero"
+    }
+  ]
+}
+{% endschema %}
