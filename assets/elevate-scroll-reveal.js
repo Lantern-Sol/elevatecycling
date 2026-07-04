@@ -7,6 +7,7 @@
  *   <div data-scroll-reveal>                → fade-up the whole element
  *   <div data-scroll-reveal="children">     → stagger-reveal each direct child
  *   <div data-scroll-reveal="fade">         → simple fade (no vertical motion)
+ *   <div data-scroll-reveal="fade-children"> → stagger-reveal children (fade only, no motion)
  *
  * Overrides per-element:
  *   data-reveal-delay="0.2"   → base delay in seconds (default 0)
@@ -42,6 +43,18 @@
     '  opacity: 1;',
     '  transform: none;',
     '}',
+    /* Fade-children mode: stagger children with opacity only (no translateY) */
+    '[data-scroll-reveal="fade-children"] {',
+    '  opacity: 1 !important;',
+    '  transform: none !important;',
+    '}',
+    '[data-scroll-reveal="fade-children"] > * {',
+    '  opacity: 0;',
+    '  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);',
+    '}',
+    '[data-scroll-reveal="fade-children"].is-revealed > * {',
+    '  opacity: 1;',
+    '}',
     /* Revealed state */
     '.is-revealed {',
     '  opacity: 1 !important;',
@@ -63,7 +76,7 @@
       var mode = el.getAttribute('data-scroll-reveal') || 'default';
       var baseDelay = parseFloat(el.getAttribute('data-reveal-delay') || '0');
 
-      if (mode === 'children') {
+      if (mode === 'children' || mode === 'fade-children') {
         var stagger = parseFloat(el.getAttribute('data-reveal-stagger') || '0.1');
         var children = el.children;
         for (var i = 0; i < children.length; i++) {

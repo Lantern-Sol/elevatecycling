@@ -1,0 +1,541 @@
+{%- doc -%}
+  Elevate Cycling — About Us CPO process section.
+  Light background with label, heading with accent text,
+  4 step cards with background images and arrow connectors,
+  and a dual-CTA row.
+{%- enddoc -%}
+
+{%- liquid
+  assign heading_html = section.settings.heading
+  if section.settings.heading_accent != blank
+    assign accent_open = '<span class="elevate-about-cpo__accent">'
+    assign accent_close = '</span>'
+    assign accent_wrap = accent_open | append: section.settings.heading_accent | append: accent_close
+    assign heading_html = heading_html | replace: section.settings.heading_accent, accent_wrap
+  endif
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-about-cpo"
+  data-scroll-reveal
+  style="
+    background: rgba(226, 227, 229, 0.4);
+    --elevate-about-cpo-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-about-cpo-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-about-cpo__inner">
+    {%- comment -%} ── Header ── {%- endcomment -%}
+    <div class="elevate-about-cpo__header">
+      {%- if section.settings.label != blank -%}
+        <p class="elevate-about-cpo__label">{{ section.settings.label }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-about-cpo__heading">{{ heading_html }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="elevate-about-cpo__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Steps grid ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-about-cpo__grid">
+        {%- for block in section.blocks -%}
+          <div class="elevate-about-cpo__card" {{ block.shopify_attributes }}>
+            {%- comment -%} Arrow connector (cards 2, 3, 4) {%- endcomment -%}
+            {%- unless forloop.first -%}
+              <div class="elevate-about-cpo__arrow" aria-hidden="true">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="#E31E24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+            {%- endunless -%}
+
+            {%- comment -%} Background image {%- endcomment -%}
+            <div class="elevate-about-cpo__card-media">
+              {%- if block.settings.image != blank -%}
+                {{
+                  block.settings.image
+                  | image_url: width: 1152
+                  | image_tag:
+                    widths: '288, 576, 864, 1152',
+                    sizes: '(min-width: 62rem) 288px, (min-width: 48rem) 50vw, 100vw',
+                    loading: 'lazy',
+                    class: 'elevate-about-cpo__card-img',
+                    alt: block.settings.title
+                }}
+              {%- else -%}
+                <div class="elevate-about-cpo__card-placeholder"></div>
+              {%- endif -%}
+              <div class="elevate-about-cpo__card-gradient"></div>
+            </div>
+
+            {%- comment -%} Card content {%- endcomment -%}
+            <div class="elevate-about-cpo__card-content">
+              <div class="elevate-about-cpo__top-row">
+                <div class="elevate-about-cpo__badge" aria-hidden="true">
+                  {{ forloop.index }}
+                </div>
+
+                {%- if block.settings.title != blank -%}
+                  <p class="elevate-about-cpo__card-title">{{ block.settings.title }}</p>
+                {%- endif -%}
+              </div>
+
+              {%- if block.settings.description != blank -%}
+                <p class="elevate-about-cpo__card-desc">{{ block.settings.description }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── CTA row ── {%- endcomment -%}
+    {%- if section.settings.primary_cta_text != blank or section.settings.secondary_cta_text != blank -%}
+      <div class="elevate-about-cpo__cta-row">
+        {%- if section.settings.primary_cta_text != blank -%}
+          <a
+            href="{{ section.settings.primary_cta_url }}"
+            class="elevate-about-cpo__cta elevate-about-cpo__cta--primary"
+          >
+            {{ section.settings.primary_cta_text }}
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.secondary_cta_text != blank -%}
+          <a
+            href="{{ section.settings.secondary_cta_url }}"
+            class="elevate-about-cpo__cta elevate-about-cpo__cta--secondary"
+          >
+            {{ section.settings.secondary_cta_text }}
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── About CPO Process ─── */
+  .elevate-about-cpo {
+    padding-block-start: var(--elevate-about-cpo-pt);
+    padding-block-end: var(--elevate-about-cpo-pb);
+  }
+
+  .elevate-about-cpo__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-inline: 1.25rem;
+  }
+
+  /* ── Header ── */
+  .elevate-about-cpo__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+    gap: 0.5rem;
+  }
+
+  .elevate-about-cpo__label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-about-cpo__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #141517;
+    margin: 0;
+  }
+
+  .elevate-about-cpo__accent {
+    color: #E31E24;
+  }
+
+  .elevate-about-cpo__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Steps grid ── */
+  .elevate-about-cpo__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  /* ── Card ── */
+  .elevate-about-cpo__card {
+    position: relative;
+    border-radius: 1.5rem;
+    min-height: 15rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+
+  .elevate-about-cpo__card-media {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    border-radius: 1.5rem;
+    background: #1F2023;
+  }
+
+  .elevate-about-cpo__card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-about-cpo__card-placeholder {
+    width: 100%;
+    height: 100%;
+    background: #1F2023;
+  }
+
+  .elevate-about-cpo__card-gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(37, 10, 10, 0) 28.4%,
+      rgba(37, 10, 10, 0.9) 66.8%
+    );
+    pointer-events: none;
+  }
+
+  /* ── Card content ── */
+  .elevate-about-cpo__card-content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem;
+  }
+
+  .elevate-about-cpo__top-row {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .elevate-about-cpo__badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    flex-shrink: 0;
+    background: #E31E24;
+    border-radius: 0.5rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1;
+    color: #FDFCFC;
+  }
+
+  .elevate-about-cpo__card-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-about-cpo__card-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  /* ── Arrow connector ── */
+  .elevate-about-cpo__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    right: 1.5rem;
+    top: -1.5rem;
+    width: 2.5rem;
+    height: 2.5rem;
+    padding: 0.5rem;
+    background: #141517;
+    border: 0.25rem solid #FDFCFC;
+    border-radius: 62.4375rem;
+    z-index: 2;
+    transform: rotate(90deg);
+  }
+
+  /* ── CTA row ── */
+  .elevate-about-cpo__cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: center;
+  }
+
+  .elevate-about-cpo__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    width: 100%;
+    text-align: center;
+  }
+
+  .elevate-about-cpo__cta:hover {
+    opacity: 0.85;
+  }
+
+  .elevate-about-cpo__cta--primary {
+    background: #E31E24;
+    color: #FDFCFC;
+    border: none;
+  }
+
+  .elevate-about-cpo__cta--secondary {
+    background: transparent;
+    color: #141517;
+    border: 0.03125rem solid #141517;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-about-cpo__inner {
+      gap: 2rem;
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-about-cpo__header {
+      align-items: center;
+      text-align: center;
+    }
+
+    .elevate-about-cpo__heading {
+      font-size: 3rem;
+    }
+
+    .elevate-about-cpo__grid {
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    .elevate-about-cpo__card {
+      flex: 1 1 0;
+      min-width: 0;
+      min-height: 24rem;
+    }
+
+    /* Arrow connector — horizontal on desktop */
+    .elevate-about-cpo__arrow {
+      right: auto;
+      left: -1.75rem;
+      top: 4.5rem;
+      transform: rotate(0deg);
+    }
+
+    .elevate-about-cpo__cta-row {
+      flex-direction: row;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-inline: auto;
+    }
+
+    .elevate-about-cpo__cta {
+      flex: none;
+      width: 17.875rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About CPO Process",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "CERTIFIED PRE-OWNED"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Four steps. Same process, every time. No shortcuts."
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading accent text",
+      "info": "Word(s) within the heading to highlight in red.",
+      "default": "every time."
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Every bike earns its listing"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "primary_cta_text",
+      "label": "Primary button text",
+      "default": "Shop Bikes & Gear"
+    },
+    {
+      "type": "url",
+      "id": "primary_cta_url",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_text",
+      "label": "Secondary button text",
+      "default": "Learn more about CPO"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_url",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Background image"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Step"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About CPO Process",
+      "settings": {
+        "label": "CERTIFIED PRE-OWNED",
+        "heading": "Four steps. Same process, every time. No shortcuts.",
+        "heading_accent": "every time.",
+        "subtitle": "Every bike earns its listing"
+      },
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "title": "Acquire",
+            "description": "We source bikes and parts from individual sellers and shops. Every submission is reviewed by our team before we commit."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Inspect & Grade",
+            "description": "Full mechanical check on every piece. Frame integrity, drivetrain, brakes, wheel true — nothing skipped."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "Detailed Photography",
+            "description": "~20 studio shots per listing. Every angle, every detail, every scratch. What you see in the listing is what ships."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "title": "List",
+            "description": "Full spec sheet and Mechanic's Notes built before anything lists. Year, groupset, brake type, condition. Nothing hidden."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,446 @@
+{%- doc -%}
+  Elevate Cycling — About Us hero section.
+  Full-bleed background with left-to-right gradient overlay,
+  left-aligned content: badge pill, heading with accent-color word,
+  subtitle, and a configurable stats row.
+{%- enddoc -%}
+
+{%- liquid
+  assign has_image = false
+  if section.settings.image != blank
+    assign has_image = true
+  endif
+
+  assign heading_html = section.settings.heading
+  if section.settings.heading_accent != blank
+    assign accent_open = '<span class="elevate-about-hero__accent">'
+    assign accent_close = '</span>'
+    assign accent_wrap = accent_open | append: section.settings.heading_accent | append: accent_close
+    assign heading_html = heading_html | replace: section.settings.heading_accent, accent_wrap
+  endif
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-about-hero"
+  style="
+    --elevate-about-hero-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-about-hero-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+    --elevate-about-hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  "
+>
+  {%- comment -%} ── Background media ── {%- endcomment -%}
+  <div class="elevate-about-hero__media">
+    {%- if has_image -%}
+      {%- assign img = section.settings.image -%}
+      {{
+        img
+        | image_url: width: 3840
+        | image_tag:
+          widths: '375, 750, 1080, 1440, 1920, 2560, 3840',
+          sizes: '100vw',
+          fetchpriority: 'high',
+          loading: 'eager',
+          class: 'elevate-about-hero__image',
+          alt: ''
+      }}
+    {%- else -%}
+      <div class="elevate-about-hero__placeholder"></div>
+    {%- endif -%}
+
+    <div class="elevate-about-hero__overlay"></div>
+  </div>
+
+  <div class="elevate-about-hero__inner">
+    <div class="elevate-about-hero__content">
+      {%- if section.settings.badge_text != blank -%}
+        <span class="elevate-about-hero__badge">{{ section.settings.badge_text }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="elevate-about-hero__heading">{{ heading_html }}</h1>
+      {%- endif -%}
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="elevate-about-hero__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="elevate-about-hero__stats-wrap">
+          {%- if section.settings.stats_label != blank -%}
+            <p class="elevate-about-hero__stats-label">{{ section.settings.stats_label }}</p>
+          {%- endif -%}
+
+          <div class="elevate-about-hero__stats">
+            {%- for block in section.blocks -%}
+              <div class="elevate-about-hero__stat" {{ block.shopify_attributes }}>
+                <p class="elevate-about-hero__stat-value">{{ block.settings.value }}</p>
+                <p class="elevate-about-hero__stat-label">{{ block.settings.label }}</p>
+              </div>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── About Hero ─── */
+  .elevate-about-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block-start: var(--elevate-about-hero-pt);
+    padding-block-end: var(--elevate-about-hero-pb);
+  }
+
+  .elevate-about-hero__inner {
+    grid-column: 2;
+    position: relative;
+    display: flex;
+    align-items: flex-end;
+    min-height: 20rem;
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Media layer ── */
+  .elevate-about-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-lowest);
+    grid-column: 1 / -1;
+  }
+
+  .elevate-about-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-about-hero__placeholder {
+    width: 100%;
+    height: 100%;
+    background: #0a0a0a;
+  }
+
+  .elevate-about-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--elevate-about-hero-overlay-opacity, 0.85));
+    pointer-events: none;
+  }
+
+  /* ── Content ── */
+  .elevate-about-hero__content {
+    position: relative;
+    z-index: var(--layer-flat);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  /* ── Badge ── */
+  .elevate-about-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3125rem 0.75rem;
+    background: #E31E24;
+    border-radius: 62.4375rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #FDFCFC;
+    text-transform: uppercase;
+  }
+
+  /* ── Heading ── */
+  .elevate-about-hero__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    text-transform: uppercase;
+    margin: 0;
+    max-width: 17.1875rem;
+  }
+
+  .elevate-about-hero__accent {
+    color: #E31E24;
+  }
+
+  /* ── Subtitle ── */
+  .elevate-about-hero__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E2E3E5;
+    margin: 0 0 5.375rem;
+    max-width: 35.75rem;
+  }
+
+  /* ── Stats wrap ── */
+  .elevate-about-hero__stats-wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    width: 100%;
+    margin-block-start: 0.75rem;
+    flex: 1 0 auto;
+    justify-content: flex-end;
+  }
+
+  .elevate-about-hero__stats-label {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #AEB2B8;
+    text-transform: uppercase;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* ── Stats row ── */
+  .elevate-about-hero__stats {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 0;
+  }
+
+  .elevate-about-hero__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.25rem;
+    flex: 1;
+    padding-inline: 0.75rem;
+  }
+
+  .elevate-about-hero__stat + .elevate-about-hero__stat {
+    border-inline-start: 0.0625rem solid #6B7280;
+  }
+
+  .elevate-about-hero__stat-value {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  .elevate-about-hero__stat-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #6B7280;
+    margin: 0;
+  }
+
+  @media (min-width: 20.0625rem) {
+    .elevate-about-hero__stat-label {
+      white-space: nowrap;
+    }
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-about-hero__overlay {
+      background: linear-gradient(
+        to right,
+        rgba(0, 0, 0, var(--elevate-about-hero-overlay-opacity, 0.85)) 0%,
+        transparent 60%
+      );
+    }
+
+    .elevate-about-hero__inner {
+      min-height: 28rem;
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-about-hero__heading {
+      font-size: 4rem;
+      line-height: 1.1;
+      max-width: 37.5rem;
+    }
+
+    .elevate-about-hero__subtitle {
+      margin: 0;
+    }
+
+    .elevate-about-hero__stats-wrap {
+      align-items: flex-start;
+    }
+
+    .elevate-about-hero__stats-label {
+      text-align: left;
+    }
+
+    .elevate-about-hero__stat {
+      align-items: flex-start;
+      text-align: left;
+      flex: 0 1 auto;
+    }
+
+    .elevate-about-hero__stat-value {
+      font-size: 3rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "About Hero",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Gradient opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 85
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "SELL OR TRADE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "\"Every great bike deserves a second owner\""
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading accent text",
+      "info": "Word(s) within the heading to highlight in red.",
+      "default": "second owner"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "header",
+      "content": "Stats"
+    },
+    {
+      "type": "text",
+      "id": "stats_label",
+      "label": "Stats label",
+      "default": "Elevate Cycling by the numbers"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value",
+          "default": "100+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "stat label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Hero",
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": {
+            "value": "3,500+",
+            "label": "bikes bought"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "99.8%",
+            "label": "eBay feedback"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "$5.4M",
+            "label": "paid out"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "24h",
+            "label": "turnaround"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
