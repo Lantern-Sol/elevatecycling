@@ -1,0 +1,573 @@
+{%- doc -%}
+  Elevate Cycling — FAQ page content section.
+  Category-filtered layout with sidebar filters (desktop) /
+  horizontal scrollable pills (mobile) and expandable FAQ items.
+{%- enddoc -%}
+
+{%- liquid
+  comment
+    Collect unique categories from blocks in order of first appearance.
+  endcomment
+  assign categories = ''
+  for block in section.blocks
+    assign cat = block.settings.category
+    if cat == blank
+      continue
+    endif
+    assign cat_check = categories | split: '|||'
+    assign already_exists = false
+    for existing in cat_check
+      if existing == cat
+        assign already_exists = true
+        break
+      endif
+    endfor
+    unless already_exists
+      if categories == ''
+        assign categories = cat
+      else
+        assign categories = categories | append: '|||' | append: cat
+      endif
+    endunless
+  endfor
+  assign category_list = categories | split: '|||'
+-%}
+
+<div
+  class="section elevate-faq-page"
+  data-faq-page
+  style="
+    --elevate-faq-page-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-faq-page-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-faq-page__layout">
+    {%- comment -%} ── Sidebar / Mobile filter row ── {%- endcomment -%}
+    <aside class="elevate-faq-page__sidebar" aria-label="FAQ category filters">
+      <p class="elevate-faq-page__filters-label">{{ section.settings.filters_label }}</p>
+      <div class="elevate-faq-page__filters" role="tablist">
+        {%- for cat in category_list -%}
+          <button
+            type="button"
+            class="elevate-faq-page__filter{% if forloop.first %} is-active{% endif %}"
+            data-category="{{ cat | handleize }}"
+            role="tab"
+            aria-selected="{% if forloop.first %}true{% else %}false{% endif %}"
+          >
+            {{ cat }}
+          </button>
+        {%- endfor -%}
+      </div>
+    </aside>
+
+    {%- comment -%} ── FAQ content grouped by category ── {%- endcomment -%}
+    <div class="elevate-faq-page__content">
+      {%- for cat in category_list -%}
+        <div
+          class="elevate-faq-page__group{% unless forloop.first %} is-hidden{% endunless %}"
+          data-category="{{ cat | handleize }}"
+        >
+          <h2 class="elevate-faq-page__category-heading">{{ cat }}</h2>
+          <div class="elevate-faq-page__questions">
+            {%- for block in section.blocks -%}
+              {%- if block.settings.category == cat -%}
+                <details class="elevate-faq-page__item" {{ block.shopify_attributes }}>
+                  <summary class="elevate-faq-page__question">
+                    <span class="elevate-faq-page__question-text">{{ block.settings.question }}</span>
+                    <span class="elevate-faq-page__icon elevate-faq-page__icon--plus" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                        {%- render 'icon', icon: 'plus-solid' -%}
+                      </svg>
+                    </span>
+                    <span class="elevate-faq-page__icon elevate-faq-page__icon--minus" aria-hidden="true">
+                      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+                        {%- render 'icon', icon: 'minus-solid' -%}
+                      </svg>
+                    </span>
+                  </summary>
+                  <div class="elevate-faq-page__answer">
+                    <p>{{ block.settings.answer }}</p>
+                  </div>
+                </details>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endfor -%}
+
+      <div class="elevate-faq-page__empty" data-faq-empty style="display: none;">
+        <p class="elevate-faq-page__empty-title">
+          No results for "<span data-faq-empty-query></span>"
+        </p>
+        <p class="elevate-faq-page__empty-subtitle">
+          Try a different search term or browse by category.
+        </p>
+        <button type="button" class="elevate-faq-page__empty-btn" data-faq-empty-clear>
+          Clear search
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module">
+  (function () {
+    const section = document.querySelector('[data-faq-page]');
+    if (!section) return;
+
+    const filters = section.querySelectorAll('.elevate-faq-page__filter');
+    const groups = section.querySelectorAll('.elevate-faq-page__group');
+    const emptyState = section.querySelector('[data-faq-empty]');
+    const emptyQuery = section.querySelector('[data-faq-empty-query]');
+    const emptyClear = section.querySelector('[data-faq-empty-clear]');
+
+    /* ── Clear search button ── */
+    if (emptyClear) {
+      emptyClear.addEventListener('click', function () {
+        var heroInput = document.querySelector('[data-faq-search-input]');
+        if (heroInput) heroInput.value = '';
+        document.dispatchEvent(new CustomEvent('faq:search', { detail: { query: '' } }));
+      });
+    }
+
+    /* ── Category filter click ── */
+    filters.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        filters.forEach(function (f) {
+          f.classList.remove('is-active');
+          f.setAttribute('aria-selected', 'false');
+        });
+        btn.classList.add('is-active');
+        btn.setAttribute('aria-selected', 'true');
+
+        const cat = btn.getAttribute('data-category');
+        groups.forEach(function (g) {
+          g.classList.toggle('is-hidden', g.getAttribute('data-category') !== cat);
+        });
+      });
+    });
+
+    /* ── Listen for search events from hero ── */
+    document.addEventListener('faq:search', function (e) {
+      const query = (e.detail && e.detail.query) ? e.detail.query.trim().toLowerCase() : '';
+      const items = section.querySelectorAll('.elevate-faq-page__item');
+
+      if (!query) {
+        /* Restore category filter state */
+        if (emptyState) emptyState.style.display = 'none';
+        items.forEach(function (item) { item.style.display = ''; });
+        const activeFilter = section.querySelector('.elevate-faq-page__filter.is-active');
+        if (activeFilter) {
+          const cat = activeFilter.getAttribute('data-category');
+          groups.forEach(function (g) {
+            g.classList.toggle('is-hidden', g.getAttribute('data-category') !== cat);
+          });
+        }
+        return;
+      }
+
+      /* Show all groups, filter individual items */
+      groups.forEach(function (g) { g.classList.remove('is-hidden'); });
+      items.forEach(function (item) {
+        var question = item.querySelector('.elevate-faq-page__question-text');
+        var answer = item.querySelector('.elevate-faq-page__answer');
+        var text = (question ? question.textContent : '') + ' ' + (answer ? answer.textContent : '');
+        item.style.display = text.toLowerCase().includes(query) ? '' : 'none';
+      });
+
+      /* Hide groups where no items matched */
+      var allHidden = true;
+      groups.forEach(function (g) {
+        var visibleItems = g.querySelectorAll('.elevate-faq-page__item:not([style*="display: none"])');
+        var hidden = visibleItems.length === 0;
+        g.classList.toggle('is-hidden', hidden);
+        if (!hidden) allHidden = false;
+      });
+
+      /* Show/hide empty state */
+      if (emptyState) {
+        emptyState.style.display = allHidden ? '' : 'none';
+        if (allHidden && emptyQuery) emptyQuery.textContent = e.detail.query.trim();
+      }
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  /* ─── FAQ Page Content ─── */
+  .elevate-faq-page {
+    grid-column: 2;
+    padding-block-start: var(--elevate-faq-page-pt);
+    padding-block-end: var(--elevate-faq-page-pb);
+  }
+
+  /* ── Layout ── */
+  .elevate-faq-page__layout {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* ── Sidebar ── */
+  .elevate-faq-page__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-faq-page__filters-label {
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    color: #000;
+    margin: 0;
+  }
+
+  .elevate-faq-page__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .elevate-faq-page__filter {
+    flex-shrink: 0;
+    white-space: nowrap;
+    min-height: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: 0.5rem;
+    background: #FDFCFC;
+    border: 0.0625rem solid #E2E3E5;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+  }
+
+  .elevate-faq-page__filter:hover {
+    border-color: #AEB2B8;
+  }
+
+  .elevate-faq-page__filter.is-active {
+    background: #F1DBDC;
+    border: 0.125rem solid #E31E24;
+    color: #141517;
+  }
+
+  /* ── Content ── */
+  .elevate-faq-page__group.is-hidden {
+    display: none;
+  }
+
+  .elevate-faq-page__category-heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3.5625rem;
+    line-height: 1.2;
+    color: #6D1316;
+    margin: 0 0 0.5rem;
+  }
+
+  .elevate-faq-page__group + .elevate-faq-page__group {
+    margin-block-start: 3rem;
+  }
+
+  /* ── FAQ Items ── */
+  .elevate-faq-page__item {
+    border-bottom: 0.0625rem solid #AEB2B8;
+  }
+
+  .elevate-faq-page__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+    padding: 1rem 0;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .elevate-faq-page__question::-webkit-details-marker {
+    display: none;
+  }
+
+  .elevate-faq-page__question-text {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    color: #36393F;
+  }
+
+  .elevate-faq-page__icon {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #36393F;
+  }
+
+  .elevate-faq-page__icon svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  /* Plus/minus toggle via CSS */
+  .elevate-faq-page__icon--minus {
+    display: none;
+  }
+
+  .elevate-faq-page__item[open] .elevate-faq-page__icon--plus {
+    display: none;
+  }
+
+  .elevate-faq-page__item[open] .elevate-faq-page__icon--minus {
+    display: block;
+  }
+
+  /* ── Answer ── */
+  .elevate-faq-page__answer {
+    padding: 0 1rem 1rem 1.5rem;
+  }
+
+  .elevate-faq-page__questions {
+    padding: 0.5rem;
+  }
+
+  .elevate-faq-page__answer p {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Empty state ── */
+  .elevate-faq-page__empty {
+    text-align: center;
+    padding: 3rem 1rem;
+  }
+
+  .elevate-faq-page__empty-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.25;
+    color: #36393F;
+    margin: 0 0 0.5rem;
+  }
+
+  .elevate-faq-page__empty-subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.6;
+    color: #6C7380;
+    margin: 0 0 1.5rem;
+  }
+
+  .elevate-faq-page__empty-btn {
+    display: inline-block;
+    padding: 0.5rem 1.5rem;
+    min-height: 3rem;
+    border: none;
+    border-radius: 0.5rem;
+    background: #E31E24;
+    color: #fff;
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.25;
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+  }
+
+  .elevate-faq-page__empty-btn:hover {
+    background: #c4191e;
+  }
+
+  /* ─── Desktop (768px+) ─── */
+  @media (min-width: 48rem) {
+    .elevate-faq-page {
+      padding-inline: 13.5rem;
+    }
+
+    .elevate-faq-page__layout {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 2rem;
+      align-items: start;
+    }
+
+    .elevate-faq-page__sidebar {
+      position: sticky;
+      top: 6rem;
+      min-width: 14rem;
+    }
+
+    .elevate-faq-page__filters {
+      flex-direction: column;
+      flex-wrap: nowrap;
+      gap: 0.75rem;
+    }
+
+    .elevate-faq-page__filter {
+      white-space: normal;
+      font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+      font-size: 1.25rem;
+      line-height: 1.25;
+      letter-spacing: 0;
+      min-height: 3rem;
+    }
+
+    .elevate-faq-page__question {
+      gap: 3rem;
+      padding: 1rem;
+    }
+
+    .elevate-faq-page__question-text {
+      font-size: 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "FAQ Page Content",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "filters_label",
+      "label": "Filters label",
+      "default": "Quick Filters"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "faq",
+      "name": "FAQ Item",
+      "settings": [
+        {
+          "type": "text",
+          "id": "category",
+          "label": "Category",
+          "info": "Items with the same category text are grouped together."
+        },
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Question"
+        },
+        {
+          "type": "textarea",
+          "id": "answer",
+          "label": "Answer"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Page Content",
+      "blocks": [
+        {
+          "type": "faq",
+          "settings": {
+            "category": "Condition & Quality",
+            "question": "What types of inventory does Elevate carry?",
+            "answer": "Elevate carries two types of inventory: brand-new gear sourced directly from brands at below-retail prices, and certified pre-owned gear bought from cyclists. Every item — new or pre-owned — is inspected, cleaned, and fully documented by our in-house mechanics before it goes live."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "category": "Condition & Quality",
+            "question": "How accurate are the condition descriptions?",
+            "answer": "Every listing includes Mechanic's Notes written by the tech who inspected the item — specific, honest, and not filtered through a marketing lens. If there's a scratch on the chainstay or wear on the cassette, it'll say so."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "category": "Condition & Quality",
+            "question": "What does \"certified pre-owned\" mean?",
+            "answer": "It means the item has passed our multi-point inspection by a qualified mechanic. Components are tested for function, frames are checked for damage, and everything is cleaned and documented with honest condition notes."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "category": "Shipping",
+            "question": "How long does shipping take?",
+            "answer": "Domestic orders ship within 1–3 business days. Standard delivery is 3–7 business days depending on your location. Expedited options are available at checkout."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "category": "Shipping",
+            "question": "Do you ship internationally?",
+            "answer": "Yes. We ship to most countries outside the US. International shipping rates are calculated at checkout based on destination and item weight. Complete bikes ship fully assembled and boxed by our mechanics. All international orders are fully insured and tracked."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "category": "Returns",
+            "question": "Can I return an item if it doesn't match the description?",
+            "answer": "Yes — we offer a 30-day satisfaction guarantee on all purchases. If the item doesn't match what was described, contact us and we'll make it right. Free return shipping is included for condition discrepancies."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "category": "Returns",
+            "question": "What is the return policy for new items?",
+            "answer": "New items can be returned within 30 days in their original condition and packaging. Return shipping costs are covered by the buyer unless the item arrived damaged or defective."
+          }
+        },
+        {
+          "type": "faq",
+          "settings": {
+            "category": "Selling & Trading",
+            "question": "How does the sell or trade program work?",
+            "answer": "Submit your gear details through our sell form — takes about 2 minutes. We'll send a fair cash or store credit offer within 24hrs. Store credit runs 15–20% higher than cash and can be applied to anything in the catalog."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
