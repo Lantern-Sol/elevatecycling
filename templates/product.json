@@ -12,6 +12,24 @@
     "main": {
       "type": "product-information",
       "blocks": {
+        "disclosures": {
+          "type": "disclosures",
+          "settings": {
+            "heading": "Disclosures",
+            "heading_preset": "h4",
+            "open_by_default": false,
+            "icon": "caret",
+            "disclosure_heading_preset": "h5",
+            "text_color": "",
+            "dividers": true,
+            "divider_color": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {}
+        },
         "media-gallery": {
           "type": "_product-media-gallery",
           "static": true,
@@ -51,13 +69,17 @@
             "height": "fit",
             "details_position": "flex-start",
             "gap": 28,
+            "use_mobile_gap": false,
+            "mobile_gap": 12,
             "sticky_details_desktop": true,
             "background_media": "none",
+            "background_color": "",
             "video_position": "cover",
             "background_image_position": "cover",
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
+            "border_color": "",
             "border_radius": 0,
             "padding-block-start": 24,
             "padding-block-end": 24,
@@ -76,7 +98,14 @@
                 "align_baseline": false,
                 "horizontal_alignment_flex_direction_column": "flex-start",
                 "vertical_alignment_flex_direction_column": "center",
+                "use_mobile_alignment": false,
+                "mobile_horizontal_alignment": "flex-start",
+                "mobile_vertical_alignment": "center",
+                "mobile_horizontal_alignment_flex_direction_column": "flex-start",
+                "mobile_vertical_alignment_flex_direction_column": "center",
                 "gap": 12,
+                "use_mobile_gap": false,
+                "mobile_gap": 12,
                 "width": "fill",
                 "custom_width": 100,
                 "width_mobile": "fill",
@@ -84,6 +113,7 @@
                 "height": "fit",
                 "custom_height": 100,
                 "background_media": "none",
+                "background_color": "",
                 "video_position": "cover",
                 "background_image_position": "cover",
                 "toggle_overlay": false,
@@ -93,6 +123,7 @@
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
+                "border_color": "",
                 "border_radius": 0,
                 "link": "",
                 "open_in_new_tab": false,
@@ -100,7 +131,12 @@
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "use_mobile_padding": false,
+                "padding-block-start-mobile": 0,
+                "padding-block-end-mobile": 0,
+                "padding-inline-start-mobile": 0,
+                "padding-inline-end-mobile": 0
               },
               "blocks": {
                 "text_xrnftG": {
@@ -108,23 +144,39 @@
                   "name": "Product title",
                   "settings": {
                     "text": "<h1>{{ closest.product.title }}</h1>",
+                    "mobile_text": "",
                     "width": "100%",
                     "max_width": "normal",
                     "alignment": "left",
+                    "height_mode": "auto",
+                    "desktop_height": "",
+                    "mobile_height": "",
                     "type_preset": "h3",
                     "font": "var(--font-primary--family)",
+                    "enable_custom_font_weight": false,
+                    "weight": "400",
                     "font_size": "",
                     "line_height": "normal",
+                    "custom_line_height": 1.5,
                     "letter_spacing": "normal",
                     "case": "none",
                     "wrap": "pretty",
+                    "type_preset_mobile": "rte",
+                    "mobile_font_size": "1rem",
+                    "mobile_custom_line_height": 1.5,
+                    "text_color": "",
                     "background": false,
                     "background_color": "#00000026",
                     "corner_radius": 0,
                     "padding-block-start": 0,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "use_mobile_padding": false,
+                    "padding-block-start-mobile": 0,
+                    "padding-block-end-mobile": 0,
+                    "padding-inline-start-mobile": 0,
+                    "padding-inline-end-mobile": 0
                   },
                   "blocks": {}
                 },
@@ -142,10 +194,19 @@
                     "line_height": "normal",
                     "letter_spacing": "normal",
                     "case": "none",
+                    "text_color": "",
+                    "type_preset_mobile": "",
+                    "mobile_font_size": "1rem",
+                    "mobile_custom_line_height": 1.5,
                     "padding-block-start": 4,
                     "padding-block-end": 0,
                     "padding-inline-start": 0,
-                    "padding-inline-end": 0
+                    "padding-inline-end": 0,
+                    "use_mobile_padding": false,
+                    "padding-block-start-mobile": 0,
+                    "padding-block-end-mobile": 0,
+                    "padding-inline-start-mobile": 0,
+                    "padding-inline-end-mobile": 0
                   },
                   "blocks": {}
                 }
@@ -173,11 +234,25 @@
               "settings": {
                 "variant_style": "buttons",
                 "show_swatches": false,
+                "option_label_text_color": "",
+                "variant_style_class": "default",
+                "custom_variant_background": "{{ settings.color_palette.background }}",
+                "custom_variant_text": "{{ settings.color_palette.foreground }}",
+                "custom_variant_border": "{{ settings.color_palette.foreground }}",
+                "selected_variant_style_class": "default",
+                "custom_selected_variant_background": "{{ settings.color_palette.foreground }}",
+                "custom_selected_variant_text": "{{ settings.color_palette.background }}",
+                "custom_selected_variant_border": "{{ settings.color_palette.foreground }}",
                 "alignment": "left",
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "use_mobile_padding": false,
+                "padding-block-start-mobile": 0,
+                "padding-block-end-mobile": 8,
+                "padding-inline-start-mobile": 0,
+                "padding-inline-end-mobile": 0
               },
               "blocks": {}
             },
@@ -185,7 +260,23 @@
               "type": "buy-buttons",
               "settings": {
                 "stacking": true,
+                "text_color": "",
                 "show_pickup_availability": false,
+                "gift_card_form": true,
+                "recipient_button_style": "default",
+                "recipient_button_background": "{{ settings.color_palette.background }}",
+                "recipient_button_text": "{{ settings.color_palette.foreground }}",
+                "recipient_button_border": "{{ settings.color_palette.foreground }}",
+                "selected_recipient_button_style": "default",
+                "selected_recipient_button_background": "{{ settings.color_palette.foreground }}",
+                "selected_recipient_button_text": "{{ settings.color_palette.background }}",
+                "selected_recipient_button_border": "{{ settings.color_palette.foreground }}",
+                "input_style": "default",
+                "input_background_color": "{{ settings.color_palette.background }}",
+                "input_text_color": "{{ settings.color_palette.foreground }}",
+                "input_border_color": "{{ settings.color_palette.foreground }}",
+                "border_width": 1,
+                "border_radius": 0,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
@@ -195,14 +286,24 @@
                 "quantity": {
                   "type": "quantity",
                   "static": true,
-                  "settings": {},
+                  "settings": {
+                    "input_style": "default",
+                    "input_background_color": "{{ settings.color_palette.background }}",
+                    "input_text_color": "{{ settings.color_palette.foreground }}",
+                    "input_border_color": "{{ settings.color_palette.foreground }}",
+                    "border_width": 1,
+                    "border_radius": 0
+                  },
                   "blocks": {}
                 },
                 "add-to-cart": {
                   "type": "add-to-cart",
                   "static": true,
                   "settings": {
-                    "style_class": "button"
+                    "style_class": "button",
+                    "custom_button_background": "{{ settings.color_palette.foreground }}",
+                    "custom_button_text": "{{ settings.color_palette.background }}",
+                    "custom_button_border": "{{ settings.color_palette.background }}"
                   },
                   "blocks": {}
                 },
@@ -220,23 +321,39 @@
               "name": "Product description",
               "settings": {
                 "text": "{{ closest.product.description }}",
+                "mobile_text": "",
                 "width": "100%",
                 "max_width": "normal",
                 "alignment": "left",
+                "height_mode": "auto",
+                "desktop_height": "",
+                "mobile_height": "",
                 "type_preset": "rte",
                 "font": "var(--font-primary--family)",
+                "enable_custom_font_weight": false,
+                "weight": "400",
                 "font_size": "",
                 "line_height": "normal",
+                "custom_line_height": 1.5,
                 "letter_spacing": "normal",
                 "case": "none",
                 "wrap": "pretty",
+                "type_preset_mobile": "rte",
+                "mobile_font_size": "1rem",
+                "mobile_custom_line_height": 1.5,
+                "text_color": "",
                 "background": false,
                 "background_color": "#00000026",
                 "corner_radius": 0,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "use_mobile_padding": false,
+                "padding-block-start-mobile": 0,
+                "padding-block-end-mobile": 0,
+                "padding-inline-start-mobile": 0,
+                "padding-inline-end-mobile": 0
               },
               "blocks": {}
             }
@@ -248,14 +365,6 @@
             "buy_buttons_eYQEYi",
             "text_aEtTtq"
           ]
-        },
-        "disclosures": {
-          "type": "disclosures",
-          "settings": {
-            "padding-block-start": 0,
-            "padding-block-end": 0
-          },
-          "blocks": {}
         }
       },
       "block_order": [
@@ -267,6 +376,10 @@
         "equal_columns": false,
         "limit_details_width": false,
         "gap": 48,
+        "use_mobile_gap": false,
+        "mobile_gap": 16,
+        "enable_sticky_add_to_cart": true,
+        "background_color": "",
         "padding-block-start": 0,
         "padding-block-end": 0
       }
@@ -279,23 +392,39 @@
           "name": "t:names.header",
           "settings": {
             "text": "<h2>You may also like </h2>",
+            "mobile_text": "",
             "width": "fit-content",
             "max_width": "normal",
             "alignment": "left",
+            "height_mode": "auto",
+            "desktop_height": "",
+            "mobile_height": "",
             "type_preset": "h4",
             "font": "var(--font-primary--family)",
+            "enable_custom_font_weight": false,
+            "weight": "400",
             "font_size": "",
             "line_height": "normal",
+            "custom_line_height": 1.5,
             "letter_spacing": "normal",
             "case": "none",
             "wrap": "pretty",
+            "type_preset_mobile": "rte",
+            "mobile_font_size": "1rem",
+            "mobile_custom_line_height": 1.5,
+            "text_color": "",
             "background": false,
             "background_color": "#00000026",
             "corner_radius": 0,
             "padding-block-start": 0,
             "padding-block-end": 0,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "use_mobile_padding": false,
+            "padding-block-start-mobile": 0,
+            "padding-block-end-mobile": 0,
+            "padding-inline-start-mobile": 0,
+            "padding-inline-end-mobile": 0
           },
           "blocks": {}
         },
@@ -304,15 +433,26 @@
           "name": "t:names.product_card",
           "static": true,
           "settings": {
+            "layout": "vertical",
+            "horizontal_image_width": 96,
             "product_card_gap": 8,
+            "use_mobile_gap": false,
+            "mobile_product_card_gap": 16,
+            "background_color": "",
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
+            "border_color": "",
             "border_radius": 0,
             "padding-block-start": 0,
             "padding-block-end": 8,
             "padding-inline-start": 0,
-            "padding-inline-end": 0
+            "padding-inline-end": 0,
+            "use_mobile_padding": false,
+            "padding-block-start-mobile": 0,
+            "padding-block-end-mobile": 0,
+            "padding-inline-start-mobile": 0,
+            "padding-inline-end-mobile": 0
           },
           "blocks": {
             "product_card_gallery_DNizbJ": {
@@ -320,9 +460,12 @@
               "name": "t:names.product_card_media",
               "settings": {
                 "image_ratio": "adapt",
+                "show_hover_label": false,
+                "show_overlay_quick_add": true,
                 "border": "none",
                 "border_width": 1,
                 "border_opacity": 100,
+                "border_color": "",
                 "border_radius": 0,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
@@ -345,6 +488,10 @@
                 "letter_spacing": "normal",
                 "case": "none",
                 "wrap": "pretty",
+                "type_preset_mobile": "rte",
+                "mobile_font_size": "1rem",
+                "mobile_custom_line_height": 1.5,
+                "text_color": "",
                 "background": false,
                 "background_color": "#00000026",
                 "corner_radius": 0,
@@ -369,10 +516,19 @@
                 "line_height": "normal",
                 "letter_spacing": "normal",
                 "case": "none",
+                "text_color": "",
+                "type_preset_mobile": "",
+                "mobile_font_size": "1rem",
+                "mobile_custom_line_height": 1.5,
                 "padding-block-start": 0,
                 "padding-block-end": 0,
                 "padding-inline-start": 0,
-                "padding-inline-end": 0
+                "padding-inline-end": 0,
+                "use_mobile_padding": false,
+                "padding-block-start-mobile": 0,
+                "padding-block-end-mobile": 0,
+                "padding-inline-start-mobile": 0,
+                "padding-inline-end-mobile": 0
               },
               "blocks": {}
             }
@@ -402,13 +558,527 @@
         "icons_shape": "none",
         "section_width": "page-width",
         "gap": 28,
+        "background_color": "",
         "padding-block-start": 48,
-        "padding-block-end": 48
+        "padding-block-end": 48,
+        "use_mobile_padding": false,
+        "padding-block-start-mobile": 0,
+        "padding-block-end-mobile": 0
+      }
+    },
+    "brand_logos_marquee": {
+      "type": "marquee",
+      "blocks": {
+        "brand_specialized": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-specialized.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_sram": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-sram.svg",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_shimano": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-shimano.svg",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_campagnolo": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-campagnolo.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_colnago": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-colnago.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_zipp": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-zipp.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_roval": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-roval.png",
+            "invert_colors": false,
+            "width": 100,
+            "width-mobile": 80,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "brand_specialized",
+        "brand_sram",
+        "brand_shimano",
+        "brand_campagnolo",
+        "brand_colnago",
+        "brand_zipp",
+        "brand_roval"
+      ],
+      "settings": {
+        "movement_direction": "normal",
+        "background_color": "#ffffff",
+        "padding-block-start": 24,
+        "padding-block-end": 24,
+        "gap_between_elements": 48
+      }
+    },
+    "elevate_pdp_trade_cta": {
+      "type": "elevate-pdp-trade-cta",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "number": "1",
+            "text": "Tell us what you've got"
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "number": "2",
+            "text": "Get a firm offer in 48 hours"
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "number": "3",
+            "text": "Ship it free, get paid Cash or Store credit"
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3"
+      ],
+      "settings": {
+        "label": "TRADE OR SALE",
+        "heading": "Your old gear",
+        "heading_line_2": "can pay for this one",
+        "secondary_cta_text": "How It Works",
+        "secondary_cta_url": "/pages/trade-form",
+        "cta_text": "Get a Quote for your gear",
+        "cta_url": "/pages/trade-form",
+        "disclaimer": "$5.4M+ paid to sellers · Complete bikes and components accepted",
+        "background_image": "shopify://shop_images/trade-section.png",
+        "background_image_mobile": "shopify://shop_images/banner.png",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "elevate_usps": {
+      "type": "elevate-usps",
+      "blocks": {
+        "usp_shipping": {
+          "type": "usp",
+          "settings": {
+            "icon": "shipping-fast",
+            "title": "FREE US SHIPPING",
+            "description": "On every order, no minimum."
+          }
+        },
+        "usp_returns": {
+          "type": "usp",
+          "settings": {
+            "icon": "return",
+            "title": "30-DAY RETURNS",
+            "description": "Ride it. If it's not right, send it back."
+          }
+        },
+        "usp_inspected": {
+          "type": "usp",
+          "settings": {
+            "icon": "search-solid",
+            "title": "INSPECTED & CLEANED",
+            "description": "Every item checked and documented before it lists."
+          }
+        },
+        "usp_pictures": {
+          "type": "usp",
+          "settings": {
+            "icon": "camera-solid",
+            "title": "DETAILED PICTURES",
+            "description": "Every angle, every imperfection — nothing hidden."
+          }
+        },
+        "usp_selection": {
+          "type": "usp",
+          "settings": {
+            "icon": "cart-plus-solid",
+            "title": "WIDE SELECTION",
+            "description": "New arrivals every day. Check back often."
+          }
+        }
+      },
+      "block_order": [
+        "usp_shipping",
+        "usp_returns",
+        "usp_inspected",
+        "usp_pictures",
+        "usp_selection"
+      ],
+      "settings": {
+        "heading": "NO GUESSWORK\nNO SURPRISES",
+        "heading_color": "#36393f",
+        "background_color": "#ffffff",
+        "badge_bg_color": "#141517",
+        "icon_color": "#e31e24",
+        "padding_top": 40,
+        "padding_bottom": 40
+      }
+    },
+    "elevate_reviews": {
+      "type": "elevate-reviews",
+      "blocks": {
+        "ebay_reviews_carousel_widget_block_XUJmzT": {
+          "type": "shopify://apps/ebay-reviews/blocks/carousel-widget-block/6ae47d69-fff4-432b-a762-b178008c9165",
+          "settings": {
+            "themeId": "light",
+            "autoscroll": true,
+            "showReviewPhotos": true,
+            "showRating": true,
+            "showDate": true,
+            "showName": false,
+            "fixedReviewsHeight": false,
+            "textStyle": "plain",
+            "ratingStyle": "text",
+            "alignment": "left",
+            "infoPosition": "top"
+          }
+        }
+      },
+      "block_order": [
+        "ebay_reviews_carousel_widget_block_XUJmzT"
+      ],
+      "settings": {
+        "eyebrow": "TRUSTED BY CYCLIST",
+        "heading": "Don't take our word for it.",
+        "subtitle": "Real riders. Real builds. Real opinions.",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "reviews_cta_link": "",
+        "reviews_cta_text": "Read all reviews"
+      }
+    },
+    "elevate_pdp_delivery": {
+      "type": "elevate-pdp-delivery",
+      "blocks": {
+        "feat_packing": {
+          "type": "feature",
+          "settings": {
+            "icon": "box-open",
+            "title": "Packed by a mechanic, not a warehouse picker",
+            "description": "The same person who inspected your bike packs it. Custom foam inserts, reinforced double-wall box."
+          }
+        },
+        "feat_shipping": {
+          "type": "feature",
+          "settings": {
+            "icon": "shipping-truck",
+            "title": "Ships within 1 business day",
+            "description": "Tracking number sent same day the order is processed. Fully insured — UPS or FedEx Ground."
+          }
+        },
+        "feat_assembly": {
+          "type": "feature",
+          "settings": {
+            "icon": "puzzle-piece",
+            "title": "Arrives 85% assembled",
+            "description": "Reattach handlebar, install pedals, set saddle height. Most riders rolling within 20 minutes. Assembly card included."
+          }
+        },
+        "feat_returns": {
+          "type": "feature",
+          "settings": {
+            "icon": "return-circle",
+            "title": "30 days to decide",
+            "description": "Not the right fit? We send a prepaid return label. No restocking fee on undamaged returns."
+          }
+        }
+      },
+      "block_order": [
+        "feat_packing",
+        "feat_shipping",
+        "feat_assembly",
+        "feat_returns"
+      ],
+      "settings": {
+        "eyebrow": "DELIVERY",
+        "heading": "How we ship this bike",
+        "video": "shopify://files/videos/hero-desktop.mp4",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "elevate_new_arrivals": {
+      "type": "elevate-new-arrivals",
+      "settings": {
+        "padding_top": 0,
+        "padding_bottom": 48,
+        "collection": "all-items",
+        "max_products": 6,
+        "eyebrow": "NEW ARRIVALS",
+        "heading": "Check what Just Dropped!",
+        "footer_text": "Stock moves fast. New items drop every weekday.",
+        "cta_label": "View All Arrivals",
+        "cta_link": ""
+      }
+    },
+    "elevate_shop_by_category": {
+      "type": "elevate-shop-by-category",
+      "blocks": {
+        "cat_bikes": {
+          "type": "category",
+          "settings": {
+            "label": "COMPLETE BIKES",
+            "label_mobile": "FULL BIKES",
+            "link": "",
+            "position_x": 6,
+            "position_y": 19,
+            "line_direction": "right",
+            "line_length": 90,
+            "position_x_mobile": 39,
+            "position_y_mobile": 11,
+            "line_direction_mobile": "down",
+            "line_length_mobile": 40
+          }
+        },
+        "cat_groupsets": {
+          "type": "category",
+          "settings": {
+            "label": "GROUPSETS",
+            "label_mobile": "",
+            "link": "",
+            "position_x": 0,
+            "position_y": 58,
+            "line_direction": "right",
+            "line_length": 130,
+            "position_x_mobile": 22,
+            "position_y_mobile": 62,
+            "line_direction_mobile": "up",
+            "line_length_mobile": 40
+          }
+        },
+        "cat_cockpit": {
+          "type": "category",
+          "settings": {
+            "label": "COCKPIT",
+            "label_mobile": "",
+            "link": "",
+            "position_x": 66,
+            "position_y": 21,
+            "line_direction": "left",
+            "line_length": 70,
+            "position_x_mobile": 68,
+            "position_y_mobile": 8,
+            "line_direction_mobile": "down",
+            "line_length_mobile": 24
+          }
+        },
+        "cat_components": {
+          "type": "category",
+          "settings": {
+            "label": "COMPONENTS",
+            "label_mobile": "",
+            "link": "",
+            "position_x": 41,
+            "position_y": 50,
+            "line_direction": "up",
+            "line_length": 195,
+            "position_x_mobile": 50,
+            "position_y_mobile": 52,
+            "line_direction_mobile": "up",
+            "line_length_mobile": 24
+          }
+        },
+        "cat_wheelsets": {
+          "type": "category",
+          "settings": {
+            "label": "WHEELSETS",
+            "label_mobile": "",
+            "link": "",
+            "position_x": 72,
+            "position_y": 73,
+            "line_direction": "left",
+            "line_length": 135,
+            "position_x_mobile": 78,
+            "position_y_mobile": 65,
+            "line_direction_mobile": "up",
+            "line_length_mobile": 32
+          }
+        }
+      },
+      "block_order": [
+        "cat_bikes",
+        "cat_groupsets",
+        "cat_cockpit",
+        "cat_components",
+        "cat_wheelsets"
+      ],
+      "settings": {
+        "padding_top": 24,
+        "padding_bottom": 24,
+        "heading": "Shop By Category",
+        "image": "shopify://shop_images/7a4976b575a6437e6daf5ba47d979d66508abad5.png",
+        "button_label": "BROWSE ALL CATEGORIES",
+        "button_link": ""
+      }
+    },
+    "elevate_faq": {
+      "type": "elevate-faq",
+      "blocks": {
+        "faq_inventory": {
+          "type": "faq",
+          "settings": {
+            "question": "What types of inventory does Elevate carry?",
+            "answer": "Elevate carries two types of inventory: brand-new gear sourced directly from brands at below-retail prices, and certified pre-owned gear bought from cyclists. Every item — new or pre-owned — is inspected, cleaned, and fully documented by our in-house mechanics before it goes live. We list condition honestly so you know exactly what you're getting before you decide."
+          }
+        },
+        "faq_condition": {
+          "type": "faq",
+          "settings": {
+            "question": "How accurate are the condition descriptions?",
+            "answer": "Every listing includes Mechanic's Notes written by the tech who inspected the item — specific, honest, and not filtered through a marketing lens. If there's a scratch on the chainstay or wear on the cassette, it'll say so. We'd rather lose a sale than have a customer surprised by something we didn't disclose."
+          }
+        },
+        "faq_returns": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I return an item if it doesn't match the description?",
+            "answer": "Yes — we offer a 30-day satisfaction guarantee on all purchases. If the item doesn't match what was described, contact us and we'll make it right. Free return shipping is included for condition discrepancies. We stand behind every listing."
+          }
+        },
+        "faq_geometry": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I know if the geometry fits me?",
+            "answer": "Every complete bike listing includes the full geometry table — top tube, stack, reach, head tube angle, and more. If you're unsure, contact our mechanics before you buy. We're familiar with most frames in our catalog and can help you compare to what you're currently riding."
+          }
+        },
+        "faq_sell": {
+          "type": "faq",
+          "settings": {
+            "question": "How does the sell or trade program work?",
+            "answer": "Submit your gear details through our sell form — takes about 2 minutes. We'll send a fair cash or store credit offer within 24hrs. Store credit runs 15–20% higher than cash and can be applied to anything in the catalog. If you accept, we send a free shipping label. Payment is processed within 48hrs of inspection."
+          }
+        },
+        "faq_international": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "Yes. We ship to most countries outside the US. International shipping rates are calculated at checkout based on destination and item weight. Complete bikes ship fully assembled and boxed by our mechanics. All international orders are fully insured and tracked."
+          }
+        }
+      },
+      "block_order": [
+        "faq_inventory",
+        "faq_condition",
+        "faq_returns",
+        "faq_geometry",
+        "faq_sell",
+        "faq_international"
+      ],
+      "settings": {
+        "padding_top": 72,
+        "padding_bottom": 40,
+        "show_divider": true,
+        "heading_line_1": "Questions?",
+        "heading_line_2": "we got the answers",
+        "phone_label": "Call or text us",
+        "phone": "(714) 248-5066",
+        "phone_note": "Mon–Fri, 9AM–5PM PST",
+        "phone_link": "",
+        "email_label": "Email support",
+        "email": "support@elevatecycling.com",
+        "email_note": "Response within 24hrs",
+        "email_link": "",
+        "location_label": "Visit us",
+        "location": "Santa Ana, CA",
+        "location_note": "Warehouse order pickup available",
+        "location_link": "",
+        "help_eyebrow": "NEED MORE HELP?",
+        "help_text": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is.",
+        "primary_label": "Visit FAQs",
+        "primary_link": "",
+        "secondary_label": "Contact Our Mechanics",
+        "secondary_link": ""
       }
     }
   },
   "order": [
     "main",
-    "product_recommendations_qggXJq"
+    "product_recommendations_qggXJq",
+    "brand_logos_marquee",
+    "elevate_pdp_trade_cta",
+    "elevate_usps",
+    "elevate_reviews",
+    "elevate_pdp_delivery",
+    "elevate_new_arrivals",
+    "elevate_shop_by_category",
+    "elevate_faq"
   ]
 }

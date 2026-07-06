@@ -205,6 +205,15 @@
     "about_trade_cta": {
       "type": "elevate-about-trade-cta",
       "settings": {
+        "label": "TRADE OR SALE",
+        "heading": "GOT GEAR COLLECTING DUST?",
+        "body_1": "We pay fair market value, send a free shipping label, and turn around an offer within 24 hours.",
+        "body_2": "No haggling. No lowball after the fact. No FB Marketplace drama.",
+        "cta_text": "Get a Quote for your gear",
+        "cta_url": "",
+        "disclaimer": "$5.4M+ paid to sellers · Complete bikes and components accepted",
+        "background_image": "shopify://shop_images/trade-section.png",
+        "background_image_mobile": "shopify://shop_images/banner.png",
         "padding_top": 72,
         "padding_bottom": 72
       }
