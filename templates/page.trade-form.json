@@ -1,0 +1,220 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "trade_hero": {
+      "type": "elevate-trade-hero",
+      "blocks": {
+        "stat_bikes": {
+          "type": "stat",
+          "settings": {
+            "value": "3,500+",
+            "label": "bikes bought"
+          }
+        },
+        "stat_feedback": {
+          "type": "stat",
+          "settings": {
+            "value": "99.8%",
+            "label": "eBay feedback"
+          }
+        },
+        "stat_paid": {
+          "type": "stat",
+          "settings": {
+            "value": "$5.4M",
+            "label": "paid out"
+          }
+        },
+        "stat_turnaround": {
+          "type": "stat",
+          "settings": {
+            "value": "24h",
+            "label": "turnaround"
+          }
+        }
+      },
+      "block_order": [
+        "stat_bikes",
+        "stat_feedback",
+        "stat_paid",
+        "stat_turnaround"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/Frame_2147227942.png",
+        "image_mobile": "shopify://shop_images/Frame_2147227942_ddcc4c20-afaa-44ac-aeab-9f9a171c654d.png",
+        "overlay_opacity": 0,
+        "badge_text": "SELL OR TRADE",
+        "heading": "Get your offer within 24h",
+        "subtitle": "Complete bikes and components. We respond within 24 business hours.",
+        "steps_heading": "How it works",
+        "step_1_title": "Tell us what you've got",
+        "step_2_title": "Get a firm offer in 48 hours",
+        "step_3_title": "Ship it free, get paid fast",
+        "cta_text": "Submit Your Gear & Components",
+        "cta_link": "",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "trade_accept": {
+      "type": "elevate-trade-accept",
+      "blocks": {
+        "cat_bikes": {
+          "type": "category",
+          "settings": {
+            "icon": "complete-bike",
+            "title": "Complete bikes",
+            "description": "Road, gravel, cyclocross, triathlon & TT. All major brands.",
+            "requirement": "Good condition or better"
+          }
+        },
+        "cat_frames": {
+          "type": "category",
+          "settings": {
+            "icon": "frameset",
+            "title": "Framesets",
+            "description": "Carbon & aluminum. Disc and rim. No crash damage or structural repairs.",
+            "requirement": "Inspected for impact damage"
+          }
+        },
+        "cat_wheels": {
+          "type": "category",
+          "settings": {
+            "icon": "wheel",
+            "title": "Wheelsets",
+            "description": "Carbon & alloy. Zipp, ENVE, Roval, DT Swiss and more.",
+            "requirement": "True, no cracks or dents"
+          }
+        },
+        "cat_groupsets": {
+          "type": "category",
+          "settings": {
+            "icon": "gear",
+            "title": "Groupsets",
+            "description": "Shimano, SRAM, Campagnolo. Di2, eTap, EPS, mechanical.",
+            "requirement": "Functional, no stripped parts"
+          }
+        },
+        "cat_components": {
+          "type": "category",
+          "settings": {
+            "icon": "puzzle-piece",
+            "title": "Components",
+            "description": "Cockpit, power meters, saddles, seatposts. ENVE, Fizik, Quarq, PRO.",
+            "requirement": "No cracks or stripped threads"
+          }
+        },
+        "not_accepted": {
+          "type": "not_accepted",
+          "settings": {
+            "title": "What we don't accept:",
+            "description": "<p>MTB, BMX, e-bikes, kids bikes, no-name brands, severely damaged or modified frames, and gear with missing components.</p><p>Not sure? Submit anyway — we'll let you know within 24 hours.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "cat_bikes",
+        "cat_frames",
+        "cat_wheels",
+        "cat_groupsets",
+        "cat_components",
+        "not_accepted"
+      ],
+      "settings": {
+        "label": "WHAT WE ACCEPT",
+        "heading": "We buy performance gear, not garage sales",
+        "subtitle": "Road, gravel, and triathlon. Complete bikes, frames, wheels, groupsets, and components from major brands. If it's high-end and rideable, we want it.",
+        "padding_top": 40,
+        "padding_bottom": 72
+      }
+    },
+    "trade_payout": {
+      "type": "elevate-trade-payout",
+      "settings": {
+        "label": "PAYOUT OPTIONS",
+        "heading": "Cash or store credit — your call",
+        "subtitle": "Get paid fast either way. Store credit gets you up to 15% more — use it toward your next upgrade.",
+        "cash_title": "Cash offer",
+        "cash_subtitle": "Direct deposit or check · 3–5 business days after receipt",
+        "cash_description": "We send a firm offer before you ship anything. Accept it, pack your gear — we send the label.",
+        "credit_title": "Store credit",
+        "credit_subtitle": "Up to 15% more than the cash offer",
+        "credit_description": "Same process, higher payout. Credit applied instantly once we receive your gear.",
+        "timeline_heading": "How the payout works",
+        "step_1_title": "Submit your gear",
+        "step_1_desc": "Takes 2 minutes. No shipping until you accept.",
+        "step_2_title": "Get a firm offer within 24 hours",
+        "step_2_desc": "No lowball after you ship. Price is locked.",
+        "step_3_title": "We send a prepaid label",
+        "step_3_desc": "Free shipping. We handle insurance too.",
+        "step_4_title": "Get paid within 3–5 days of receipt",
+        "step_4_desc": "Cash or store credit — whichever you chose.",
+        "padding_top": 0,
+        "padding_bottom": 0
+      }
+    },
+    "trade_form": {
+      "type": "elevate-trade-form",
+      "settings": {
+        "step1_label": "Description",
+        "step1_eyebrow": "SELL YOUR GEAR",
+        "step1_heading": "Tell us what you have",
+        "step1_subtitle": "Add each item you want to sell. We'll send you a firm offer within 24 hours.",
+        "step2_label": "Contact",
+        "step2_eyebrow": "ALMOST THERE",
+        "step2_heading": "How should we reach you?",
+        "step2_subtitle": "We'll send your offer to the email below. Usually within 24 hours.",
+        "consent_text": "I confirm this gear is mine to sell. <a href=\"/pages/terms\">View full terms</a> — we keep it simple.",
+        "step3_label": "All Done",
+        "done_heading": "We've got it — offer incoming",
+        "done_subtitle": "You'll hear from us within the next 24h via email with a firm offer. No lowballs, no games.",
+        "done_step_1_title": "Check your inbox",
+        "done_step_1_desc": "We'll email your offer within 24 hours",
+        "done_step_2_title": "We evaluate your gear",
+        "done_step_2_desc": "Our team reviews condition, market value, and demand",
+        "done_step_3_title": "Accept your offer",
+        "done_step_3_desc": "Lock in your price — no changes after acceptance",
+        "done_step_4_title": "Ship free, get paid",
+        "done_step_4_desc": "We send the label. Payment within 3–5 days of receipt.",
+        "done_cta_text": "Browse While You Wait",
+        "done_cta_link": "/collections/all",
+        "bulk_cta_heading": "Selling 5 or more items?",
+        "bulk_cta_text": "Use our bulk format",
+        "bulk_excel_url": "",
+        "bulk_sheets_url": "",
+        "add_item_text": "Add another item",
+        "next_text": "Next",
+        "submit_text": "Get My Offer",
+        "disclaimer_text": "Your info is never shared or sold. We respond within 1 business day.",
+        "padding_top": 0,
+        "padding_bottom": 40
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "content_direction": "column",
+        "gap": 12,
+        "background_color": "",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    }
+  },
+  "order": [
+    "trade_hero",
+    "trade_accept",
+    "trade_payout",
+    "trade_form",
+    "main"
+  ]
+}

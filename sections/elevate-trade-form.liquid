@@ -1,0 +1,3073 @@
+{%- doc -%}
+  Elevate Cycling — Trade Form multi-step section.
+  3-step "sell your gear" form: Description → Contact → All Done.
+  Supports per-item and bulk submission modes.
+  Submits via Shopify /contact endpoint.
+{%- enddoc -%}
+
+<div
+  id="trade-form"
+  class="section section--page-width page-width-normal elevate-trade-form"
+  data-trade-form
+  data-scroll-reveal
+  style=" 
+    background: #FDFCFC;
+    --elevate-trade-form-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-trade-form-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-trade-form__inner">
+
+    {%- comment -%} ── Sidebar (desktop only, step 1 only) ── {%- endcomment -%}
+    <aside class="elevate-trade-form__sidebar" data-trade-sidebar>
+      <div class="elevate-trade-form__sidebar-top">
+        <div class="elevate-trade-form__sidebar-card">
+          <div class="elevate-trade-form__sidebar-card-header">
+            <p class="elevate-trade-form__sidebar-label">YOUR ITEMS</p>
+            <p class="elevate-trade-form__sidebar-count" data-trade-items-count>1 item listed</p>
+          </div>
+          <ul class="elevate-trade-form__items-list" data-trade-items-list>
+            <li class="elevate-trade-form__items-entry is-active" data-trade-item-entry="0">
+              <span class="elevate-trade-form__items-type">Complete Bike</span>
+              <span class="elevate-trade-form__items-model">New item</span>
+            </li>
+          </ul>
+          <button type="button" class="elevate-trade-form__add-item" data-trade-add-item>
+            <span class="elevate-trade-form__add-icon" aria-hidden="true">+</span>
+            {{ section.settings.add_item_text | default: 'Add another item' }}
+          </button>
+        </div>
+      </div>
+
+      <p class="elevate-trade-form__sidebar-or">OR</p>
+
+      <div class="elevate-trade-form__bulk-cta" data-trade-bulk-toggle>
+        <p class="elevate-trade-form__bulk-cta-heading">{{ section.settings.bulk_cta_heading | default: 'Selling 5 or more items?' }}</p>
+        <p class="elevate-trade-form__bulk-cta-text">{{ section.settings.bulk_cta_text | default: 'Use our bulk format' }} →</p>
+      </div>
+    </aside>
+
+    {%- comment -%} ── Step header (changes per step) ── {%- endcomment -%}
+    <div class="elevate-trade-form__header" data-trade-header>
+      <p class="elevate-trade-form__eyebrow" data-trade-eyebrow>{{ section.settings.step1_eyebrow | default: 'SELL YOUR GEAR' }}</p>
+      <h2 class="elevate-trade-form__heading" data-trade-heading>{{ section.settings.step1_heading | default: 'Tell us what you have' }}</h2>
+      <p class="elevate-trade-form__subtitle" data-trade-subtitle>{{ section.settings.step1_subtitle | default: "Add each item you want to sell. We'll send you a firm offer within 24 hours." }}</p>
+    </div>
+
+    {%- comment -%} ── Progress bar ── {%- endcomment -%}
+    <div class="elevate-trade-form__progress" data-trade-progress>
+      <div class="elevate-trade-form__progress-step" data-trade-progress-step="1">
+        <div class="elevate-trade-form__progress-bar is-filled"></div>
+        <div class="elevate-trade-form__progress-circle is-active">1</div>
+        <span class="elevate-trade-form__progress-label is-active">{{ section.settings.step1_label | default: 'Description' }}</span>
+      </div>
+      <div class="elevate-trade-form__progress-step" data-trade-progress-step="2">
+        <div class="elevate-trade-form__progress-bar"></div>
+        <div class="elevate-trade-form__progress-circle">2</div>
+        <span class="elevate-trade-form__progress-label">{{ section.settings.step2_label | default: 'Contact' }}</span>
+      </div>
+      <div class="elevate-trade-form__progress-step" data-trade-progress-step="3">
+        <div class="elevate-trade-form__progress-bar"></div>
+        <div class="elevate-trade-form__progress-circle">3</div>
+        <span class="elevate-trade-form__progress-label">{{ section.settings.step3_label | default: 'All Done!' }}</span>
+      </div>
+    </div>
+
+    {%- comment -%} ── Main content ── {%- endcomment -%}
+    <div class="elevate-trade-form__main">
+
+      {%- comment -%} ── Mobile item tabs (step 1 only) ── {%- endcomment -%}
+      <div class="elevate-trade-form__mobile-tabs" data-trade-mobile-tabs>
+        <div class="elevate-trade-form__tabs-row" data-trade-tabs-row>
+          <button type="button" class="elevate-trade-form__tab is-active" data-trade-tab="0">Item 1</button>
+        </div>
+        <button type="button" class="elevate-trade-form__tab-add" data-trade-tab-add aria-label="Add item">+</button>
+      </div>
+
+      {%- comment -%} ══════════════════════════════════════════ {%- endcomment -%}
+      {%- comment -%} ── STEP 1: Description (per-item mode) ── {%- endcomment -%}
+      {%- comment -%} ══════════════════════════════════════════ {%- endcomment -%}
+      <div class="elevate-trade-form__step" data-trade-step="1">
+
+        {%- comment -%} ── Item type selector ── {%- endcomment -%}
+        <div class="elevate-trade-form__field">
+          <label class="elevate-trade-form__label">
+            What are you selling? <span class="elevate-trade-form__required">*</span>
+          </label>
+
+          {%- comment -%} Desktop: image cards {%- endcomment -%}
+          <div class="elevate-trade-form__type-cards" data-trade-type-cards>
+            {%- assign type_keys = 'bike,frameset,groupset,wheelset,individual' | split: ',' -%}
+            {%- assign type_labels = 'Complete Bike,Frameset,Groupset,Wheelset,Individual item' | split: ',' -%}
+            {%- assign type_descs = 'Full build — frame: groupset: wheels,Frame only: or frame with fork,Full drivetrain or individual components,Front and rear wheels: paired set,One part — handlebar: saddle: post: or stem' | split: ',' -%}
+            {%- assign type_settings = 'type_bike_image,type_frameset_image,type_groupset_image,type_wheelset_image,type_individual_image' | split: ',' -%}
+            {%- assign type_assets = 'trade-type-bike.png,trade-type-frameset.png,trade-type-groupset.png,trade-type-wheelset.png,trade-type-individual.png' | split: ',' -%}
+            {%- for key in type_keys -%}
+              {%- assign img_setting = type_settings[forloop.index0] -%}
+              {%- assign img = section.settings[img_setting] -%}
+              {%- assign desc_raw = type_descs[forloop.index0] -%}
+              <button
+                type="button"
+                class="elevate-trade-form__type-card{% if forloop.first %} is-active{% endif %}"
+                data-trade-type="{{ key }}"
+              >
+                <div class="elevate-trade-form__type-img">
+                  {%- if img != blank -%}
+                    {{ img | image_url: width: 240 | image_tag: loading: 'lazy', alt: type_labels[forloop.index0] }}
+                  {%- else -%}
+                    <img src="{{ type_assets[forloop.index0] | asset_url }}" alt="{{ type_labels[forloop.index0] }}" loading="lazy" width="240">
+                  {%- endif -%}
+                </div>
+                <div class="elevate-trade-form__type-text">
+                  <span class="elevate-trade-form__type-label">{{ type_labels[forloop.index0] }}</span>
+                  <span class="elevate-trade-form__type-desc">{{ desc_raw | replace: ':', ',' }}</span>
+                </div>
+              </button>
+            {%- endfor -%}
+          </div>
+
+          {%- comment -%} Mobile: select dropdown {%- endcomment -%}
+          <div class="elevate-trade-form__type-select-wrap">
+            <select class="elevate-trade-form__type-select elevate-trade-form__input" data-trade-type-select>
+              {%- for key in type_keys -%}
+                <option value="{{ key }}"{% if forloop.first %} selected{% endif %}>{{ type_labels[forloop.index0] }}</option>
+              {%- endfor -%}
+            </select>
+          </div>
+        </div>
+
+        {%- comment -%} ── Item fields ── {%- endcomment -%}
+        <div class="elevate-trade-form__fields-grid" data-trade-row-dynamic>
+          <div class="elevate-trade-form__field">
+            <label class="elevate-trade-form__label" for="trade-brand">
+              Brand <span class="elevate-trade-form__required">*</span>
+            </label>
+            <input type="text" id="trade-brand" class="elevate-trade-form__input" data-trade-field="brand" placeholder="e.g. Specialized, Trek" required>
+          </div>
+          <div class="elevate-trade-form__field">
+            <label class="elevate-trade-form__label" for="trade-model">
+              Model <span class="elevate-trade-form__required">*</span>
+            </label>
+            <input type="text" id="trade-model" class="elevate-trade-form__input" data-trade-field="model" placeholder="e.g. Tarmac SL7, Madone" required>
+          </div>
+          <div class="elevate-trade-form__field">
+            <label class="elevate-trade-form__label" for="trade-year">
+              Year <span class="elevate-trade-form__required">*</span>
+            </label>
+            <select id="trade-year" class="elevate-trade-form__input" data-trade-field="year" required>
+              <option value="" disabled selected>Select year</option>
+              {%- assign current_year = 'now' | date: '%Y' | plus: 1 -%}
+              {%- for i in (0..30) -%}
+                {%- assign year_val = current_year | minus: i -%}
+                <option value="{{ year_val }}">{{ year_val }}</option>
+              {%- endfor -%}
+            </select>
+          </div>
+          <div class="elevate-trade-form__field" data-trade-conditional="size">
+            <label class="elevate-trade-form__label" for="trade-size">
+              Size <span class="elevate-trade-form__required">*</span>
+            </label>
+            <select id="trade-size" class="elevate-trade-form__input" data-trade-field="size">
+              <option value="" disabled selected>Select size</option>
+              <option value="XXS">XXS</option>
+              <option value="XS">XS</option>
+              <option value="S">S / 49-51</option>
+              <option value="M">M / 52-54</option>
+              <option value="L">L / 56-58</option>
+              <option value="XL">XL / 59-61</option>
+              <option value="XXL">XXL / 62+</option>
+            </select>
+          </div>
+          <div class="elevate-trade-form__field" data-trade-conditional="groupset">
+            <label class="elevate-trade-form__label" for="trade-groupset">
+              Groupset
+            </label>
+            <input type="text" id="trade-groupset" class="elevate-trade-form__input" data-trade-field="groupset" placeholder="e.g. Shimano Ultegra Di2">
+          </div>
+          <div class="elevate-trade-form__field">
+            <label class="elevate-trade-form__label" for="trade-price">
+              Asking Price
+            </label>
+            <input type="text" id="trade-price" class="elevate-trade-form__input" data-trade-field="price" placeholder="$0.00" inputmode="decimal">
+          </div>
+        </div>
+
+        {%- comment -%} ── Condition radio cards ── {%- endcomment -%}
+        <div class="elevate-trade-form__field">
+          <label class="elevate-trade-form__label">
+            Condition <span class="elevate-trade-form__required">*</span>
+          </label>
+          <div class="elevate-trade-form__conditions" data-trade-conditions>
+            {%- assign cond_values = 'new,like_new,used,good' | split: ',' -%}
+            {%- assign cond_labels = 'New Item,Like New,Used,Good Condition' | split: ',' -%}
+            {%- assign cond_descs = 'Unused, original packaging,Minimal signs of use,Normal wear and tear,Fully functional, cosmetic wear' | split: ',' -%}
+            {%- for val in cond_values -%}
+              <label class="elevate-trade-form__condition-card">
+                <input
+                  type="radio"
+                  name="trade_condition"
+                  value="{{ val }}"
+                  class="sr-only"
+                  data-trade-field="condition"
+                >
+                <span class="elevate-trade-form__condition-radio" aria-hidden="true"></span>
+                <span class="elevate-trade-form__condition-content">
+                  <span class="elevate-trade-form__condition-label">{{ cond_labels[forloop.index0] }}</span>
+                  <span class="elevate-trade-form__condition-desc">{{ cond_descs[forloop.index0] }}</span>
+                </span>
+              </label>
+            {%- endfor -%}
+          </div>
+        </div>
+
+        {%- comment -%} ── Notes ── {%- endcomment -%}
+        <div class="elevate-trade-form__field">
+          <label class="elevate-trade-form__label" for="trade-notes">
+            Notes
+          </label>
+          <textarea id="trade-notes" class="elevate-trade-form__textarea" data-trade-field="notes" placeholder="Any details about modifications, damage, upgrades..." rows="3"></textarea>
+        </div>
+
+        {%- comment -%} ── Photo upload ── {%- endcomment -%}
+        <div class="elevate-trade-form__field">
+          <label class="elevate-trade-form__label">Your pictures</label>
+          <div class="elevate-trade-form__upload-zone" data-trade-upload-zone>
+            <div class="elevate-trade-form__upload-prompt">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" aria-hidden="true" class="elevate-trade-form__upload-icon">
+                {%- render 'icon', icon: 'upload' -%}
+              </svg>
+              <p class="elevate-trade-form__upload-heading">Drag photos here or tap to browse</p>
+              <p class="elevate-trade-form__upload-hint">JPG, PNG, HEIC, PDF, WEBP.</p>
+            </div>
+            <input type="file" class="sr-only" data-trade-file-input accept="image/jpeg,image/png,image/webp,image/heic,.pdf" multiple>
+          </div>
+          <div class="elevate-trade-form__thumbnails" data-trade-thumbnails></div>
+          <div class="elevate-trade-form__photo-tip">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" width="16" height="16" aria-hidden="true" class="elevate-trade-form__photo-tip-icon">
+              <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a.75.75 0 000 1.5h.253a.25.25 0 01.244.304l-.459 2.066A1.75 1.75 0 0010.747 15H11a.75.75 0 000-1.5h-.253a.25.25 0 01-.244-.304l.459-2.066A1.75 1.75 0 009.253 9H9z" clip-rule="evenodd"/>
+            </svg>
+            <p class="elevate-trade-form__photo-tip-text">More photos = higher quote accuracy. Minimum 3 photos per item.</p>
+          </div>
+          <p class="elevate-trade-form__photo-note">Photos help us give you a better offer. We may request additional photos via email after reviewing your submission.</p>
+        </div>
+      </div>
+
+      {%- comment -%} ══════════════════════════════════════ {%- endcomment -%}
+      {%- comment -%} ── STEP 1: Description (bulk mode) ── {%- endcomment -%}
+      {%- comment -%} ══════════════════════════════════════ {%- endcomment -%}
+      <div class="elevate-trade-form__step" data-trade-step="1-bulk" hidden>
+        <button type="button" class="elevate-trade-form__back-to-items" data-trade-back-to-items>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16" aria-hidden="true">
+            {%- render 'icon', icon: 'arrow-left' -%}
+          </svg>
+          <span>Back to per-item mode</span>
+        </button>
+
+        <div class="elevate-trade-form__template-buttons">
+          <a href="{{ section.settings.bulk_excel_url | default: '#' }}" class="elevate-trade-form__template-btn"{% if section.settings.bulk_excel_url != blank %} download{% endif %}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="24" height="24" aria-hidden="true">
+              {%- render 'icon', icon: 'file-excel' -%}
+            </svg>
+            <span class="elevate-trade-form__template-btn-text">
+              <span class="elevate-trade-form__template-btn-title">Excel Template</span>
+              <span class="elevate-trade-form__template-btn-sub">Download .xlsx</span>
+            </span>
+          </a>
+          <a href="{{ section.settings.bulk_sheets_url | default: '#' }}" class="elevate-trade-form__template-btn" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="24" height="24" aria-hidden="true">
+              {%- render 'icon', icon: 'google-sheets' -%}
+            </svg>
+            <span class="elevate-trade-form__template-btn-text">
+              <span class="elevate-trade-form__template-btn-title">Google Sheets</span>
+              <span class="elevate-trade-form__template-btn-sub">Open & duplicate</span>
+            </span>
+          </a>
+        </div>
+
+        <div class="elevate-trade-form__field">
+          <label class="elevate-trade-form__label">Your pictures</label>
+          <div class="elevate-trade-form__upload-zone" data-trade-bulk-upload-zone>
+            <div class="elevate-trade-form__upload-prompt">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" aria-hidden="true" class="elevate-trade-form__upload-icon">
+                {%- render 'icon', icon: 'upload' -%}
+              </svg>
+              <p class="elevate-trade-form__upload-text">Upload your filled file</p>
+              <p class="elevate-trade-form__upload-hint">.XLSX or .CSV — Max. 10 MB</p>
+            </div>
+            <input type="file" class="sr-only" data-trade-bulk-file-input accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv">
+          </div>
+          <div class="elevate-trade-form__bulk-file-name" data-trade-bulk-filename hidden></div>
+        </div>
+
+        <div class="elevate-trade-form__field">
+          <label class="elevate-trade-form__label" for="trade-bulk-notes">Notes (optional)</label>
+          <textarea id="trade-bulk-notes" class="elevate-trade-form__textarea" data-trade-field="bulkNotes" placeholder="Anything else we should know..." rows="3"></textarea>
+        </div>
+      </div>
+
+      {%- comment -%} ══════════════════════════════ {%- endcomment -%}
+      {%- comment -%} ── STEP 2: Contact ────────── {%- endcomment -%}
+      {%- comment -%} ══════════════════════════════ {%- endcomment -%}
+      <div class="elevate-trade-form__step elevate-trade-form__step--contact" data-trade-step="2" hidden>
+        <div class="elevate-trade-form__row">
+          <div class="elevate-trade-form__field">
+            <label class="elevate-trade-form__label" for="trade-contact-name">
+              Name <span class="elevate-trade-form__required">*</span>
+            </label>
+            <input type="text" id="trade-contact-name" class="elevate-trade-form__input" data-trade-field="contactName" placeholder="John" required>
+          </div>
+          <div class="elevate-trade-form__field">
+            <label class="elevate-trade-form__label" for="trade-contact-lastname">
+              Last Name <span class="elevate-trade-form__required">*</span>
+            </label>
+            <input type="text" id="trade-contact-lastname" class="elevate-trade-form__input" data-trade-field="contactLastName" placeholder="Doe" required>
+          </div>
+        </div>
+
+        <div class="elevate-trade-form__row">
+          <div class="elevate-trade-form__field">
+            <label class="elevate-trade-form__label" for="trade-contact-email">
+              Email <span class="elevate-trade-form__required">*</span>
+            </label>
+            <input type="email" id="trade-contact-email" class="elevate-trade-form__input" data-trade-field="contactEmail" placeholder="johndoe@example.com" required>
+          </div>
+          <div class="elevate-trade-form__field">
+            <label class="elevate-trade-form__label" for="trade-contact-phone">
+              Phone <span class="elevate-trade-form__required">*</span>
+            </label>
+            <input type="tel" id="trade-contact-phone" class="elevate-trade-form__input" data-trade-field="contactPhone" placeholder="(123) 456-7890" required>
+          </div>
+        </div>
+
+        <div class="elevate-trade-form__field">
+          <label class="elevate-trade-form__label">
+            How would you like to be paid? <span class="elevate-trade-form__required">*</span>
+          </label>
+          <div class="elevate-trade-form__payout-cards" data-trade-payout-cards>
+            <label class="elevate-trade-form__payout-card">
+              <input type="radio" name="trade_payout" value="cash" class="sr-only" data-trade-field="payout">
+              <span class="elevate-trade-form__payout-content">
+                <span class="elevate-trade-form__payout-label">CASH</span>
+                <span class="elevate-trade-form__payout-desc">ACH / Check</span>
+              </span>
+            </label>
+            <label class="elevate-trade-form__payout-card">
+              <input type="radio" name="trade_payout" value="credit" class="sr-only" data-trade-field="payout">
+              <span class="elevate-trade-form__payout-content">
+                <span class="elevate-trade-form__payout-label">Store Credit</span>
+                <span class="elevate-trade-form__payout-desc">+15% Bonus Value</span>
+              </span>
+            </label>
+            <label class="elevate-trade-form__payout-card">
+              <input type="radio" name="trade_payout" value="either" class="sr-only" data-trade-field="payout">
+              <span class="elevate-trade-form__payout-content">
+                <span class="elevate-trade-form__payout-label">Either</span>
+                <span class="elevate-trade-form__payout-desc">Show Both</span>
+              </span>
+            </label>
+          </div>
+        </div>
+
+        <div class="elevate-trade-form__consent">
+          <label class="elevate-trade-form__consent-label">
+            <input type="checkbox" class="elevate-trade-form__checkbox" data-trade-field="terms">
+            <span class="elevate-trade-form__consent-text">{{ section.settings.consent_text | default: "I confirm this gear is mine to sell. <a href='/pages/terms'>View full terms</a> — we keep it simple." }}</span>
+          </label>
+        </div>
+      </div>
+
+      {%- comment -%} ══════════════════════════════ {%- endcomment -%}
+      {%- comment -%} ── STEP 3: All Done ───────── {%- endcomment -%}
+      {%- comment -%} ══════════════════════════════ {%- endcomment -%}
+      <div class="elevate-trade-form__step elevate-trade-form__step--done" data-trade-step="3" hidden>
+        <div class="elevate-trade-form__done-content">
+          <div class="elevate-trade-form__done-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="32" height="32" aria-hidden="true">
+              {%- render 'icon', icon: 'check-circle' -%}
+            </svg>
+          </div>
+
+          <h3 class="elevate-trade-form__done-heading">{{ section.settings.done_heading | default: "We've got it — offer incoming" }}</h3>
+          <p class="elevate-trade-form__done-subtitle">{{ section.settings.done_subtitle | default: "You'll hear from us within the next 24h via email with a firm offer. No lowballs, no games." }}</p>
+
+          <div class="elevate-trade-form__done-steps">
+            {%- for i in (1..4) -%}
+              {%- assign done_title_key = 'done_step_' | append: i | append: '_title' -%}
+              {%- assign done_desc_key = 'done_step_' | append: i | append: '_desc' -%}
+              {%- assign step_title = section.settings[done_title_key] -%}
+              {%- assign step_desc = section.settings[done_desc_key] -%}
+              {%- if step_title != blank -%}
+                <div class="elevate-trade-form__done-step">
+                  <span class="elevate-trade-form__done-step-badge">{{ i }}</span>
+                  <div class="elevate-trade-form__done-step-text">
+                    <p class="elevate-trade-form__done-step-title">{{ step_title }}</p>
+                    {%- if step_desc != blank -%}
+                      <p class="elevate-trade-form__done-step-desc">{{ step_desc }}</p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          <a href="{{ section.settings.done_cta_link | default: '/collections/all' }}" class="elevate-trade-form__done-cta">
+            <span>{{ section.settings.done_cta_text | default: 'Browse While You Wait' }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      {%- comment -%} ── Footer / nav buttons ── {%- endcomment -%}
+      <div class="elevate-trade-form__footer" data-trade-footer>
+        <div class="elevate-trade-form__footer-row">
+          <button type="button" class="elevate-trade-form__btn elevate-trade-form__btn--back" data-trade-back hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-left' -%}
+            </svg>
+            <span>Back</span>
+          </button>
+          <button type="button" class="elevate-trade-form__btn elevate-trade-form__btn--next" data-trade-next>
+            <span>{{ section.settings.next_text | default: 'Next' }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </button>
+          <button type="button" class="elevate-trade-form__btn elevate-trade-form__btn--submit" data-trade-submit hidden>
+            <span>{{ section.settings.submit_text | default: 'Get My Offer' }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </button>
+        </div>
+        <p class="elevate-trade-form__disclaimer">{{ section.settings.disclaimer_text | default: 'Your info is never shared or sold. We respond within 1 business day.' }}</p>
+      </div>
+
+    </div>
+
+    {%- comment -%} Hidden Liquid form — Shopify injects CAPTCHA token + handles submit {%- endcomment -%}
+    {% form 'contact', id: 'trade-contact-form', class: 'sr-only', aria-hidden: 'true' %}
+      <input type="email" name="contact[email]" value="" data-trade-hidden-email>
+      <input type="hidden" name="contact[name]" value="" data-trade-hidden-name>
+      <input type="hidden" name="contact[phone]" value="" data-trade-hidden-phone>
+      <input type="hidden" name="contact[subject]" value="" data-trade-hidden-subject>
+      <textarea name="contact[body]" data-trade-hidden-body style="display:none"></textarea>
+    {% endform %}
+
+  </div>
+</div>
+
+{%- comment -%} ══════════════════════════════════════════ {%- endcomment -%}
+{%- comment -%} ── JavaScript ─────────────────────────── {%- endcomment -%}
+{%- comment -%} ══════════════════════════════════════════ {%- endcomment -%}
+<script type="module">
+(function() {
+  var root = document.querySelector('[data-trade-form]');
+  if (!root) return;
+
+  /* ── Cached DOM refs ── */
+  var sidebar = root.querySelector('[data-trade-sidebar]');
+  var itemsList = root.querySelector('[data-trade-items-list]');
+  var mobileTabs = root.querySelector('[data-trade-mobile-tabs]');
+  var tabsRow = root.querySelector('[data-trade-tabs-row]');
+  var progressSteps = root.querySelectorAll('[data-trade-progress-step]');
+  var progressBars = root.querySelectorAll('.elevate-trade-form__progress-bar');
+  var eyebrow = root.querySelector('[data-trade-eyebrow]');
+  var heading = root.querySelector('[data-trade-heading]');
+  var subtitle = root.querySelector('[data-trade-subtitle]');
+  var btnBack = root.querySelector('[data-trade-back]');
+  var btnNext = root.querySelector('[data-trade-next]');
+  var btnSubmit = root.querySelector('[data-trade-submit]');
+  var footer = root.querySelector('[data-trade-footer]');
+  var typeCards = root.querySelectorAll('[data-trade-type]');
+  var typeSelect = root.querySelector('[data-trade-type-select]');
+  var conditionInputs = root.querySelectorAll('[data-trade-field="condition"]');
+  var uploadZone = root.querySelector('[data-trade-upload-zone]');
+  var fileInput = root.querySelector('[data-trade-file-input]');
+  var thumbnailsContainer = root.querySelector('[data-trade-thumbnails]');
+  var bulkUploadZone = root.querySelector('[data-trade-bulk-upload-zone]');
+  var bulkFileInput = root.querySelector('[data-trade-bulk-file-input]');
+  var bulkFilename = root.querySelector('[data-trade-bulk-filename]');
+
+  /* ── Step header content ── */
+  var stepHeaders = {
+    1: {
+      eyebrow: {{ section.settings.step1_eyebrow | default: 'SELL YOUR GEAR' | json }},
+      heading: {{ section.settings.step1_heading | default: 'Tell us what you have' | json }},
+      subtitle: {{ section.settings.step1_subtitle | default: "Add each item you want to sell. We'll send you a firm offer within 24 hours." | json }}
+    },
+    '1-bulk': {
+      eyebrow: 'SUBMIT YOUR GEAR',
+      heading: 'Submit multiple items at once',
+      subtitle: "Use our template, fill in your items, then upload it below. We\u2019ll review everything and send a single offer."
+    },
+    2: {
+      eyebrow: {{ section.settings.step2_eyebrow | default: 'ALMOST THERE' | json }},
+      heading: {{ section.settings.step2_heading | default: 'How should we reach you?' | json }},
+      subtitle: {{ section.settings.step2_subtitle | default: "We'll send your offer to the email below. Usually within 24 hours." | json }}
+    }
+  };
+
+  /* ── State ── */
+  var state = {
+    mode: 'item',
+    step: 1,
+    activeItem: 0,
+    items: [createEmptyItem()],
+    contact: { name: '', lastName: '', email: '', phone: '', payout: '', terms: false },
+    bulk: { file: null, notes: '' }
+  };
+
+  function createEmptyItem() {
+    return { type: 'bike', brand: '', model: '', year: '', size: '', groupset: '', price: '', condition: '', notes: '', photos: [] };
+  }
+
+  /* ── Type-field visibility map ── */
+  var typeFields = {
+    bike:       { size: true, groupset: true },
+    frameset:   { size: true, groupset: false },
+    groupset:   { size: false, groupset: false },
+    wheelset:   { size: false, groupset: false },
+    individual: { size: false, groupset: false }
+  };
+
+  var typeLabels = {
+    bike: 'Complete Bike',
+    frameset: 'Frameset',
+    groupset: 'Groupset',
+    wheelset: 'Wheelset',
+    individual: 'Individual'
+  };
+
+  /* ═══════════════════════════════════ */
+  /* ── Render helpers ── */
+  /* ═══════════════════════════════════ */
+
+  function updateProgress() {
+    progressSteps.forEach(function(el) {
+      var s = parseInt(el.dataset.tradeProgressStep);
+      var circle = el.querySelector('.elevate-trade-form__progress-circle');
+      var label = el.querySelector('.elevate-trade-form__progress-label');
+      if (circle) {
+        circle.classList.toggle('is-active', s === state.step);
+        circle.classList.toggle('is-completed', s < state.step);
+      }
+      if (label) {
+        label.classList.toggle('is-active', s === state.step);
+        label.classList.toggle('is-completed', s < state.step);
+      }
+    });
+    progressSteps.forEach(function(el) {
+      var s = parseInt(el.dataset.tradeProgressStep);
+      var bar = el.querySelector('.elevate-trade-form__progress-bar');
+      if (bar) bar.classList.toggle('is-filled', s <= state.step);
+    });
+  }
+
+  function updateHeader() {
+    if (state.step === 3) {
+      eyebrow.hidden = true;
+      heading.hidden = true;
+      subtitle.hidden = true;
+      return;
+    }
+    eyebrow.hidden = false;
+    heading.hidden = false;
+    subtitle.hidden = false;
+    var headerKey = state.step === 1 && state.mode === 'bulk' ? '1-bulk' : state.step;
+    var h = stepHeaders[headerKey];
+    if (h) {
+      eyebrow.textContent = h.eyebrow;
+      heading.textContent = h.heading;
+      subtitle.textContent = h.subtitle;
+    }
+  }
+
+  function showStep(n) {
+    state.step = n;
+    updateProgress();
+    updateHeader();
+
+    /* Show/hide steps */
+    root.querySelectorAll('[data-trade-step]').forEach(function(el) {
+      var stepKey = el.dataset.tradeStep;
+      if (n === 1) {
+        if (state.mode === 'item') {
+          el.hidden = stepKey !== '1';
+        } else {
+          el.hidden = stepKey !== '1-bulk';
+        }
+      } else {
+        el.hidden = stepKey !== String(n);
+      }
+    });
+
+    /* Sidebar visible on step 1 in both modes; mobile tabs only in item mode */
+    var showSidebar = n === 1;
+    sidebar.classList.toggle('is-hidden', !showSidebar);
+    root.classList.toggle('is-bulk-mode', state.mode === 'bulk');
+    mobileTabs.classList.toggle('is-hidden', n !== 1 || state.mode !== 'item');
+
+    /* Footer */
+    footer.hidden = n === 3;
+    btnBack.hidden = n === 1;
+    btnNext.hidden = n !== 1;
+    btnSubmit.hidden = n !== 2;
+  }
+
+  function updateConditionalFields() {
+    var item = state.items[state.activeItem];
+    var fields = typeFields[item.type] || {};
+    root.querySelectorAll('[data-trade-conditional]').forEach(function(el) {
+      var key = el.dataset.tradeConditional;
+      el.hidden = !fields[key];
+    });
+    root.querySelectorAll('[data-trade-row-dynamic]').forEach(function(row) {
+      var visibleCount = row.querySelectorAll('.elevate-trade-form__field:not([hidden])').length;
+      row.dataset.tradeCols = visibleCount;
+    });
+  }
+
+  function syncTypeUI() {
+    var item = state.items[state.activeItem];
+    typeCards.forEach(function(btn) {
+      btn.classList.toggle('is-active', btn.dataset.tradeType === item.type);
+    });
+    typeSelect.value = item.type;
+    updateConditionalFields();
+  }
+
+  function syncFieldsToUI() {
+    var item = state.items[state.activeItem];
+    root.querySelectorAll('[data-trade-step="1"] [data-trade-field]').forEach(function(el) {
+      var key = el.dataset.tradeField;
+      if (key === 'condition') {
+        el.checked = el.value === item.condition;
+        el.closest('.elevate-trade-form__condition-card').classList.toggle('is-active', el.checked);
+      } else if (el.tagName === 'SELECT' || el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+        el.value = item[key] || '';
+      }
+    });
+    syncTypeUI();
+    renderThumbnails();
+  }
+
+  /* ── Sidebar list ── */
+  function renderSidebar() {
+    /* Update mobile item count */
+    var countEl = root.querySelector('[data-trade-items-count]');
+    if (countEl) {
+      var n = state.items.length;
+      countEl.textContent = n + (n === 1 ? ' item listed' : ' items listed');
+    }
+
+    itemsList.innerHTML = '';
+    state.items.forEach(function(item, i) {
+      var li = document.createElement('li');
+      li.className = 'elevate-trade-form__items-entry' + (i === state.activeItem ? ' is-active' : '');
+      li.dataset.tradeItemEntry = i;
+
+      var typeSpan = document.createElement('span');
+      typeSpan.className = 'elevate-trade-form__items-type';
+      typeSpan.textContent = typeLabels[item.type] || 'Item';
+
+      var modelSpan = document.createElement('span');
+      modelSpan.className = 'elevate-trade-form__items-model';
+      modelSpan.textContent = item.model || item.brand || 'New item';
+
+      li.appendChild(typeSpan);
+      li.appendChild(modelSpan);
+
+      if (state.items.length > 1) {
+        var removeBtn = document.createElement('button');
+        removeBtn.type = 'button';
+        removeBtn.className = 'elevate-trade-form__items-remove';
+        removeBtn.setAttribute('aria-label', 'Remove item');
+        removeBtn.innerHTML = '&times;';
+        removeBtn.dataset.tradeRemoveItem = i;
+        li.appendChild(removeBtn);
+      }
+
+      itemsList.appendChild(li);
+    });
+  }
+
+  function renderMobileTabs() {
+    tabsRow.innerHTML = '';
+    state.items.forEach(function(item, i) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'elevate-trade-form__tab' + (i === state.activeItem ? ' is-active' : '');
+      btn.dataset.tradeTab = i;
+      btn.textContent = item.model || typeLabels[item.type] || 'Item ' + (i + 1);
+      tabsRow.appendChild(btn);
+    });
+  }
+
+  /* ── Photo thumbnails ── */
+  function renderThumbnails() {
+    var item = state.items[state.activeItem];
+    thumbnailsContainer.innerHTML = '';
+    item.photos.forEach(function(photo, i) {
+      var thumb = document.createElement('div');
+      thumb.className = 'elevate-trade-form__thumbnail';
+
+      var img = document.createElement('img');
+      img.src = photo.preview;
+      img.alt = 'Photo ' + (i + 1);
+      thumb.appendChild(img);
+
+      var removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.className = 'elevate-trade-form__thumbnail-remove';
+      removeBtn.setAttribute('aria-label', 'Remove photo');
+      removeBtn.innerHTML = '&times;';
+      removeBtn.dataset.tradeRemovePhoto = i;
+      thumb.appendChild(removeBtn);
+
+      thumbnailsContainer.appendChild(thumb);
+    });
+  }
+
+  /* ── Save current field values to state ── */
+  function saveCurrentFields() {
+    if (state.step === 1 && state.mode === 'item') {
+      var item = state.items[state.activeItem];
+      root.querySelectorAll('[data-trade-step="1"] [data-trade-field]').forEach(function(el) {
+        var key = el.dataset.tradeField;
+        if (key === 'condition') {
+          if (el.checked) item.condition = el.value;
+        } else {
+          item[key] = el.value;
+        }
+      });
+    } else if (state.step === 2) {
+      state.contact.name = root.querySelector('[data-trade-field="contactName"]').value;
+      state.contact.lastName = root.querySelector('[data-trade-field="contactLastName"]').value;
+      state.contact.email = root.querySelector('[data-trade-field="contactEmail"]').value;
+      state.contact.phone = root.querySelector('[data-trade-field="contactPhone"]').value;
+      var payoutChecked = root.querySelector('[data-trade-field="payout"]:checked');
+      state.contact.payout = payoutChecked ? payoutChecked.value : '';
+      state.contact.terms = root.querySelector('[data-trade-field="terms"]').checked;
+    }
+  }
+
+  /* ═══════════════════════════════════ */
+  /* ── Validation ── */
+  /* ═══════════════════════════════════ */
+  function clearErrors() {
+    root.querySelectorAll('.is-error').forEach(function(el) { el.classList.remove('is-error'); });
+    root.querySelectorAll('.elevate-trade-form__error').forEach(function(el) { el.remove(); });
+  }
+
+  function showError(field, message) {
+    field.classList.add('is-error');
+    var err = document.createElement('p');
+    err.className = 'elevate-trade-form__error';
+    err.textContent = message;
+    field.closest('.elevate-trade-form__field').appendChild(err);
+  }
+
+  function validateSingleItem(item) {
+    if (!item.brand.trim()) return false;
+    if (!item.model.trim()) return false;
+    if (!item.year) return false;
+    var fields = typeFields[item.type] || {};
+    if (fields.size && !item.size) return false;
+    if (!item.condition) return false;
+    return true;
+  }
+
+  function validateStep1() {
+    clearErrors();
+    if (state.mode === 'bulk') return true;
+
+    /* Save current item fields first */
+    saveCurrentFields();
+
+    /* Check ALL items, switch to first invalid one */
+    for (var i = 0; i < state.items.length; i++) {
+      if (!validateSingleItem(state.items[i])) {
+        /* Switch to the invalid item */
+        state.activeItem = i;
+        syncFieldsToUI();
+        renderSidebar();
+        renderMobileTabs();
+        break;
+      }
+    }
+
+    /* Now validate the currently displayed fields (the first invalid item) */
+    var valid = true;
+    var item = state.items[state.activeItem];
+
+    var brandEl = root.querySelector('[data-trade-field="brand"]');
+    if (!brandEl.value.trim()) { showError(brandEl, 'Brand is required'); valid = false; }
+
+    var modelEl = root.querySelector('[data-trade-field="model"]');
+    if (!modelEl.value.trim()) { showError(modelEl, 'Model is required'); valid = false; }
+
+    var yearEl = root.querySelector('[data-trade-field="year"]');
+    if (!yearEl.value) { showError(yearEl, 'Year is required'); valid = false; }
+
+    var fields = typeFields[item.type] || {};
+    if (fields.size) {
+      var sizeEl = root.querySelector('[data-trade-field="size"]');
+      if (!sizeEl.value) { showError(sizeEl, 'Size is required'); valid = false; }
+    }
+
+    var condChecked = root.querySelector('[data-trade-field="condition"]:checked');
+    if (!condChecked) {
+      var condContainer = root.querySelector('[data-trade-conditions]');
+      condContainer.classList.add('is-error');
+      var err = document.createElement('p');
+      err.className = 'elevate-trade-form__error';
+      err.textContent = 'Please select a condition';
+      condContainer.closest('.elevate-trade-form__field').appendChild(err);
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  function validateStep2() {
+    clearErrors();
+    var valid = true;
+
+    var nameEl = root.querySelector('[data-trade-field="contactName"]');
+    if (!nameEl.value.trim()) { showError(nameEl, 'Name is required'); valid = false; }
+
+    var lastEl = root.querySelector('[data-trade-field="contactLastName"]');
+    if (!lastEl.value.trim()) { showError(lastEl, 'Last name is required'); valid = false; }
+
+    var emailEl = root.querySelector('[data-trade-field="contactEmail"]');
+    if (!emailEl.value.trim() || !emailEl.value.includes('@')) { showError(emailEl, 'Valid email is required'); valid = false; }
+
+    var phoneEl = root.querySelector('[data-trade-field="contactPhone"]');
+    if (!phoneEl.value.trim()) { showError(phoneEl, 'Phone is required'); valid = false; }
+
+    var payoutChecked = root.querySelector('[data-trade-field="payout"]:checked');
+    if (!payoutChecked) {
+      var payoutContainer = root.querySelector('[data-trade-payout-cards]');
+      payoutContainer.classList.add('is-error');
+      var err = document.createElement('p');
+      err.className = 'elevate-trade-form__error';
+      err.textContent = 'Please select a payout preference';
+      payoutContainer.closest('.elevate-trade-form__field').appendChild(err);
+      valid = false;
+    }
+
+    var termsEl = root.querySelector('[data-trade-field="terms"]');
+    if (!termsEl.checked) {
+      termsEl.closest('.elevate-trade-form__consent').classList.add('is-error');
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  /* ═══════════════════════════════════ */
+  /* ── Submission ── */
+  /* ═══════════════════════════════════ */
+  function buildSubmissionBody() {
+    var lines = [];
+    lines.push('=== TRADE FORM SUBMISSION ===');
+    lines.push('');
+
+    if (state.mode === 'item') {
+      lines.push('ITEMS (' + state.items.length + '):');
+      lines.push('');
+      state.items.forEach(function(item, i) {
+        lines.push('--- Item ' + (i + 1) + ' ---');
+        lines.push('Type: ' + (typeLabels[item.type] || item.type));
+        lines.push('Brand: ' + item.brand);
+        lines.push('Model: ' + item.model);
+        lines.push('Year: ' + item.year);
+        if (item.size) lines.push('Size: ' + item.size);
+        if (item.groupset) lines.push('Groupset: ' + item.groupset);
+        if (item.price) lines.push('Asking Price: ' + item.price);
+        lines.push('Condition: ' + item.condition);
+        if (item.notes) lines.push('Notes: ' + item.notes);
+        lines.push('Photos attached: ' + item.photos.length);
+        lines.push('');
+      });
+    } else {
+      lines.push('MODE: Bulk submission (spreadsheet attached separately)');
+      if (state.bulk.notes) lines.push('Notes: ' + state.bulk.notes);
+      lines.push('');
+    }
+
+    lines.push('=== CONTACT INFO ===');
+    lines.push('Name: ' + state.contact.name + ' ' + state.contact.lastName);
+    lines.push('Email: ' + state.contact.email);
+    lines.push('Phone: ' + state.contact.phone);
+    lines.push('Payout Preference: ' + state.contact.payout);
+
+    return lines.join('\n');
+  }
+
+  function submitForm() {
+    saveCurrentFields();
+    if (!validateStep2()) return;
+
+    var submitBtn = btnSubmit;
+    submitBtn.disabled = true;
+    submitBtn.querySelector('span').textContent = 'Sending…';
+
+    var itemCount = state.mode === 'item' ? state.items.length : 'bulk';
+    var subject = 'Trade Form Submission — ' + (state.mode === 'item' ? state.items.length + ' item(s)' : 'Bulk');
+
+    /* Populate the hidden Liquid form — Shopify handles CAPTCHA via native submit */
+    var hiddenForm = document.getElementById('trade-contact-form');
+    hiddenForm.querySelector('[data-trade-hidden-email]').value = state.contact.email;
+    hiddenForm.querySelector('[data-trade-hidden-name]').value = state.contact.name + ' ' + state.contact.lastName;
+    hiddenForm.querySelector('[data-trade-hidden-phone]').value = state.contact.phone;
+    hiddenForm.querySelector('[data-trade-hidden-subject]').value = subject;
+    hiddenForm.querySelector('[data-trade-hidden-body]').value = buildSubmissionBody();
+
+    /* Submit into a hidden iframe to stay on page */
+    var iframeName = 'trade-submit-frame';
+    var iframe = document.getElementById(iframeName);
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.id = iframeName;
+      iframe.name = iframeName;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+    hiddenForm.target = iframeName;
+
+    /* ── DEBUG — REMOVE BEFORE LAUNCH ── */
+    console.group('%c[Trade Form] Submit Debug', 'color: #E31E24; font-weight: bold');
+    console.log('State:', JSON.parse(JSON.stringify(state)));
+    console.log('Email:', state.contact.email);
+    console.log('Name:', state.contact.name + ' ' + state.contact.lastName);
+    console.log('Subject:', subject);
+    console.log('Body:', buildSubmissionBody());
+    console.groupEnd();
+    /* ── END DEBUG ── */
+
+    iframe.onload = function() {
+      try {
+        var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        var iframeHtml = iframeDoc.documentElement.innerHTML;
+        var hasErrors = iframeDoc.querySelector('.errors, .form-errors');
+        var isCaptchaError = iframeHtml.indexOf('Missing CAPTCHA') !== -1;
+
+        /* ── DEBUG — REMOVE BEFORE LAUNCH ── */
+        console.group('%c[Trade Form] Response', 'color: #E31E24; font-weight: bold');
+        console.log('Has errors:', !!hasErrors, '| CAPTCHA error:', isCaptchaError);
+        console.log('Response (first 1000 chars):', iframeHtml.substring(0, 1000));
+        console.groupEnd();
+        /* ── END DEBUG ── */
+
+        if (!hasErrors && !isCaptchaError) {
+          showStep(3);
+          root.querySelector('.elevate-trade-form__inner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          submitBtn.disabled = false;
+          submitBtn.querySelector('span').textContent = {{ section.settings.submit_text | default: 'Get My Offer' | json }};
+          alert('Something went wrong. Please check your fields and try again.');
+        }
+      } catch (e) {
+        /* Cross-origin iframe — assume success (Shopify redirected to /contact success) */
+        console.log('[Trade Form] iframe cross-origin — assuming success');
+        showStep(3);
+        root.querySelector('.elevate-trade-form__inner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    };
+
+    hiddenForm.submit();
+  }
+
+  /* ═══════════════════════════════════ */
+  /* ── Event listeners ── */
+  /* ═══════════════════════════════════ */
+
+  /* Item type — desktop cards */
+  typeCards.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var item = state.items[state.activeItem];
+      item.type = btn.dataset.tradeType;
+      syncTypeUI();
+      renderSidebar();
+      renderMobileTabs();
+    });
+  });
+
+  /* Item type — mobile select */
+  typeSelect.addEventListener('change', function() {
+    var item = state.items[state.activeItem];
+    item.type = typeSelect.value;
+    syncTypeUI();
+    renderSidebar();
+    renderMobileTabs();
+  });
+
+  /* Condition radio cards */
+  conditionInputs.forEach(function(input) {
+    input.addEventListener('change', function() {
+      root.querySelectorAll('.elevate-trade-form__condition-card').forEach(function(card) {
+        card.classList.toggle('is-active', card.querySelector('input').checked);
+      });
+    });
+  });
+
+  /* Payout radio cards */
+  root.querySelectorAll('[data-trade-field="payout"]').forEach(function(input) {
+    input.addEventListener('change', function() {
+      root.querySelectorAll('.elevate-trade-form__payout-card').forEach(function(card) {
+        card.classList.toggle('is-active', card.querySelector('input').checked);
+      });
+    });
+  });
+
+  /* Sidebar item click */
+  itemsList.addEventListener('click', function(e) {
+    var entry = e.target.closest('[data-trade-item-entry]');
+    var removeBtn = e.target.closest('[data-trade-remove-item]');
+
+    if (removeBtn) {
+      var idx = parseInt(removeBtn.dataset.tradeRemoveItem);
+      state.items.splice(idx, 1);
+      if (state.activeItem >= state.items.length) state.activeItem = state.items.length - 1;
+      renderSidebar();
+      renderMobileTabs();
+      syncFieldsToUI();
+      return;
+    }
+
+    if (entry) {
+      saveCurrentFields();
+      state.activeItem = parseInt(entry.dataset.tradeItemEntry);
+      renderSidebar();
+      renderMobileTabs();
+      syncFieldsToUI();
+    }
+  });
+
+  /* Mobile tab click */
+  tabsRow.addEventListener('click', function(e) {
+    var tab = e.target.closest('[data-trade-tab]');
+    if (tab) {
+      saveCurrentFields();
+      state.activeItem = parseInt(tab.dataset.tradeTab);
+      renderSidebar();
+      renderMobileTabs();
+      syncFieldsToUI();
+    }
+  });
+
+  /* Add item — sidebar */
+  root.querySelector('[data-trade-add-item]').addEventListener('click', function() {
+    saveCurrentFields();
+    state.items.push(createEmptyItem());
+    state.activeItem = state.items.length - 1;
+    renderSidebar();
+    renderMobileTabs();
+    syncFieldsToUI();
+  });
+
+  /* Add item — mobile tab */
+  root.querySelector('[data-trade-tab-add]').addEventListener('click', function() {
+    saveCurrentFields();
+    state.items.push(createEmptyItem());
+    state.activeItem = state.items.length - 1;
+    renderSidebar();
+    renderMobileTabs();
+    syncFieldsToUI();
+  });
+
+  /* Model field live-update for sidebar/tabs */
+  var modelField = root.querySelector('[data-trade-field="model"]');
+  if (modelField) {
+    modelField.addEventListener('input', function() {
+      state.items[state.activeItem].model = modelField.value;
+      renderSidebar();
+      renderMobileTabs();
+    });
+  }
+
+  /* Bulk mode toggle */
+  root.querySelector('[data-trade-bulk-toggle]').addEventListener('click', function() {
+    state.mode = 'bulk';
+    showStep(1);
+  });
+
+  /* Back to item mode (text button + sidebar card click) */
+  var backToItemBtn = root.querySelector('[data-trade-back-to-items]');
+  if (backToItemBtn) {
+    backToItemBtn.addEventListener('click', function() {
+      state.mode = 'item';
+      showStep(1);
+    });
+  }
+  var sidebarCard = root.querySelector('.elevate-trade-form__sidebar-card');
+  if (sidebarCard) {
+    sidebarCard.addEventListener('click', function() {
+      if (state.mode === 'bulk') {
+        state.mode = 'item';
+        showStep(1);
+      }
+    });
+  }
+
+  /* Navigation: Next */
+  btnNext.addEventListener('click', function() {
+    saveCurrentFields();
+    if (state.step === 1) {
+      if (state.mode === 'item') {
+        if (!validateStep1()) return;
+      }
+      showStep(2);
+      root.querySelector('.elevate-trade-form__inner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  /* Navigation: Back */
+  btnBack.addEventListener('click', function() {
+    clearErrors();
+    if (state.step === 2) {
+      showStep(1);
+      root.querySelector('.elevate-trade-form__inner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  /* Submit */
+  btnSubmit.addEventListener('click', function() {
+    saveCurrentFields();
+    submitForm();
+  });
+
+  /* ── Photo upload ── */
+  function handlePhotoFiles(files) {
+    var item = state.items[state.activeItem];
+    Array.from(files).forEach(function(file) {
+      if (file.size > 10 * 1024 * 1024) return;
+      if (!file.type.startsWith('image/')) return;
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        item.photos.push({ file: file, preview: e.target.result });
+        renderThumbnails();
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  uploadZone.addEventListener('click', function() { fileInput.click(); });
+  fileInput.addEventListener('change', function() {
+    handlePhotoFiles(fileInput.files);
+    fileInput.value = '';
+  });
+
+  uploadZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    uploadZone.classList.add('is-dragover');
+  });
+  uploadZone.addEventListener('dragleave', function() {
+    uploadZone.classList.remove('is-dragover');
+  });
+  uploadZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    uploadZone.classList.remove('is-dragover');
+    handlePhotoFiles(e.dataTransfer.files);
+  });
+
+  /* Photo remove */
+  thumbnailsContainer.addEventListener('click', function(e) {
+    var btn = e.target.closest('[data-trade-remove-photo]');
+    if (btn) {
+      var idx = parseInt(btn.dataset.tradeRemovePhoto);
+      state.items[state.activeItem].photos.splice(idx, 1);
+      renderThumbnails();
+    }
+  });
+
+  /* ── Bulk file upload ── */
+  bulkUploadZone.addEventListener('click', function() { bulkFileInput.click(); });
+  bulkFileInput.addEventListener('change', function() {
+    if (bulkFileInput.files.length) {
+      state.bulk.file = bulkFileInput.files[0];
+      bulkFilename.textContent = state.bulk.file.name;
+      bulkFilename.hidden = false;
+    }
+  });
+  bulkUploadZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    bulkUploadZone.classList.add('is-dragover');
+  });
+  bulkUploadZone.addEventListener('dragleave', function() {
+    bulkUploadZone.classList.remove('is-dragover');
+  });
+  bulkUploadZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    bulkUploadZone.classList.remove('is-dragover');
+    if (e.dataTransfer.files.length) {
+      state.bulk.file = e.dataTransfer.files[0];
+      bulkFilename.textContent = state.bulk.file.name;
+      bulkFilename.hidden = false;
+    }
+  });
+
+  /* ── Init ── */
+  showStep(1);
+  syncFieldsToUI();
+  renderSidebar();
+  renderMobileTabs();
+
+})();
+</script>
+
+{% stylesheet %}
+  /* ─── Trade Form Section ─── */
+  .elevate-trade-form {
+    position: relative;
+    padding-block-start: var(--elevate-trade-form-pt);
+    padding-block-end: var(--elevate-trade-form-pb);
+  }
+
+  .elevate-trade-form__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    background: #FDFCFC;
+    border-radius: 2rem;
+    overflow: clip;
+    padding: 1.5rem 1rem;
+  }
+
+  /* Mobile visual order within __inner */
+  .elevate-trade-form__header { order: 1; }
+  .elevate-trade-form__sidebar { order: 2; }
+  .elevate-trade-form__progress { order: 3; }
+  .elevate-trade-form__main {
+    order: 4;
+    background: #F2F2F3;
+    margin-inline: -1rem;
+  }
+
+  .elevate-trade-form__step {
+    background: #FDFCFC;
+    border-radius: 1.5rem 1.5rem 0 0;
+    padding: 1.5rem 1rem 0;
+  }
+
+  /* ── sr-only ── */
+  .elevate-trade-form .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Sidebar              ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__sidebar {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.75rem;
+    background: #F2F2F3;
+    margin-inline: -1rem;
+    padding-inline: 1rem;
+    padding-block: 0.75rem 0;
+  }
+
+  .elevate-trade-form__sidebar.is-hidden {
+    display: none;
+  }
+
+  .elevate-trade-form__sidebar-top {
+    display: contents;
+  }
+
+  .elevate-trade-form__sidebar-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex: 1 0 0;
+    align-self: stretch;
+    border: none;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: #E31E24;
+    padding: 0.75rem;
+  }
+
+  .elevate-trade-form__sidebar-card-header {
+    padding: 0;
+  }
+
+  .elevate-trade-form__sidebar-count {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: rgba(253, 252, 252, 0.7);
+    margin: 0.125rem 0 0;
+  }
+
+  .elevate-trade-form__sidebar-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-trade-form__items-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: none;
+    flex-direction: column;
+    max-height: 5rem;
+    overflow-y: auto;
+  }
+
+  .elevate-trade-form__items-entry {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.375rem 0.75rem;
+    cursor: pointer;
+    border-left: 0.5rem solid transparent;
+    border-top: 1px solid #E2E3E5;
+    position: relative;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    background: rgba(226, 227, 229, 0.4);
+    font-size: 0.75rem;
+  }
+
+  .elevate-trade-form__items-entry:hover {
+    background: rgba(226, 227, 229, 0.6);
+  }
+
+  .elevate-trade-form__items-entry.is-active {
+    background: #F1DBDC;
+    border-left-color: #E31E24;
+  }
+
+  .elevate-trade-form__items-type {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #36393F;
+  }
+
+  .elevate-trade-form__items-model {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #36393F;
+  }
+
+  .elevate-trade-form__items-remove {
+    position: absolute;
+    top: 0.375rem;
+    right: 0.375rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: none;
+    background: none;
+    color: #AEB2B8;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: color 0.15s ease, background-color 0.15s ease;
+    padding: 0;
+  }
+
+  .elevate-trade-form__items-remove:hover {
+    color: #E31E24;
+    background: rgba(227, 30, 36, 0.08);
+  }
+
+  .elevate-trade-form__add-item {
+    display: none;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.5rem 0.75rem;
+    border: none;
+    border-top: 1px solid #E2E3E5;
+    background: none;
+    cursor: pointer;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    transition: opacity 0.15s ease;
+    width: 100%;
+  }
+
+  .elevate-trade-form__add-item:hover {
+    opacity: 0.8;
+  }
+
+  .elevate-trade-form__add-icon {
+    font-size: 1.125rem;
+    line-height: 1;
+  }
+
+  .elevate-trade-form__sidebar-or {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #AEB2B8;
+    text-align: center;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  /* Bulk CTA card */
+  .elevate-trade-form__bulk-cta {
+    display: flex;
+    padding: 0.75rem;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex: 1 0 0;
+    border: 0.5px solid #AEB2B8;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+    overflow: hidden;
+    background: #FDFCFC;
+    gap: 0;
+  }
+
+  .elevate-trade-form__bulk-cta:hover {
+    border-color: #36393F;
+  }
+
+  .elevate-trade-form__bulk-cta-heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-trade-form__bulk-cta-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Mobile tabs         ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__mobile-tabs {
+    display: flex;
+    align-items: flex-end;
+    gap: 0.25rem;
+    padding-block-end: 0;
+    padding-inline: 1rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .elevate-trade-form__mobile-tabs.is-hidden {
+    display: none;
+  }
+
+  .elevate-trade-form__tabs-row {
+    display: flex;
+    gap: 0.25rem;
+  }
+
+  .elevate-trade-form__tab {
+    padding: 0.5rem 1rem;
+    border: 2px solid transparent;
+    border-bottom: none;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background: #AEB2B8;
+    font-family: 'Montserrat', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #FDFCFC;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .elevate-trade-form__tab.is-active {
+    background: #FDFCFC;
+    border-color: #E31E24;
+    border-bottom: none;
+    color: #36393F;
+  }
+
+  .elevate-trade-form__tab-add {
+    flex-shrink: 0;
+    padding: 0.5rem 0.75rem;
+    border: 2px solid transparent;
+    border-bottom: none;
+    border-radius: 0.5rem 0.5rem 0 0;
+    background: #AEB2B8;
+    color: #FDFCFC;
+    font-family: 'Montserrat', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Progress bar        ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__progress {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-block-start: 1rem;
+    padding-block-end: 1.5rem;
+    background: #F2F2F3;
+    margin-inline: -1rem;
+    padding-inline: 1rem;
+  }
+
+  /* Each step is a column: circle on top, label below.
+     Bar is positioned absolutely to connect from previous circle. */
+  .elevate-trade-form__progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    width: 4.375rem;
+  }
+
+  /* Bar connects from the previous step's center to this step's center */
+  .elevate-trade-form__progress-bar {
+    position: absolute;
+    top: 0.625rem;
+    right: 50%;
+    width: 4.375rem;
+    height: 0.25rem;
+    background: #E2E3E5;
+    border-radius: 6.1875rem;
+    z-index: 1;
+    transition: background-color 0.2s ease;
+  }
+
+  /* First step: no bar to its left */
+  .elevate-trade-form__progress-step:first-child .elevate-trade-form__progress-bar {
+    display: none;
+  }
+
+  .elevate-trade-form__progress-bar.is-filled {
+    background: #E31E24;
+  }
+
+  .elevate-trade-form__progress-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: #E2E3E5;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.8125rem;
+    line-height: 1;
+    color: #141517;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .elevate-trade-form__progress-circle.is-active,
+  .elevate-trade-form__progress-circle.is-completed {
+    background: #E31E24;
+    color: #FDFCFC;
+  }
+
+  .elevate-trade-form__progress-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #36393F;
+    white-space: nowrap;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Header              ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-trade-form__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.1;
+    color: #141517;
+    margin: 0.25rem 0 0;
+  }
+
+  .elevate-trade-form__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #36393F;
+    margin: 0.5rem 0 0;
+  }
+
+  .elevate-trade-form__header {
+    padding-block-end: 1.5rem;
+    background: rgba(226, 227, 229, 0.40);
+    margin-inline: -1rem;
+    padding-inline: 1rem;
+    padding-block-start: 1.5rem;
+    border-radius: 1.5rem 1.5rem 0 0;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Form fields         ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__step {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-trade-form__step[hidden] {
+    display: none;
+  }
+
+  .elevate-trade-form__row {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .elevate-trade-form__fields-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+
+  .elevate-trade-form__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .elevate-trade-form__field[hidden] {
+    display: none;
+  }
+
+  .elevate-trade-form__label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #141517;
+    padding-inline-start: 0.25rem;
+  }
+
+  .elevate-trade-form__required {
+    color: #EB4343;
+  }
+
+  .elevate-trade-form .elevate-trade-form__input,
+  .elevate-trade-form .elevate-trade-form__textarea {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid #AEB2B8;
+    border-radius: 0.5rem;
+    background: #FDFCFC;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #36393F;
+    transition: border-color 0.15s ease;
+    height: 2.875rem;
+  }
+
+  .elevate-trade-form__input:focus,
+  .elevate-trade-form__textarea:focus {
+    outline: none;
+    border-color: #E31E24;
+  }
+
+  .elevate-trade-form__input::placeholder,
+  .elevate-trade-form__textarea::placeholder {
+    color: #AEB2B8;
+  }
+
+  .elevate-trade-form__input.is-error,
+  .elevate-trade-form__textarea.is-error {
+    border-color: #EB4343;
+  }
+
+  .elevate-trade-form__textarea {
+    height: auto;
+    resize: vertical;
+    min-height: 4.5rem;
+  }
+
+  .elevate-trade-form select.elevate-trade-form__input {
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='%236B7280'%3E%3Cpath fill-rule='evenodd' d='M5.23 7.21a.75.75 0 011.06.02L10 11.168l3.71-3.938a.75.75 0 111.08 1.04l-4.25 4.5a.75.75 0 01-1.08 0l-4.25-4.5a.75.75 0 01.02-1.06z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.75rem center;
+    background-size: 1.25rem;
+    padding-right: 2.5rem;
+  }
+
+  .elevate-trade-form__error {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #EB4343;
+    margin: 0.125rem 0 0 0.25rem;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Type cards (desktop) ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__type-cards {
+    display: none;
+  }
+
+  .elevate-trade-form__type-select-wrap {
+    display: block;
+  }
+
+  .elevate-trade-form__type-card {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border: 2px solid #E2E3E5;
+    border-radius: 0.75rem;
+    background: #FDFCFC;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    padding: 0;
+  }
+
+  .elevate-trade-form__type-card:hover:not(.is-active) {
+    border-color: #E31E24;
+    background: #FBEAEA;
+  }
+
+  .elevate-trade-form__type-card.is-active {
+    border-color: #E31E24;
+    background: #E31E24;
+  }
+
+  .elevate-trade-form__type-card.is-active .elevate-trade-form__type-label {
+    color: #FDFCFC;
+  }
+
+  .elevate-trade-form__type-card.is-active .elevate-trade-form__type-desc {
+    color: rgba(253, 252, 252, 0.7);
+  }
+
+  .elevate-trade-form__type-img {
+    width: 100%;
+    aspect-ratio: 120 / 72;
+    display: block;
+    overflow: hidden;
+    background: #F2F2F3;
+  }
+
+  .elevate-trade-form__type-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .elevate-trade-form__type-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    text-align: center;
+    padding: 0.5rem 0.5rem 0.625rem;
+  }
+
+  .elevate-trade-form__type-label {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #141517;
+  }
+
+  .elevate-trade-form__type-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.6875rem;
+    line-height: 1.4;
+    letter-spacing: -0.00875rem;
+    color: #6A6D72;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Condition cards      ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__conditions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.5rem;
+  }
+
+  .elevate-trade-form .elevate-trade-form__condition-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    padding: 0.625rem 0.5rem;
+    border: 1px solid #E2E3E5;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .elevate-trade-form__condition-card:hover {
+    border-color: #AEB2B8;
+  }
+
+  .elevate-trade-form__condition-card.is-active {
+    border-color: #E31E24;
+    background: #FEF2F2;
+  }
+
+  .elevate-trade-form__condition-radio {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid #AEB2B8;
+    border-radius: 50%;
+    position: relative;
+    transition: border-color 0.15s ease;
+  }
+
+  .elevate-trade-form__condition-card.is-active .elevate-trade-form__condition-radio {
+    border-color: #E31E24;
+  }
+
+  .elevate-trade-form__condition-card.is-active .elevate-trade-form__condition-radio::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background: #E31E24;
+  }
+
+  .elevate-trade-form__condition-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.0625rem;
+  }
+
+  .elevate-trade-form__condition-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: #141517;
+  }
+
+  .elevate-trade-form__condition-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: #6B7280;
+  }
+
+  /* ── Contact step: fields stay stacked on mobile ── */
+  .elevate-trade-form__step--contact .elevate-trade-form__row {
+    grid-template-columns: 1fr;
+  }
+
+  /* ── Type select — taller on mobile to approximate Figma ── */
+  .elevate-trade-form__type-select-wrap .elevate-trade-form__input {
+    height: 4rem;
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: #141517;
+    padding-block: 0.75rem;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Photo upload zone    ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__upload-zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    border: 2px dashed #D1D5DB;
+    border-radius: 0.75rem;
+    background: rgba(226, 227, 229, 0.2);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+    min-height: 7rem;
+  }
+
+  .elevate-trade-form__upload-zone:hover,
+  .elevate-trade-form__upload-zone.is-dragover {
+    border-color: #E31E24;
+    background: rgba(227, 30, 36, 0.04);
+  }
+
+  .elevate-trade-form__upload-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+  }
+
+  .elevate-trade-form__upload-icon {
+    color: #AEB2B8;
+    margin-block-end: 0.25rem;
+  }
+
+  .elevate-trade-form__upload-heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-trade-form__upload-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-trade-form__upload-link {
+    color: #E31E24;
+    font-weight: 600;
+    text-decoration: underline;
+  }
+
+  .elevate-trade-form__upload-hint {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  /* ── Thumbnails ── */
+  .elevate-trade-form__thumbnails {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding-block-start: 0.5rem;
+  }
+
+  .elevate-trade-form__thumbnail {
+    position: relative;
+    width: 5rem;
+    height: 5rem;
+    border: 1px solid #E2E3E5;
+    border-radius: 0.5rem;
+    overflow: hidden;
+  }
+
+  .elevate-trade-form__thumbnail img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-trade-form__thumbnail-remove {
+    position: absolute;
+    top: 0.125rem;
+    right: 0.125rem;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    border: none;
+    background: rgba(20, 21, 23, 0.7);
+    color: #FDFCFC;
+    font-size: 0.75rem;
+    line-height: 1;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+  }
+
+  .elevate-trade-form__photo-tip {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid #E2E3E5;
+    border-radius: 0.5rem;
+    margin-block-start: 0.25rem;
+  }
+
+  .elevate-trade-form__photo-tip-icon {
+    flex-shrink: 0;
+    color: #AEB2B8;
+  }
+
+  .elevate-trade-form__photo-tip-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #6A6D72;
+    margin: 0;
+  }
+
+  .elevate-trade-form__photo-note {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #6A6D72;
+    margin: 0;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Bulk mode            ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__back-to-items {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: #6A6D72;
+    cursor: pointer;
+    transition: color 0.15s ease;
+    margin-block-end: 0.5rem;
+  }
+
+  .elevate-trade-form__back-to-items:hover {
+    color: #E31E24;
+  }
+
+  .elevate-trade-form__back-to-items svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .elevate-trade-form__template-buttons {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    max-width: 25.875rem;
+    margin-inline: auto;
+  }
+
+  .elevate-trade-form__template-btn {
+    display: flex;
+    flex: 1 0 0;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 0.5px solid #141517;
+    border-radius: 0.75rem;
+    background: #FDFCFC;
+    color: #141517;
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .elevate-trade-form__template-btn:hover {
+    border-color: #E31E24;
+  }
+
+  .elevate-trade-form__template-btn svg {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #36393F;
+  }
+
+  .elevate-trade-form__template-btn-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-start;
+    justify-content: center;
+    line-height: 1.5;
+  }
+
+  .elevate-trade-form__template-btn-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #141517;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  .elevate-trade-form__template-btn-sub {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: #AEB2B8;
+    letter-spacing: -0.01em;
+  }
+
+  .elevate-trade-form__bulk-file-name {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #36393F;
+    padding: 0.5rem 0.25rem;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Step 2: Payout cards ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__payout-cards {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+  }
+
+  .elevate-trade-form__payout-cards > .elevate-trade-form__payout-card {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .elevate-trade-form .elevate-trade-form__payout-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.625rem 0.5rem;
+    border: 1px solid #E2E3E5;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .elevate-trade-form__payout-card:hover {
+    border-color: #AEB2B8;
+  }
+
+  .elevate-trade-form__payout-card.is-active {
+    border-color: #E31E24;
+    background: #FEF2F2;
+  }
+
+  .elevate-trade-form__payout-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.125rem;
+  }
+
+  .elevate-trade-form__payout-label {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #141517;
+  }
+
+  .elevate-trade-form__payout-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    color: #6B7280;
+  }
+
+  /* ── Consent ── */
+  .elevate-trade-form__consent {
+    padding-block-start: 0.5rem;
+  }
+
+  .elevate-trade-form .elevate-trade-form__consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  .elevate-trade-form__consent.is-error .elevate-trade-form__checkbox {
+    border-color: #EB4343;
+  }
+
+  .elevate-trade-form__checkbox {
+    -webkit-appearance: none;
+    appearance: none;
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0.125rem 0 0;
+    border: 2px solid #AEB2B8;
+    border-radius: 0.25rem;
+    background: #FDFCFC;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .elevate-trade-form__checkbox:checked {
+    background: #E31E24;
+    border-color: #E31E24;
+  }
+
+  .elevate-trade-form__checkbox:checked::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.625rem;
+    height: 0.625rem;
+    transform: translate(-50%, -50%);
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") no-repeat center / contain;
+  }
+
+  .elevate-trade-form__consent-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #36393F;
+  }
+
+  .elevate-trade-form__consent-text a {
+    color: #E31E24;
+    text-decoration: underline;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Step 3: All Done     ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__step--done {
+    padding: 1rem 0;
+  }
+
+  .elevate-trade-form__done-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    max-width: 32rem;
+    margin: 0 auto;
+  }
+
+  .elevate-trade-form__done-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 1rem;
+    background: #FEF2F2;
+    color: #E31E24;
+  }
+
+  .elevate-trade-form__done-heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.1;
+    color: #141517;
+    margin: 0;
+  }
+
+  .elevate-trade-form__done-subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-trade-form__done-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    text-align: left;
+    padding: 1rem 0;
+  }
+
+  .elevate-trade-form__done-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .elevate-trade-form__done-step-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    background: #AEB2B8;
+    flex-shrink: 0;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: #FDFCFC;
+  }
+
+  .elevate-trade-form__done-step-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .elevate-trade-form__done-step-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: #141517;
+    margin: 0;
+  }
+
+  .elevate-trade-form__done-step-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: #6B7280;
+    margin: 0;
+  }
+
+  .elevate-trade-form__done-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: #E31E24;
+    border-radius: 0.75rem;
+    color: #FDFCFC;
+    text-decoration: none;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    transition: background-color 0.15s ease;
+    margin-block-start: 0.5rem;
+  }
+
+  .elevate-trade-form__done-cta:hover {
+    background: #c4191e;
+  }
+
+  .elevate-trade-form__done-cta svg {
+    color: #FDFCFC;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Footer / buttons     ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding-block-start: 1.5rem;
+    background: #FDFCFC;
+    padding-inline: 1rem;
+  }
+
+  .elevate-trade-form__footer[hidden] {
+    display: none;
+  }
+
+  .elevate-trade-form__footer-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .elevate-trade-form__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+    border: none;
+  }
+
+  .elevate-trade-form__btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .elevate-trade-form__btn--back {
+    background: transparent;
+    color: #36393F;
+    border: 1px solid #AEB2B8;
+  }
+
+  .elevate-trade-form__btn--back:hover {
+    background: #F2F2F3;
+    border-color: #36393F;
+  }
+
+  .elevate-trade-form__btn--back svg {
+    color: #36393F;
+  }
+
+  .elevate-trade-form__btn--next,
+  .elevate-trade-form__btn--submit {
+    background: #E31E24;
+    color: #FDFCFC;
+  }
+
+  .elevate-trade-form__btn--next:hover,
+  .elevate-trade-form__btn--submit:hover {
+    background: #c4191e;
+  }
+
+  .elevate-trade-form__btn--next svg,
+  .elevate-trade-form__btn--submit svg {
+    color: #FDFCFC;
+  }
+
+  .elevate-trade-form__btn[hidden] {
+    display: none;
+  }
+
+  .elevate-trade-form__btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .elevate-trade-form__disclaimer {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #6B7280;
+    margin: 0;
+  }
+
+  /* ══════════════════════════════════════ */
+  /* ── Desktop (990px+)                ── */
+  /* ══════════════════════════════════════ */
+  @media (min-width: 61.9375rem) {
+    .elevate-trade-form__inner {
+      display: grid;
+      grid-template-columns: 14.75rem 1fr;
+      grid-template-rows: auto auto 1fr;
+      gap: 0 2rem;
+      padding: 2.5rem 7.5rem;
+    }
+
+    /* Reset mobile order */
+    .elevate-trade-form__header,
+    .elevate-trade-form__sidebar,
+    .elevate-trade-form__progress,
+    .elevate-trade-form__main { order: unset; }
+
+    /* Sidebar spans all rows in column 1 */
+    .elevate-trade-form__sidebar {
+      grid-column: 1;
+      grid-row: 1 / -1;
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      align-self: flex-start;
+      background: transparent;
+      margin-inline: 0;
+      padding-inline: 0;
+      padding-block: 0;
+    }
+
+    /* Header + progress + main in column 2 */
+    .elevate-trade-form__header {
+      grid-column: 2;
+      background: transparent;
+      margin-inline: 0;
+      padding-inline: 0;
+      padding-block-start: 0;
+      border-radius: 0;
+    }
+    .elevate-trade-form__progress {
+      grid-column: 2;
+      background: transparent;
+      margin-inline: 0;
+      padding-inline: 0;
+      padding-block-start: 1rem;
+      padding-block-end: 3rem;
+    }
+    .elevate-trade-form__main {
+      grid-column: 2;
+      background: transparent;
+      margin-inline: 0;
+    }
+
+    .elevate-trade-form__step {
+      background: transparent;
+      border-radius: 0;
+      padding: 0;
+    }
+
+    .elevate-trade-form__sidebar.is-hidden {
+      display: none;
+    }
+
+    /* When sidebar hidden (step 2/3), content spans full width */
+    .elevate-trade-form__sidebar.is-hidden ~ .elevate-trade-form__header,
+    .elevate-trade-form__sidebar.is-hidden ~ .elevate-trade-form__progress,
+    .elevate-trade-form__sidebar.is-hidden ~ .elevate-trade-form__main {
+      grid-column: 1 / -1;
+    }
+
+    .elevate-trade-form__sidebar-top {
+      display: contents;
+    }
+
+    .elevate-trade-form__sidebar-card {
+      display: block;
+      border: 2px solid #E31E24;
+      border-radius: 1rem;
+      background: #FDFCFC;
+      padding: 0;
+      flex: initial;
+      align-self: auto;
+      align-items: stretch;
+      width: 100%;
+    }
+
+    .elevate-trade-form__sidebar-card-header {
+      padding: 0.75rem 1.5rem;
+    }
+
+    .elevate-trade-form__sidebar-label {
+      color: #36393F;
+      font-weight: 400;
+    }
+
+    .elevate-trade-form__sidebar-count {
+      display: none;
+    }
+
+    .elevate-trade-form__items-list {
+      display: flex;
+      max-height: none;
+    }
+
+    .elevate-trade-form__items-entry {
+      padding: 0.5rem 1.5rem;
+      font-size: inherit;
+    }
+
+    .elevate-trade-form__add-item {
+      display: flex;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.875rem;
+    }
+
+    .elevate-trade-form__bulk-cta {
+      border-radius: 1rem;
+      padding: 0.75rem 1.5rem;
+      flex: initial;
+      align-items: flex-start;
+      justify-content: flex-start;
+      text-align: left;
+      gap: 0.5rem;
+    }
+
+    /* Type select reset */
+    .elevate-trade-form__type-select-wrap .elevate-trade-form__input {
+      height: 2.875rem;
+      font-family: 'Inter', var(--font-body--family), sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 400;
+      color: #36393F;
+      padding-block: 0.625rem;
+    }
+
+    /* Tabs hidden on desktop — defensive resets */
+    .elevate-trade-form__tab {
+      border-radius: 2rem;
+      border: 1px solid #E2E3E5;
+      background: #FDFCFC;
+      color: #36393F;
+      font-family: 'Inter', var(--font-body--family), sans-serif;
+      font-weight: 500;
+      font-size: 0.8125rem;
+    }
+
+    .elevate-trade-form__tab.is-active {
+      background: #FEF2F2;
+      border-color: #E31E24;
+      color: #E31E24;
+      font-weight: 600;
+    }
+
+    .elevate-trade-form__tab-add {
+      width: 1.75rem;
+      height: 1.75rem;
+      padding: 0;
+      border: 1px dashed #AEB2B8;
+      border-radius: 50%;
+      background: none;
+      color: #AEB2B8;
+      font-family: inherit;
+      font-size: 1rem;
+    }
+
+    /* Mobile tabs hidden on desktop */
+    .elevate-trade-form__mobile-tabs {
+      display: none;
+    }
+
+    /* Main */
+    .elevate-trade-form__main {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .elevate-trade-form__footer {
+      background: transparent;
+      padding-inline: 0;
+    }
+
+    .elevate-trade-form__heading {
+      font-size: 3rem;
+    }
+
+    /* Type cards — show on desktop */
+    .elevate-trade-form__type-cards {
+      display: flex;
+      gap: 0.75rem;
+    }
+
+    .elevate-trade-form__type-img {
+      aspect-ratio: 120 / 72;
+    }
+
+    .elevate-trade-form__type-select-wrap {
+      display: none;
+    }
+
+    /* Rows go horizontal */
+    .elevate-trade-form__row {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    .elevate-trade-form__row > .elevate-trade-form__field {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .elevate-trade-form__fields-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    /* Conditions in 4-col grid */
+    .elevate-trade-form__conditions {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .elevate-trade-form .elevate-trade-form__condition-card {
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+    }
+
+    /* Payout cards horizontal */
+    .elevate-trade-form__payout-cards {
+      flex-direction: row;
+    }
+
+    .elevate-trade-form__payout-card {
+      flex: 1;
+    }
+
+    .elevate-trade-form .elevate-trade-form__payout-card {
+      padding: 1rem;
+    }
+
+    /* Done step */
+    .elevate-trade-form__step--done {
+      padding: 2rem 0;
+    }
+
+    .elevate-trade-form__done-heading {
+      font-size: 2.5rem;
+    }
+
+  }
+
+  /* ══════════════════════════ */
+  /* ── Bulk mode states     ── */
+  /* ══════════════════════════ */
+  .elevate-trade-form__back-to-items {
+    display: none;
+  }
+
+  .elevate-trade-form.is-bulk-mode .elevate-trade-form__sidebar-card {
+    background: #FDFCFC;
+    border: 0.5px solid #AEB2B8;
+    cursor: pointer;
+  }
+
+  .elevate-trade-form.is-bulk-mode .elevate-trade-form__sidebar-label {
+    color: #36393F;
+  }
+
+  .elevate-trade-form.is-bulk-mode .elevate-trade-form__sidebar-count {
+    color: #AEB2B8;
+  }
+
+  .elevate-trade-form.is-bulk-mode .elevate-trade-form__bulk-cta {
+    border: 2px solid #E31E24;
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade — Gear Form",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Step 1 — Description"
+    },
+    {
+      "type": "text",
+      "id": "step1_label",
+      "label": "Progress label",
+      "default": "Description"
+    },
+    {
+      "type": "text",
+      "id": "step1_eyebrow",
+      "label": "Eyebrow",
+      "default": "SELL YOUR GEAR"
+    },
+    {
+      "type": "text",
+      "id": "step1_heading",
+      "label": "Heading",
+      "default": "Tell us what you have"
+    },
+    {
+      "type": "textarea",
+      "id": "step1_subtitle",
+      "label": "Subtitle",
+      "default": "Add each item you want to sell. We'll send you a firm offer within 24 hours."
+    },
+    {
+      "type": "header",
+      "content": "Item type images"
+    },
+    {
+      "type": "image_picker",
+      "id": "type_bike_image",
+      "label": "Complete Bike image"
+    },
+    {
+      "type": "image_picker",
+      "id": "type_frameset_image",
+      "label": "Frameset image"
+    },
+    {
+      "type": "image_picker",
+      "id": "type_groupset_image",
+      "label": "Groupset image"
+    },
+    {
+      "type": "image_picker",
+      "id": "type_wheelset_image",
+      "label": "Wheelset image"
+    },
+    {
+      "type": "image_picker",
+      "id": "type_individual_image",
+      "label": "Individual component image"
+    },
+    {
+      "type": "header",
+      "content": "Step 2 — Contact"
+    },
+    {
+      "type": "text",
+      "id": "step2_label",
+      "label": "Progress label",
+      "default": "Contact"
+    },
+    {
+      "type": "text",
+      "id": "step2_eyebrow",
+      "label": "Eyebrow",
+      "default": "ALMOST THERE"
+    },
+    {
+      "type": "text",
+      "id": "step2_heading",
+      "label": "Heading",
+      "default": "How should we reach you?"
+    },
+    {
+      "type": "textarea",
+      "id": "step2_subtitle",
+      "label": "Subtitle",
+      "default": "We'll send your offer to the email below. Usually within 24 hours."
+    },
+    {
+      "type": "textarea",
+      "id": "consent_text",
+      "label": "Consent checkbox text",
+      "default": "I confirm this gear is mine to sell. <a href='/pages/terms'>View full terms</a> — we keep it simple."
+    },
+    {
+      "type": "header",
+      "content": "Step 3 — All Done"
+    },
+    {
+      "type": "text",
+      "id": "step3_label",
+      "label": "Progress label",
+      "default": "All Done"
+    },
+    {
+      "type": "text",
+      "id": "done_heading",
+      "label": "Heading",
+      "default": "We've got it — offer incoming"
+    },
+    {
+      "type": "textarea",
+      "id": "done_subtitle",
+      "label": "Subtitle",
+      "default": "You'll hear from us within the next 24h via email with a firm offer. No lowballs, no games."
+    },
+    {
+      "type": "text",
+      "id": "done_step_1_title",
+      "label": "Next step 1 — Title",
+      "default": "Check your inbox"
+    },
+    {
+      "type": "text",
+      "id": "done_step_1_desc",
+      "label": "Next step 1 — Description",
+      "default": "We'll email your offer within 24 hours"
+    },
+    {
+      "type": "text",
+      "id": "done_step_2_title",
+      "label": "Next step 2 — Title",
+      "default": "We evaluate your gear"
+    },
+    {
+      "type": "text",
+      "id": "done_step_2_desc",
+      "label": "Next step 2 — Description",
+      "default": "Our team reviews condition, market value, and demand"
+    },
+    {
+      "type": "text",
+      "id": "done_step_3_title",
+      "label": "Next step 3 — Title",
+      "default": "Accept your offer"
+    },
+    {
+      "type": "text",
+      "id": "done_step_3_desc",
+      "label": "Next step 3 — Description",
+      "default": "Lock in your price — no changes after acceptance"
+    },
+    {
+      "type": "text",
+      "id": "done_step_4_title",
+      "label": "Next step 4 — Title",
+      "default": "Ship free, get paid"
+    },
+    {
+      "type": "text",
+      "id": "done_step_4_desc",
+      "label": "Next step 4 — Description",
+      "default": "We send the label. Payment within 3–5 days of receipt."
+    },
+    {
+      "type": "text",
+      "id": "done_cta_text",
+      "label": "CTA button text",
+      "default": "Browse While You Wait"
+    },
+    {
+      "type": "url",
+      "id": "done_cta_link",
+      "label": "CTA button link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "header",
+      "content": "Bulk submission"
+    },
+    {
+      "type": "text",
+      "id": "bulk_cta_heading",
+      "label": "Bulk CTA heading",
+      "default": "Selling 5 or more items?"
+    },
+    {
+      "type": "text",
+      "id": "bulk_cta_text",
+      "label": "Bulk CTA text",
+      "default": "Use our bulk format"
+    },
+    {
+      "type": "url",
+      "id": "bulk_excel_url",
+      "label": "Excel template download URL"
+    },
+    {
+      "type": "url",
+      "id": "bulk_sheets_url",
+      "label": "Google Sheets template URL"
+    },
+    {
+      "type": "header",
+      "content": "Buttons & labels"
+    },
+    {
+      "type": "text",
+      "id": "add_item_text",
+      "label": "Add item button text",
+      "default": "Add another item"
+    },
+    {
+      "type": "text",
+      "id": "next_text",
+      "label": "Next button text",
+      "default": "Next"
+    },
+    {
+      "type": "text",
+      "id": "submit_text",
+      "label": "Submit button text",
+      "default": "Get My Offer"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer_text",
+      "label": "Disclaimer text",
+      "default": "Your info is never shared or sold. We respond within 1 business day."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trade — Gear Form"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,451 @@
+{%- doc -%}
+  Elevate Cycling — Trade Form "What we accept" section.
+  Light background, header with label/heading/subtitle,
+  grid of dark category cards + bordered "not accepted" card.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-trade-accept"
+  data-scroll-reveal
+  style="
+    background: #FDFCFC;
+    --elevate-trade-accept-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-trade-accept-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-trade-accept__inner">
+
+    {%- comment -%} ── Header ── {%- endcomment -%}
+    <div class="elevate-trade-accept__header">
+      {%- if section.settings.label != blank -%}
+        <p class="elevate-trade-accept__label">{{ section.settings.label }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-trade-accept__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subtitle != blank -%}
+        <p class="elevate-trade-accept__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Cards grid ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-trade-accept__grid">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'category' -%}
+            <div class="elevate-trade-accept__card" {{ block.shopify_attributes }}>
+              <div class="elevate-trade-accept__card-header">
+                {%- if block.settings.icon != 'none' -%}
+                  <div class="elevate-trade-accept__card-badge">
+                    <svg
+                      class="elevate-trade-accept__card-icon"
+                      aria-hidden="true"
+                      focusable="false"
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                    >
+                      {%- render 'icon', icon: block.settings.icon -%}
+                    </svg>
+                  </div>
+                {%- endif -%}
+
+                {%- if block.settings.title != blank -%}
+                  <h3 class="elevate-trade-accept__card-title">{{ block.settings.title }}</h3>
+                {%- endif -%}
+              </div>
+
+              {%- if block.settings.description != blank -%}
+                <p class="elevate-trade-accept__card-desc">{{ block.settings.description }}</p>
+              {%- endif -%}
+
+              <hr class="elevate-trade-accept__card-divider" aria-hidden="true">
+
+              {%- if block.settings.requirement != blank -%}
+                <p class="elevate-trade-accept__card-req">
+                  <svg class="elevate-trade-accept__card-check" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7.5L5.5 11L12 3" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"/></svg>
+                  {{ block.settings.requirement }}
+                </p>
+              {%- endif -%}
+            </div>
+
+          {%- elsif block.type == 'not_accepted' -%}
+            <div class="elevate-trade-accept__card-excluded" {{ block.shopify_attributes }}>
+              {%- if block.settings.title != blank -%}
+                <h3 class="elevate-trade-accept__excluded-title">{{ block.settings.title }}</h3>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <div class="elevate-trade-accept__excluded-desc">{{ block.settings.description }}</div>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Trade Accept ─── */
+  .elevate-trade-accept {
+    position: relative;
+    padding-block-start: var(--elevate-trade-accept-pt);
+    padding-block-end: var(--elevate-trade-accept-pb);
+  }
+
+  .elevate-trade-accept__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Header ── */
+  .elevate-trade-accept__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-trade-accept__label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-trade-accept__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-trade-accept__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Cards grid ── */
+  .elevate-trade-accept__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  /* ── Category card ── */
+  .elevate-trade-accept__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: #141517;
+    border-radius: 1.5rem;
+    padding: 1.5rem 1rem;
+    overflow: hidden;
+    min-height: 12.375rem;
+  }
+
+  .elevate-trade-accept__card-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .elevate-trade-accept__card-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #E31E24;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    flex-shrink: 0;
+    color: #FFFFFF;
+  }
+
+  .elevate-trade-accept__card-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    object-fit: contain;
+  }
+
+  .elevate-trade-accept__card-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-trade-accept__card-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  .elevate-trade-accept__card-divider {
+    width: 100%;
+    border: none;
+    border-block-start: 0.0625rem solid #36393F;
+    margin: 0;
+  }
+
+  .elevate-trade-accept__card-req {
+    display: flex;
+    align-items: center;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-trade-accept__card-check {
+    flex-shrink: 0;
+    margin-inline-end: 0.375rem;
+  }
+
+  /* ── Not-accepted card ── */
+  .elevate-trade-accept__card-excluded {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    border: 0.03125rem solid #AEB2B8;
+    border-radius: 1rem;
+    padding: 1.5rem 1rem;
+    min-height: 12.375rem;
+    overflow: hidden;
+  }
+
+  .elevate-trade-accept__excluded-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-trade-accept__excluded-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-trade-accept__inner {
+      padding-inline: 10.375rem;
+    }
+
+    .elevate-trade-accept__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+
+    .elevate-trade-accept__card {
+      justify-content: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade — What We Accept",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "WHAT WE ACCEPT"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "We buy performance gear, not garage sales"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Road, gravel, and triathlon. Complete bikes, frames, wheels, groupsets, and components from major brands. If it's high-end and rideable, we want it."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "category",
+      "name": "Category card",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "complete-bike",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "complete-bike", "label": "Complete bike" },
+            { "value": "frameset", "label": "Frameset" },
+            { "value": "wheel", "label": "Wheel" },
+            { "value": "gear", "label": "Gear / Groupset" },
+            { "value": "puzzle-piece", "label": "Puzzle piece / Components" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Category name"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Brief description of what's accepted in this category."
+        },
+        {
+          "type": "text",
+          "id": "requirement",
+          "label": "Requirement line",
+          "default": "Good condition or better"
+        }
+      ]
+    },
+    {
+      "type": "not_accepted",
+      "name": "Not accepted card",
+      "limit": 1,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "What we don't accept:"
+        },
+        {
+          "type": "richtext",
+          "id": "description",
+          "label": "Description"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trade — What We Accept",
+      "blocks": [
+        {
+          "type": "category",
+          "settings": {
+            "icon": "complete-bike",
+            "title": "Complete bikes",
+            "description": "Road, gravel, cyclocross, triathlon & TT. All major brands.",
+            "requirement": "Good condition or better"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "icon": "frameset",
+            "title": "Framesets",
+            "description": "Carbon & aluminum. Disc and rim. No crash damage or structural repairs.",
+            "requirement": "Inspected for impact damage"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "icon": "wheel",
+            "title": "Wheelsets",
+            "description": "Carbon & alloy. Zipp, ENVE, Roval, DT Swiss and more.",
+            "requirement": "True, no cracks or dents"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "icon": "gear",
+            "title": "Groupsets",
+            "description": "Shimano, SRAM, Campagnolo. Di2, eTap, EPS, mechanical.",
+            "requirement": "Functional, no stripped parts"
+          }
+        },
+        {
+          "type": "category",
+          "settings": {
+            "icon": "puzzle-piece",
+            "title": "Components",
+            "description": "Cockpit, power meters, saddles, seatposts. ENVE, Fizik, Quarq, PRO.",
+            "requirement": "No cracks or stripped threads"
+          }
+        },
+        {
+          "type": "not_accepted",
+          "settings": {
+            "title": "What we don't accept:"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
