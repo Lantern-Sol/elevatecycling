@@ -938,29 +938,18 @@
     }
     hiddenForm.target = iframeName;
 
-    /* ── DEBUG — REMOVE BEFORE LAUNCH ── */
-    console.group('%c[Trade Form] Submit Debug', 'color: #E31E24; font-weight: bold');
-    console.log('State:', JSON.parse(JSON.stringify(state)));
-    console.log('Email:', state.contact.email);
-    console.log('Name:', state.contact.name + ' ' + state.contact.lastName);
-    console.log('Subject:', subject);
-    console.log('Body:', buildSubmissionBody());
-    console.groupEnd();
-    /* ── END DEBUG ── */
-
     iframe.onload = function() {
       try {
-        var iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+        var iframeWindow = iframe.contentWindow;
+        if (iframeWindow && iframeWindow.location.href.indexOf('/challenge') !== -1) {
+          window.location.href = iframeWindow.location.href;
+          return;
+        }
+
+        var iframeDoc = iframe.contentDocument || iframeWindow.document;
         var iframeHtml = iframeDoc.documentElement.innerHTML;
         var hasErrors = iframeDoc.querySelector('.errors, .form-errors');
         var isCaptchaError = iframeHtml.indexOf('Missing CAPTCHA') !== -1;
-
-        /* ── DEBUG — REMOVE BEFORE LAUNCH ── */
-        console.group('%c[Trade Form] Response', 'color: #E31E24; font-weight: bold');
-        console.log('Has errors:', !!hasErrors, '| CAPTCHA error:', isCaptchaError);
-        console.log('Response (first 1000 chars):', iframeHtml.substring(0, 1000));
-        console.groupEnd();
-        /* ── END DEBUG ── */
 
         if (!hasErrors && !isCaptchaError) {
           showStep(3);
@@ -971,10 +960,9 @@
           alert('Something went wrong. Please check your fields and try again.');
         }
       } catch (e) {
-        /* Cross-origin iframe — assume success (Shopify redirected to /contact success) */
-        console.log('[Trade Form] iframe cross-origin — assuming success');
-        showStep(3);
-        root.querySelector('.elevate-trade-form__inner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        /* Cross-origin — likely /challenge redirect. Submit normally so user can solve CAPTCHA */
+        hiddenForm.target = '_self';
+        hiddenForm.submit();
       }
     };
 
