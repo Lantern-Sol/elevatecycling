@@ -1,0 +1,517 @@
+{%- doc -%}
+  Elevate Cycling — Trade Form "Payout Options" section.
+  Pink gradient background, two payout cards (cash + store credit)
+  and a 4-step timeline showing how the payout process works.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-trade-payout"
+  data-scroll-reveal
+  style="
+    background: transparent;
+    --elevate-trade-payout-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-trade-payout-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-trade-payout__inner">
+
+    {%- comment -%} ── Header ── {%- endcomment -%}
+    <div class="elevate-trade-payout__header">
+      {%- if section.settings.label != blank -%}
+        <p class="elevate-trade-payout__label">{{ section.settings.label }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-trade-payout__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subtitle != blank -%}
+        <p class="elevate-trade-payout__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Two-column layout ── {%- endcomment -%}
+    <div class="elevate-trade-payout__cols">
+
+      {%- comment -%} ── Left: payout cards ── {%- endcomment -%}
+      <div class="elevate-trade-payout__cards">
+
+        {%- comment -%} Cash offer card {%- endcomment -%}
+        <div class="elevate-trade-payout__card elevate-trade-payout__card--cash">
+          {%- if section.settings.cash_title != blank -%}
+            <h3 class="elevate-trade-payout__card-title">{{ section.settings.cash_title }}</h3>
+          {%- endif -%}
+          {%- if section.settings.cash_subtitle != blank -%}
+            <p class="elevate-trade-payout__card-subtitle">{{ section.settings.cash_subtitle }}</p>
+          {%- endif -%}
+          <hr class="elevate-trade-payout__card-divider" aria-hidden="true">
+          {%- if section.settings.cash_description != blank -%}
+            <p class="elevate-trade-payout__card-desc">{{ section.settings.cash_description }}</p>
+          {%- endif -%}
+        </div>
+
+        {%- comment -%} Store credit card {%- endcomment -%}
+        <div class="elevate-trade-payout__card elevate-trade-payout__card--credit">
+          {%- if section.settings.credit_title != blank -%}
+            <h3 class="elevate-trade-payout__card-title">{{ section.settings.credit_title }}</h3>
+          {%- endif -%}
+          {%- if section.settings.credit_subtitle != blank -%}
+            <p class="elevate-trade-payout__card-subtitle">{{ section.settings.credit_subtitle }}</p>
+          {%- endif -%}
+          <hr class="elevate-trade-payout__card-divider" aria-hidden="true">
+          {%- if section.settings.credit_description != blank -%}
+            <p class="elevate-trade-payout__card-desc">{{ section.settings.credit_description }}</p>
+          {%- endif -%}
+        </div>
+
+      </div>
+
+      {%- comment -%} ── Right: timeline ── {%- endcomment -%}
+      <div class="elevate-trade-payout__timeline">
+        {%- if section.settings.timeline_heading != blank -%}
+          <h3 class="elevate-trade-payout__timeline-heading">{{ section.settings.timeline_heading }}</h3>
+        {%- endif -%}
+
+        <div class="elevate-trade-payout__steps">
+          {%- for i in (1..4) -%}
+            {%- assign title_key = 'step_' | append: i | append: '_title' -%}
+            {%- assign desc_key = 'step_' | append: i | append: '_desc' -%}
+            {%- assign step_title = section.settings[title_key] -%}
+            {%- assign step_desc = section.settings[desc_key] -%}
+
+            {%- if step_title != blank or step_desc != blank -%}
+              <div class="elevate-trade-payout__step">
+                <div class="elevate-trade-payout__step-badge" aria-hidden="true">{{ i }}</div>
+                <div class="elevate-trade-payout__step-content">
+                  {%- if step_title != blank -%}
+                    <p class="elevate-trade-payout__step-title">{{ step_title }}</p>
+                  {%- endif -%}
+                  {%- if step_desc != blank -%}
+                    <p class="elevate-trade-payout__step-desc">{{ step_desc }}</p>
+                  {%- endif -%}
+                </div>
+              </div>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Trade Payout ─── */
+  .elevate-trade-payout {
+    position: relative;
+    padding-block-start: var(--elevate-trade-payout-pt);
+    padding-block-end: var(--elevate-trade-payout-pb);
+  }
+
+  .elevate-trade-payout__inner {
+    grid-column: 1 / -1;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding: 2.5rem 1.5rem;
+    border-radius: 2rem;
+    background: linear-gradient(to bottom, #f1dbdc, #fdfcfc);
+    overflow: clip;
+  }
+
+  /* ── Header ── */
+  .elevate-trade-payout__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-trade-payout__label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-trade-payout__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-trade-payout__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Columns ── */
+  .elevate-trade-payout__cols {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  /* ── Cards ── */
+  .elevate-trade-payout__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-trade-payout__card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1.25rem;
+    border-radius: 1rem;
+    overflow: clip;
+  }
+
+  /* Cash card (light) */
+  .elevate-trade-payout__card--cash {
+    background: #FDFCFC;
+  }
+
+  .elevate-trade-payout__card--cash .elevate-trade-payout__card-title {
+    color: #141517;
+  }
+
+  .elevate-trade-payout__card--cash .elevate-trade-payout__card-subtitle {
+    color: #36393F;
+  }
+
+  .elevate-trade-payout__card--cash .elevate-trade-payout__card-desc {
+    color: #36393F;
+  }
+
+  /* Credit card (dark gradient) */
+  .elevate-trade-payout__card--credit {
+    background: linear-gradient(to bottom, #250a0a, #6d1316);
+  }
+
+  .elevate-trade-payout__card--credit .elevate-trade-payout__card-title {
+    color: #FDFCFC;
+  }
+
+  .elevate-trade-payout__card--credit .elevate-trade-payout__card-subtitle {
+    color: #E31E24;
+  }
+
+  .elevate-trade-payout__card--credit .elevate-trade-payout__card-desc {
+    color: #FDFCFC;
+  }
+
+  .elevate-trade-payout__card-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .elevate-trade-payout__card-subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    margin: 0;
+  }
+
+  .elevate-trade-payout__card-divider {
+    width: 100%;
+    border: none;
+    border-block-start: 0.0625rem solid rgba(153, 153, 153, 0.15);
+    margin: 0;
+  }
+
+  .elevate-trade-payout__card-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    margin: 0;
+  }
+
+  /* ── Timeline ── */
+  .elevate-trade-payout__timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .elevate-trade-payout__timeline-heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #141517;
+    margin: 0;
+  }
+
+  .elevate-trade-payout__steps {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-trade-payout__step {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .elevate-trade-payout__step-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    background: #E31E24;
+    border-radius: 1rem;
+    flex-shrink: 0;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #FDFCFC;
+  }
+
+  .elevate-trade-payout__step-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .elevate-trade-payout__step-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #141517;
+    margin: 0;
+  }
+
+  .elevate-trade-payout__step-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-trade-payout__inner {
+      padding: 2.5rem 13.5rem;
+    }
+
+    .elevate-trade-payout__heading {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-trade-payout__cols {
+      flex-direction: row;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .elevate-trade-payout__cards {
+      width: 30.0625rem;
+      flex-shrink: 0;
+    }
+
+    .elevate-trade-payout__timeline {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .elevate-trade-payout__step {
+      gap: 1rem;
+    }
+
+    .elevate-trade-payout__step-badge {
+      width: 2rem;
+      height: 2rem;
+      border-radius: 0.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade — Payout Options",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "PAYOUT OPTIONS"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Cash or store credit — your call"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Get paid fast either way. Store credit gets you up to 15% more — use it toward your next upgrade."
+    },
+    {
+      "type": "header",
+      "content": "Cash offer card"
+    },
+    {
+      "type": "text",
+      "id": "cash_title",
+      "label": "Title",
+      "default": "Cash offer"
+    },
+    {
+      "type": "text",
+      "id": "cash_subtitle",
+      "label": "Subtitle",
+      "default": "Direct deposit or check · 3–5 business days after receipt"
+    },
+    {
+      "type": "textarea",
+      "id": "cash_description",
+      "label": "Description",
+      "default": "We send a firm offer before you ship anything. Accept it, pack your gear — we send the label."
+    },
+    {
+      "type": "header",
+      "content": "Store credit card"
+    },
+    {
+      "type": "text",
+      "id": "credit_title",
+      "label": "Title",
+      "default": "Store credit"
+    },
+    {
+      "type": "text",
+      "id": "credit_subtitle",
+      "label": "Subtitle",
+      "default": "Up to 15% more than the cash offer"
+    },
+    {
+      "type": "textarea",
+      "id": "credit_description",
+      "label": "Description",
+      "default": "Same process, higher payout. Credit applied instantly once we receive your gear."
+    },
+    {
+      "type": "header",
+      "content": "Timeline"
+    },
+    {
+      "type": "text",
+      "id": "timeline_heading",
+      "label": "Timeline heading",
+      "default": "How the payout works"
+    },
+    {
+      "type": "text",
+      "id": "step_1_title",
+      "label": "Step 1 — Title",
+      "default": "Submit your gear"
+    },
+    {
+      "type": "text",
+      "id": "step_1_desc",
+      "label": "Step 1 — Description",
+      "default": "Takes 2 minutes. No shipping until you accept."
+    },
+    {
+      "type": "text",
+      "id": "step_2_title",
+      "label": "Step 2 — Title",
+      "default": "Get a firm offer within 24 hours"
+    },
+    {
+      "type": "text",
+      "id": "step_2_desc",
+      "label": "Step 2 — Description",
+      "default": "No lowball after you ship. Price is locked."
+    },
+    {
+      "type": "text",
+      "id": "step_3_title",
+      "label": "Step 3 — Title",
+      "default": "We send a prepaid label"
+    },
+    {
+      "type": "text",
+      "id": "step_3_desc",
+      "label": "Step 3 — Description",
+      "default": "Free shipping. We handle insurance too."
+    },
+    {
+      "type": "text",
+      "id": "step_4_title",
+      "label": "Step 4 — Title",
+      "default": "Get paid within 3–5 days of receipt"
+    },
+    {
+      "type": "text",
+      "id": "step_4_desc",
+      "label": "Step 4 — Description",
+      "default": "Cash or store credit — whichever you chose."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trade — Payout Options"
+    }
+  ]
+}
+{% endschema %}

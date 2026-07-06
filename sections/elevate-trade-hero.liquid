@@ -1,0 +1,771 @@
+{%- doc -%}
+  Elevate Cycling — Trade Form hero section.
+  Full-bleed background with dark overlay, left-aligned content
+  (badge, heading, subtitle, "How it works" steps, CTA),
+  and a vertical stats column on the right (desktop).
+{%- enddoc -%}
+
+{%- liquid
+  assign has_image = false
+  assign has_image_mobile = false
+  if section.settings.image != blank
+    assign has_image = true
+  endif
+  if section.settings.image_mobile != blank
+    assign has_image_mobile = true
+  endif
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-trade-hero"
+  style="
+    background: transparent;
+    --elevate-trade-hero-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-trade-hero-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+    --elevate-trade-hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  "
+>
+  {%- comment -%} ── Background media ── {%- endcomment -%}
+  <div class="elevate-trade-hero__media">
+    {%- if has_image -%}
+      <picture>
+        {%- if has_image_mobile -%}
+          <source
+            media="(max-width: 61.875rem)"
+            srcset="
+              {{ section.settings.image_mobile | image_url: width: 375 }} 375w,
+              {{ section.settings.image_mobile | image_url: width: 750 }} 750w,
+              {{ section.settings.image_mobile | image_url: width: 1080 }} 1080w
+            "
+            sizes="100vw"
+          >
+        {%- endif -%}
+        {{
+          section.settings.image
+          | image_url: width: 3840
+          | image_tag:
+            widths: '750, 1080, 1440, 1920, 2560, 3840',
+            sizes: '100vw',
+            fetchpriority: 'high',
+            loading: 'eager',
+            class: 'elevate-trade-hero__image',
+            alt: ''
+        }}
+      </picture>
+    {%- else -%}
+      <div class="elevate-trade-hero__placeholder"></div>
+    {%- endif -%}
+
+    <div class="elevate-trade-hero__overlay"></div>
+  </div>
+
+  {%- comment -%} ── Inner layout ── {%- endcomment -%}
+  <div class="elevate-trade-hero__inner">
+
+    {%- comment -%} ── Top content (badge, heading, subtitle) ── {%- endcomment -%}
+    <div class="elevate-trade-hero__content">
+      {%- if section.settings.badge_text != blank -%}
+        <span class="elevate-trade-hero__badge">{{ section.settings.badge_text }}</span>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h1 class="elevate-trade-hero__heading">{{ section.settings.heading }}</h1>
+      {%- endif -%}
+
+      {%- if section.settings.subtitle != blank -%}
+        <p class="elevate-trade-hero__subtitle">{{ section.settings.subtitle }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Stats ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-trade-hero__stats">
+        {%- for block in section.blocks -%}
+          {%- unless forloop.first -%}
+            <hr class="elevate-trade-hero__stat-divider" aria-hidden="true">
+          {%- endunless -%}
+          <div class="elevate-trade-hero__stat" {{ block.shopify_attributes }}>
+            <p class="elevate-trade-hero__stat-value">{{ block.settings.value }}</p>
+            <p class="elevate-trade-hero__stat-label">{{ block.settings.label }}</p>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── How it works ── {%- endcomment -%}
+    {%- if section.settings.steps_heading != blank -%}
+      <div class="elevate-trade-hero__steps">
+        <h2 class="elevate-trade-hero__steps-heading">{{ section.settings.steps_heading }}</h2>
+
+        <div class="elevate-trade-hero__steps-row">
+          {%- if section.settings.step_1_title != blank -%}
+            <div class="elevate-trade-hero__step">
+              <span class="elevate-trade-hero__step-badge" aria-hidden="true">1</span>
+              <p class="elevate-trade-hero__step-label">{{ section.settings.step_1_title }}</p>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.step_2_title != blank -%}
+            <div class="elevate-trade-hero__step">
+              <span class="elevate-trade-hero__step-badge" aria-hidden="true">2</span>
+              <p class="elevate-trade-hero__step-label">{{ section.settings.step_2_title }}</p>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.step_3_title != blank -%}
+            <div class="elevate-trade-hero__step">
+              <span class="elevate-trade-hero__step-badge" aria-hidden="true">3</span>
+              <p class="elevate-trade-hero__step-label">{{ section.settings.step_3_title }}</p>
+            </div>
+          {%- endif -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── CTA button (desktop only) ── {%- endcomment -%}
+    {%- if section.settings.cta_text != blank -%}
+      <div class="elevate-trade-hero__cta-wrap">
+        <a
+          class="elevate-trade-hero__cta"
+          href="{{ section.settings.cta_link | default: '#trade-form' }}"
+        >
+          <span>{{ section.settings.cta_text }}</span>
+          <svg class="elevate-trade-hero__cta-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M12 4L12 20M12 20L6 14M12 20L18 14" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </a>
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Trade Hero ─── */
+  .elevate-trade-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block-start: var(--elevate-trade-hero-pt);
+    padding-block-end: var(--elevate-trade-hero-pb);
+  }
+
+  /* ── Media layer ── */
+  .elevate-trade-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-lowest);
+    grid-column: 1 / -1;
+  }
+
+  .elevate-trade-hero__media picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .elevate-trade-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-trade-hero__placeholder {
+    width: 100%;
+    height: 100%;
+    background: #141517;
+  }
+
+  .elevate-trade-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--elevate-trade-hero-overlay-opacity, 0.85));
+    pointer-events: none;
+  }
+
+  /* ── Inner layout ── */
+  .elevate-trade-hero__inner {
+    grid-column: 2;
+    position: relative;
+    z-index: var(--layer-flat);
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-inline: 0.5rem;
+    align-items: flex-start;
+  }
+
+  /* ── Content column ── */
+  .elevate-trade-hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  /* ── Badge ── */
+  .elevate-trade-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3125rem 0.75rem;
+    background: #E31E24;
+    border-radius: 62.4375rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #FDFCFC;
+    text-transform: uppercase;
+  }
+
+  /* ── Heading ── */
+  .elevate-trade-hero__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+    max-width: 20rem;
+  }
+
+  /* ── Subtitle ── */
+  .elevate-trade-hero__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #E2E3E5;
+    margin: 0;
+    max-width: 35.75rem;
+  }
+
+  /* ── How it works ── */
+  .elevate-trade-hero__steps {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-block: 0.5rem;
+    border-block-start: 0.0625rem solid #6B7280;
+    width: 100%;
+  }
+
+  .elevate-trade-hero__steps-heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-trade-hero__steps-row {
+    display: flex;
+    gap: 0;
+    width: 100%;
+    position: relative;
+  }
+
+  .elevate-trade-hero__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+    text-align: center;
+    position: relative;
+  }
+
+  .elevate-trade-hero__step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 0.9375rem;
+    left: calc(50% + 1.25rem);
+    right: calc(-50% + 1.25rem);
+    height: 0.0625rem;
+    background: repeating-linear-gradient(
+      to right,
+      #E31E24 0,
+      #E31E24 0.375rem,
+      transparent 0.375rem,
+      transparent 0.75rem
+    );
+    pointer-events: none;
+  }
+
+  .elevate-trade-hero__step-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    background: #E31E24;
+    border-radius: 0.5rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #FDFCFC;
+    position: relative;
+    z-index: 1;
+  }
+
+  .elevate-trade-hero__step:not(:last-child) .elevate-trade-hero__step-label {
+    padding-inline-end: 0.5rem;
+  }
+
+  .elevate-trade-hero__step-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  /* ── CTA button ── */
+  .elevate-trade-hero__cta-wrap {
+    display: block;
+    padding-block-start: 0.75rem;
+    width: 100%;
+  }
+
+  .elevate-trade-hero__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    background: #E31E24;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    color: #FDFCFC;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .elevate-trade-hero__cta:hover {
+    background: #c9191f;
+  }
+
+  .elevate-trade-hero__cta-icon {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  /* ── Stats ── */
+  .elevate-trade-hero__stats {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0;
+    width: 100%;
+    padding-block-start: 1rem;
+  }
+
+  .elevate-trade-hero__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.25rem;
+    flex: 1;
+    padding-inline: 0.75rem;
+  }
+
+  .elevate-trade-hero__stat:first-child {
+    padding-inline-start: 0;
+  }
+
+  .elevate-trade-hero__stat:last-child {
+    padding-inline-end: 0;
+  }
+
+  .elevate-trade-hero__stat + .elevate-trade-hero__stat {
+    border-inline-start: 0.0625rem solid #6B7280;
+  }
+
+  .elevate-trade-hero__stat-divider {
+    display: none;
+  }
+
+  .elevate-trade-hero__stat-value {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 400;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #AEB2B8;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .elevate-trade-hero__stat-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #6B7280;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  /* ── Entrance animation ── */
+  @keyframes elevate-trade-hero-fade-up {
+    from {
+      opacity: 0;
+      transform: translateY(1.25rem);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @keyframes elevate-trade-hero-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+
+  .elevate-trade-hero__badge,
+  .elevate-trade-hero__heading,
+  .elevate-trade-hero__subtitle,
+  .elevate-trade-hero__steps {
+    animation: elevate-trade-hero-fade-up 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .elevate-trade-hero__badge     { animation-delay: 0.1s; }
+  .elevate-trade-hero__heading   { animation-delay: 0.2s; }
+  .elevate-trade-hero__subtitle  { animation-delay: 0.3s; }
+  .elevate-trade-hero__steps     { animation-delay: 0.4s; }
+
+  .elevate-trade-hero__stats {
+    animation: elevate-trade-hero-fade-in 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .elevate-trade-hero__badge,
+    .elevate-trade-hero__heading,
+    .elevate-trade-hero__subtitle,
+    .elevate-trade-hero__steps,
+    .elevate-trade-hero__stats {
+      animation: none;
+    }
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-trade-hero__inner {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-rows: auto auto auto;
+      gap: 0.75rem;
+      align-items: start;
+      min-height: 25.5rem;
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-trade-hero__content {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .elevate-trade-hero__steps {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .elevate-trade-hero__cta-wrap {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    .elevate-trade-hero__stats {
+      grid-column: 2;
+      grid-row: 1 / -1;
+      align-self: center;
+    }
+
+    .elevate-trade-hero__heading {
+      font-size: 4rem;
+      max-width: none;
+    }
+
+    .elevate-trade-hero__steps {
+      border-block-start: none;
+    }
+
+    .elevate-trade-hero__steps-heading {
+      font-size: 3rem;
+    }
+
+    .elevate-trade-hero__steps-row {
+      gap: 0.75rem;
+    }
+
+    .elevate-trade-hero__step {
+      flex-direction: row;
+      text-align: start;
+      width: 8.625rem;
+      flex: none;
+    }
+
+    .elevate-trade-hero__step:not(:last-child)::after {
+      display: none;
+    }
+
+    .elevate-trade-hero__step-badge {
+      width: 2.5rem;
+      height: 2.5rem;
+      background: transparent;
+      border: 0.0625rem solid #6B7280;
+      border-radius: 0.5rem;
+      font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+      font-size: 1.25rem;
+      line-height: 1.2;
+    }
+
+    .elevate-trade-hero__step-label {
+      font-size: 0.75rem;
+    }
+
+    .elevate-trade-hero__cta-wrap {
+      display: block;
+      width: auto;
+    }
+
+    .elevate-trade-hero__cta {
+      width: 26.125rem;
+    }
+
+    /* Stats: vertical column on right */
+    .elevate-trade-hero__stats {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      width: auto;
+      gap: 0.75rem;
+      padding-block-start: 0;
+    }
+
+    .elevate-trade-hero__stat {
+      flex: none;
+      border-inline-start: none;
+      padding-inline: 0.75rem;
+    }
+
+    .elevate-trade-hero__stat:first-child {
+      padding-inline-start: 0.75rem;
+    }
+
+    .elevate-trade-hero__stat:last-child {
+      padding-inline-end: 0.75rem;
+    }
+
+    .elevate-trade-hero__stat + .elevate-trade-hero__stat {
+      border-inline-start: none;
+    }
+
+    .elevate-trade-hero__stat-divider {
+      display: block;
+      width: 5rem;
+      border: none;
+      border-block-start: 0.0625rem solid #6B7280;
+      margin: 0;
+    }
+
+    .elevate-trade-hero__stat-value {
+      font-size: 3rem;
+      font-weight: 700;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Trade Hero",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Background image (mobile)"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 85
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "SELL OR TRADE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Get your offer within 24h"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Complete bikes and components. We respond within 24 business hours."
+    },
+    {
+      "type": "header",
+      "content": "How it works"
+    },
+    {
+      "type": "text",
+      "id": "steps_heading",
+      "label": "Steps heading",
+      "default": "How it works"
+    },
+    {
+      "type": "text",
+      "id": "step_1_title",
+      "label": "Step 1",
+      "default": "Tell us what you've got"
+    },
+    {
+      "type": "text",
+      "id": "step_2_title",
+      "label": "Step 2",
+      "default": "Get a firm offer in 48 hours"
+    },
+    {
+      "type": "text",
+      "id": "step_3_title",
+      "label": "Step 3",
+      "default": "Ship it free, get paid fast"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Submit Your Gear & Components"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link",
+      "info": "Defaults to #trade-form anchor if empty."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value",
+          "default": "100+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "stat label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Trade Hero",
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": {
+            "value": "3,500+",
+            "label": "bikes bought"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "99.8%",
+            "label": "eBay feedback"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "$5.4M",
+            "label": "paid out"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "24h",
+            "label": "turnaround"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -89,7 +89,7 @@
     <p class="elevate-faq-contact__form-eyebrow">{{ section.settings.form_eyebrow }}</p>
     <h3 class="elevate-faq-contact__form-heading">{{ section.settings.form_heading }}</h3>
 
-    <form class="elevate-faq-contact__form" data-faq-contact-form>
+    {% form 'contact', class: 'elevate-faq-contact__form', data-faq-contact-form: '' %}
       {%- comment -%} Topic selector {%- endcomment -%}
       <div class="elevate-faq-contact__field">
         <label class="elevate-faq-contact__label">
@@ -220,7 +220,7 @@
 
         <p class="elevate-faq-contact__disclaimer">{{ section.settings.disclaimer_text }}</p>
       </div>
-    </form>
+    {% endform %}
   </div>
 
   </div>
@@ -244,50 +244,55 @@
     var checked = form.querySelector('.elevate-faq-contact__topic-input:checked');
     if (checked) checked.closest('.elevate-faq-contact__topic').classList.add('is-active');
 
-    /* Form submission via Shopify contact form endpoint */
+    /* Form submission via hidden iframe (native submit keeps CAPTCHA token) */
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       var btn = form.querySelector('.elevate-faq-contact__submit');
       btn.disabled = true;
       btn.querySelector('span').textContent = 'Sending…';
 
-      var data = new FormData(form);
-      data.append('form_type', 'contact');
-      data.append('utf8', '✓');
-      var urlEncodedData = new URLSearchParams(data);
+      var iframeName = 'faq-contact-submit-frame';
+      var iframe = document.getElementById(iframeName);
+      if (!iframe) {
+        iframe = document.createElement('iframe');
+        iframe.id = iframeName;
+        iframe.name = iframeName;
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+      }
+      form.target = iframeName;
 
-      fetch('/contact', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: urlEncodedData.toString()
-      })
-        .then(function (res) {
-          if (res.url && res.url.includes('/challenge')) {
-            window.location.href = res.url;
+      iframe.onload = function () {
+        try {
+          var iframeWindow = iframe.contentWindow;
+          if (iframeWindow && iframeWindow.location.href.indexOf('/challenge') !== -1) {
+            window.location.href = iframeWindow.location.href;
             return;
           }
-          return res.text().then(function (html) {
-            var parser = new DOMParser();
-            var doc = parser.parseFromString(html, 'text/html');
-            var hasErrors = doc.querySelector('.errors, .form-errors');
 
-            if (res.ok && !hasErrors) {
-              form.innerHTML = '<div class="elevate-faq-contact__success">' +
-                '<p class="elevate-faq-contact__success-title">Message sent!</p>' +
-                '<p class="elevate-faq-contact__success-text">We\'ll get back to you within 1 business day.</p>' +
-                '</div>';
-            } else {
-              btn.disabled = false;
-              btn.querySelector('span').textContent = '{{ section.settings.submit_text | default: "Submit" }}';
-              alert('Something went wrong. Please check your fields and try again.');
-            }
-          });
-        })
-        .catch(function () {
-          btn.disabled = false;
-          btn.querySelector('span').textContent = '{{ section.settings.submit_text | default: "Submit" }}';
-          alert('Something went wrong. Please try again or email us directly.');
-        });
+          var iframeDoc = iframe.contentDocument || iframeWindow.document;
+          var iframeHtml = iframeDoc.documentElement.innerHTML;
+          var hasErrors = iframeDoc.querySelector('.errors, .form-errors');
+          var isCaptchaError = iframeHtml.indexOf('Missing CAPTCHA') !== -1;
+
+          if (!hasErrors && !isCaptchaError) {
+            form.innerHTML = '<div class="elevate-faq-contact__success">' +
+              '<p class="elevate-faq-contact__success-title">Message sent!</p>' +
+              '<p class="elevate-faq-contact__success-text">We\'ll get back to you within 1 business day.</p>' +
+              '</div>';
+          } else {
+            btn.disabled = false;
+            btn.querySelector('span').textContent = '{{ section.settings.submit_text | default: "Submit" }}';
+            alert('Something went wrong. Please check your fields and try again.');
+          }
+        } catch (err) {
+          /* Cross-origin — likely /challenge redirect. Submit normally so user can solve CAPTCHA */
+          form.target = '_self';
+          HTMLFormElement.prototype.submit.call(form);
+        }
+      };
+
+      HTMLFormElement.prototype.submit.call(form);
     });
   })();
 </script>
