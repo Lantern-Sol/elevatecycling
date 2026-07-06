@@ -200,7 +200,7 @@
           <div class="elevate-trade-form__conditions" data-trade-conditions>
             {%- assign cond_values = 'new,like_new,used,good' | split: ',' -%}
             {%- assign cond_labels = 'New Item,Like New,Used,Good Condition' | split: ',' -%}
-            {%- assign cond_descs = 'Unused, original packaging,Minimal signs of use,Normal wear and tear,Fully functional, cosmetic wear' | split: ',' -%}
+            {%- assign cond_descs = 'Never used / Open box,No visible wear use,Normal use,Visible wear use' | split: ',' -%}
             {%- for val in cond_values -%}
               <label class="elevate-trade-form__condition-card">
                 <input
@@ -2522,7 +2522,7 @@
       grid-template-columns: 14.75rem 1fr;
       grid-template-rows: auto auto 1fr;
       gap: 0 2rem;
-      padding: 2.5rem 7.5rem;
+      padding: 2.5rem 4.375rem;
     }
 
     /* Reset mobile order */
