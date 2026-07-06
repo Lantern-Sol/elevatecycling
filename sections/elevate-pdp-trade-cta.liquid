@@ -1,0 +1,574 @@
+{%- doc -%}
+  Elevate Cycling — PDP Trade/Sale CTA banner.
+  Dark full-width banner with background image, gradient overlay,
+  centered text, 3-step row, two CTA buttons, and disclaimer.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-pdp-trade"
+  data-scroll-reveal
+  style="
+    background: #141517;
+    --elevate-pdp-trade-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-pdp-trade-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  {%- comment -%} ── Banner: image + gradient + header (clipped on mobile) ── {%- endcomment -%}
+  {%- assign desktop_bg = section.settings.background_image -%}
+  {%- assign mobile_bg = section.settings.background_image_mobile | default: desktop_bg -%}
+  <div class="elevate-pdp-trade__banner">
+    {%- if desktop_bg != blank or mobile_bg != blank -%}
+      <picture class="elevate-pdp-trade__bg" aria-hidden="true">
+        {%- if section.settings.background_image_mobile != blank -%}
+          <source
+            media="(max-width: 61.875rem)"
+            srcset="
+              {{ mobile_bg | image_url: width: 400 }} 400w,
+              {{ mobile_bg | image_url: width: 600 }} 600w,
+              {{ mobile_bg | image_url: width: 800 }} 800w
+            "
+            sizes="100vw"
+          >
+        {%- endif -%}
+        {%- assign fallback_bg = desktop_bg | default: mobile_bg -%}
+        <source
+          media="(min-width: 61.9375rem)"
+          srcset="
+            {{ fallback_bg | image_url: width: 800 }} 800w,
+            {{ fallback_bg | image_url: width: 1200 }} 1200w,
+            {{ fallback_bg | image_url: width: 1920 }} 1920w
+          "
+          sizes="100vw"
+        >
+        {{
+          fallback_bg
+          | image_url: width: 1920
+          | image_tag:
+            loading: 'lazy',
+            class: 'elevate-pdp-trade__bg-img',
+            alt: ''
+        }}
+      </picture>
+    {%- endif -%}
+    <div class="elevate-pdp-trade__gradient" aria-hidden="true"></div>
+
+    <div class="elevate-pdp-trade__header">
+      {%- if section.settings.label != blank -%}
+        <p class="elevate-pdp-trade__label">{{ section.settings.label }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank or section.settings.heading_line_2 != blank -%}
+        <h2 class="elevate-pdp-trade__heading">
+          {%- if section.settings.heading != blank -%}{{ section.settings.heading }}{%- endif -%}
+          {%- if section.settings.heading_line_2 != blank -%}<br>{{ section.settings.heading_line_2 }}{%- endif -%}
+        </h2>
+      {%- endif -%}
+    </div>
+  </div>
+
+  {%- comment -%} ── Bottom: steps + CTAs (solid dark bg on mobile) ── {%- endcomment -%}
+  <div class="elevate-pdp-trade__bottom">
+
+    {%- comment -%} Header (desktop only — hidden on mobile, shown here for vertical centering) {%- endcomment -%}
+    <div class="elevate-pdp-trade__header elevate-pdp-trade__header--desktop">
+      {%- if section.settings.label != blank -%}
+        <p class="elevate-pdp-trade__label">{{ section.settings.label }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank or section.settings.heading_line_2 != blank -%}
+        <h2 class="elevate-pdp-trade__heading">
+          {%- if section.settings.heading != blank -%}{{ section.settings.heading }}{%- endif -%}
+          {%- if section.settings.heading_line_2 != blank -%}<br>{{ section.settings.heading_line_2 }}{%- endif -%}
+        </h2>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-pdp-trade__steps">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'step' -%}
+            <div class="elevate-pdp-trade__step" {{ block.shopify_attributes }}>
+              <div class="elevate-pdp-trade__step-badge">
+                <span class="elevate-pdp-trade__step-num">{{ block.settings.number }}</span>
+              </div>
+              {%- if block.settings.text != blank -%}
+                <p class="elevate-pdp-trade__step-text">{{ block.settings.text }}</p>
+              {%- endif -%}
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    <div class="elevate-pdp-trade__cta-group">
+      <div class="elevate-pdp-trade__cta-row">
+        {%- if section.settings.cta_text != blank -%}
+          <a
+            href="{{ section.settings.cta_url }}"
+            class="elevate-pdp-trade__cta elevate-pdp-trade__cta--primary"
+          >
+            <span>{{ section.settings.cta_text }}</span>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M5 12H19M19 12L13 6M19 12L13 18" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </a>
+        {%- endif -%}
+        {%- if section.settings.secondary_cta_text != blank -%}
+          <a
+            href="{{ section.settings.secondary_cta_url }}"
+            class="elevate-pdp-trade__cta elevate-pdp-trade__cta--secondary"
+          >
+            <span>{{ section.settings.secondary_cta_text }}</span>
+          </a>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.disclaimer != blank -%}
+        <p class="elevate-pdp-trade__disclaimer">{{ section.settings.disclaimer }}</p>
+      {%- endif -%}
+    </div>
+
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── PDP Trade/Sale CTA Banner ─── */
+  .elevate-pdp-trade {
+    position: relative;
+    overflow: hidden;
+  }
+
+  /* ── Banner (image + gradient + header) ── */
+  .elevate-pdp-trade__banner {
+    position: relative;
+    height: 36.5625rem;
+    margin-bottom: -6.5rem;
+    overflow: clip;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 2rem 1.5rem 1.5rem;
+    grid-column: 1 / -1;
+  }
+
+  .elevate-pdp-trade__bg {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .elevate-pdp-trade__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-pdp-trade__gradient {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(20, 21, 23, 0) 60%,
+      #141517 100%
+    );
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── Header ── */
+  .elevate-pdp-trade__header {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-pdp-trade__header--desktop {
+    display: none;
+  }
+
+  .elevate-pdp-trade__label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-pdp-trade__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  /* ── Bottom (steps + CTAs on solid dark) ── */
+  .elevate-pdp-trade__bottom {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.75rem;
+    padding: 0 2rem 3rem;
+    grid-column: 2;
+  }
+
+  /* ── Steps ── */
+  .elevate-pdp-trade__steps {
+    display: flex;
+    gap: 0.5rem;
+    padding-block-start: 1rem;
+    width: 100%;
+  }
+
+  .elevate-pdp-trade__step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+    position: relative;
+  }
+
+  .elevate-pdp-trade__step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 1rem;
+    left: calc(43% + 1.75rem);
+    width: calc(100% - 2rem);
+    height: 2px;
+    background: repeating-linear-gradient(
+      to right,
+      #E31E24 0,
+      #E31E24 8px,
+      transparent 8px,
+      transparent 16px
+    );
+    pointer-events: none;
+  }
+
+  .elevate-pdp-trade__step-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline: 1rem;
+    height: 2rem;
+    background: #E31E24;
+    border-radius: 62.4375rem;
+  }
+
+  .elevate-pdp-trade__step-num {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+  }
+
+  .elevate-pdp-trade__step-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #FDFCFC;
+    margin: 0;
+    text-align: center;
+  }
+
+  /* ── CTAs ── */
+  .elevate-pdp-trade__cta-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .elevate-pdp-trade__cta-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .elevate-pdp-trade__cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .elevate-pdp-trade__cta--primary {
+    background: #E31E24;
+    color: #FDFCFC;
+  }
+
+  .elevate-pdp-trade__cta--secondary {
+    background: transparent;
+    border: 0.5px solid #FDFCFC;
+    color: #FDFCFC;
+  }
+
+  .elevate-pdp-trade__cta:hover {
+    opacity: 0.85;
+  }
+
+  .elevate-pdp-trade__disclaimer {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-pdp-trade__banner {
+      position: absolute;
+      inset: 0;
+      height: auto;
+      margin-bottom: 0;
+      overflow: visible;
+      padding: 0;
+      grid-column: 1 / -1;
+    }
+
+    .elevate-pdp-trade__banner .elevate-pdp-trade__header {
+      display: none;
+    }
+
+    .elevate-pdp-trade__header--desktop {
+      display: flex;
+    }
+
+    .elevate-pdp-trade__gradient {
+      background: linear-gradient(
+        90deg,
+        transparent 25%,
+        rgba(0, 0, 0, 0.8) 40%,
+        rgba(0, 0, 0, 0.8) 60%,
+        transparent 75%
+      );
+    }
+
+    .elevate-pdp-trade__bottom {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 31.25rem;
+      gap: 2.5rem;
+      padding: 0 4.375rem;
+    }
+
+
+    .elevate-pdp-trade__heading {
+      font-size: 3.5625rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .elevate-pdp-trade__steps {
+      max-width: 29.5rem;
+    }
+
+    .elevate-pdp-trade__step {
+      width: 9.375rem;
+      flex: none;
+    }
+
+    .elevate-pdp-trade__step-text {
+      font-size: 1rem;
+      letter-spacing: -0.01rem;
+    }
+
+    .elevate-pdp-trade__step-badge {
+      border-radius: 1rem;
+      width: 3rem;
+      padding-inline: 0;
+    }
+
+    .elevate-pdp-trade__cta-row {
+      flex-direction: row;
+      width: auto;
+      gap: 1rem;
+    }
+
+    .elevate-pdp-trade__cta--secondary {
+      order: -1;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP — Trade CTA",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "TRADE OR SALE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading (line 1)",
+      "default": "Your old gear"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading (line 2)",
+      "default": "can pay for this one"
+    },
+    {
+      "type": "header",
+      "content": "Call to action"
+    },
+    {
+      "type": "text",
+      "id": "secondary_cta_text",
+      "label": "Secondary button text",
+      "default": "How It Works"
+    },
+    {
+      "type": "url",
+      "id": "secondary_cta_url",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Primary button text",
+      "default": "Get a Quote for your gear"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer",
+      "label": "Disclaimer",
+      "default": "$5.4M+ paid to sellers · Complete bikes and components accepted"
+    },
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image (desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "background_image_mobile",
+      "label": "Background image (mobile)",
+      "info": "Optional. Falls back to the desktop image if empty."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "1"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "Tell us what you've got"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP — Trade CTA",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "number": "1",
+            "text": "Tell us what you've got"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "number": "2",
+            "text": "Get a firm offer in 48 hours"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "number": "3",
+            "text": "Ship it free, get paid Cash or Store credit"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

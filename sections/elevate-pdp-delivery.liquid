@@ -1,0 +1,385 @@
+{%- doc -%}
+  Elevate Cycling — PDP Delivery & Assembly section.
+  Dark background, left column with header + 4 feature rows (icon + title + desc),
+  right column with hero image. Mobile stacks vertically.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-pdp-delivery"
+  data-scroll-reveal
+  style="
+    background: #141517;
+    --elevate-pdp-delivery-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-pdp-delivery-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-pdp-delivery__inner">
+
+    {%- comment -%} ── Header ── {%- endcomment -%}
+    <div class="elevate-pdp-delivery__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="elevate-pdp-delivery__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-pdp-delivery__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Media: image or video ── {%- endcomment -%}
+    {%- if section.settings.video != blank -%}
+      <div class="elevate-pdp-delivery__media">
+        {{
+          section.settings.video
+          | video_tag:
+              autoplay: true,
+              loop: true,
+              muted: true,
+              playsinline: true,
+              class: 'elevate-pdp-delivery__img'
+        }}
+      </div>
+    {%- elsif section.settings.image != blank -%}
+      <div class="elevate-pdp-delivery__media">
+        {{
+          section.settings.image
+          | image_url: width: 960
+          | image_tag:
+              loading: 'lazy',
+              class: 'elevate-pdp-delivery__img',
+              sizes: '(min-width: 990px) 50vw, 100vw',
+              widths: '375, 550, 750, 960'
+        }}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Feature rows ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-pdp-delivery__features">
+        {%- for block in section.blocks -%}
+          <div class="elevate-pdp-delivery__feature" {{ block.shopify_attributes }}>
+            {%- if block.settings.icon != 'none' -%}
+              <div class="elevate-pdp-delivery__feature-badge">
+                {%- liquid
+                  case block.settings.icon
+                    when 'box-open'
+                      assign icon_vb = '0 0 17 17'
+                    when 'shipping-truck', 'shipping-fast', 'puzzle-piece', 'return', 'return-circle'
+                      assign icon_vb = '0 0 24 24'
+                    else
+                      assign icon_vb = '0 0 20 20'
+                  endcase
+                -%}
+                <svg
+                  class="elevate-pdp-delivery__feature-icon"
+                  aria-hidden="true"
+                  focusable="false"
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="{{ icon_vb }}"
+                >
+                  {%- render 'icon', icon: block.settings.icon -%}
+                </svg>
+              </div>
+            {%- endif -%}
+
+            <div class="elevate-pdp-delivery__feature-text">
+              {%- if block.settings.title != blank -%}
+                <p class="elevate-pdp-delivery__feature-title">{{ block.settings.title }}</p>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <p class="elevate-pdp-delivery__feature-desc">{{ block.settings.description }}</p>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── PDP Delivery & Assembly ─── */
+  .elevate-pdp-delivery {
+    position: relative;
+    padding-block-start: var(--elevate-pdp-delivery-pt);
+    padding-block-end: var(--elevate-pdp-delivery-pb);
+  }
+
+  .elevate-pdp-delivery__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Header ── */
+  .elevate-pdp-delivery__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-pdp-delivery__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-pdp-delivery__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  /* ── Features ── */
+  .elevate-pdp-delivery__features {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-pdp-delivery__feature {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .elevate-pdp-delivery__feature-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #E31E24;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    flex-shrink: 0;
+    color: #FDFCFC;
+  }
+
+  .elevate-pdp-delivery__feature-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: currentColor;
+  }
+
+  .elevate-pdp-delivery__feature-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    min-width: 0;
+  }
+
+  .elevate-pdp-delivery__feature-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-pdp-delivery__feature-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  /* ── Media ── */
+  .elevate-pdp-delivery__media {
+    border-radius: 1.5rem;
+    overflow: hidden;
+  }
+
+  .elevate-pdp-delivery__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-pdp-delivery__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto 1fr;
+      gap: 2rem;
+      padding-inline: 0;
+    }
+
+    .elevate-pdp-delivery__header {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .elevate-pdp-delivery__features {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .elevate-pdp-delivery__media {
+      grid-column: 2;
+      grid-row: 1 / -1;
+      min-width: 0;
+    }
+
+    .elevate-pdp-delivery__heading {
+      font-size: 3.5625rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP — Delivery & Assembly",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "DELIVERY"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "How we ship this bike"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video (overrides image)"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "feature",
+      "name": "Feature",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "default": "box-open",
+          "options": [
+            { "value": "none", "label": "None" },
+            { "value": "box", "label": "Box (closed)" },
+            { "value": "box-open", "label": "Box (open)" },
+            { "value": "shipping-truck", "label": "Shipping truck" },
+            { "value": "shipping-fast", "label": "Shipping fast" },
+            { "value": "puzzle-piece", "label": "Puzzle piece" },
+            { "value": "return", "label": "Return" },
+            { "value": "return-circle", "label": "Return (circle)" }
+          ]
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Feature title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Feature description goes here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP — Delivery & Assembly",
+      "blocks": [
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "box-open",
+            "title": "Packed by a mechanic, not a warehouse picker",
+            "description": "The same person who inspected your bike packs it. Custom foam inserts, reinforced double-wall box."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "shipping-truck",
+            "title": "Ships within 1 business day",
+            "description": "Tracking number sent same day the order is processed. Fully insured — UPS or FedEx Ground."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "puzzle-piece",
+            "title": "Arrives 85% assembled",
+            "description": "Reattach handlebar, install pedals, set saddle height. Most riders rolling within 20 minutes. Assembly card included."
+          }
+        },
+        {
+          "type": "feature",
+          "settings": {
+            "icon": "return-circle",
+            "title": "30 days to decide",
+            "description": "Not the right fit? We send a prepaid return label. No restocking fee on undamaged returns."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
