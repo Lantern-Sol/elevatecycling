@@ -112,14 +112,12 @@
 <style>
   /* ─── PDP — Mechanic's Notes (media column) ─── */
   .elevate-mechanic-media {
-    border-radius: 1.5rem;
-    padding: 1.5rem;
+    border-radius: 0;
+    padding: 2rem 1rem;
     margin-top: 1.5rem;
+    margin-inline: calc(-1 * var(--page-margin, 12px));
     overflow: hidden;
     position: relative;
-    box-shadow:
-      0 2px 4px -2px rgba(0, 0, 0, 0.1),
-      0 4px 6px -1px rgba(0, 0, 0, 0.1);
   }
 
   /* ── Background layers ── */
@@ -127,14 +125,12 @@
     position: absolute;
     inset: 0;
     pointer-events: none;
-    border-radius: 1.5rem;
   }
 
   .elevate-mechanic-media__bg-solid {
     position: absolute;
     inset: 0;
     background: #141517;
-    border-radius: 1.5rem;
   }
 
   .elevate-mechanic-media__bg-texture {
@@ -144,7 +140,6 @@
     height: 100%;
     object-fit: cover;
     opacity: 0.05;
-    border-radius: 1.5rem;
   }
 
   /* ── Inner layout ── */
@@ -343,6 +338,23 @@
   }
 
   /* ─── Desktop ─── */
+  @media (min-width: 46.875rem) {
+    .elevate-mechanic-media {
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      margin-inline: 0;
+      box-shadow:
+        0 2px 4px -2px rgba(0, 0, 0, 0.1),
+        0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
+
+    .elevate-mechanic-media__bg,
+    .elevate-mechanic-media__bg-solid,
+    .elevate-mechanic-media__bg-texture {
+      border-radius: 1.5rem;
+    }
+  }
+
   @media (min-width: 61.9375rem) {
     .elevate-mechanic-media__inner {
       flex-direction: row;

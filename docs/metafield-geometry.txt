@@ -1,0 +1,10 @@
+Reach: 441 | mm
+Stack: 603 | mm
+Effective Top Tube: 590 | mm
+Standover: 765 | mm
+Head Angle: 71.5 | deg
+Seat Angle: 73.5 | deg
+Chainstay: 420 | mm
+Wheelbase: 1005 | mm
+BB Drop: 72 | mm
+Fork Rake: 47 | mm

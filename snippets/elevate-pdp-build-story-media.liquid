@@ -1,27 +1,52 @@
 {%- doc -%}
   Elevate Cycling — PDP "Why We Love This Build" (media column snippet).
-  Renders product.description in a light card below the gallery.
+  Collapsible accordion with product.description.
   Only visible when product.description is populated.
 {%- enddoc -%}
 
 {%- unless product.description == blank -%}
-<div class="elevate-build-story-media" data-scroll-reveal>
-  <p class="elevate-build-story-media__eyebrow">Build Description</p>
-  <h2 class="elevate-build-story-media__heading">Why we love this build</h2>
+<details class="elevate-build-story-media" data-scroll-reveal>
+  <summary class="elevate-build-story-media__trigger">
+    <div class="elevate-build-story-media__header">
+      <p class="elevate-build-story-media__eyebrow">Build Description</p>
+      <h2 class="elevate-build-story-media__heading">Why we love this build</h2>
+    </div>
+    <svg class="elevate-build-story-media__chevron" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </summary>
   <div class="elevate-build-story-media__body rte">
     {{ product.description }}
   </div>
-</div>
+</details>
 
 <style>
   .elevate-build-story-media {
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1.5rem;
+    margin-top: 1.5rem;
+    overflow: hidden;
+  }
+
+  .elevate-build-story-media__trigger {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .elevate-build-story-media__trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .elevate-build-story-media__header {
+    flex: 1;
+    min-width: 0;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    background: rgba(226, 227, 229, 0.4);
-    border-radius: 1.5rem;
-    padding: 1.5rem;
-    margin-top: 1.5rem;
   }
 
   .elevate-build-story-media__eyebrow {
@@ -35,15 +60,31 @@
   }
 
   .elevate-build-story-media__heading {
-    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
-    font-weight: 400;
-    font-size: 3rem;
+    font-family: 'Bebas Neue', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
     line-height: 1.2;
     color: #36393F;
     margin: 0;
+    text-transform: uppercase;
+  }
+
+  .elevate-build-story-media__chevron {
+    flex-shrink: 0;
+    color: #36393F;
+    transition: transform 0.3s ease;
+  }
+
+  .elevate-build-story-media[open] .elevate-build-story-media__chevron {
+    transform: rotate(180deg);
+  }
+
+  .elevate-build-story-media[open] .elevate-build-story-media__trigger {
+    padding-bottom: 0.5rem;
   }
 
   .elevate-build-story-media__body {
+    padding: 0.5rem 1rem 1rem 1rem;
     font-family: 'Inter', var(--font-body--family), sans-serif;
     font-weight: 400;
     font-size: 0.875rem;

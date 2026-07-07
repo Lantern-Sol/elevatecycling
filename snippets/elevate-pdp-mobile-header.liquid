@@ -1,0 +1,294 @@
+{%- comment -%}
+  Elevate Cycling — PDP Mobile Header
+  Mobile-only duplicate of sidecar header (breadcrumbs, badges, title, stars, price).
+  Rendered inside the media column BEFORE the gallery so mobile sees:
+  header → gallery → sidecar body.
+  Hidden on desktop via display:none at min-width:750px.
+  Receives: product (product object)
+{%- endcomment -%}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign sku = current_variant.sku
+  assign msrp_raw = product.metafields.custom.msrp.value
+
+  comment
+    Badge detection from product tags
+  endcomment
+  assign has_new = false
+  assign has_new_arrival = false
+  assign has_cpo = false
+  assign has_clearance = false
+
+  for tag in product.tags
+    assign tag_lower = tag | downcase
+    if tag_lower == 'new'
+      assign has_new = true
+    elsif tag_lower == 'new arrival'
+      assign has_new_arrival = true
+    elsif tag_lower == 'cpo'
+      assign has_cpo = true
+    elsif tag_lower == 'clearance'
+      assign has_clearance = true
+    endif
+  endfor
+
+  assign has_any_badge = false
+  if has_new or has_new_arrival or has_cpo or has_clearance
+    assign has_any_badge = true
+  endif
+
+  comment
+    MSRP savings calculation
+  endcomment
+  assign has_msrp = false
+  assign savings_pct = 0
+  if msrp_raw != blank
+    assign msrp_cents = msrp_raw | times: 100 | round
+    assign price_cents = current_variant.price
+    if msrp_cents > price_cents
+      assign has_msrp = true
+      assign diff = msrp_cents | minus: price_cents
+      assign savings_pct = diff | times: 100 | divided_by: msrp_cents
+    endif
+  endif
+
+  comment
+    Compare-at discount calculation
+  endcomment
+  assign has_compare = false
+  assign discount_pct = 0
+  if current_variant.compare_at_price > current_variant.price
+    assign has_compare = true
+    assign compare_diff = current_variant.compare_at_price | minus: current_variant.price
+    assign discount_pct = compare_diff | times: 100 | divided_by: current_variant.compare_at_price
+  endif
+-%}
+
+<div class="elevate-mobile-header">
+  {%- comment -%} ── Breadcrumbs ── {%- endcomment -%}
+  {% render 'elevate-breadcrumbs-nav' %}
+
+  {%- comment -%} ── Badges row + SKU ── {%- endcomment -%}
+  {%- if has_any_badge or sku != blank -%}
+    <div class="elevate-mobile-header__badges-row">
+      <div class="elevate-mobile-header__badges">
+        {%- if has_new -%}
+          <span class="elevate-badge elevate-badge--new">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M15.168 6.27344L10.082 5.73633L8 1.06641L5.91797 5.73633L0.832031 6.27344L4.63086 9.69727L3.57031 14.6992L8 12.1445L12.4297 14.6992L11.3691 9.69727L15.168 6.27344Z" fill="currentColor"/></svg>
+            New
+          </span>
+        {%- endif -%}
+        {%- if has_new_arrival -%}
+          <span class="elevate-badge elevate-badge--new-arrival">
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M11.1716 6.42926C11.3753 6.17962 11.3336 5.81643 11.0797 5.61689C10.8259 5.41734 10.4544 5.45825 10.2515 5.70706L7.48794 9.09681L6.01014 7.96133C5.88943 7.86308 5.73511 7.81586 5.58008 7.82974C5.42506 7.84362 5.28158 7.9175 5.18024 8.03563C5.13073 8.09357 5.09333 8.16084 5.07026 8.23348C5.04719 8.30611 5.03891 8.38263 5.04592 8.45852C5.05292 8.53441 5.07507 8.60812 5.11105 8.67531C5.14702 8.74249 5.1961 8.80178 5.25538 8.84968L7.19238 10.3609C7.3147 10.4604 7.47141 10.5074 7.62831 10.4918C7.7852 10.4761 7.92954 10.3991 8.0298 10.2774L11.1691 6.42008L11.1716 6.42926Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M6.75489 1.91573C7.20073 1.58844 7.42365 1.4248 7.66494 1.36134C7.88055 1.30664 8.10641 1.30664 8.32202 1.36134C8.56582 1.4248 8.78957 1.58844 9.23208 1.91573L9.79731 2.33068C9.95177 2.44423 10.0294 2.501 10.1129 2.54525C10.1875 2.58421 10.2651 2.6165 10.3459 2.6421C10.4369 2.66965 10.5312 2.68385 10.7207 2.71307L11.4137 2.8191C11.9606 2.90259 12.2336 2.94517 12.449 3.07292C12.641 3.18563 12.8013 3.34593 12.914 3.53796C13.0418 3.75504 13.0835 4.02889 13.1679 4.57326L13.2739 5.26624C13.3031 5.45576 13.3173 5.55094 13.3449 5.64195C13.3699 5.72266 13.4022 5.80002 13.4417 5.87405C13.4868 5.95754 13.5427 6.03519 13.6563 6.18965L14.0712 6.75489C14.3985 7.20073 14.5622 7.42365 14.6256 7.66494C14.6803 7.88055 14.6803 8.10641 14.6256 8.32202C14.563 8.56582 14.3985 8.78957 14.0712 9.23208L13.6563 9.79731C13.5768 9.8969 13.5051 10.0024 13.4417 10.1129C13.4021 10.1876 13.3697 10.2659 13.3449 10.3467C13.3173 10.4369 13.3031 10.5312 13.2739 10.7207L13.1679 11.4137C13.0844 11.9606 13.0418 12.2336 12.914 12.449C12.8013 12.641 12.641 12.8013 12.449 12.914C12.2319 13.0418 11.9581 13.0835 11.4137 13.1679L10.7207 13.2739C10.5941 13.2883 10.4688 13.3123 10.3459 13.3457C10.2651 13.3702 10.1875 13.4025 10.1129 13.4425C10.0294 13.4868 9.95177 13.5427 9.79731 13.6571L9.23208 14.0721C8.78623 14.3994 8.56331 14.563 8.32202 14.6265C8.10641 14.6812 7.88055 14.6812 7.66494 14.6265C7.42115 14.563 7.19739 14.3994 6.75489 14.0721L6.18965 13.6571C6.09006 13.5777 5.98456 13.5059 5.87405 13.4425C5.79964 13.403 5.72164 13.3706 5.64111 13.3457C5.51816 13.3123 5.39284 13.2883 5.26624 13.2739L4.57326 13.1679C4.02639 13.0844 3.75254 13.0426 3.53796 12.914C3.34662 12.8002 3.18675 12.6403 3.07292 12.449C2.94517 12.2319 2.90343 11.9581 2.8191 11.4137L2.71307 10.7207C2.68385 10.5312 2.66965 10.4369 2.6421 10.3459C2.61774 10.2651 2.58529 10.1871 2.54525 10.1129C2.48186 10.0024 2.41012 9.8969 2.33068 9.79731L1.91573 9.23208C1.58844 8.78623 1.4248 8.56415 1.36134 8.32202C1.30664 8.10641 1.30664 7.88055 1.36134 7.66494C1.42396 7.42115 1.58844 7.19739 1.91573 6.75489L2.33068 6.18965C2.44423 6.03519 2.501 5.95754 2.54525 5.87405C2.58421 5.80002 2.6165 5.72238 2.6421 5.64111C2.66965 5.55011 2.68385 5.45576 2.71307 5.26624L2.8191 4.57326C2.90259 4.02639 2.94517 3.75254 3.07292 3.53796C3.18563 3.34593 3.34593 3.1873 3.53796 3.07292C3.75504 2.94517 4.02889 2.90343 4.57326 2.8191L5.26624 2.71307C5.45576 2.68468 5.55094 2.66965 5.64111 2.6421C5.72182 2.61705 5.79947 2.58477 5.87405 2.54525C5.95754 2.501 6.03519 2.44423 6.18965 2.33068L6.75489 1.91573ZM8.74198 2.58867L9.33561 3.02449C9.46168 3.11717 9.58608 3.20901 9.72468 3.28248C9.84713 3.3476 9.97404 3.4002 10.1054 3.44028C10.2556 3.4818 10.4084 3.51277 10.5629 3.53295L11.291 3.64483C11.9096 3.74001 11.9865 3.76589 12.0315 3.79261C12.1022 3.83491 12.1585 3.89113 12.2002 3.96126C12.2269 4.00635 12.2536 4.08316 12.348 4.70183L12.4599 5.42988C12.48 5.58436 12.511 5.73725 12.5525 5.88741C12.5932 6.01988 12.6458 6.14679 12.7103 6.26813C12.7838 6.40673 12.8756 6.53113 12.9683 6.6572L13.4041 7.25083C13.7748 7.75511 13.8099 7.82775 13.8233 7.87952C13.8425 7.95795 13.8425 8.03987 13.8233 8.1183C13.8099 8.16923 13.7748 8.24187 13.4041 8.74699L12.9683 9.34062C12.8756 9.46669 12.7838 9.59109 12.7103 9.72969C12.6458 9.8513 12.5929 9.97878 12.5525 10.1104C12.511 10.2606 12.48 10.4135 12.4599 10.5679L12.348 11.296C12.2528 11.9147 12.2269 11.9915 12.2002 12.0366C12.1584 12.1055 12.1005 12.1634 12.0315 12.2052C11.9865 12.2319 11.9096 12.2586 11.291 12.353L10.5629 12.4649C10.4084 12.485 10.2556 12.516 10.1054 12.5575C9.97377 12.5979 9.84629 12.6508 9.72468 12.7153C9.58608 12.7888 9.46168 12.8807 9.33561 12.9733L8.74198 13.4092C8.2377 13.7799 8.16506 13.8149 8.11329 13.8283C8.03486 13.8475 7.95294 13.8475 7.87451 13.8283C7.82358 13.8149 7.75094 13.7799 7.24582 13.4092L6.65219 12.9733C6.52868 12.8784 6.39867 12.7922 6.26312 12.7153C6.14151 12.6508 6.01403 12.5979 5.8824 12.5575C5.73224 12.516 5.57936 12.485 5.42487 12.4649L4.69682 12.353C4.07815 12.2578 4.00134 12.2319 3.95626 12.2052C3.88728 12.1634 3.82942 12.1055 3.7876 12.0366C3.76089 11.9915 3.73417 11.9147 3.63982 11.296L3.52794 10.5679C3.50776 10.4135 3.4768 10.2606 3.43527 10.1104C3.39486 9.97878 3.34203 9.8513 3.27747 9.72969C3.204 9.59109 3.11216 9.46669 3.01948 9.34062L2.58366 8.74699C2.21295 8.2427 2.17789 8.17007 2.16453 8.1183C2.14528 8.03987 2.14528 7.95795 2.16453 7.87952C2.17789 7.82859 2.21295 7.75595 2.58366 7.25083L3.01948 6.6572C3.11216 6.53113 3.204 6.40673 3.27747 6.26813C3.34204 6.14568 3.39464 6.01877 3.43527 5.88741C3.4768 5.73725 3.50776 5.58436 3.52794 5.42988L3.63982 4.70183C3.735 4.08316 3.76089 4.00635 3.7876 3.96126C3.82942 3.89229 3.88728 3.83443 3.95626 3.79261C4.00134 3.76589 4.07815 3.73918 4.69682 3.64483L5.42487 3.53295C5.57936 3.51277 5.73224 3.4818 5.8824 3.44028C6.01488 3.39965 6.14178 3.34705 6.26312 3.28248C6.40172 3.20901 6.52612 3.11717 6.65219 3.02449L7.24582 2.58867C7.75011 2.21796 7.82274 2.1829 7.87451 2.16954C7.95294 2.15029 8.03486 2.15029 8.11329 2.16954C8.16422 2.1829 8.23686 2.21796 8.74198 2.58867Z" fill="currentColor"/></svg>
+            New Arrival
+          </span>
+        {%- endif -%}
+        {%- if has_cpo -%}
+          <span class="elevate-badge elevate-badge--cpo">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6.20312 0L6.04688 0.140625L0.34375 5.90625L0 6.25L0.34375 6.60938L5.09375 11.3594L5.45312 11.7031L5.79688 11.3594L11.5625 5.65625L11.7031 5.5V0H6.20312ZM6.625 1H10.7031V5.07812L5.45312 10.2969L1.40625 6.25L6.625 1ZM9.20312 2C8.92773 2 8.70312 2.22461 8.70312 2.5C8.70312 2.77539 8.92773 3 9.20312 3C9.47852 3 9.70312 2.77539 9.70312 2.5C9.70312 2.22461 9.47852 2 9.20312 2Z" fill="currentColor"/></svg>
+            Pre-owned
+          </span>
+        {%- endif -%}
+        {%- if has_clearance -%}
+          <span class="elevate-badge elevate-badge--clearance">
+            <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6.20312 0L6.04688 0.140625L0.34375 5.90625L0 6.25L0.34375 6.60938L5.09375 11.3594L5.45312 11.7031L5.79688 11.3594L11.5625 5.65625L11.7031 5.5V0H6.20312ZM6.625 1H10.7031V5.07812L5.45312 10.2969L1.40625 6.25L6.625 1ZM9.20312 2C8.92773 2 8.70312 2.22461 8.70312 2.5C8.70312 2.77539 8.92773 3 9.20312 3C9.47852 3 9.70312 2.77539 9.70312 2.5C9.70312 2.22461 9.47852 2 9.20312 2Z" fill="currentColor"/></svg>
+            Clearance
+          </span>
+        {%- endif -%}
+      </div>
+      {%- if sku != blank -%}
+        <span class="elevate-mobile-header__sku">SKU: {{ sku }}</span>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  {%- comment -%} ── Product title ── {%- endcomment -%}
+  <p class="elevate-mobile-header__title">{{ product.title }}</p>
+
+  {%- comment -%} ── eBay stars row ── {%- endcomment -%}
+  <div class="elevate-mobile-header__stars">
+    <span class="elevate-mobile-header__stars-icons" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+    <span class="elevate-mobile-header__stars-pct">99.8%</span>
+    <span class="elevate-mobile-header__stars-text">Positive feedback on ebay</span>
+  </div>
+
+  {%- comment -%} ── Price block ── {%- endcomment -%}
+  <div class="elevate-mobile-header__price-row">
+    <div class="elevate-mobile-header__price-left">
+      <span class="elevate-mobile-header__price">
+        {{ current_variant.price | money_without_trailing_zeros }}
+      </span>
+      {%- if has_compare -%}
+        <div class="elevate-mobile-header__compare-row">
+          <span class="elevate-mobile-header__compare-at">
+            {{ current_variant.compare_at_price | money_without_trailing_zeros }}
+          </span>
+          <span class="elevate-mobile-header__discount-badge">{{ discount_pct }}% OFF</span>
+        </div>
+      {%- endif -%}
+    </div>
+    {%- if has_msrp -%}
+      <div class="elevate-mobile-header__price-right">
+        <span class="elevate-mobile-header__retail-label">
+          Retail: ~{{ msrp_cents | money_without_trailing_zeros }}
+        </span>
+        <span class="elevate-mobile-header__savings-badge">
+          Save ~{{ savings_pct }}% off retail
+        </span>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+<style>
+  /* Hidden on desktop */
+  .elevate-mobile-header {
+    display: none;
+  }
+
+  @media screen and (max-width: 749px) {
+    .elevate-mobile-header {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem; /* 12px */
+      padding: 1rem 0;
+    }
+
+    /* --- Breadcrumbs inside mobile header --- */
+    .elevate-mobile-header .elevate-breadcrumbs {
+      margin-block-end: 0;
+    }
+
+    .elevate-mobile-header .elevate-breadcrumbs__list {
+      justify-content: flex-start;
+      font-size: 0.625rem; /* 10px */
+    }
+
+    /* --- Badges row + SKU --- */
+    .elevate-mobile-header__badges-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .elevate-mobile-header__badges {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .elevate-mobile-header__sku {
+      font-size: 0.75rem; /* 12px */
+      color: #AEB2B8;
+      white-space: nowrap;
+    }
+
+    /* --- Title --- */
+    .elevate-mobile-header__title {
+      font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+      font-weight: 700;
+      font-size: 1.5rem; /* 24px */
+      line-height: 1.2;
+      color: #141517;
+      margin: 0;
+    }
+
+    /* --- Stars row --- */
+    .elevate-mobile-header__stars {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.875rem; /* 14px */
+    }
+
+    .elevate-mobile-header__stars-icons {
+      color: #FBC70F;
+      letter-spacing: 0.0625rem;
+    }
+
+    .elevate-mobile-header__stars-pct {
+      font-weight: 700;
+      color: #0D0904;
+    }
+
+    .elevate-mobile-header__stars-text {
+      color: #908E8C;
+    }
+
+    /* --- Price row --- */
+    .elevate-mobile-header__price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+
+    .elevate-mobile-header__price-left {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem; /* 4px */
+    }
+
+    .elevate-mobile-header__price {
+      font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+      font-weight: 400;
+      font-size: 2rem; /* 32px */
+      line-height: 1.2;
+      color: #36393F;
+    }
+
+    .elevate-mobile-header__compare-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .elevate-mobile-header__compare-at {
+      font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+      font-weight: 700;
+      font-size: 1.25rem; /* 20px */
+      color: #AEB2B8;
+      text-decoration: line-through;
+      line-height: 1.2;
+    }
+
+    .elevate-mobile-header__discount-badge {
+      display: inline-block;
+      font-size: 0.75rem; /* 12px */
+      font-weight: 700;
+      color: #E31E24;
+      background: #FDECEC;
+      padding: 0 0.5rem;
+      border-radius: 0.125rem; /* 2px */
+      white-space: nowrap;
+      line-height: 1.5;
+    }
+
+    .elevate-mobile-header__price-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 0.25rem;
+    }
+
+    .elevate-mobile-header__retail-label {
+      font-size: 0.75rem; /* 12px */
+      color: #AEB2B8;
+    }
+
+    .elevate-mobile-header__savings-badge {
+      display: inline-block;
+      font-size: 0.75rem; /* 12px */
+      font-weight: 700;
+      color: #359E5B;
+      background: #EDFCF2;
+      padding: 0 0.5rem;
+      border-radius: 0.125rem; /* 2px */
+      white-space: nowrap;
+      line-height: 1.5;
+    }
+  }
+</style>

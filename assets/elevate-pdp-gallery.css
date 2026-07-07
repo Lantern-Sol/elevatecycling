@@ -270,16 +270,32 @@
     padding-inline: 0;
   }
 
-  /* On mobile the counter is the primary nav — position normally */
+  /* Counter stays as overlay on mobile too (JS moves it into slideshow-container) */
   .product-information media-gallery .media-gallery__mobile-controls {
-    position: static;
-    transform: none;
-    justify-content: center;
-    padding-block-start: 0.75rem;
+    bottom: 1rem;
   }
 
-  /* Keep mobile thumbnails smaller if they ever show */
+  /* Force-show thumbnail strip on mobile — Horizon's mobile:hidden
+     hides it with !important; this is the only way to override vendor utility
+     without modifying vendor files (same pattern as desktop:hidden override at line 128) */
+  .product-information media-gallery slideshow-controls[thumbnails].mobile\:hidden {
+    display: flex !important;
+  }
+
+  /* Mobile thumbnails: 64×64px */
   .product-information media-gallery .slideshow-controls__thumbnail {
-    width: 3.5rem;
+    width: 4rem; /* 64px */
+    height: 4rem;
+  }
+
+  /* Social proof: full-width pill on mobile */
+  .elevate-social-proof {
+    width: 100%;
+    margin-block-start: 0.5rem;
+  }
+
+  /* Hide desktop breadcrumbs on mobile — mobile header has its own */
+  .elevate-breadcrumbs--desktop {
+    display: none;
   }
 }

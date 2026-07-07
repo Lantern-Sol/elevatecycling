@@ -137,7 +137,7 @@
       {%- endif -%}
       {%- if has_clearance -%}
         <span class="elevate-badge elevate-badge--clearance">
-          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M2 2l8 8M10 2l-8 8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6.20312 0L6.04688 0.140625L0.34375 5.90625L0 6.25L0.34375 6.60938L5.09375 11.3594L5.45312 11.7031L5.79688 11.3594L11.5625 5.65625L11.7031 5.5V0H6.20312ZM6.625 1H10.7031V5.07812L5.45312 10.2969L1.40625 6.25L6.625 1ZM9.20312 2C8.92773 2 8.70312 2.22461 8.70312 2.5C8.70312 2.77539 8.92773 3 9.20312 3C9.47852 3 9.70312 2.77539 9.70312 2.5C9.70312 2.22461 9.47852 2 9.20312 2Z" fill="currentColor"/></svg>
           Clearance
         </span>
       {%- endif -%}
@@ -163,6 +163,16 @@
   <span class="elevate-sidecar__price">
     {{ current_variant.price | money_without_trailing_zeros }}
   </span>
+  {%- if current_variant.compare_at_price > current_variant.price -%}
+    <div class="elevate-sidecar__compare-row">
+      <span class="elevate-sidecar__compare-at">
+        {{ current_variant.compare_at_price | money_without_trailing_zeros }}
+      </span>
+      {%- assign discount_diff = current_variant.compare_at_price | minus: current_variant.price -%}
+      {%- assign discount_pct = discount_diff | times: 100 | divided_by: current_variant.compare_at_price -%}
+      <span class="elevate-sidecar__discount-badge">{{ discount_pct }}% OFF</span>
+    </div>
+  {%- endif -%}
   {%- if has_msrp -%}
     <div class="elevate-sidecar__msrp">
       <span class="elevate-sidecar__msrp-label">

@@ -108,11 +108,12 @@
         data-testid="product-information-media"
       >
         {% render 'elevate-breadcrumbs-nav' %}
+        {% render 'elevate-pdp-mobile-header', product: product %}
         {{ media_gallery }}
-        {% render 'elevate-pdp-build-story-media' %}
         {% render 'elevate-pdp-mechanic-notes-media' %}
-        {% render 'elevate-pdp-specs-media' %}
         {% render 'elevate-pdp-geometry-media' %}
+        {% render 'elevate-pdp-build-story-media' %}
+        {% render 'elevate-pdp-specs-media' %}
       </div>
     {% endcapture %}
 
@@ -165,7 +166,7 @@
     }
 
     .product-information__grid {
-      row-gap: var(--mobile-gap, var(--gap, 0));
+      row-gap: 1rem;
     }
   }
 
