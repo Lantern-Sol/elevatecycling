@@ -36,6 +36,12 @@
       {%- render 'theme-editor' -%}
     {% endif %}
 
+    {%- if request.page_type == 'product' -%}
+      {{ 'elevate-pdp-gallery.css' | asset_url | stylesheet_tag }}
+      {{ 'elevate-pdp-sidecar.css' | asset_url | stylesheet_tag }}
+      <script src="{{ 'elevate-pdp-gallery.js' | asset_url }}" defer></script>
+    {%- endif -%}
+
     {{ content_for_header }}
   </head>
 

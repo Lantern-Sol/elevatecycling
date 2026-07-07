@@ -1,0 +1,674 @@
+/* ============================================================
+   Elevate PDP Sidecar — Buy Panel Styles
+   ============================================================ */
+
+/* ---------- A. Badges row + SKU ---------- */
+
+.elevate-sidecar__badges-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem; /* 8px */
+  flex-wrap: wrap;
+}
+
+.elevate-sidecar__badges {
+  display: flex;
+  gap: 0.5rem; /* 8px */
+  flex-wrap: wrap;
+}
+
+.elevate-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem; /* 4px */
+  font-size: 0.75rem; /* 12px */
+  font-weight: 700;
+  line-height: 1.5;
+  padding: 0.25rem 0.75rem; /* 4px 12px */
+  border-radius: 0.5rem; /* 8px */
+  white-space: nowrap;
+}
+
+.elevate-badge svg {
+  width: 1rem; /* 16px — matches Figma badge icon size */
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.elevate-badge--new {
+  background: #4ade80;
+  color: #36393f;
+}
+
+.elevate-badge--new-arrival {
+  background: #f9d44e;
+  color: #141517;
+}
+
+.elevate-badge--cpo {
+  background: #2dd4bf;
+  color: #042f2e;
+}
+
+.elevate-badge--clearance {
+  background: #ef4444;
+  color: #fff;
+}
+
+.elevate-sidecar__sku {
+  font-size: 0.875rem; /* 14px */
+  color: #aeb2b8;
+  white-space: nowrap;
+}
+
+/* ---------- B. Product title ---------- */
+
+.elevate-sidecar__title {
+  font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+  font-weight: 700;
+  font-size: 2rem; /* 32px */
+  line-height: 1.2;
+  color: #141517;
+  margin: 0;
+}
+
+/* ---------- C. eBay stars row ---------- */
+
+/* Collapse the parent 24px gap to 8px between title → stars → price */
+.elevate-sidecar__stars {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem; /* 8px */
+  font-size: 0.875rem; /* 14px */
+  margin-top: -1rem; /* -16px: 24px gap − 16px = 8px visual gap */
+}
+
+.elevate-sidecar__stars-icons {
+  color: #fbc70f;
+  letter-spacing: 0.0625rem; /* 1px */
+}
+
+.elevate-sidecar__stars-pct {
+  font-weight: 700;
+  color: #0d0904;
+}
+
+.elevate-sidecar__stars-text {
+  color: #908e8c;
+}
+
+/* ---------- D. Price + MSRP ---------- */
+
+.elevate-sidecar__price-block {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* 12px */
+  flex-wrap: wrap;
+  margin-top: -1rem; /* -16px: 24px gap − 16px = 8px visual gap */
+}
+
+.elevate-sidecar__price {
+  font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+  font-weight: 400;
+  font-size: 3rem; /* 48px */
+  line-height: 1.2;
+  color: #36393f;
+}
+
+.elevate-sidecar__msrp {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem; /* 4px */
+}
+
+.elevate-sidecar__msrp-label {
+  font-size: 0.875rem; /* 14px */
+  color: #aeb2b8;
+}
+
+.elevate-sidecar__savings-badge {
+  display: inline-block;
+  font-size: 0.75rem; /* 12px */
+  font-weight: 700;
+  color: #359e5b;
+  background: #edfcf2;
+  padding: 0 0.5rem; /* 0 8px */
+  border-radius: 0.25rem; /* 4px */
+  white-space: nowrap;
+  line-height: 1.5;
+}
+
+/* ---------- E. General Stats ---------- */
+
+.elevate-stats {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* 16px */
+  padding: 0.5rem 0; /* 8px vertical */
+}
+
+.elevate-stats__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.elevate-stats__heading {
+  font-size: 1.25rem; /* 20px */
+  font-weight: 700;
+  color: #141517;
+  letter-spacing: -0.0125rem;
+}
+
+/* Grade pill */
+.elevate-grade {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem; /* 8px */
+  background: #4ade80;
+  padding-left: 0.75rem; /* 12px */
+  padding-right: 0.25rem; /* 4px */
+  padding-top: 0.25rem; /* 4px */
+  padding-bottom: 0.25rem; /* 4px */
+  border-radius: 62.4375rem; /* fully rounded */
+}
+
+.elevate-grade__text {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 700;
+  color: #fdfcfc;
+  white-space: nowrap;
+}
+
+.elevate-grade__pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem; /* 12px */
+  font-weight: 700;
+  background: #141517;
+  color: #fdfcfc;
+  padding: 0 0.75rem; /* 0 12px */
+  height: 1.5rem; /* 24px */
+  border-radius: 62.4375rem;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+/* Stats grid — 2-col wrap on desktop, 1-col on mobile */
+.elevate-stats__grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem; /* 12px */
+}
+
+.elevate-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem; /* 4px */
+  flex: 1 1 calc(50% - 0.375rem); /* 2-col: fill half minus gap */
+  min-width: 0;
+}
+
+.elevate-stat__row {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem; /* 4px */
+}
+
+.elevate-stat__icon {
+  width: 1rem; /* 16px */
+  height: 1rem;
+  flex-shrink: 0;
+  color: #141517;
+}
+
+.elevate-stat__label {
+  font-size: 0.875rem; /* 14px */
+  color: #141517;
+  letter-spacing: -0.00875rem;
+  white-space: nowrap;
+}
+
+.elevate-stat__value {
+  font-size: 0.875rem; /* 14px */
+  font-weight: 700;
+  color: #141517;
+  white-space: nowrap;
+  margin-left: auto;
+  text-align: right;
+  letter-spacing: -0.00875rem;
+}
+
+.elevate-stat__value--green {
+  color: #4ade80;
+}
+
+/* Progress bar */
+.elevate-stat__bar {
+  width: 100%;
+  height: 0.375rem; /* 6px */
+  background: #e2e3e5;
+  border-radius: 62.4375rem; /* fully rounded */
+  overflow: hidden;
+}
+
+.elevate-stat__fill {
+  height: 100%;
+  background: #4ade80;
+  border-radius: 62.4375rem;
+  transition: width 0.3s ease;
+}
+
+/* ---------- F. Size / fit card ---------- */
+
+.elevate-size-card {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* 12px */
+  border: 0.03125rem dashed #aeb2b8; /* ~0.5px */
+  border-radius: 1rem; /* 16px */
+  padding: 0.75rem 1rem; /* 12px 16px */
+  width: 100%;
+}
+
+.elevate-size-card__icon {
+  width: 2rem; /* 32px */
+  height: 2rem;
+  flex-shrink: 0;
+  color: #36393f;
+}
+
+.elevate-size-card__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.elevate-size-card__fit {
+  font-size: 1rem; /* 16px */
+  font-weight: 700;
+  color: #36393f;
+  line-height: 1.5;
+}
+
+.elevate-size-card__ref {
+  font-size: 1rem; /* 16px */
+  color: #36393f;
+  line-height: 1.5;
+}
+
+.elevate-size-card__link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 0.125rem;
+}
+
+.elevate-size-card__link:hover {
+  color: #e31e24;
+}
+
+/* ---------- G. CTA card container ---------- */
+
+.elevate-cta-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* 12px */
+  background: rgba(226, 227, 229, 0.4);
+  border-radius: 1rem; /* 16px */
+  padding: 0.5rem; /* 8px */
+}
+
+/* ---------- H. ATC button override ----------
+   Horizon .button uses CSS custom properties for colors.
+   Override the vars on the button itself for max specificity. */
+
+.elevate-cta-card .product-form-buttons .button.add-to-cart-button,
+.elevate-cta-card .product-form-buttons .button,
+.elevate-cta-card button[name="add"],
+.elevate-cta-card .product-form__submit {
+  --button-background-color: #e31e24;
+  --button-color: #fdfcfc;
+  --button-border-color: #e31e24;
+  background: var(--button-background-color);
+  color: var(--button-color);
+  border-color: var(--button-border-color);
+  border-radius: 0.75rem; /* 12px */
+  width: 100%;
+  min-height: 3rem; /* 48px */
+  font-weight: 700;
+  font-size: 1rem; /* 16px */
+  letter-spacing: 0.03em;
+  outline: none;
+  box-shadow: none;
+}
+
+/* ATC button inner layout — text + arrow */
+.elevate-cta-card .add-to-cart-text__content span span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.elevate-atc-arrow {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.elevate-cta-card .product-form-buttons .button.add-to-cart-button:hover,
+.elevate-cta-card .product-form-buttons .button:hover,
+.elevate-cta-card button[name="add"]:hover,
+.elevate-cta-card .product-form__submit:hover {
+  --button-background-color: #c71a1f;
+  --button-border-color: #c71a1f;
+  background: var(--button-background-color);
+  border-color: var(--button-border-color);
+}
+
+/* Hide accelerated checkout / Shop Pay inside CTA card */
+.elevate-cta-card .accelerated-checkout-block,
+.elevate-cta-card .shopify-payment-button,
+.elevate-cta-card shopify-accelerated-checkout,
+.elevate-cta-card shopify-buy-it-now-button,
+.elevate-cta-card [data-shopify="payment-button"] {
+  display: none;
+}
+
+/* Hide quantity selector inside CTA card */
+.elevate-cta-card quantity-selector,
+.elevate-cta-card .quantity-selector,
+.elevate-cta-card .quantity-selector-wrapper {
+  display: none;
+}
+
+/* Safety net: hide leftover cached Horizon blocks inside CTA card.
+   Only variant-picker and buy-buttons should be visible. */
+.elevate-cta-card > .text-block,
+.elevate-cta-card > .price-block,
+.elevate-cta-card > .block--divider,
+.elevate-cta-card > .divider,
+.elevate-cta-card > .group-block {
+  display: none;
+}
+
+/* ---------- I. Ask a Mechanic button ---------- */
+
+.elevate-cta-card__ask-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 3rem; /* 48px */
+  border: 0.03125rem solid #141517; /* ~0.5px */
+  border-radius: 0.75rem; /* 12px */
+  background: transparent;
+  color: #141517;
+  font-size: 1rem; /* 16px */
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.elevate-cta-card__ask-btn:hover {
+  background: #141517;
+  color: #fdfcfc;
+}
+
+/* ---------- J. Trust icons row ---------- */
+
+.elevate-trust {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem; /* 8px */
+  padding: 0 0.5rem; /* 0 8px */
+}
+
+.elevate-trust__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem; /* 4px */
+  flex: 1;
+  text-align: center;
+  min-width: 0;
+}
+
+.elevate-trust__icon {
+  width: 1.5rem; /* 24px */
+  height: 1.5rem;
+  color: #6d1316;
+  flex-shrink: 0;
+}
+
+.elevate-trust__text {
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.5;
+  color: #6d1316;
+  letter-spacing: -0.0075rem;
+}
+
+/* ---------- F2. Size reference popup ---------- */
+
+.elevate-size-dialog {
+  display: contents;
+}
+
+.elevate-size-card__trigger {
+  all: unset;
+  font-size: 1rem;
+  color: #36393f;
+  cursor: pointer;
+  line-height: 1.5;
+}
+
+.elevate-size-card__underline {
+  text-decoration: underline;
+  text-underline-offset: 0.125rem;
+}
+
+.elevate-size-card__trigger:hover {
+  color: #e31e24;
+}
+
+/* Popup modal */
+.elevate-size-popup {
+  max-width: 31.25rem; /* 500px */
+  width: calc(100% - 2rem);
+  border-radius: 1.5rem; /* 24px */
+  border: none;
+  padding: 0;
+  overflow: hidden;
+  background: #fdfcfc;
+  box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.2);
+}
+
+.elevate-size-popup[open] {
+  animation: modalSlideInTop var(--animation-speed, 0.3s) var(--animation-easing, ease) forwards;
+}
+
+.elevate-size-popup.dialog-closing {
+  animation: modalSlideOutTop var(--animation-speed, 0.3s) var(--animation-easing, ease) forwards;
+}
+
+/* Header */
+.elevate-size-popup__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #e31e24;
+  padding: 1.25rem 1.5rem;
+}
+
+.elevate-size-popup__title {
+  font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+  font-size: 1.5rem; /* 24px */
+  font-weight: 700;
+  color: #fff;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.elevate-size-popup__close {
+  all: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: opacity 0.15s ease;
+}
+
+.elevate-size-popup__close svg {
+  width: 2rem;
+  height: 2rem;
+}
+
+.elevate-size-popup__close:hover {
+  opacity: 0.8;
+}
+
+/* Body */
+.elevate-size-popup__body {
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.elevate-size-popup__intro {
+  font-size: 0.875rem; /* 14px */
+  line-height: 1.6;
+  color: #36393f;
+  margin: 0;
+}
+
+/* Disclaimer */
+.elevate-size-popup__disclaimer {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  background: rgba(226, 227, 229, 0.4);
+  border-radius: 0.75rem; /* 12px */
+  padding: 0.75rem 1rem;
+}
+
+.elevate-size-popup__info-icon {
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+  color: #6b7280;
+  margin-top: 0.125rem;
+}
+
+.elevate-size-popup__disclaimer-text {
+  font-size: 0.75rem; /* 12px */
+  line-height: 1.5;
+  color: #6b7280;
+  margin: 0;
+}
+
+/* Divider */
+.elevate-size-popup__divider {
+  border: none;
+  border-top: 0.0625rem solid #e2e3e5;
+  margin: 0;
+}
+
+/* Table */
+.elevate-size-popup__table-wrap {
+  display: flex;
+  flex-direction: column;
+}
+
+.elevate-size-popup__table-header,
+.elevate-size-popup__table-row {
+  display: grid;
+  grid-template-columns: 3rem 1fr 1fr;
+  gap: 0.75rem;
+  padding: 0.625rem 0.75rem;
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.elevate-size-popup__table-header {
+  background: rgba(226, 227, 229, 0.4);
+  border-radius: 0.5rem;
+  font-weight: 700;
+  color: #36393f;
+}
+
+.elevate-size-popup__table-row {
+  color: #36393f;
+  border-bottom: 0.0625rem solid #e2e3e5;
+}
+
+.elevate-size-popup__table-row span:first-child {
+  font-weight: 700;
+}
+
+.elevate-size-popup__table-row:last-child {
+  border-bottom: none;
+}
+
+/* CTA */
+.elevate-size-popup__cta {
+  font-size: 0.75rem; /* 12px */
+  color: #6b7280;
+  text-align: center;
+  margin: 0;
+  padding-top: 0.25rem;
+}
+
+.elevate-size-popup__cta-link {
+  color: #e31e24;
+  text-decoration: underline;
+  text-underline-offset: 0.125rem;
+}
+
+.elevate-size-popup__cta-link:hover {
+  color: #c71a1f;
+}
+
+/* ---------- Responsive — mobile ---------- */
+
+@media screen and (max-width: 749px) {
+  .elevate-sidecar__title {
+    font-size: 1.75rem; /* 28px */
+  }
+
+  .elevate-sidecar__price {
+    font-size: 2.5rem; /* 40px */
+  }
+
+  .elevate-stat {
+    flex: 1 1 100%;
+  }
+
+  .elevate-trust__item {
+    flex: 0 0 calc(50% - 0.25rem);
+  }
+
+  .elevate-size-popup {
+    width: calc(100% - 1rem);
+    border-radius: 1rem;
+  }
+
+  .elevate-size-popup__header {
+    padding: 1rem 1.25rem;
+  }
+
+  .elevate-size-popup__title {
+    font-size: 1.25rem;
+  }
+
+  .elevate-size-popup__body {
+    padding: 1.25rem;
+  }
+}

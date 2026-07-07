@@ -1,0 +1,27 @@
+{%- comment -%}
+  Breadcrumb nav for PDP — rendered inside product-information__media.
+  Home / Collection / Product Title (ellipsis)
+{%- endcomment -%}
+
+{%- liquid
+  assign parent_collection = collection
+  if parent_collection.handle == blank
+    assign parent_collection = product.collections.first
+  endif
+-%}
+
+<nav class="elevate-breadcrumbs" aria-label="Breadcrumb">
+  <ol class="elevate-breadcrumbs__list">
+    <li class="elevate-breadcrumbs__item">
+      <a class="elevate-breadcrumbs__link" href="{{ routes.root_url }}">Home</a>
+    </li>
+    {%- if parent_collection.handle != blank -%}
+      <li class="elevate-breadcrumbs__item">
+        <a class="elevate-breadcrumbs__link" href="{{ parent_collection.url }}">{{ parent_collection.title }}</a>
+      </li>
+    {%- endif -%}
+    <li class="elevate-breadcrumbs__item elevate-breadcrumbs__item--current" aria-current="page">
+      <span class="elevate-breadcrumbs__current">{{ product.title }}</span>
+    </li>
+  </ol>
+</nav>

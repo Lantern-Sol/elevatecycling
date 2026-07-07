@@ -107,7 +107,12 @@
         class="product-information__media"
         data-testid="product-information-media"
       >
+        {% render 'elevate-breadcrumbs-nav' %}
         {{ media_gallery }}
+        {% render 'elevate-pdp-build-story-media' %}
+        {% render 'elevate-pdp-mechanic-notes-media' %}
+        {% render 'elevate-pdp-specs-media' %}
+        {% render 'elevate-pdp-geometry-media' %}
       </div>
     {% endcapture %}
 

@@ -13,6 +13,7 @@
   {% endif %}
 >
   {% capture children %}
+    {% render 'elevate-pdp-sidecar', product: closest.product %}
     <div class="view-product-title">
       <a
         href="{{ closest.product.selected_or_first_available_variant.url }}"
@@ -20,7 +21,10 @@
         {{- closest.product.title }}
       </a>
     </div>
-    {% content_for 'blocks' %}
+    <div class="elevate-cta-card">
+      {% content_for 'blocks' %}
+      {% render 'elevate-pdp-sidecar-bottom', product: closest.product %}
+    </div>
   {% endcapture %}
 
   {% render 'group',

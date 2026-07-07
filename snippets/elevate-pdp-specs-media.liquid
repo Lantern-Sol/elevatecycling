@@ -1,0 +1,198 @@
+{%- doc -%}
+  Elevate Cycling — PDP Specs (media column snippet).
+  Two-column grouped spec table parsed from custom.bike_specs metafield.
+  Pixel-perfect match to Figma node 4458:29259.
+  Format:
+    ALL CAPS LINE = group header
+    Label: Value = spec row
+{%- enddoc -%}
+
+{%- liquid
+  assign specs_raw = product.metafields.custom.bike_specs.value
+  if specs_raw == blank
+    assign specs_raw = product.metafields.custom.bike_specs
+  endif
+-%}
+
+{%- unless specs_raw == blank -%}
+{%- capture newline %}
+{% endcapture -%}
+{%- liquid
+  assign spec_lines = specs_raw | split: newline
+
+  comment
+    Build an array of groups. Each group has a title (optional) and rows.
+    We'll split into two columns for desktop display.
+  endcomment
+
+  assign group_count = 0
+  assign current_group_open = false
+-%}
+
+<div class="elevate-specs-media" data-scroll-reveal>
+  <div class="elevate-specs-media__grid">
+
+    {%- comment -%}
+      We iterate lines and build groups inline.
+      ALL CAPS line → new group header.
+      Otherwise → label:value row.
+    {%- endcomment -%}
+
+    {%- for line in spec_lines -%}
+      {%- assign trimmed = line | strip -%}
+      {%- if trimmed == blank -%}
+        {%- continue -%}
+      {%- endif -%}
+
+      {%- assign upper_line = trimmed | upcase -%}
+      {%- if upper_line == trimmed and trimmed contains ' ' or trimmed == upper_line and trimmed.size > 2 -%}
+        {%- comment -%} ALL CAPS = group header {%- endcomment -%}
+        {%- if current_group_open -%}
+          </div></div>
+        {%- endif -%}
+        {%- assign group_count = group_count | plus: 1 -%}
+        <div class="elevate-specs-media__group">
+          <div class="elevate-specs-media__group-header">
+            <span class="elevate-specs-media__group-title">{{ trimmed }}</span>
+          </div>
+          <div class="elevate-specs-media__rows">
+        {%- assign current_group_open = true -%}
+      {%- else -%}
+        {%- comment -%} Label: Value row {%- endcomment -%}
+        {%- assign colon_pos = trimmed | split: ':' -%}
+        {%- assign spec_label = colon_pos[0] | strip -%}
+        {%- assign spec_value_parts = '' -%}
+        {%- for part in colon_pos -%}
+          {%- if forloop.first -%}{%- continue -%}{%- endif -%}
+          {%- if spec_value_parts != '' -%}
+            {%- assign spec_value_parts = spec_value_parts | append: ':' | append: part -%}
+          {%- else -%}
+            {%- assign spec_value_parts = part -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign spec_value = spec_value_parts | strip -%}
+
+        {%- unless current_group_open -%}
+          {%- assign group_count = group_count | plus: 1 -%}
+          <div class="elevate-specs-media__group">
+            <div class="elevate-specs-media__rows">
+          {%- assign current_group_open = true -%}
+        {%- endunless -%}
+
+        {%- if spec_label != blank and spec_value != blank -%}
+          <div class="elevate-specs-media__row">
+            <span class="elevate-specs-media__label">{{ spec_label }}</span>
+            <span class="elevate-specs-media__value">{{ spec_value }}</span>
+          </div>
+        {%- endif -%}
+      {%- endif -%}
+    {%- endfor -%}
+
+    {%- if current_group_open -%}
+      </div></div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+<style>
+  /* ─── PDP — Specs (media column) ─── */
+  .elevate-specs-media {
+    margin-top: 1.5rem;
+    overflow: hidden;
+  }
+
+  /* ── Grid: two equal columns on desktop ── */
+  .elevate-specs-media__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .elevate-specs-media__group {
+    break-inside: avoid;
+  }
+
+  /* ── Group header ── */
+  .elevate-specs-media__group-header {
+    border-bottom: 0.125rem solid #6B7280;
+    padding: 0.5rem 1rem;
+  }
+
+  .elevate-specs-media__group-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #E31E24;
+    text-transform: uppercase;
+  }
+
+  /* ── Rows ── */
+  .elevate-specs-media__rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .elevate-specs-media__row {
+    display: flex;
+    align-items: center;
+    min-height: 2.5rem;
+    border-bottom: 0.03125rem solid #AEB2B8;
+  }
+
+  .elevate-specs-media__row:last-child {
+    border-bottom: none;
+  }
+
+  .elevate-specs-media__label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+    width: 7.5rem;
+    flex-shrink: 0;
+    padding: 0.625rem 0 0.625rem 1rem;
+  }
+
+  .elevate-specs-media__value {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+    flex: 1;
+    min-width: 0;
+    padding: 0.625rem 0 0.625rem 1rem;
+  }
+
+  /* ─── Desktop: two-column ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-specs-media__grid {
+      flex-direction: row;
+      gap: 1.5rem;
+    }
+
+    .elevate-specs-media__grid > .elevate-specs-media__group {
+      flex: 1;
+      min-width: 0;
+    }
+
+    /* Stack groups into two visual columns using CSS columns */
+    .elevate-specs-media__grid {
+      display: block;
+      column-count: 2;
+      column-gap: 1.5rem;
+    }
+
+    .elevate-specs-media__group {
+      break-inside: avoid;
+      margin-bottom: 1.5rem;
+    }
+  }
+</style>
+{%- endunless -%}

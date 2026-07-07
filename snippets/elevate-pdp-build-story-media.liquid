@@ -1,0 +1,63 @@
+{%- doc -%}
+  Elevate Cycling — PDP "Why We Love This Build" (media column snippet).
+  Renders product.description in a light card below the gallery.
+  Only visible when product.description is populated.
+{%- enddoc -%}
+
+{%- unless product.description == blank -%}
+<div class="elevate-build-story-media" data-scroll-reveal>
+  <p class="elevate-build-story-media__eyebrow">Build Description</p>
+  <h2 class="elevate-build-story-media__heading">Why we love this build</h2>
+  <div class="elevate-build-story-media__body rte">
+    {{ product.description }}
+  </div>
+</div>
+
+<style>
+  .elevate-build-story-media {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+  }
+
+  .elevate-build-story-media__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-build-story-media__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-build-story-media__body {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+  }
+
+  .elevate-build-story-media__body p {
+    margin: 0 0 1rem;
+  }
+
+  .elevate-build-story-media__body p:last-child {
+    margin-bottom: 0;
+  }
+</style>
+{%- endunless -%}

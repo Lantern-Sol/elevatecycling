@@ -1,0 +1,364 @@
+{%- doc -%}
+  Elevate Cycling — PDP Mechanic's Notes (media column snippet).
+  Dark card with summary, build highlights, CPO sidebar, and inspector attribution.
+  Pixel-perfect match to Figma node 4458:29204.
+  Metafield: custom.mechanic_notes (multi_line_text_field)
+  Format:
+    Summary paragraph
+    ---
+    Full highlight sentence per line
+    ---
+    Inspector Name
+{%- enddoc -%}
+
+{%- liquid
+  assign notes_raw = product.metafields.custom.mechanic_notes.value
+  if notes_raw == blank
+    assign notes_raw = product.metafields.custom.mechanic_notes
+  endif
+-%}
+
+{%- unless notes_raw == blank -%}
+{%- capture newline %}
+{% endcapture -%}
+{%- liquid
+  assign parts = notes_raw | split: '---'
+  assign summary = parts[0] | strip
+  assign highlights_raw = parts[1] | strip
+  assign inspector = parts[2] | strip
+-%}
+
+<div class="elevate-mechanic-media" data-scroll-reveal>
+  {%- comment -%} ── Background layers: solid + texture ── {%- endcomment -%}
+  <div class="elevate-mechanic-media__bg" aria-hidden="true">
+    <div class="elevate-mechanic-media__bg-solid"></div>
+    <img
+      class="elevate-mechanic-media__bg-texture"
+      src="{{ 'elevate-mechanic-bg.png' | asset_url }}"
+      alt=""
+      loading="lazy"
+    >
+  </div>
+
+  <div class="elevate-mechanic-media__inner">
+
+    {%- comment -%} ── Left column: notes content ── {%- endcomment -%}
+    <div class="elevate-mechanic-media__content">
+      <div class="elevate-mechanic-media__header">
+        <p class="elevate-mechanic-media__eyebrow">OUR TAKE</p>
+        <h2 class="elevate-mechanic-media__heading">Mechanic's Notes</h2>
+
+        {%- if summary != blank -%}
+          <p class="elevate-mechanic-media__summary">{{ summary }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if highlights_raw != blank -%}
+        <div class="elevate-mechanic-media__highlights">
+          <p class="elevate-mechanic-media__highlights-title">Build Highlights</p>
+          <div class="elevate-mechanic-media__highlights-list">
+            {%- assign highlight_lines = highlights_raw | split: newline -%}
+            {%- for line in highlight_lines -%}
+              {%- assign trimmed = line | strip -%}
+              {%- if trimmed != blank -%}
+                <p class="elevate-mechanic-media__highlight-item"><svg aria-hidden="true" width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M11.5 3.5L5.5 10L2.5 7" stroke="#FDFCFC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg><span>{{ trimmed }}</span></p>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Right sidebar: CPO badge ── {%- endcomment -%}
+    <aside class="elevate-mechanic-media__sidebar" aria-label="Certified Pre-Owned">
+      <div class="elevate-mechanic-media__cpo-card">
+        <div class="elevate-mechanic-media__cpo-badge">
+          <div class="elevate-mechanic-media__cpo-badge-img">
+            <img
+              src="{{ 'elevate-cpo-badge.png' | asset_url }}"
+              alt=""
+              width="56"
+              height="56"
+              loading="lazy"
+            >
+          </div>
+          <span class="elevate-mechanic-media__cpo-label">CERTIFIED PRE-OWNED</span>
+        </div>
+
+        <div class="elevate-mechanic-media__cpo-checklist">
+          <p class="elevate-mechanic-media__cpo-intro">This bike is Certified Pre-Owned</p>
+          {%- assign cpo_items = 'Frame integrity verified,All components inspected & cleaned,Parts replaced as needed,Drivetrain inspected&comma; cleaned&comma; & tuned,Suspension inspected&comma; tuned&comma; & dialed in,Wheels trued' | split: ',' -%}
+          {%- for item in cpo_items -%}
+            <div class="elevate-mechanic-media__cpo-item">
+              <svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 1.125C3.30029 1.125 1.125 3.30029 1.125 6C1.125 8.69971 3.30029 10.875 6 10.875C8.69971 10.875 10.875 8.69971 10.875 6C10.875 5.47559 10.8047 4.95264 10.6172 4.46484L10.0078 5.0625C10.0825 5.36279 10.125 5.66309 10.125 6C10.125 8.28809 8.28809 10.125 6 10.125C3.71191 10.125 1.875 8.28809 1.875 6C1.875 3.71191 3.71191 1.875 6 1.875C7.125 1.875 8.13574 2.32324 8.84766 3.03516L9.375 2.50781C8.51221 1.64502 7.3125 1.125 6 1.125ZM10.2305 2.73047L6 6.96094L4.39453 5.35547L3.85547 5.89453L5.73047 7.76953L6 8.02734L6.26953 7.76953L10.7695 3.26953L10.2305 2.73047Z" fill="#AEB2B8"/>
+              </svg>
+              <span>{{ item | replace: '&comma;', ',' }}</span>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- if inspector != blank -%}
+        <p class="elevate-mechanic-media__inspector">
+          <em>Inspected by: {{ inspector }}</em>
+        </p>
+      {%- endif -%}
+    </aside>
+
+  </div>
+</div>
+
+<style>
+  /* ─── PDP — Mechanic's Notes (media column) ─── */
+  .elevate-mechanic-media {
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    margin-top: 1.5rem;
+    overflow: hidden;
+    position: relative;
+    box-shadow:
+      0 2px 4px -2px rgba(0, 0, 0, 0.1),
+      0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  }
+
+  /* ── Background layers ── */
+  .elevate-mechanic-media__bg {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: 1.5rem;
+  }
+
+  .elevate-mechanic-media__bg-solid {
+    position: absolute;
+    inset: 0;
+    background: #141517;
+    border-radius: 1.5rem;
+  }
+
+  .elevate-mechanic-media__bg-texture {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.05;
+    border-radius: 1.5rem;
+  }
+
+  /* ── Inner layout ── */
+  .elevate-mechanic-media__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    position: relative;
+  }
+
+  /* ── Content column ── */
+  .elevate-mechanic-media__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* ── Header group (eyebrow + heading + summary) ── */
+  .elevate-mechanic-media__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-mechanic-media__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-mechanic-media__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-mechanic-media__summary {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  /* ── Build Highlights ── */
+  .elevate-mechanic-media__highlights {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-mechanic-media__highlights-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 400;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-mechanic-media__highlights-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    padding-left: 1rem;
+  }
+
+  .elevate-mechanic-media__highlight-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-mechanic-media__highlight-item svg {
+    flex-shrink: 0;
+    margin-top: 0.1875rem;
+  }
+
+  /* ── CPO Sidebar ── */
+  .elevate-mechanic-media__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-mechanic-media__cpo-card {
+    background: #322909;
+    border-radius: 1rem;
+    padding: 1.5rem 1rem 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-mechanic-media__cpo-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: #F9D44E;
+    border-radius: 62.4375rem 1.5rem 1.5rem 62.4375rem;
+    padding: 0.25rem 0.75rem 0.25rem 0;
+    width: fit-content;
+    overflow: visible;
+  }
+
+  .elevate-mechanic-media__cpo-badge-img {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 2.875rem;
+    height: 1.75rem;
+    flex-shrink: 0;
+    overflow: visible;
+  }
+
+  .elevate-mechanic-media__cpo-badge-img img {
+    width: 3.5rem;
+    height: 3.5rem;
+    max-width: none;
+    flex-shrink: 0;
+    object-fit: contain;
+    pointer-events: none;
+  }
+
+  .elevate-mechanic-media__cpo-label {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 400;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #141517;
+    white-space: nowrap;
+  }
+
+  .elevate-mechanic-media__cpo-checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    padding-top: 0.75rem;
+  }
+
+  .elevate-mechanic-media__cpo-intro {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-mechanic-media__cpo-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-left: 0.5rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #FDFCFC;
+  }
+
+  .elevate-mechanic-media__cpo-item svg {
+    flex-shrink: 0;
+  }
+
+  /* ── Inspector ── */
+  .elevate-mechanic-media__inspector {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #AEB2B8;
+    text-align: center;
+    margin: 0;
+  }
+
+  /* ─── Desktop ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-mechanic-media__inner {
+      flex-direction: row;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .elevate-mechanic-media__content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .elevate-mechanic-media__sidebar {
+      flex-shrink: 0;
+      width: 14rem;
+    }
+  }
+</style>
+{%- endunless -%}
