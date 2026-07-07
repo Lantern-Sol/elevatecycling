@@ -5,6 +5,7 @@
   Summary bar with bundle pricing + "Bike only" / "Add bundle to cart" CTAs.
 {%- endcomment -%}
 
+{%- if product != blank -%}
 {%- liquid
   assign bundle_products = product.metafields.custom.bundle_products.value
   assign has_bundle = false
@@ -14,16 +15,10 @@
     assign has_bundle = true
   else
     if section.settings.kit_product_1 != blank
-      assign kit_1_lookup = all_products[section.settings.kit_product_1]
-      if kit_1_lookup.title != blank
-        assign kit_1 = kit_1_lookup
-      endif
+      assign kit_1 = section.settings.kit_product_1
     endif
     if section.settings.kit_product_2 != blank
-      assign kit_2_lookup = all_products[section.settings.kit_product_2]
-      if kit_2_lookup.title != blank
-        assign kit_2 = kit_2_lookup
-      endif
+      assign kit_2 = section.settings.kit_product_2
     endif
     if kit_1 != blank or kit_2 != blank
       assign has_bundle = true
@@ -500,6 +495,7 @@
     }
   })();
 </script>
+{%- endif -%}
 
 {% stylesheet %}
   /* ─── PDP — Complete the Kit ─── */

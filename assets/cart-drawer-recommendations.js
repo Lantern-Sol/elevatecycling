@@ -100,7 +100,7 @@ class CartDrawerRecs extends HTMLElement {
           price: Number(p.price || 0) * 100,
           available: p.available,
           variantId: p.variants?.[0]?.id,
-          handle: cleanUrl.replace('/products/', ''),
+          handle: cleanUrl.split('/').pop() || '',
           tags: [],
         };
       });
@@ -110,6 +110,7 @@ class CartDrawerRecs extends HTMLElement {
     if (needsBackfill.length) {
       await Promise.all(
         needsBackfill.map(async (p) => {
+          if (!p.url) return;
           try {
             const res = await fetch(`${p.url}.json`);
             if (!res.ok) return;
@@ -193,12 +194,13 @@ class CartDrawerRecs extends HTMLElement {
     if (!Array.isArray(tags)) tags = typeof tags === 'string' ? tags.split(', ') : [];
     let hasNew = false, hasNewArrival = false, hasCpo = false, hasClearance = false, gradeValue = '';
     for (const tag of tags) {
+      if (typeof tag !== 'string') continue;
       const lower = tag.toLowerCase().trim();
       if (lower === 'new') hasNew = true;
       else if (lower === 'new arrival') hasNewArrival = true;
       else if (lower === 'cpo') hasCpo = true;
       else if (lower === 'clearance') hasClearance = true;
-      if (tag.includes('Grade:')) gradeValue = tag.split(':')[1].trim();
+      if (lower.startsWith('grade:')) gradeValue = tag.split(':')[1].trim();
     }
     return { hasNew, hasNewArrival, hasCpo, hasClearance, gradeValue };
   }
