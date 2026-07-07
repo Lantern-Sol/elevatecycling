@@ -12,6 +12,11 @@
   if specs_raw == blank
     assign specs_raw = product.metafields.custom.bike_specs
   endif
+
+  assign is_component = false
+  if product.metafields.custom.spec_summary.value != blank
+    assign is_component = true
+  endif
 -%}
 
 {%- unless specs_raw == blank -%}
@@ -24,7 +29,7 @@
   assign current_group_open = false
 -%}
 
-<div class="elevate-specs-media" data-scroll-reveal>
+<div class="elevate-specs-media{% if is_component %} elevate-specs-media--single-col{% endif %}" data-scroll-reveal>
   <div class="elevate-specs-media__viewport" id="specs-viewport">
     <div class="elevate-specs-media__grid">
 
@@ -132,7 +137,6 @@
 <style>
   /* ─── PDP — Specs (media column) ─── */
   .elevate-specs-media {
-    margin-top: 1.5rem;
     position: relative;
   }
 
@@ -317,6 +321,10 @@
     .elevate-specs-media__group {
       break-inside: avoid;
       margin-bottom: 1rem;
+    }
+
+    .elevate-specs-media--single-col .elevate-specs-media__grid {
+      column-count: 1;
     }
   }
 </style>

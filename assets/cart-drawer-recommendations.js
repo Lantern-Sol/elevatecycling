@@ -1,6 +1,7 @@
 import { formatMoney } from '@theme/money-formatting';
 import { CartLinesUpdateEvent } from '@shopify/events';
 import { fetchConfig } from '@theme/utilities';
+import { sectionRenderer } from '@theme/section-renderer';
 
 const RECENTLY_VIEWED_KEY = 'viewedProducts';
 const MIN_RECENTLY_VIEWED = 3;
@@ -331,7 +332,7 @@ class CartDrawerRecs extends HTMLElement {
 
   /**
    * Intercepts form submits to add via AJAX instead of navigating to /cart.
-   * Follows the same CartLinesUpdateEvent pattern as product-form.
+   * Mirrors the product-form.js pattern exactly so the cart drawer morphs.
    * @param {SubmitEvent} e
    */
   handleAddToCart = async (e) => {
@@ -343,70 +344,100 @@ class CartDrawerRecs extends HTMLElement {
     if (btn) btn.disabled = true;
 
     const formData = new FormData(form);
-    const variantId = /** @type {string} */ (formData.get('id'));
-    const quantity = Number(formData.get('quantity')) || 1;
+    const itemCount = Number(formData.get('quantity')) || 1;
 
-    // Collect section IDs so the Section Rendering API returns fresh HTML
-    const cartItemsComponents = document.querySelectorAll('cart-items-component');
+    // Collect section IDs from all cart-items-components so the Section
+    // Rendering API returns fresh HTML for the cart drawer (same as product-form.js)
     const sectionIds = [];
-    cartItemsComponents.forEach((el) => {
+    document.querySelectorAll('cart-items-component').forEach((el) => {
       if (el instanceof HTMLElement && el.dataset.sectionId) {
         sectionIds.push(el.dataset.sectionId);
       }
     });
-    formData.append('sections', sectionIds.join(','));
+    if (sectionIds.length) {
+      formData.append('sections', sectionIds.join(','));
+    }
 
+    // Create a deferred promise that cart-items-component will await
     const deferredEventPromise = CartLinesUpdateEvent.createPromise();
 
-    // Dispatch on document — cart-items-component and cart-drawer-component
-    // both listen on document for this event.
-    document.dispatchEvent(
+    // Dispatch from the form element — bubbles to document where
+    // cart-items-component and cart-drawer-component listen
+    form.dispatchEvent(
       new CartLinesUpdateEvent({
         action: 'add',
         context: 'product',
-        lines: [{ merchandiseId: variantId, quantity }],
+        lines: [{ merchandiseId: /** @type {string} */ (formData.get('id')), quantity: itemCount }],
         promise: deferredEventPromise.promise,
       })
     );
 
-    const cfg = fetchConfig('javascript', { body: formData });
+    const fetchCfg = fetchConfig('javascript', { body: formData });
 
-    try {
-      const res = await fetch(Theme.routes.cart_add_url, {
-        ...cfg,
-        headers: { ...cfg.headers, Accept: 'text/html' },
+    fetch(Theme.routes.cart_add_url, {
+      ...fetchCfg,
+      headers: { ...fetchCfg.headers, Accept: 'text/html' },
+    })
+      .then((res) => res.json())
+      .then(async (response) => {
+        if (response.status) {
+          // Error from Shopify (out of stock, etc.)
+          const ajaxCart = await this.fetchCart();
+          deferredEventPromise.resolve({
+            cart: CartLinesUpdateEvent.createCartFromAjaxResponse(ajaxCart),
+            detail: {
+              didError: true,
+              items: ajaxCart.items,
+              source: 'cart-drawer-recs',
+              itemCount,
+            },
+          });
+          return;
+        }
+
+        // Success — fetch updated cart and resolve the event promise
+        // so cart-items-component can morph the section
+        const ajaxCart = await this.fetchCart();
+        deferredEventPromise.resolve({
+          cart: CartLinesUpdateEvent.createCartFromAjaxResponse(ajaxCart),
+          detail: {
+            items: ajaxCart.items,
+            source: 'cart-drawer-recs',
+            itemCount,
+            sections: response.sections,
+            didError: false,
+          },
+        });
+      })
+      .catch((err) => {
+        deferredEventPromise.reject(err);
+        form.submit(); // Fallback to native form submission
+      })
+      .finally(() => {
+        if (btn) btn.disabled = false;
       });
-      const response = await res.json();
-
-      if (response.status) {
-        deferredEventPromise.reject(new Error(response.message || 'Add to cart failed'));
-        return;
-      }
-
-      // Fetch updated cart and resolve the event promise so cart-items-component morphs
-      const cartRes = await fetch(`${Theme.routes.cart_url}.json`, {
-        headers: { Accept: 'application/json' },
-        credentials: 'same-origin',
-      });
-      const ajaxCart = await cartRes.json();
-
-      deferredEventPromise.resolve({
-        cart: CartLinesUpdateEvent.createCartFromAjaxResponse(ajaxCart),
-        detail: {
-          items: ajaxCart.items,
-          source: 'cart-drawer-recs',
-          itemCount: quantity,
-          sections: response.sections,
-        },
-      });
-    } catch (err) {
-      deferredEventPromise.reject(err);
-      // Fallback: submit the form natively
-      form.submit();
-    } finally {
-      if (btn) btn.disabled = false;
-    }
   };
+
+  /**
+   * Fetches the current cart via the AJAX API.
+   * Uses cart-items-component.fetchCartData() when available (deduplication),
+   * falls back to a direct fetch otherwise — same pattern as product-form.js.
+   * @returns {Promise<Object>}
+   */
+  async fetchCart() {
+    /** @type {any} */
+    const cartItemsComponent = document.querySelector('cart-items-component');
+    if (cartItemsComponent?.fetchCartData) {
+      await customElements.whenDefined('cart-items-component');
+      return cartItemsComponent.fetchCartData();
+    }
+    const res = await fetch(`${Theme.routes.cart_url}.json`, {
+      headers: { Accept: 'application/json' },
+      credentials: 'same-origin',
+    });
+    if (!res.ok) throw new Error(`Failed to fetch cart: ${res.status}`);
+    return res.json();
+  }
 
   /** Stats data cache keyed by product handle */
   _statsCache = {};

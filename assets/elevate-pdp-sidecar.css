@@ -483,6 +483,41 @@
   letter-spacing: -0.0075rem;
 }
 
+/* ---------- F-alt. Spec summary card (components) ---------- */
+
+.elevate-spec-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem; /* 12px */
+  border: 0.03125rem dashed #aeb2b8; /* ~0.5px */
+  border-radius: 1rem; /* 16px */
+  padding: 0.75rem 1rem; /* 12px 16px */
+  width: 100%;
+  min-height: 4.5rem; /* 72px */
+}
+
+.elevate-spec-summary__icon {
+  width: 2rem; /* 32px */
+  height: 2rem;
+  flex-shrink: 0;
+  color: #36393f;
+}
+
+.elevate-spec-summary__text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.elevate-spec-summary__line {
+  font-size: 1rem; /* 16px */
+  line-height: 1.5;
+  color: #36393f;
+  letter-spacing: -0.01em;
+  margin: 0;
+}
+
 /* ---------- F2. Size reference popup ---------- */
 
 .elevate-size-dialog {

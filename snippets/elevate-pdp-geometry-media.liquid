@@ -11,9 +11,31 @@
   if geo_raw == blank
     assign geo_raw = product.metafields.custom.geometry
   endif
+
+  assign is_component = false
+  if product.metafields.custom.spec_summary.value != blank
+    assign is_component = true
+  endif
 -%}
 
 {%- unless geo_raw == blank -%}
+
+{%- if is_component -%}
+  {%- comment -%} ── Component: editorial paragraphs ── {%- endcomment -%}
+  <div class="elevate-geo-media elevate-geo-media--editorial" data-scroll-reveal>
+    <div class="elevate-geo-media__editorial-card">
+      <div class="elevate-geo-media__diagram-header">
+        <p class="elevate-geo-media__eyebrow">BUILD DESCRIPTION</p>
+        <h2 class="elevate-geo-media__heading">Why we like this {{ product.type | default: 'build' | downcase }}</h2>
+      </div>
+      <div class="elevate-geo-media__editorial-body rte">
+        {{ geo_raw }}
+      </div>
+    </div>
+  </div>
+
+{%- else -%}
+  {%- comment -%} ── Bike: geometry diagram + stats + table ── {%- endcomment -%}
 {%- capture newline %}
 {% endcapture -%}
 {%- liquid
@@ -210,11 +232,11 @@
 
   </div>
 </div>
+{%- endif -%}
 
 <style>
   /* ─── PDP — Geometry (media column) ─── */
   .elevate-geo-media {
-    margin-top: 1.5rem;
     padding: 1.5rem 0;
   }
 
@@ -262,7 +284,7 @@
   .elevate-geo-media__heading {
     font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
     font-weight: 400;
-    font-size: 3.5625rem;
+    font-size: 3rem;
     line-height: 1.2;
     color: #36393F;
     margin: 0;
@@ -525,6 +547,31 @@
     line-height: 1.5;
     color: #36393F;
     margin: 0;
+  }
+
+  /* ── Editorial card (components) ── */
+  .elevate-geo-media__editorial-card {
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1.5rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .elevate-geo-media__editorial-body {
+    margin-top: 1rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+  }
+
+  .elevate-geo-media__editorial-body p {
+    margin: 0 0 1rem;
+  }
+
+  .elevate-geo-media__editorial-body p:last-child {
+    margin-bottom: 0;
   }
 
   /* ─── Desktop: side by side ─── */

@@ -5,11 +5,17 @@
 {%- enddoc -%}
 
 {%- unless product.description == blank -%}
-<details class="elevate-build-story-media" data-scroll-reveal>
+{%- liquid
+  assign is_component = false
+  if product.metafields.custom.spec_summary.value != blank
+    assign is_component = true
+  endif
+-%}
+<details class="elevate-build-story-media" open data-scroll-reveal>
   <summary class="elevate-build-story-media__trigger">
     <div class="elevate-build-story-media__header">
-      <p class="elevate-build-story-media__eyebrow">Build Description</p>
-      <h2 class="elevate-build-story-media__heading">Why we love this build</h2>
+      <p class="elevate-build-story-media__eyebrow">{% if is_component %}Product Description{% else %}Build Description{% endif %}</p>
+      <h2 class="elevate-build-story-media__heading">{% if is_component %}What's included{% else %}Why we love this build{% endif %}</h2>
     </div>
     <svg class="elevate-build-story-media__chevron" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -19,6 +25,17 @@
     {{ product.description }}
   </div>
 </details>
+<script>
+  /* Desktop: prevent <details> from toggling — always open */
+  (function() {
+    var mq = window.matchMedia('(min-width: 750px)');
+    document.querySelectorAll('.elevate-build-story-media summary').forEach(function(s) {
+      s.addEventListener('click', function(e) {
+        if (mq.matches) e.preventDefault();
+      });
+    });
+  })();
+</script>
 
 <style>
   .elevate-build-story-media {
@@ -60,13 +77,12 @@
   }
 
   .elevate-build-story-media__heading {
-    font-family: 'Bebas Neue', var(--font-heading--family), sans-serif;
-    font-weight: 700;
-    font-size: 1.5rem;
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 400;
+    font-size: 3rem;
     line-height: 1.2;
     color: #36393F;
     margin: 0;
-    text-transform: uppercase;
   }
 
   .elevate-build-story-media__chevron {
@@ -81,6 +97,17 @@
 
   .elevate-build-story-media[open] .elevate-build-story-media__trigger {
     padding-bottom: 0.5rem;
+  }
+
+  /* Desktop: always open — chevron hidden, summary non-interactive */
+  @media screen and (min-width: 750px) {
+    .elevate-build-story-media__trigger {
+      cursor: default;
+    }
+
+    .elevate-build-story-media__chevron {
+      display: none;
+    }
   }
 
   .elevate-build-story-media__body {

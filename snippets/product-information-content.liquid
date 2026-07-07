@@ -111,8 +111,8 @@
         {% render 'elevate-pdp-mobile-header', product: product %}
         {{ media_gallery }}
         {% render 'elevate-pdp-mechanic-notes-media' %}
-        {% render 'elevate-pdp-geometry-media' %}
         {% render 'elevate-pdp-build-story-media' %}
+        {% render 'elevate-pdp-geometry-media' %}
         {% render 'elevate-pdp-specs-media' %}
       </div>
     {% endcapture %}
@@ -144,6 +144,8 @@
   /* Default column positions */
   .product-details {
     order: 1;
+    background: #FEFFFE;
+    box-shadow: -4px 0 6px -1px rgba(0, 0, 0, 0.10), -2px 0 4px -2px rgba(0, 0, 0, 0.10);
   }
 
   .product-information__media {

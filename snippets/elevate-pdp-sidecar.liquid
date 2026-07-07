@@ -12,6 +12,7 @@
   assign mechanical_integrity = product.metafields.custom.mechanical_integrity.value
   assign spec_level = product.metafields.custom.spec_level.value
   assign size_fit = product.metafields.custom.size_fit.value
+  assign spec_summary = product.metafields.custom.spec_summary.value
 
   comment
     Badge detection from product tags
@@ -260,106 +261,125 @@
   </div>
 {%- endif -%}
 
-{%- comment -%} ── F. Size / fit card + popup ── {%- endcomment -%}
-<script src="{{ 'dialog.js' | asset_url }}" type="module"></script>
-<dialog-component class="elevate-size-dialog">
-  <div class="elevate-size-card">
-    <svg class="elevate-size-card__icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-      <path d="M19.5 5C17.5781 5 16 6.57812 16 8.5C16 10.4219 17.5781 12 19.5 12C21.4219 12 23 10.4219 23 8.5C23 6.57812 21.4219 5 19.5 5ZM19.5 7C20.3398 7 21 7.66016 21 8.5C21 9.33984 20.3398 10 19.5 10C18.6602 10 18 9.33984 18 8.5C18 7.66016 18.6602 7 19.5 7ZM15.0938 10.5312C14.5859 10.582 14.0938 10.832 13.75 11.25L11.4062 14.0938C10.5977 15.0781 10.9492 16.6328 12.0938 17.1875L15.5312 18.875L14.625 23.875L16.5938 24.2188L17.6562 18.4688L17.7812 17.7188L17.0938 17.375L12.9375 15.375L15.3125 12.5L19.375 15.7812L19.6562 16H25V14H20.3438L16.5625 10.9688C16.1406 10.6289 15.6016 10.4805 15.0938 10.5312ZM8.5 18C6.03125 18 4 20.0312 4 22.5C4 24.9688 6.03125 27 8.5 27C10.9688 27 13 24.9688 13 22.5C13 20.0312 10.9688 18 8.5 18ZM23.5 18C21.0312 18 19 20.0312 19 22.5C19 24.9688 21.0312 27 23.5 27C25.9688 27 28 24.9688 28 22.5C28 20.0312 25.9688 18 23.5 18ZM8.5 20C9.87891 20 11 21.1211 11 22.5C11 23.8789 9.87891 25 8.5 25C7.12109 25 6 23.8789 6 22.5C6 21.1211 7.12109 20 8.5 20ZM23.5 20C24.8789 20 26 21.1211 26 22.5C26 23.8789 24.8789 25 23.5 25C22.1211 25 21 23.8789 21 22.5C21 21.1211 22.1211 20 23.5 20Z" fill="#36393F"/>
+{%- comment -%} ── F. Size / fit card (bikes) OR spec summary card (components) ── {%- endcomment -%}
+{%- if spec_summary != blank -%}
+  {%- comment -%} Inline spec summary for components (groupsets, etc.) {%- endcomment -%}
+  <div class="elevate-spec-summary">
+    <svg class="elevate-spec-summary__icon" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path d="M16 3C8.832 3 3 8.832 3 16s5.832 13 13 13 13-5.832 13-13S23.168 3 16 3zm0 2c6.087 0 11 4.913 11 11s-4.913 11-11 11S5 22.087 5 16 9.913 5 16 5zm-1 5v2h2v-2h-2zm0 4v8h2v-8h-2z" fill="#36393F"/>
     </svg>
-    <div class="elevate-size-card__text">
-      <span class="elevate-size-card__fit">
-        {%- if size_fit != blank -%}Fits riders {{ size_fit }}{%- else -%}Frame Size Reference Guide{%- endif -%}
-      </span>
-      <button type="button" on:click="/showDialog" class="elevate-size-card__link elevate-size-card__trigger">Check our <span class="elevate-size-card__underline">Frame Size Reference</span></button>
+    <div class="elevate-spec-summary__text">
+      {%- assign spec_lines = spec_summary | newline_to_br | split: '<br />' -%}
+      {%- for line in spec_lines -%}
+        {%- assign trimmed = line | strip -%}
+        {%- if trimmed != blank -%}
+          <p class="elevate-spec-summary__line">{{ trimmed }}</p>
+        {%- endif -%}
+      {%- endfor -%}
     </div>
   </div>
-
-  {%- comment -%} Size reference popup modal {%- endcomment -%}
-  <dialog
-    ref="dialog"
-    class="elevate-size-popup dialog-modal"
-    scroll-lock
-    aria-labelledby="elevate-size-popup-heading"
-  >
-    {%- comment -%} Header bar {%- endcomment -%}
-    <div class="elevate-size-popup__header">
-      <h2 id="elevate-size-popup-heading" class="elevate-size-popup__title">Frame Size Reference Guide</h2>
-      <button
-        ref="closeButton"
-        on:click="/closeDialog"
-        type="button"
-        class="elevate-size-popup__close"
-        aria-label="Close"
-      >
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
-          <path d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32C7.16344 32 0 24.8366 0 16Z" fill="#E2E3E5"/>
-          <path d="M10 10L22 22M22 10L10 22" stroke="#555860" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-      </button>
+{%- elsif size_fit != blank or size_fit == blank -%}
+  {%- comment -%} Size / fit card + popup for bikes {%- endcomment -%}
+  <script src="{{ 'dialog.js' | asset_url }}" type="module"></script>
+  <dialog-component class="elevate-size-dialog">
+    <div class="elevate-size-card">
+      <svg class="elevate-size-card__icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M19.5 5C17.5781 5 16 6.57812 16 8.5C16 10.4219 17.5781 12 19.5 12C21.4219 12 23 10.4219 23 8.5C23 6.57812 21.4219 5 19.5 5ZM19.5 7C20.3398 7 21 7.66016 21 8.5C21 9.33984 20.3398 10 19.5 10C18.6602 10 18 9.33984 18 8.5C18 7.66016 18.6602 7 19.5 7ZM15.0938 10.5312C14.5859 10.582 14.0938 10.832 13.75 11.25L11.4062 14.0938C10.5977 15.0781 10.9492 16.6328 12.0938 17.1875L15.5312 18.875L14.625 23.875L16.5938 24.2188L17.6562 18.4688L17.7812 17.7188L17.0938 17.375L12.9375 15.375L15.3125 12.5L19.375 15.7812L19.6562 16H25V14H20.3438L16.5625 10.9688C16.1406 10.6289 15.6016 10.4805 15.0938 10.5312ZM8.5 18C6.03125 18 4 20.0312 4 22.5C4 24.9688 6.03125 27 8.5 27C10.9688 27 13 24.9688 13 22.5C13 20.0312 10.9688 18 8.5 18ZM23.5 18C21.0312 18 19 20.0312 19 22.5C19 24.9688 21.0312 27 23.5 27C25.9688 27 28 24.9688 28 22.5C28 20.0312 25.9688 18 23.5 18ZM8.5 20C9.87891 20 11 21.1211 11 22.5C11 23.8789 9.87891 25 8.5 25C7.12109 25 6 23.8789 6 22.5C6 21.1211 7.12109 20 8.5 20ZM23.5 20C24.8789 20 26 21.1211 26 22.5C26 23.8789 24.8789 25 23.5 25C22.1211 25 21 23.8789 21 22.5C21 21.1211 22.1211 20 23.5 20Z" fill="#36393F"/>
+      </svg>
+      <div class="elevate-size-card__text">
+        <span class="elevate-size-card__fit">
+          {%- if size_fit != blank -%}Fits riders {{ size_fit }}{%- else -%}Frame Size Reference Guide{%- endif -%}
+        </span>
+        <button type="button" on:click="/showDialog" class="elevate-size-card__link elevate-size-card__trigger">Check our <span class="elevate-size-card__underline">Frame Size Reference</span></button>
+      </div>
     </div>
 
-    {%- comment -%} Body {%- endcomment -%}
-    <div class="elevate-size-popup__body">
-      <p class="elevate-size-popup__intro">
-        Heights are a starting point. A &ldquo;Large&rdquo; Trek and a &ldquo;Large&rdquo; Specialized are not the same bike &mdash; <strong>Every item listed has their exact geometry.</strong>
-      </p>
-      <p class="elevate-size-popup__intro">
-        Saddle height, cleat position, and stem length all move. If the frame is right, the fit follows.
-      </p>
+    {%- comment -%} Size reference popup modal {%- endcomment -%}
+    <dialog
+      ref="dialog"
+      class="elevate-size-popup dialog-modal"
+      scroll-lock
+      aria-labelledby="elevate-size-popup-heading"
+    >
+      {%- comment -%} Header bar {%- endcomment -%}
+      <div class="elevate-size-popup__header">
+        <h2 id="elevate-size-popup-heading" class="elevate-size-popup__title">Frame Size Reference Guide</h2>
+        <button
+          ref="closeButton"
+          on:click="/closeDialog"
+          type="button"
+          class="elevate-size-popup__close"
+          aria-label="Close"
+        >
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32C7.16344 32 0 24.8366 0 16Z" fill="#E2E3E5"/>
+            <path d="M10 10L22 22M22 10L10 22" stroke="#555860" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
 
-      {%- comment -%} Disclaimer {%- endcomment -%}
-      <div class="elevate-size-popup__disclaimer">
-        <svg class="elevate-size-popup__info-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
-          <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
-          <path d="M10 9v5M10 6.5v.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-        </svg>
-        <p class="elevate-size-popup__disclaimer-text">
-          General starting point only &mdash; not a fit guarantee. Each listing has exact geometry. Confirm sizing there before you buy.
+      {%- comment -%} Body {%- endcomment -%}
+      <div class="elevate-size-popup__body">
+        <p class="elevate-size-popup__intro">
+          Heights are a starting point. A &ldquo;Large&rdquo; Trek and a &ldquo;Large&rdquo; Specialized are not the same bike &mdash; <strong>Every item listed has their exact geometry.</strong>
+        </p>
+        <p class="elevate-size-popup__intro">
+          Saddle height, cleat position, and stem length all move. If the frame is right, the fit follows.
+        </p>
+
+        {%- comment -%} Disclaimer {%- endcomment -%}
+        <div class="elevate-size-popup__disclaimer">
+          <svg class="elevate-size-popup__info-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 9v5M10 6.5v.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <p class="elevate-size-popup__disclaimer-text">
+            General starting point only &mdash; not a fit guarantee. Each listing has exact geometry. Confirm sizing there before you buy.
+          </p>
+        </div>
+
+        {%- comment -%} Divider {%- endcomment -%}
+        <hr class="elevate-size-popup__divider">
+
+        {%- comment -%} Size table {%- endcomment -%}
+        <div class="elevate-size-popup__table-wrap">
+          <div class="elevate-size-popup__table-header">
+            <span>Size</span>
+            <span>Frame</span>
+            <span>Rider Height</span>
+          </div>
+          <div class="elevate-size-popup__table-row">
+            <span>XS</span>
+            <span>13 in / 33 cm</span>
+            <span>4&rsquo;10&Prime; &ndash; 5&rsquo;2&Prime;</span>
+          </div>
+          <div class="elevate-size-popup__table-row">
+            <span>S</span>
+            <span>15 in / 38 cm</span>
+            <span>5&rsquo;2&Prime; &ndash; 5&rsquo;6&Prime;</span>
+          </div>
+          <div class="elevate-size-popup__table-row">
+            <span>M</span>
+            <span>17 in / 43 cm</span>
+            <span>5&rsquo;6&Prime; &ndash; 5&rsquo;10&Prime;</span>
+          </div>
+          <div class="elevate-size-popup__table-row">
+            <span>L</span>
+            <span>19 in / 48 cm</span>
+            <span>5&rsquo;10&Prime; &ndash; 6&rsquo;2&Prime;</span>
+          </div>
+          <div class="elevate-size-popup__table-row">
+            <span>XL</span>
+            <span>21 in / 53 cm</span>
+            <span>6&rsquo;2&Prime; &ndash; 6&rsquo;5&Prime;</span>
+          </div>
+        </div>
+
+        {%- comment -%} CTA {%- endcomment -%}
+        <p class="elevate-size-popup__cta">
+          Unsure about a specific listing? <a href="/pages/ask-a-mechanic" class="elevate-size-popup__cta-link">Ask to our Mechanics</a>
         </p>
       </div>
-
-      {%- comment -%} Divider {%- endcomment -%}
-      <hr class="elevate-size-popup__divider">
-
-      {%- comment -%} Size table {%- endcomment -%}
-      <div class="elevate-size-popup__table-wrap">
-        <div class="elevate-size-popup__table-header">
-          <span>Size</span>
-          <span>Frame</span>
-          <span>Rider Height</span>
-        </div>
-        <div class="elevate-size-popup__table-row">
-          <span>XS</span>
-          <span>13 in / 33 cm</span>
-          <span>4&rsquo;10&Prime; &ndash; 5&rsquo;2&Prime;</span>
-        </div>
-        <div class="elevate-size-popup__table-row">
-          <span>S</span>
-          <span>15 in / 38 cm</span>
-          <span>5&rsquo;2&Prime; &ndash; 5&rsquo;6&Prime;</span>
-        </div>
-        <div class="elevate-size-popup__table-row">
-          <span>M</span>
-          <span>17 in / 43 cm</span>
-          <span>5&rsquo;6&Prime; &ndash; 5&rsquo;10&Prime;</span>
-        </div>
-        <div class="elevate-size-popup__table-row">
-          <span>L</span>
-          <span>19 in / 48 cm</span>
-          <span>5&rsquo;10&Prime; &ndash; 6&rsquo;2&Prime;</span>
-        </div>
-        <div class="elevate-size-popup__table-row">
-          <span>XL</span>
-          <span>21 in / 53 cm</span>
-          <span>6&rsquo;2&Prime; &ndash; 6&rsquo;5&Prime;</span>
-        </div>
-      </div>
-
-      {%- comment -%} CTA {%- endcomment -%}
-      <p class="elevate-size-popup__cta">
-        Unsure about a specific listing? <a href="/pages/ask-a-mechanic" class="elevate-size-popup__cta-link">Ask to our Mechanics</a>
-      </p>
-    </div>
-  </dialog>
-</dialog-component>
+    </dialog>
+  </dialog-component>
+{%- endif -%}
