@@ -1,0 +1,418 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "lp_hero": {
+      "type": "elevate-lp-hero",
+      "settings": {
+        "product": "s-small-time-alpe-d-huez-x-shimano-grx-2x11-di2-4iiii-power-meter-hunt-gravel-bike-copy",
+        "eyebrow": "WEEKLY DROPS — DRIVETRAIN & WHEELSETS",
+        "title_override": "2022 56cm Specialized S-Works Tarmac SL7 — SRAM Red AXS, Verified Down to the Bolt.",
+        "subtitle": "Every spec confirmed before it's listed. Every flaw disclosed before you pay.",
+        "primary_label": "Shop This Bike",
+        "primary_link": "",
+        "secondary_label": "View this Week's Drop",
+        "secondary_link": "",
+        "pill_1": "One-of-a-kind Inventory",
+        "pill_2": "99.8% Brand positive feedback on ebay",
+        "trust_1": "Free US Shipping",
+        "trust_2": "30-day free returns*",
+        "trust_3": "Certified Pre-Owned",
+        "trust_4": "Guaranteed Buyback",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "contrast_bar": {
+      "type": "elevate-contrast-bar",
+      "settings": {
+        "eyebrow": "WHY THIS, NOT THE ALTERNATIVES",
+        "heading": "The Old Way Was a Gamble.",
+        "old_heading": "THE OLD WAY",
+        "old_point_1": "Marketplace listings — no condition standard, no recourse if it shows up damaged",
+        "old_point_2": "Unscreened sellers — compatibility is a guess until it's in your hands",
+        "old_point_3": "Local shop trade-ins — lowball offers, long waits, no transparency on value",
+        "elevate_heading": "THE ELEVATE WAY",
+        "elevate_point_1": "Spec-verified listings — drivetrain, brake standard, and frame condition confirmed before it's posted",
+        "elevate_point_2": "Condition graded, not glossed — wear is described, not hidden",
+        "elevate_point_3": "Payout confirmed first — you know the number before anything ships",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "elevate_new_arrivals_PtiUXW": {
+      "type": "elevate-new-arrivals",
+      "settings": {
+        "padding_top": 0,
+        "padding_bottom": 48,
+        "collection": "complete-bikes",
+        "max_products": 6,
+        "eyebrow": "THIS WEEK’S DROP PREVIEW",
+        "heading": "Drivetrain & Wheelsets",
+        "subheading": "",
+        "header_alignment": "left",
+        "footer_text": "",
+        "cta_label": "View this Week’s Drop",
+        "cta_link": ""
+      }
+    },
+    "cpo_trust": {
+      "type": "elevate-lp-cpo-trust",
+      "settings": {
+        "badge_image": "shopify://shop_images/Frame_2147228038.png",
+        "eyebrow": "THE INSPECTION",
+        "title": "Every Bolt, Checked.",
+        "description": "Placeholder checklist — final step count and language to be locked against the CPO landing page copy so claims stay consistent site-wide.",
+        "check_1": "Drivetrain compatibility confirmed",
+        "check_2": "Frame inspected for impact damage",
+        "check_3": "Brake standard verified",
+        "check_4": "Wheel trueness & hub bearing check",
+        "check_5": "Bottom bracket threading confirmed",
+        "check_6": "Cosmetic wear graded & disclosed",
+        "padding_top": 40,
+        "padding_bottom": 72
+      }
+    },
+    "brand_logos_marquee": {
+      "type": "marquee",
+      "blocks": {
+        "brand_specialized": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-specialized.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_sram": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-sram.svg",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_shimano": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-shimano.svg",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_campagnolo": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-campagnolo.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_colnago": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-colnago.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_zipp": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-zipp.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "brand_roval": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-roval.png",
+            "invert_colors": false,
+            "width": 100,
+            "width-mobile": 80,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "brand_specialized",
+        "brand_sram",
+        "brand_shimano",
+        "brand_campagnolo",
+        "brand_colnago",
+        "brand_zipp",
+        "brand_roval"
+      ],
+      "settings": {
+        "movement_direction": "normal",
+        "background_color": "#ffffff",
+        "padding-block-start": 24,
+        "padding-block-end": 24,
+        "gap_between_elements": 48
+      }
+    },
+    "social_proof": {
+      "type": "elevate-social-proof",
+      "settings": {
+        "eyebrow": "PROOF, NOT PROMISES",
+        "heading": "Numbers Over Adjectives",
+        "stat_1_value": "3,500+",
+        "stat_1_label": "BIKES PURCHASED & VERIFIED",
+        "stat_2_value": "99.8%",
+        "stat_2_label": "POSITIVE FEEDBACK SCORE",
+        "stat_3_value": "$5.4M",
+        "stat_3_label": "PAID OUT TO SELLERS",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "how_it_works": {
+      "type": "elevate-lp-how-it-works",
+      "settings": {
+        "eyebrow": "PURCHASE PROCESS",
+        "title": "How it works",
+        "step_1_number": "01",
+        "step_1_title": "Browse Verified Stock",
+        "step_1_description": "Filtered by frame size, groupset, and condition grade — no guesswork.",
+        "step_2_number": "02",
+        "step_2_title": "Read the Full Report",
+        "step_2_description": "Every listing includes a detailed spec sheet and honest condition notes.",
+        "step_3_number": "03",
+        "step_3_title": "Buy with Confidence",
+        "step_3_description": "Free shipping, 30-day returns, and a guaranteed buyback if you upgrade.",
+        "padding_top": 56,
+        "padding_bottom": 56
+      }
+    },
+    "risk_reversal": {
+      "type": "elevate-usps",
+      "blocks": {
+        "usp_shipping": {
+          "type": "usp",
+          "settings": {
+            "icon": "shipping-fast",
+            "title": "FREE US SHIPPING, ORDERS $500+",
+            "description": "On every order, over $500."
+          }
+        },
+        "usp_returns": {
+          "type": "usp",
+          "settings": {
+            "icon": "return",
+            "title": "30-DAY RETURNS",
+            "description": "Wrong fit, wrong feel. Send it back."
+          }
+        },
+        "usp_buyback": {
+          "type": "usp",
+          "settings": {
+            "icon": "return-circle",
+            "title": "BUYBACK GUARANTEE",
+            "description": "We buy it back. If it's in good condition.*"
+          }
+        }
+      },
+      "block_order": [
+        "usp_shipping",
+        "usp_returns",
+        "usp_buyback"
+      ],
+      "settings": {
+        "stacked_layout": true,
+        "eyebrow": "NO FINE PRINT",
+        "heading": "The Risk Is Ours, Not Yours.",
+        "heading_color": "#36393f",
+        "background_color": "#fdfcfc",
+        "badge_bg_color": "#141517",
+        "icon_color": "#e31e24",
+        "padding_top": 56,
+        "padding_bottom": 72
+      }
+    },
+    "elevate_pdp_trade_cta_Gyw3AV": {
+      "type": "elevate-pdp-trade-cta",
+      "blocks": {
+        "step_3kJfi3": {
+          "type": "step",
+          "settings": {
+            "number": "1",
+            "text": "Tell us what you've got"
+          }
+        },
+        "step_dDdjwK": {
+          "type": "step",
+          "settings": {
+            "number": "2",
+            "text": "Get a firm offer in 48 hours"
+          }
+        },
+        "step_WbxtfX": {
+          "type": "step",
+          "settings": {
+            "number": "3",
+            "text": "Ship it free, get paid Cash or Store credit"
+          }
+        }
+      },
+      "block_order": [
+        "step_3kJfi3",
+        "step_dDdjwK",
+        "step_WbxtfX"
+      ],
+      "settings": {
+        "label": "TRADE OR SALE",
+        "heading": "Your old gear",
+        "heading_line_2": "can pay for this one",
+        "secondary_cta_text": "How It Works",
+        "secondary_cta_url": "/pages/trade-form",
+        "cta_text": "Get a Quote for your gear",
+        "cta_url": "/pages/trade-form",
+        "disclaimer": "$5.4M+ paid to sellers · Complete bikes and components accepted",
+        "background_image": "shopify://shop_images/trade-section.png",
+        "background_image_mobile": "shopify://shop_images/banner.png",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "elevate_faq_qezNA4": {
+      "type": "elevate-faq",
+      "blocks": {
+        "faq_bj4AD9": {
+          "type": "faq",
+          "settings": {
+            "question": "What types of inventory does Elevate carry?",
+            "answer": "Elevate carries two types of inventory: brand-new gear sourced directly from brands at below-retail prices, and certified pre-owned gear bought from cyclists. Every item — new or pre-owned — is inspected, cleaned, and fully documented by our in-house mechanics before it goes live. We list condition honestly so you know exactly what you're getting before you decide."
+          }
+        },
+        "faq_yDKUya": {
+          "type": "faq",
+          "settings": {
+            "question": "How accurate are the condition descriptions?",
+            "answer": "Every listing includes Mechanic's Notes written by the tech who inspected the item — specific, honest, and not filtered through a marketing lens. If there's a scratch on the chainstay or wear on the cassette, it'll say so. We'd rather lose a sale than have a customer surprised by something we didn't disclose."
+          }
+        },
+        "faq_9DNx3m": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I return an item if it doesn't match the description?",
+            "answer": "Yes — we offer a 30-day satisfaction guarantee on all purchases. If the item doesn't match what was described, contact us and we'll make it right. Free return shipping is included for condition discrepancies. We stand behind every listing."
+          }
+        },
+        "faq_ejDkgN": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I know if the geometry fits me?",
+            "answer": "Every complete bike listing includes the full geometry table — top tube, stack, reach, head tube angle, and more. If you're unsure, contact our mechanics before you buy. We're familiar with most frames in our catalog and can help you compare to what you're currently riding."
+          }
+        },
+        "faq_J4TVXD": {
+          "type": "faq",
+          "settings": {
+            "question": "How does the sell or trade program work?",
+            "answer": "Submit your gear details through our sell form — takes about 2 minutes. We'll send a fair cash or store credit offer within 24hrs. Store credit runs 15–20% higher than cash and can be applied to anything in the catalog. If you accept, we send a free shipping label. Payment is processed within 48hrs of inspection."
+          }
+        },
+        "faq_rfx4Yk": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "Yes. We ship to most countries outside the US. International shipping rates are calculated at checkout based on destination and item weight. Complete bikes ship fully assembled and boxed by our mechanics. All international orders are fully insured and tracked."
+          }
+        }
+      },
+      "block_order": [
+        "faq_bj4AD9",
+        "faq_yDKUya",
+        "faq_9DNx3m",
+        "faq_ejDkgN",
+        "faq_J4TVXD",
+        "faq_rfx4Yk"
+      ],
+      "settings": {
+        "padding_top": 72,
+        "padding_bottom": 40,
+        "show_divider": false,
+        "heading_line_1": "Questions?",
+        "heading_line_2": "we got the answers",
+        "phone_label": "Call or text us",
+        "phone": "(714) 248-5066",
+        "phone_note": "Mon–Fri, 9AM–5PM PST",
+        "phone_link": "",
+        "email_label": "Email support",
+        "email": "support@elevatecycling.com",
+        "email_note": "Response within 24hrs",
+        "email_link": "",
+        "location_label": "Visit us",
+        "location": "Santa Ana, CA",
+        "location_note": "Warehouse order pickup available",
+        "location_link": "",
+        "help_eyebrow": "NEED MORE HELP?",
+        "help_text": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is.",
+        "primary_label": "Visit FAQs",
+        "primary_link": "",
+        "secondary_label": "Contact Our Mechanics",
+        "secondary_link": ""
+      }
+    }
+  },
+  "order": [
+    "lp_hero",
+    "contrast_bar",
+    "elevate_new_arrivals_PtiUXW",
+    "cpo_trust",
+    "brand_logos_marquee",
+    "social_proof",
+    "how_it_works",
+    "risk_reversal",
+    "elevate_pdp_trade_cta_Gyw3AV",
+    "elevate_faq_qezNA4"
+  ]
+}

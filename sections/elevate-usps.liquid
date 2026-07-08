@@ -8,7 +8,7 @@
   style="background-color: {{ section.settings.background_color }};"
 ></div>
 <div
-  class="section section--page-width elevate-usps"
+  class="section section--page-width elevate-usps{% if section.settings.stacked_layout %} elevate-usps--stacked{% endif %}"
   data-scroll-reveal
   style="
     --page-content-width: 63rem;
@@ -21,8 +21,11 @@
   "
 >
   <div class="elevate-usps__wrap">
-    {%- if section.settings.heading != blank -%}
+    {%- if section.settings.eyebrow != blank or section.settings.heading != blank -%}
       <div class="elevate-usps__heading">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="elevate-usps__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
         <h2>{{ section.settings.heading }}</h2>
         <button class="elevate-usps__heading-arrow" type="button" aria-label="Scroll to next card" data-usps-scroll>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
@@ -85,6 +88,17 @@
     content: '';
     flex-shrink: 0;
     width: -0.1rem;
+  }
+
+  /* ─── Eyebrow ─── */
+  .elevate-usps__eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    letter-spacing: 0.045rem;
+    margin: 0;
   }
 
   /* ─── Heading ─── */
@@ -215,6 +229,49 @@
     max-width: 7.5rem;
   }
 
+  /* ─── Stacked variant — mobile: vertical stack ─── */
+  .elevate-usps--stacked .elevate-usps__wrap {
+    flex-direction: column;
+    align-items: stretch;
+    overflow-x: visible;
+    scroll-snap-type: none;
+    margin-inline-end: 0;
+    padding-top: 0;
+    padding-inline-start: 2rem;
+  }
+
+  .elevate-usps--stacked .elevate-usps__heading {
+    scroll-snap-align: none;
+  }
+
+  .elevate-usps--stacked .elevate-usps__heading-arrow {
+    display: none;
+  }
+
+  .elevate-usps--stacked .elevate-usps__badge {
+    flex-direction: row;
+    width: auto;
+    min-width: 0;
+    padding: 1rem 1rem 1rem 0;
+    scroll-snap-align: none;
+    filter: none;
+  }
+
+  .elevate-usps--stacked .elevate-usps__badge-icon-slot {
+    flex: 0 0 1.75rem;
+    width: 1.75rem;
+    height: 3.5rem;
+    justify-content: flex-end;
+  }
+
+  .elevate-usps--stacked .elevate-usps__badge-text {
+    text-align: left;
+  }
+
+  .elevate-usps--stacked .elevate-usps__heading + .elevate-usps__badge .elevate-usps__badge-desc {
+    max-width: none;
+  }
+
   /* ─── Desktop (750px+) ─── */
   @media (min-width: 750px) {
     .elevate-usps {
@@ -279,6 +336,23 @@
     .elevate-usps__heading + .elevate-usps__badge .elevate-usps__badge-desc {
       max-width: none;
     }
+
+    /* ─── Stacked layout (LP variant) ─── */
+    .elevate-usps--stacked .elevate-usps__wrap {
+      row-gap: 1.5rem;
+      padding-inline-start: 2rem;
+    }
+
+    .elevate-usps--stacked .elevate-usps__heading {
+      margin-inline-start: -2rem;
+      width: calc(100% + 2rem);
+      flex-basis: calc(100% + 2rem);
+    }
+
+    .elevate-usps--stacked .elevate-usps__heading h2 {
+      font-size: 3rem;
+      text-transform: none;
+    }
   }
 {% endstylesheet %}
 
@@ -316,6 +390,18 @@
   "name": "Elevate USPs",
   "tag": "section",
   "settings": [
+    {
+      "type": "checkbox",
+      "id": "stacked_layout",
+      "label": "Stacked layout",
+      "info": "Heading full-width above badges instead of side-by-side.",
+      "default": false
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow"
+    },
     {
       "type": "textarea",
       "id": "heading",
@@ -384,7 +470,8 @@
             { "value": "cart-plus-solid", "label": "Cart plus" },
             { "value": "certified", "label": "Certified" },
             { "value": "tags-solid", "label": "Tags" },
-            { "value": "eye-solid", "label": "Eye" }
+            { "value": "eye-solid", "label": "Eye" },
+            { "value": "return-circle", "label": "Return circle" }
           ],
           "default": "shipping-fast"
         },

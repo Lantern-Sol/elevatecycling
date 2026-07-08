@@ -1,0 +1,319 @@
+{%- doc -%}
+  Elevate Cycling — LP CPO Trust Module.
+  Two-column layout: copy left (eyebrow, title, description)
+  and dark inspection card right (CPO badge + 2-col checklist).
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-lp-cpo-trust"
+  data-scroll-reveal
+  style="
+    --cpo-trust-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --cpo-trust-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-lp-cpo-trust__inner">
+    {%- comment -%} ── Left column: copy ── {%- endcomment -%}
+    <div class="elevate-lp-cpo-trust__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="elevate-lp-cpo-trust__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.title != blank -%}
+        <h2 class="elevate-lp-cpo-trust__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.description != blank -%}
+        <p class="elevate-lp-cpo-trust__description">{{ section.settings.description }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Right column: inspection card ── {%- endcomment -%}
+    <div class="elevate-lp-cpo-trust__card">
+      <div class="elevate-lp-cpo-trust__badge-wrap">
+        {%- if section.settings.badge_image != blank -%}
+          <img
+            src="{{ section.settings.badge_image | image_url: width: 200 }}"
+            alt="{{ section.settings.badge_image.alt | default: 'Certified Pre-Owned badge' }}"
+            width="146"
+            height="148"
+            loading="lazy"
+          >
+        {%- else -%}
+          <img
+            src="{{ 'elevate-cpo-badge.png' | asset_url }}"
+            alt="Certified Pre-Owned badge"
+            width="146"
+            height="148"
+            loading="lazy"
+          >
+        {%- endif -%}
+      </div>
+
+      <div class="elevate-lp-cpo-trust__checklist">
+        {%- for i in (1..6) -%}
+          {%- liquid
+            assign setting_key = 'check_' | append: i
+            assign check_text = section.settings[setting_key]
+          -%}
+          {%- if check_text != blank -%}
+            <div class="elevate-lp-cpo-trust__check-item">
+              <svg class="elevate-lp-cpo-trust__checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>
+              <span>{{ check_text }}</span>
+            </div>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── LP CPO Trust Module ─── */
+  .elevate-lp-cpo-trust {
+    padding-block: var(--cpo-trust-pt) var(--cpo-trust-pb);
+  }
+
+  .elevate-lp-cpo-trust__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Copy column ── */
+  .elevate-lp-cpo-trust__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-lp-cpo-trust__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-lp-cpo-trust__title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-lp-cpo-trust__description {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #36393F;
+    margin: 0;
+    max-width: 28rem;
+  }
+
+  /* ── Inspection card ── */
+  .elevate-lp-cpo-trust__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+    background: #141517;
+    border-radius: 2rem;
+    padding: 2rem;
+    overflow: hidden;
+  }
+
+  .elevate-lp-cpo-trust__badge-wrap {
+    flex-shrink: 0;
+  }
+
+  .elevate-lp-cpo-trust__badge-wrap img {
+    display: block;
+    width: 9.125rem;
+    height: 9.25rem;
+    object-fit: contain;
+  }
+
+  /* ── Checklist ── */
+  .elevate-lp-cpo-trust__checklist {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  .elevate-lp-cpo-trust__check-item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .elevate-lp-cpo-trust__checkmark {
+    width: 1rem;
+    height: 1rem;
+    color: #E31E24;
+    flex-shrink: 0;
+  }
+
+  .elevate-lp-cpo-trust__check-item > span:last-child {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #FDFCFC;
+    opacity: 0.85;
+  }
+
+  /* ── Desktop (990px+) ── */
+  @media (min-width: 61.9375rem) {
+    .elevate-lp-cpo-trust__inner {
+      flex-direction: row;
+      align-items: center;
+      gap: 1.5rem;
+      padding-inline: 2.375rem;
+    }
+
+    .elevate-lp-cpo-trust__copy {
+      flex: 1 1 0%;
+      min-width: 0;
+    }
+
+    .elevate-lp-cpo-trust__title {
+      font-size: 3rem;
+    }
+
+    .elevate-lp-cpo-trust__card {
+      flex-direction: row;
+      flex-shrink: 0;
+      padding: 2rem;
+      gap: 2rem;
+    }
+
+    .elevate-lp-cpo-trust__checklist {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      width: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "LP — CPO Trust",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "badge_image",
+      "label": "Badge image",
+      "info": "Falls back to elevate-cpo-badge.png if empty."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "THE INSPECTION"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Every Bolt, Checked."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Placeholder checklist — final step count and language to be locked against the CPO landing page copy so claims stay consistent site-wide."
+    },
+    {
+      "type": "header",
+      "content": "Checklist items"
+    },
+    {
+      "type": "text",
+      "id": "check_1",
+      "label": "Check 1",
+      "default": "Drivetrain compatibility confirmed"
+    },
+    {
+      "type": "text",
+      "id": "check_2",
+      "label": "Check 2",
+      "default": "Frame inspected for impact damage"
+    },
+    {
+      "type": "text",
+      "id": "check_3",
+      "label": "Check 3",
+      "default": "Brake standard verified"
+    },
+    {
+      "type": "text",
+      "id": "check_4",
+      "label": "Check 4",
+      "default": "Wheel trueness & hub bearing check"
+    },
+    {
+      "type": "text",
+      "id": "check_5",
+      "label": "Check 5",
+      "default": "Bottom bracket threading confirmed"
+    },
+    {
+      "type": "text",
+      "id": "check_6",
+      "label": "Check 6",
+      "default": "Cosmetic wear graded & disclosed"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "presets": [
+    {
+      "name": "LP — CPO Trust"
+    }
+  ]
+}
+{% endschema %}
