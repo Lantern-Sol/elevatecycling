@@ -20,12 +20,15 @@
 >
   <div class="elevate-arrivals__inner">
     {%- comment -%} ── Section header ── {%- endcomment -%}
-    <div class="elevate-arrivals__header">
+    <div class="elevate-arrivals__header elevate-arrivals__header--{{ section.settings.header_alignment }}">
       {%- if section.settings.eyebrow != blank -%}
         <p class="elevate-arrivals__eyebrow">{{ section.settings.eyebrow }}</p>
       {%- endif -%}
       {%- if section.settings.heading != blank -%}
         <h2 class="elevate-arrivals__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+      {%- if section.settings.subheading != blank -%}
+        <p class="elevate-arrivals__subheading">{{ section.settings.subheading }}</p>
       {%- endif -%}
     </div>
 
@@ -454,6 +457,33 @@
     line-height: 1.2;
     color: #141517;
     margin: 0;
+  }
+
+  .elevate-arrivals__subheading {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #36393F;
+    margin: 0;
+    max-width: 36rem;
+  }
+
+  /* ── Header alignment modifiers ── */
+  .elevate-arrivals__header--left {
+    text-align: left;
+    align-items: flex-start;
+  }
+
+  .elevate-arrivals__header--center {
+    text-align: center;
+    align-items: center;
+  }
+
+  .elevate-arrivals__header--right {
+    text-align: right;
+    align-items: flex-end;
   }
 
   /* ── Carousel wrapper ── */
@@ -1044,8 +1074,9 @@
       align-items: center;
     }
 
-    .elevate-arrivals__header {
-      text-align: center;
+    .elevate-arrivals__subheading {
+      font-size: 0.875rem;
+      letter-spacing: -0.00875rem;
     }
 
     .elevate-arrivals__heading {
@@ -1317,6 +1348,23 @@
       "id": "heading",
       "label": "Heading",
       "default": "Check what Just Dropped!"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "info": "Optional paragraph below the heading"
+    },
+    {
+      "type": "select",
+      "id": "header_alignment",
+      "label": "Header alignment",
+      "options": [
+        { "value": "left", "label": "Left" },
+        { "value": "center", "label": "Center" },
+        { "value": "right", "label": "Right" }
+      ],
+      "default": "center"
     },
     {
       "type": "header",

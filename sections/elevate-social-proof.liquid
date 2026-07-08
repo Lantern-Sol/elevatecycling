@@ -1,0 +1,287 @@
+{%- doc -%}
+  Elevate Cycling — Social Proof stats bar.
+  Copy left (eyebrow + heading), three stats right separated by vertical dividers.
+  All text editable via schema settings.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-social-proof"
+  data-scroll-reveal
+  style="
+    background: rgba(226, 227, 229, 0.4);
+    --sp-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --sp-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-social-proof__inner">
+
+    {%- comment -%} ── Copy column ── {%- endcomment -%}
+    <div class="elevate-social-proof__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="elevate-social-proof__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-social-proof__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Stats row ── {%- endcomment -%}
+    <div class="elevate-social-proof__stats">
+
+      {%- if section.settings.stat_1_value != blank -%}
+        <div class="elevate-social-proof__stat">
+          <p class="elevate-social-proof__stat-value">{{ section.settings.stat_1_value }}</p>
+          {%- if section.settings.stat_1_label != blank -%}
+            <p class="elevate-social-proof__stat-label">{{ section.settings.stat_1_label }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.stat_2_value != blank -%}
+        <div class="elevate-social-proof__divider" aria-hidden="true"></div>
+        <div class="elevate-social-proof__stat">
+          <p class="elevate-social-proof__stat-value">{{ section.settings.stat_2_value }}</p>
+          {%- if section.settings.stat_2_label != blank -%}
+            <p class="elevate-social-proof__stat-label">{{ section.settings.stat_2_label }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.stat_3_value != blank -%}
+        <div class="elevate-social-proof__divider" aria-hidden="true"></div>
+        <div class="elevate-social-proof__stat">
+          <p class="elevate-social-proof__stat-value">{{ section.settings.stat_3_value }}</p>
+          {%- if section.settings.stat_3_label != blank -%}
+            <p class="elevate-social-proof__stat-label">{{ section.settings.stat_3_label }}</p>
+          {%- endif -%}
+        </div>
+      {%- endif -%}
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Social Proof ─── */
+  .elevate-social-proof {
+    grid-column: 1 / -1;
+    padding-block: var(--sp-pt) var(--sp-pb);
+    overflow: hidden;
+  }
+
+  .elevate-social-proof__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 80rem;
+    margin-inline: auto;
+  }
+
+  /* ── Copy ── */
+  .elevate-social-proof__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-social-proof__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-social-proof__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Stats row ── */
+  .elevate-social-proof__stats {
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .elevate-social-proof__stat {
+    flex: 1 1 0%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+    padding-inline: 0.5rem;
+  }
+
+  .elevate-social-proof__stat-value {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .elevate-social-proof__stat-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #6B7280;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-social-proof__divider {
+    width: 0.03125rem;
+    align-self: stretch;
+    background: #E31E24;
+    flex-shrink: 0;
+  }
+
+  /* ── Desktop (990px+) ── */
+  @media (min-width: 61.9375rem) {
+    .elevate-social-proof__inner {
+      flex-direction: row;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .elevate-social-proof__copy {
+      flex-shrink: 0;
+      white-space: nowrap;
+    }
+
+    .elevate-social-proof__heading {
+      font-size: 3rem;
+    }
+
+    .elevate-social-proof__stats {
+      flex: 1 1 0%;
+      min-width: 0;
+    }
+
+    .elevate-social-proof__stat {
+      padding-inline: 2rem;
+    }
+
+    .elevate-social-proof__stat-value {
+      font-size: 3rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "LP — Social Proof",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Copy"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "PROOF, NOT PROMISES"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Numbers Over Adjectives"
+    },
+    {
+      "type": "header",
+      "content": "Stat 1"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_value",
+      "label": "Value",
+      "default": "3,500+"
+    },
+    {
+      "type": "text",
+      "id": "stat_1_label",
+      "label": "Label",
+      "default": "BIKES PURCHASED & VERIFIED"
+    },
+    {
+      "type": "header",
+      "content": "Stat 2"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_value",
+      "label": "Value",
+      "default": "99.8%"
+    },
+    {
+      "type": "text",
+      "id": "stat_2_label",
+      "label": "Label",
+      "default": "POSITIVE FEEDBACK SCORE"
+    },
+    {
+      "type": "header",
+      "content": "Stat 3"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_value",
+      "label": "Value",
+      "default": "$5.4M"
+    },
+    {
+      "type": "text",
+      "id": "stat_3_label",
+      "label": "Label",
+      "default": "PAID OUT TO SELLERS"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "LP — Social Proof"
+    }
+  ]
+}
+{% endschema %}

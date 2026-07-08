@@ -1,0 +1,358 @@
+{%- doc -%}
+  Elevate Cycling — Contrast Bar (The Old Way vs The Elevate Way).
+  Side-by-side comparison cards with copy column left, two-card grid right.
+  All text editable via schema settings.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-contrast-bar"
+  data-scroll-reveal
+  style="
+    background: #FDFCFC;
+    --cb-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --cb-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-contrast-bar__inner">
+
+    {%- comment -%} ── Left column: copy ── {%- endcomment -%}
+    <div class="elevate-contrast-bar__copy">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="elevate-contrast-bar__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-contrast-bar__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Right column: comparison cards ── {%- endcomment -%}
+    <div class="elevate-contrast-bar__grid">
+
+      {%- comment -%} Old Way card {%- endcomment -%}
+      <div class="elevate-contrast-bar__col elevate-contrast-bar__col--old">
+        {%- if section.settings.old_heading != blank -%}
+          <p class="elevate-contrast-bar__col-heading">{{ section.settings.old_heading }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.old_point_1 != blank -%}
+          <div class="elevate-contrast-bar__row">
+            <p class="elevate-contrast-bar__row-text">{{ section.settings.old_point_1 }}</p>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.old_point_2 != blank -%}
+          <div class="elevate-contrast-bar__row">
+            <p class="elevate-contrast-bar__row-text">{{ section.settings.old_point_2 }}</p>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.old_point_3 != blank -%}
+          <div class="elevate-contrast-bar__row">
+            <p class="elevate-contrast-bar__row-text">{{ section.settings.old_point_3 }}</p>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Elevate Way card {%- endcomment -%}
+      <div class="elevate-contrast-bar__col elevate-contrast-bar__col--elevate">
+        {%- if section.settings.elevate_heading != blank -%}
+          <p class="elevate-contrast-bar__col-heading">{{ section.settings.elevate_heading }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.elevate_point_1 != blank -%}
+          <div class="elevate-contrast-bar__row">
+            <p class="elevate-contrast-bar__row-text">{{ section.settings.elevate_point_1 }}</p>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.elevate_point_2 != blank -%}
+          <div class="elevate-contrast-bar__row">
+            <p class="elevate-contrast-bar__row-text">{{ section.settings.elevate_point_2 }}</p>
+          </div>
+        {%- endif -%}
+
+        {%- if section.settings.elevate_point_3 != blank -%}
+          <div class="elevate-contrast-bar__row">
+            <p class="elevate-contrast-bar__row-text">{{ section.settings.elevate_point_3 }}</p>
+          </div>
+        {%- endif -%}
+      </div>
+
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Contrast Bar ─── */
+  .elevate-contrast-bar {
+    grid-column: 1 / -1;
+    padding-block: var(--cb-pt) var(--cb-pb);
+    overflow: hidden;
+  }
+
+  .elevate-contrast-bar__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    max-width: 80rem;
+    margin-inline: auto;
+  }
+
+  /* ── Copy column ── */
+  .elevate-contrast-bar__copy {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-contrast-bar__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-contrast-bar__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Card grid ── */
+  .elevate-contrast-bar__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1.5rem;
+    overflow: hidden;
+  }
+
+  /* ── Shared column styles ── */
+  .elevate-contrast-bar__col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem 1rem;
+    border-radius: 1.5rem;
+  }
+
+  .elevate-contrast-bar__col-heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    margin: 0;
+  }
+
+  .elevate-contrast-bar__row + .elevate-contrast-bar__row {
+    border-top: 0.03125rem solid;
+    padding-block-start: 0.75rem;
+  }
+
+  .elevate-contrast-bar__row-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    margin: 0;
+  }
+
+  /* ── Old Way column ── */
+  .elevate-contrast-bar__col--old {
+    background: transparent;
+  }
+
+  .elevate-contrast-bar__col--old .elevate-contrast-bar__col-heading {
+    color: #AEB2B8;
+  }
+
+  .elevate-contrast-bar__col--old .elevate-contrast-bar__row {
+    border-color: #AEB2B8;
+  }
+
+  .elevate-contrast-bar__col--old .elevate-contrast-bar__row-text {
+    color: #36393F;
+  }
+
+  /* ── Elevate Way column ── */
+  .elevate-contrast-bar__col--elevate {
+    background: #141517;
+    box-shadow:
+      0 0.25rem 0.375rem -0.125rem rgba(0, 0, 0, 0.1),
+      0 0.125rem 0.25rem -0.125rem rgba(0, 0, 0, 0.1);
+  }
+
+  .elevate-contrast-bar__col--elevate .elevate-contrast-bar__col-heading {
+    color: #E31E24;
+  }
+
+  .elevate-contrast-bar__col--elevate .elevate-contrast-bar__row {
+    border-color: #FDFCFC;
+  }
+
+  .elevate-contrast-bar__col--elevate .elevate-contrast-bar__row-text {
+    color: #FDFCFC;
+    opacity: 0.85;
+  }
+
+  /* ── Desktop (990px+) ── */
+  @media (min-width: 61.9375rem) {
+    .elevate-contrast-bar__inner {
+      flex-direction: row;
+      align-items: center;
+      gap: 2rem;
+      padding-inline: 2.375rem;
+    }
+
+    .elevate-contrast-bar__copy {
+      flex: 0 0 23.6875rem;
+      width: 23.6875rem;
+    }
+
+    .elevate-contrast-bar__heading {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-contrast-bar__grid {
+      flex: 1 1 0%;
+      min-width: 0;
+      flex-direction: row;
+    }
+
+    .elevate-contrast-bar__col {
+      flex: 1 1 0%;
+      min-width: 0;
+      gap: 1rem;
+      padding: 2rem;
+    }
+
+    .elevate-contrast-bar__col--old {
+      align-items: flex-end;
+    }
+
+    .elevate-contrast-bar__col--old .elevate-contrast-bar__row-text {
+      text-align: right;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "LP — Contrast Bar",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Copy"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "WHY THIS, NOT THE ALTERNATIVES"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Old Way Was a Gamble."
+    },
+    {
+      "type": "header",
+      "content": "The Old Way"
+    },
+    {
+      "type": "text",
+      "id": "old_heading",
+      "label": "Column heading",
+      "default": "THE OLD WAY"
+    },
+    {
+      "type": "textarea",
+      "id": "old_point_1",
+      "label": "Point 1",
+      "default": "Marketplace listings — no condition standard, no recourse if it shows up damaged"
+    },
+    {
+      "type": "textarea",
+      "id": "old_point_2",
+      "label": "Point 2",
+      "default": "Unscreened sellers — compatibility is a guess until it's in your hands"
+    },
+    {
+      "type": "textarea",
+      "id": "old_point_3",
+      "label": "Point 3",
+      "default": "Local shop trade-ins — lowball offers, long waits, no transparency on value"
+    },
+    {
+      "type": "header",
+      "content": "The Elevate Way"
+    },
+    {
+      "type": "text",
+      "id": "elevate_heading",
+      "label": "Column heading",
+      "default": "THE ELEVATE WAY"
+    },
+    {
+      "type": "textarea",
+      "id": "elevate_point_1",
+      "label": "Point 1",
+      "default": "Spec-verified listings — drivetrain, brake standard, and frame condition confirmed before it's posted"
+    },
+    {
+      "type": "textarea",
+      "id": "elevate_point_2",
+      "label": "Point 2",
+      "default": "Condition graded, not glossed — wear is described, not hidden"
+    },
+    {
+      "type": "textarea",
+      "id": "elevate_point_3",
+      "label": "Point 3",
+      "default": "Payout confirmed first — you know the number before anything ships"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "LP — Contrast Bar"
+    }
+  ]
+}
+{% endschema %}
