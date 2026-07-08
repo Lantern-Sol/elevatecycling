@@ -60,20 +60,6 @@
         }}
       {%- endif -%}
 
-      {%- if has_video and has_poster -%}
-        <button
-          type="button"
-          class="elevate-cpo-video__play"
-          aria-label="Play video"
-          data-cpo-video-play
-        >
-          <svg width="72" height="72" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-            <circle cx="36" cy="36" r="36" fill="rgba(0,0,0,0.5)"/>
-            <path d="M29 24L50 36L29 48V24Z" fill="#FDFCFC"/>
-          </svg>
-        </button>
-      {%- endif -%}
-
       {%- comment -%} ── Text content (inside media for border-radius clipping) ── {%- endcomment -%}
       <div class="elevate-cpo-video__content">
         {%- if section.settings.caption != blank -%}
@@ -87,29 +73,6 @@
     </div>
   </div>
 </div>
-
-{% javascript %}
-  (function () {
-    document.querySelectorAll('[data-cpo-video-player]').forEach(function (player) {
-      var btn = player.querySelector('[data-cpo-video-play]');
-      var video = player.querySelector('[data-cpo-video]');
-      if (!btn || !video) return;
-
-      btn.addEventListener('click', function () {
-        video.play();
-        btn.hidden = true;
-      });
-
-      video.addEventListener('pause', function () {
-        if (video.currentTime > 0) btn.hidden = false;
-      });
-
-      video.addEventListener('ended', function () {
-        btn.hidden = false;
-      });
-    });
-  })();
-{% endjavascript %}
 
 {% stylesheet %}
   /* ─── CPO Video ─── */
@@ -146,11 +109,6 @@
     aspect-ratio: 4 / 5;
     object-fit: cover;
     border-radius: 0 0 1.5rem 1.5rem;
-  }
-
-  /* Play button: hidden on mobile (autoplay), shown on desktop */
-  .elevate-cpo-video__play {
-    display: none;
   }
 
   /* ── Content: overlaid on video (inside __media for clipping) ── */
@@ -218,10 +176,6 @@
       min-width: 0;
       aspect-ratio: 16 / 9;
       border-radius: 2rem;
-    }
-
-    .elevate-cpo-video__play {
-      display: none;
     }
 
     .elevate-cpo-video__content {

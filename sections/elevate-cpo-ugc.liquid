@@ -190,6 +190,18 @@
                 dot.classList.toggle('elevate-cpo-ugc__dot--active', i === index);
               });
             }
+          } else {
+            var video = entry.target.querySelector('[data-ugc-video]');
+            if (video && !video.hidden) {
+              video.pause();
+              video.currentTime = 0;
+              video.hidden = true;
+              video.muted = true;
+              var poster = entry.target.querySelector('[data-ugc-poster]');
+              var playBtn = entry.target.querySelector('[data-ugc-play]');
+              if (poster) poster.hidden = false;
+              if (playBtn) playBtn.hidden = false;
+            }
           }
         });
       }, {
