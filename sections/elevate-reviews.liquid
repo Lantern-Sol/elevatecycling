@@ -3,9 +3,11 @@
   Custom heading + Reputon eBay Reviews app block slot.
 {%- endcomment -%}
 
+{%- assign stat_blocks = section.blocks | where: 'type', 'stat' -%}
+
 <div
   id="elevate-reviews-{{ section.id }}"
-  class="section section--page-width elevate-reviews"
+  class="section section--page-width elevate-reviews{% if stat_blocks.size > 0 %} elevate-reviews--has-stats{% endif %}"
   data-scroll-reveal
   style="
     --reviews-pad-top: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
@@ -14,13 +16,29 @@
 >
   <div class="elevate-reviews__inner">
     {%- comment -%} ── Section heading ── {%- endcomment -%}
-    <div class="elevate-reviews__header">
+    <div class="elevate-reviews__header{% if stat_blocks.size > 0 %} elevate-reviews__header--has-stats{% endif %}">
+      {%- if stat_blocks.size > 0 -%}
+        <div class="elevate-reviews__stats">
+          {%- for block in stat_blocks -%}
+            <div class="elevate-reviews__stat" {{ block.shopify_attributes }}>
+              <p class="elevate-reviews__stat-value">{{ block.settings.value }}</p>
+              <p class="elevate-reviews__stat-label">{{ block.settings.label }}</p>
+            </div>
+            {%- unless forloop.last -%}
+              <span class="elevate-reviews__stat-divider" aria-hidden="true"></span>
+            {%- endunless -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
       {%- if section.settings.eyebrow != blank -%}
         <p class="elevate-reviews__eyebrow">{{ section.settings.eyebrow }}</p>
       {%- endif -%}
+
       {%- if section.settings.heading != blank -%}
         <h2 class="elevate-reviews__heading">{{ section.settings.heading }}</h2>
       {%- endif -%}
+
       {%- if section.settings.subtitle != blank -%}
         <p class="elevate-reviews__subtitle">{{ section.settings.subtitle }}</p>
       {%- endif -%}
@@ -56,6 +74,15 @@
     margin-block-end: 2.5rem;
   }
 
+  .elevate-reviews__header--has-stats {
+    text-align: left;
+    padding-inline: 1rem;
+  }
+
+  .elevate-reviews__header--has-stats .elevate-reviews__eyebrow {
+    margin-block-start: 0.75rem;
+  }
+
   .elevate-reviews__eyebrow {
     font-family: 'Host Grotesk', sans-serif;
     font-weight: 700;
@@ -83,6 +110,54 @@
     margin: 0;
   }
 
+  /* ── Stats ── */
+  .elevate-reviews__stats {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+  }
+
+  .elevate-reviews__stat {
+    flex: 1;
+    text-align: center;
+    padding-inline: 0.75rem;
+  }
+
+  .elevate-reviews__stat-value {
+    font-family: 'Big Shoulders Display', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #e31e24;
+    margin: 0;
+  }
+
+  .elevate-reviews__stat-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #6b7280;
+    margin: 0;
+    white-space: nowrap;
+  }
+
+  .elevate-reviews__stat:first-child {
+    padding-inline-start: 0;
+  }
+
+  .elevate-reviews__stat:last-child {
+    padding-inline-end: 0;
+  }
+
+  .elevate-reviews__stat-divider {
+    width: 1px;
+    align-self: stretch;
+    background: #6b7280;
+    flex-shrink: 0;
+  }
+
   /* ── Widget wrapper ── */
   .elevate-reviews__widget {
     width: 100%;
@@ -105,6 +180,10 @@
 
   .reputon-ebay-reviews-widget .kHUFvl {
     padding: 40px 16px 0 !important;
+  }
+
+  .elevate-reviews--has-stats .reputon-ebay-reviews-widget .kHUFvl {
+    padding-top: 0 !important;
   }
 
   /* Feedback header bar — double class for specificity over styled-components */
@@ -319,11 +398,47 @@
     justify-content: center;
   }
 
+  /* ── Desktop (stats variant) ── */
+  @media (min-width: 61.9375rem) {
+    .elevate-reviews__header--has-stats {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto auto;
+      column-gap: 2rem;
+      row-gap: 0.5rem;
+    }
+
+    .elevate-reviews__header--has-stats .elevate-reviews__eyebrow {
+      grid-column: 1;
+      grid-row: 1;
+      margin-block-start: 0;
+    }
+
+    .elevate-reviews__header--has-stats .elevate-reviews__heading {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .elevate-reviews__header--has-stats .elevate-reviews__subtitle {
+      grid-column: 1;
+      grid-row: 3;
+    }
+
+    .elevate-reviews__header--has-stats .elevate-reviews__stats {
+      grid-column: 2;
+      grid-row: 1 / -1;
+      align-self: center;
+    }
+
+    .elevate-reviews__stat-value {
+      font-size: 3rem;
+    }
+  }
+
   /* ── Responsive ── */
   @media (max-width: 48rem) {
 
     .elevate-reviews__header {
-      text-align: left;
       margin-block-end: 1rem;
     }
 
@@ -667,6 +782,24 @@
   "blocks": [
     {
       "type": "@app"
+    },
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value",
+          "default": "3,500+"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "bikes certified"
+        }
+      ]
     }
   ],
   "presets": [

@@ -1,0 +1,375 @@
+{%- doc -%}
+  Elevate Cycling — CPO Condition System / Grades section.
+  Two-column layout: left header (eyebrow, heading with accent, guarantee strip)
+  + right 2×2 grid of grade cards (blocks). Stacks on mobile.
+{%- enddoc -%}
+
+{%- liquid
+  assign heading_html = section.settings.heading
+  if section.settings.heading_accent != blank
+    assign accent_open = '<span class="elevate-cpo-grades__accent">'
+    assign accent_close = '</span>'
+    assign accent_wrap = accent_open | append: section.settings.heading_accent | append: accent_close
+    assign heading_html = heading_html | replace: section.settings.heading_accent, accent_wrap
+  endif
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-cpo-grades"
+  data-scroll-reveal
+  style="background: linear-gradient(180deg, #FDE8E8 0%, #FFFFFF 100%); border-radius: 2rem 2rem 0 0;"
+>
+  <div class="elevate-cpo-grades__inner">
+    {%- comment -%} ── Left column: header ── {%- endcomment -%}
+    <div class="elevate-cpo-grades__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="elevate-cpo-grades__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-cpo-grades__heading">{{ heading_html }}</h2>
+      {%- endif -%}
+
+    </div>
+
+    {%- comment -%} ── Right column: grade cards ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-cpo-grades__grid" data-scroll-reveal="children">
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign pill_color = '#6B7280'
+            assign pill_style = 'outlined'
+            case block.settings.grade_color
+              when 'green-solid'
+                assign pill_color = '#4ade80'
+                assign pill_style = 'solid'
+              when 'green'
+                assign pill_color = '#4ade80'
+                assign pill_style = 'outlined'
+              when 'blue'
+                assign pill_color = '#3b82f6'
+                assign pill_style = 'outlined'
+              when 'gray'
+                assign pill_color = '#6B7280'
+                assign pill_style = 'outlined'
+            endcase
+          -%}
+          <div class="elevate-cpo-grades__card" {{ block.shopify_attributes }}>
+            <div class="elevate-cpo-grades__card-top">
+              <span class="elevate-cpo-grades__card-title">{{ block.settings.title }}</span>
+              <span
+                class="elevate-cpo-grades__pill elevate-cpo-grades__pill--{{ pill_style }}"
+                style="
+                  {%- if pill_style == 'solid' -%}
+                    background: {{ pill_color }}; color: #141517;
+                  {%- else -%}
+                    border-color: {{ pill_color }}; color: {{ pill_color }}; background: transparent;
+                  {%- endif -%}
+                "
+              >
+                {{ block.settings.grade_label }}
+              </span>
+            </div>
+            {%- if block.settings.description != blank -%}
+              <p class="elevate-cpo-grades__card-desc">{{ block.settings.description }}</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.guarantee_text != blank -%}
+      <div class="elevate-cpo-grades__guarantee">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true" class="elevate-cpo-grades__guarantee-icon">
+          {%- render 'icon', icon: 'check-circle' -%}
+        </svg>
+        <p class="elevate-cpo-grades__guarantee-text">{{ section.settings.guarantee_text }}</p>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── CPO Grades ─── */
+  .elevate-cpo-grades {
+    padding-block: 3rem;
+  }
+
+  .elevate-cpo-grades__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Header (left on desktop) ── */
+  .elevate-cpo-grades__header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .elevate-cpo-grades__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-cpo-grades__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 1.15;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-cpo-grades__accent {
+    color: #E31E24;
+  }
+
+  /* ── Guarantee strip ── */
+  .elevate-cpo-grades__guarantee {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    border: 0.0625rem solid #AEB2B8;
+    border-radius: 0.5rem;
+    align-self: flex-start;
+  }
+
+  .elevate-cpo-grades__guarantee-icon {
+    flex-shrink: 0;
+    color: #E31E24;
+  }
+
+  .elevate-cpo-grades__guarantee-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Grade cards grid ── */
+  .elevate-cpo-grades__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .elevate-cpo-grades__card {
+    background: #141517;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .elevate-cpo-grades__card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+
+  .elevate-cpo-grades__card-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    color: #FDFCFC;
+  }
+
+  .elevate-cpo-grades__pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.1875rem 0.625rem;
+    border-radius: 62.4375rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .elevate-cpo-grades__pill--solid {
+    border: none;
+  }
+
+  .elevate-cpo-grades__pill--outlined {
+    border: 0.0625rem solid;
+  }
+
+  .elevate-cpo-grades__card-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-cpo-grades {
+      padding-block: 5rem;
+    }
+
+    .elevate-cpo-grades__inner {
+      display: grid;
+      grid-template-columns: 32% 1fr;
+      grid-template-rows: auto auto;
+      gap: 1.25rem 3rem;
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-cpo-grades__header {
+      grid-column: 1;
+      grid-row: 1;
+    }
+
+    .elevate-cpo-grades__guarantee {
+      grid-column: 1;
+      grid-row: 2;
+      align-self: start;
+    }
+
+    .elevate-cpo-grades__heading {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-cpo-grades__grid {
+      grid-column: 2;
+      grid-row: 1 / -1;
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "CPO Grades",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "CONDITION SYSTEM"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Grade assigned before listing. Never estimated."
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading accent text",
+      "info": "Word(s) within the heading to highlight in red.",
+      "default": "Never estimated."
+    },
+    {
+      "type": "text",
+      "id": "guarantee_text",
+      "label": "Guarantee text",
+      "default": "30-day return if condition doesn't match the listing."
+    }
+  ],
+  "blocks": [
+    {
+      "type": "grade",
+      "name": "Grade",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Unridden"
+        },
+        {
+          "type": "text",
+          "id": "grade_label",
+          "label": "Grade label",
+          "info": "Text inside the pill, e.g. \"Grade A+ — New\"",
+          "default": "Grade A+ — New"
+        },
+        {
+          "type": "select",
+          "id": "grade_color",
+          "label": "Pill color",
+          "options": [
+            { "value": "green-solid", "label": "Green (solid)" },
+            { "value": "green", "label": "Green (outlined)" },
+            { "value": "blue", "label": "Blue (outlined)" },
+            { "value": "gray", "label": "Gray (outlined)" }
+          ],
+          "default": "green-solid"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Never ridden. May have been display or test-fitted. Original spec intact."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CPO Grades",
+      "blocks": [
+        {
+          "type": "grade",
+          "settings": {
+            "title": "Unridden",
+            "grade_label": "Grade A+ — New",
+            "grade_color": "green-solid",
+            "description": "Never ridden. May have been display or test-fitted. Original spec intact."
+          }
+        },
+        {
+          "type": "grade",
+          "settings": {
+            "title": "Excellent",
+            "grade_label": "Grade A — Like New",
+            "grade_color": "green",
+            "description": "No visible wear under normal inspection. Functionally indistinguishable from new — just priced like it isn't."
+          }
+        },
+        {
+          "type": "grade",
+          "settings": {
+            "title": "Expected",
+            "grade_label": "Grade B — Wear use",
+            "grade_color": "blue",
+            "description": "Normal ride wear consistent with regular use. Minor cosmetic marks possible. Mechanically sound and fully documented."
+          }
+        },
+        {
+          "type": "grade",
+          "settings": {
+            "title": "Fair",
+            "grade_label": "Grade C — Good",
+            "grade_color": "gray",
+            "description": "Visible use marks, possible paint chips or cable wear. Every mechanical system inspected and cleared. Priced retail to reflect condition honestly."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

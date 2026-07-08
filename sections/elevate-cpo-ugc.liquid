@@ -1,0 +1,723 @@
+{%- doc -%}
+  Elevate Cycling — CPO UGC (User-Generated Content) carousel section.
+  "Real Bikes. Real Riders." — horizontally scrollable portrait cards
+  with optional video play overlay and grade badge pills.
+{%- enddoc -%}
+
+<div
+  class="section section--full-width elevate-cpo-ugc"
+  data-scroll-reveal
+  style="
+    background: linear-gradient(180deg, #250a0a 0%, #6d1316 100%);
+    border-radius: 2rem 2rem 0 0;
+    --elevate-cpo-ugc-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-cpo-ugc-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-cpo-ugc__inner">
+    {%- comment -%} ── Header ── {%- endcomment -%}
+    <div class="elevate-cpo-ugc__header">
+      {%- if section.settings.caption != blank -%}
+        <p class="elevate-cpo-ugc__caption">{{ section.settings.caption }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-cpo-ugc__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Carousel track ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-cpo-ugc__track" data-ugc-track>
+        {%- for block in section.blocks -%}
+          {%- liquid
+            assign has_video = false
+            assign video = block.settings.video
+
+            if video != blank and video.sources.size > 0
+              assign has_video = true
+            endif
+
+            assign poster_image = block.settings.image
+            if poster_image == blank and has_video and video.preview_image != blank
+              assign poster_image = video.preview_image
+            endif
+          -%}
+
+          <div
+            class="elevate-cpo-ugc__card"
+            data-ugc-card
+            {{ block.shopify_attributes }}
+          >
+            {%- if poster_image != blank or has_video -%}
+              <div class="elevate-cpo-ugc__card-media" data-ugc-player>
+                <div class="elevate-cpo-ugc__card-poster" data-ugc-poster>
+                  {%- if poster_image != blank -%}
+                    {{
+                      poster_image
+                      | image_url: width: 960
+                      | image_tag:
+                        widths: '236, 472, 600, 960',
+                        sizes: '(min-width: 48rem) 236px, 60vw',
+                        loading: 'lazy',
+                        class: 'elevate-cpo-ugc__card-img',
+                        alt: block.settings.badge_text
+                    }}
+                  {%- endif -%}
+
+                  {%- if has_video -%}
+                    <button
+                      type="button"
+                      class="elevate-cpo-ugc__play"
+                      aria-label="Play video"
+                      data-ugc-play
+                    >
+                      <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <circle cx="28" cy="28" r="28" fill="rgba(255,255,255,0.9)"/>
+                        <path d="M22 18L40 28L22 38V18Z" fill="#141517"/>
+                      </svg>
+                    </button>
+                  {%- endif -%}
+                </div>
+
+                {%- if has_video -%}
+                  <video
+                    class="elevate-cpo-ugc__video"
+                    data-ugc-video
+                    playsinline
+                    loop
+                    muted
+                    preload="none"
+                    hidden
+                  >
+                    {%- for source in video.sources -%}
+                      <source src="{{ source.url }}" type="{{ source.mime_type }}">
+                    {%- endfor -%}
+                  </video>
+                {%- endif -%}
+              </div>
+            {%- else -%}
+              <div class="elevate-cpo-ugc__card-placeholder"></div>
+            {%- endif -%}
+
+            {%- if block.settings.badge_text != blank -%}
+              <span class="elevate-cpo-ugc__badge">{{ block.settings.badge_text }}</span>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+
+      {%- comment -%} ── Scroll progress bar (mobile) ── {%- endcomment -%}
+      <div class="elevate-cpo-ugc__progress" aria-hidden="true">
+        <div class="elevate-cpo-ugc__progress-thumb" data-ugc-progress-thumb></div>
+      </div>
+
+      {%- comment -%} ── Nav (arrows + dots) ── {%- endcomment -%}
+      <div class="elevate-cpo-ugc__nav">
+        <button
+          type="button"
+          class="elevate-cpo-ugc__arrow elevate-cpo-ugc__arrow--prev"
+          aria-label="Previous slide"
+          data-ugc-prev
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            {%- render 'icon', icon: 'arrow-left-solid' -%}
+          </svg>
+        </button>
+
+        <div class="elevate-cpo-ugc__dots">
+          {%- for block in section.blocks -%}
+            <button
+              type="button"
+              class="elevate-cpo-ugc__dot{% if forloop.first %} elevate-cpo-ugc__dot--active{% endif %}"
+              data-dot-index="{{ forloop.index0 }}"
+              aria-label="Go to slide {{ forloop.index }}"
+            ></button>
+          {%- endfor -%}
+        </div>
+
+        <button
+          type="button"
+          class="elevate-cpo-ugc__arrow elevate-cpo-ugc__arrow--next"
+          aria-label="Next slide"
+          data-ugc-next
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            {%- render 'icon', icon: 'arrow-right-solid' -%}
+          </svg>
+        </button>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Footer tagline ── {%- endcomment -%}
+    {%- if section.settings.footer_text != blank or section.settings.hashtag != blank -%}
+      <p class="elevate-cpo-ugc__footer">
+        {%- if section.settings.footer_text != blank -%}
+          {{ section.settings.footer_text }}
+        {%- endif -%}
+        {%- if section.settings.hashtag != blank -%}
+          {%- if section.settings.hashtag_url != blank -%}
+            <a href="{{ section.settings.hashtag_url }}" class="elevate-cpo-ugc__hashtag" target="_blank" rel="noopener">{{ section.settings.hashtag }}</a>
+          {%- else -%}
+            <span class="elevate-cpo-ugc__hashtag">{{ section.settings.hashtag }}</span>
+          {%- endif -%}
+        {%- endif -%}
+      </p>
+    {%- endif -%}
+  </div>
+</div>
+
+{% javascript %}
+  /* ─── CPO UGC — carousel navigation ─── */
+  (function () {
+    document.querySelectorAll('.elevate-cpo-ugc').forEach(function (section) {
+      var track = section.querySelector('[data-ugc-track]');
+      var dots = section.querySelectorAll('.elevate-cpo-ugc__dot');
+      var prevBtn = section.querySelector('[data-ugc-prev]');
+      var nextBtn = section.querySelector('[data-ugc-next]');
+      var cards = section.querySelectorAll('[data-ugc-card]');
+      if (!track || cards.length < 2) return;
+
+      /* Scroll → update active dot via IntersectionObserver */
+      var activeDot = 0;
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            var index = Array.prototype.indexOf.call(cards, entry.target);
+            if (index >= 0) {
+              activeDot = index;
+              dots.forEach(function (dot, i) {
+                dot.classList.toggle('elevate-cpo-ugc__dot--active', i === index);
+              });
+            }
+          } else {
+            var video = entry.target.querySelector('[data-ugc-video]');
+            if (video && !video.hidden) {
+              video.pause();
+              video.currentTime = 0;
+              video.hidden = true;
+              video.muted = true;
+              var poster = entry.target.querySelector('[data-ugc-poster]');
+              var playBtn = entry.target.querySelector('[data-ugc-play]');
+              if (poster) poster.hidden = false;
+              if (playBtn) playBtn.hidden = false;
+            }
+          }
+        });
+      }, {
+        root: track,
+        threshold: 0.6
+      });
+
+      cards.forEach(function (card) {
+        observer.observe(card);
+      });
+
+      /* Arrow click → scroll by card width + gap (with loop) */
+      function getScrollAmount() {
+        if (!cards[0]) return 300;
+        var style = getComputedStyle(track);
+        var gap = parseFloat(style.gap) || 16;
+        return cards[0].offsetWidth + gap;
+      }
+
+      function isAtStart() {
+        return track.scrollLeft <= 2;
+      }
+
+      function isAtEnd() {
+        return track.scrollLeft + track.offsetWidth >= track.scrollWidth - 2;
+      }
+
+      if (prevBtn) {
+        prevBtn.addEventListener('click', function () {
+          if (isAtStart()) {
+            cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', inline: 'end', block: 'nearest' });
+          } else {
+            track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
+          }
+        });
+      }
+
+      if (nextBtn) {
+        nextBtn.addEventListener('click', function () {
+          if (isAtEnd()) {
+            cards[0].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+          } else {
+            track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
+          }
+        });
+      }
+
+      /* Dot click → scroll to card */
+      dots.forEach(function (dot) {
+        dot.addEventListener('click', function () {
+          var index = parseInt(dot.getAttribute('data-dot-index'), 10);
+          if (cards[index]) {
+            cards[index].scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+          }
+        });
+      });
+
+      /* Scroll progress bar — tracks horizontal scroll (mobile) */
+      var progressThumb = section.querySelector('[data-ugc-progress-thumb]');
+      if (progressThumb && track) {
+        function updateProgress() {
+          var maxScroll = track.scrollWidth - track.offsetWidth;
+          if (maxScroll <= 0) {
+            progressThumb.style.transform = 'translateX(0)';
+            return;
+          }
+          var ratio = track.scrollLeft / maxScroll;
+          var progressTrack = progressThumb.parentElement;
+          var maxTranslate = progressTrack.offsetWidth - progressThumb.offsetWidth;
+          progressThumb.style.transform = 'translateX(' + (ratio * maxTranslate) + 'px)';
+        }
+
+        track.addEventListener('scroll', updateProgress, { passive: true });
+        window.addEventListener('resize', updateProgress);
+        updateProgress();
+      }
+    });
+  })();
+
+  /* ─── CPO UGC — video play / pause ─── */
+  (function () {
+    var allPlayers = document.querySelectorAll('[data-ugc-player]');
+
+    function stopAll(except) {
+      allPlayers.forEach(function (p) {
+        if (p === except) return;
+        var v = p.querySelector('[data-ugc-video]');
+        var poster = p.querySelector('[data-ugc-poster]');
+        var playBtn = p.querySelector('[data-ugc-play]');
+        if (!v || v.hidden) return;
+        v.pause();
+        v.currentTime = 0;
+        v.hidden = true;
+        v.muted = true;
+        if (poster) poster.hidden = false;
+        if (playBtn) playBtn.hidden = false;
+      });
+    }
+
+    allPlayers.forEach(function (player) {
+      var btn = player.querySelector('[data-ugc-play]');
+      var video = player.querySelector('[data-ugc-video]');
+      if (!btn || !video) return;
+
+      /* Play button → stop others, start this one */
+      btn.addEventListener('click', function () {
+        stopAll(player);
+        var poster = player.querySelector('[data-ugc-poster]');
+        if (poster) poster.hidden = true;
+        btn.hidden = true;
+        video.hidden = false;
+        video.muted = false;
+        video.play();
+      });
+
+      /* Click on playing video → pause & restore poster */
+      video.addEventListener('click', function () {
+        video.pause();
+        video.currentTime = 0;
+        video.hidden = true;
+        video.muted = true;
+        var poster = player.querySelector('[data-ugc-poster]');
+        if (poster) poster.hidden = false;
+        btn.hidden = false;
+      });
+    });
+  })();
+{% endjavascript %}
+
+{% stylesheet %}
+  /* ─── CPO UGC Carousel ─── */
+  .elevate-cpo-ugc {
+    padding-block-start: var(--elevate-cpo-ugc-pt);
+    padding-block-end: var(--elevate-cpo-ugc-pb);
+  }
+
+  .elevate-cpo-ugc__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  /* ── Header ── */
+  .elevate-cpo-ugc__header {
+    text-align: left;
+    align-self: stretch;
+    padding-inline: 1.25rem;
+  }
+
+  .elevate-cpo-ugc__caption {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #FDFCFC;
+    margin: 0 0 0.5rem;
+  }
+
+  .elevate-cpo-ugc__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.1;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  /* ── Carousel track ── */
+  .elevate-cpo-ugc__track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-inline: 1.25rem;
+    width: 100%;
+  }
+
+  .elevate-cpo-ugc__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── Card ── */
+  .elevate-cpo-ugc__card {
+    position: relative;
+    flex: 0 0 14.75rem;
+    min-width: 14.75rem;
+    aspect-ratio: 9 / 16;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    scroll-snap-align: center;
+  }
+
+  .elevate-cpo-ugc__card-media {
+    position: absolute;
+    inset: 0;
+  }
+
+  .elevate-cpo-ugc__card-poster {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+
+  .elevate-cpo-ugc__card-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-cpo-ugc__card-placeholder {
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 1.5rem;
+  }
+
+  /* ── Play button overlay ── */
+  .elevate-cpo-ugc__play {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .elevate-cpo-ugc__play:hover {
+    opacity: 0.85;
+  }
+
+  .elevate-cpo-ugc__play:focus-visible {
+    outline: 0.125rem solid #FDFCFC;
+    outline-offset: 0.125rem;
+    border-radius: 1.5rem;
+  }
+
+  /* ── Native video ── */
+  .elevate-cpo-ugc__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    background: #000;
+    cursor: pointer;
+  }
+
+  .elevate-cpo-ugc__video[hidden] {
+    display: none;
+  }
+
+  /* ── Grade badge pill ── */
+  .elevate-cpo-ugc__badge {
+    position: absolute;
+    bottom: 0.75rem;
+    left: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.375rem 0.75rem;
+    background: rgba(20, 21, 23, 0.85);
+    border-radius: 62.4375rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #FDFCFC;
+    white-space: nowrap;
+    z-index: 1;
+  }
+
+  /* ── Scroll progress bar (mobile) ── */
+  .elevate-cpo-ugc__progress {
+    position: relative;
+    align-self: stretch;
+    height: 0.125rem;
+    background: #E2E3E5;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    margin-inline: 1.25rem;
+  }
+
+  .elevate-cpo-ugc__progress-thumb {
+    position: absolute;
+    top: -0.0625rem;
+    left: 0;
+    height: 0.25rem;
+    width: 4.75rem;
+    background: #E31E24;
+    border-radius: 0.25rem;
+    transition: transform 0.1s ease-out;
+  }
+
+  /* ── Nav row (arrows + dots) ── */
+  .elevate-cpo-ugc__nav {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+  }
+
+  /* ── Arrow buttons ── */
+  .elevate-cpo-ugc__arrow {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    border: 0.0625rem solid rgba(253, 252, 252, 0.3);
+    background-color: transparent;
+    color: #FDFCFC;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: border-color 0.2s ease;
+  }
+
+  .elevate-cpo-ugc__arrow:hover {
+    border-color: rgba(253, 252, 252, 0.6);
+  }
+
+  .elevate-cpo-ugc__arrow:focus-visible {
+    outline: 0.125rem solid #FDFCFC;
+    outline-offset: 0.125rem;
+  }
+
+  .elevate-cpo-ugc__arrow svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  /* ── Dot indicators ── */
+  .elevate-cpo-ugc__dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+  }
+
+  .elevate-cpo-ugc__dot {
+    width: 0.75rem;
+    height: 0.25rem;
+    border-radius: 999px;
+    background-color: #E2E3E5;
+    border: none;
+    padding: 0;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .elevate-cpo-ugc__dot--active {
+    background-color: #E31E24;
+  }
+
+  /* ── Footer tagline ── */
+  .elevate-cpo-ugc__footer {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #AEB2B8;
+    margin: 0;
+    text-align: left;
+    align-self: stretch;
+    padding-inline: 1.25rem;
+  }
+
+  .elevate-cpo-ugc__hashtag {
+    color: #FDFCFC;
+    text-decoration: underline;
+    text-underline-offset: 0.125rem;
+  }
+
+  a.elevate-cpo-ugc__hashtag:hover {
+    text-decoration-color: #E31E24;
+  }
+
+  /* ─── Desktop (768px+) ─── */
+  @media (min-width: 48rem) {
+    .elevate-cpo-ugc__heading {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-cpo-ugc__track {
+      gap: 1.5rem;
+      padding-inline: 3rem;
+    }
+
+    .elevate-cpo-ugc__progress {
+      display: none;
+    }
+
+    .elevate-cpo-ugc__nav {
+      display: flex;
+    }
+
+    .elevate-cpo-ugc__arrow {
+      display: flex;
+    }
+
+    .elevate-cpo-ugc__footer {
+      font-size: 1rem;
+      letter-spacing: -0.01rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "CPO UGC Carousel",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "REAL BIKES. REAL RIDERS."
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Certified gear, in the wild."
+    },
+    {
+      "type": "header",
+      "content": "Footer"
+    },
+    {
+      "type": "text",
+      "id": "footer_text",
+      "label": "Footer text",
+      "default": "Tag your Elevate bike for a chance to be featured. "
+    },
+    {
+      "type": "text",
+      "id": "hashtag",
+      "label": "Hashtag text",
+      "default": "#ElevateCycling"
+    },
+    {
+      "type": "url",
+      "id": "hashtag_url",
+      "label": "Hashtag link"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "UGC Card",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "text",
+          "id": "badge_text",
+          "label": "Badge text",
+          "info": "e.g. Grade B · Pinarello F7"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Upload a video (optional — shows play button)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CPO UGC Carousel"
+    }
+  ]
+}
+{% endschema %}

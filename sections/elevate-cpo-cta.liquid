@@ -1,0 +1,303 @@
+{%- doc -%}
+  Elevate Cycling — CPO final CTA section.
+  Centered dark section with eyebrow, heading, two CTA buttons,
+  and a 4-icon USP strip. Rounded bottom corners to pair with
+  the grades section's rounded top corners.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-cpo-cta"
+  data-scroll-reveal
+  style="background: #141517;"
+>
+  <div class="elevate-cpo-cta__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="elevate-cpo-cta__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="elevate-cpo-cta__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.primary_label != blank or section.settings.secondary_label != blank -%}
+      <div class="elevate-cpo-cta__buttons">
+        {%- if section.settings.secondary_label != blank -%}
+          <a href="{{ section.settings.secondary_link }}" class="elevate-cpo-cta__btn elevate-cpo-cta__btn--secondary">
+            {{ section.settings.secondary_label }}
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.primary_label != blank -%}
+          <a href="{{ section.settings.primary_link }}" class="elevate-cpo-cta__btn elevate-cpo-cta__btn--primary">
+            <span>{{ section.settings.primary_label }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- if section.blocks.size > 0 -%}
+      <ul class="elevate-cpo-cta__usps" role="list">
+        {%- for block in section.blocks -%}
+          <li class="elevate-cpo-cta__usp" {{ block.shopify_attributes }}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="elevate-cpo-cta__usp-icon" aria-hidden="true">
+              {%- render 'icon', icon: block.settings.icon -%}
+            </svg>
+            <span class="elevate-cpo-cta__usp-label">{{ block.settings.label }}</span>
+          </li>
+        {%- endfor -%}
+      </ul>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── CPO CTA ─── */
+  .elevate-cpo-cta {
+    border-radius: 0 0 2rem 2rem;
+    overflow: hidden;
+  }
+
+  .elevate-cpo-cta__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    text-align: left;
+    gap: 1rem;
+    padding-block: 3rem;
+    padding-inline: 0.5rem;
+  }
+
+  .elevate-cpo-cta__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-cpo-cta__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+    max-width: 40rem;
+  }
+
+  /* ── Buttons ── */
+  .elevate-cpo-cta__buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    margin-block-start: 0.5rem;
+  }
+
+  .elevate-cpo-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    height: 3rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    padding: 0 1.5rem;
+    border-radius: 0.75rem;
+    cursor: pointer;
+    white-space: nowrap;
+    transition:
+      background-color 0.2s ease-in-out,
+      border-color 0.2s ease-in-out,
+      opacity 0.2s ease-in-out;
+  }
+
+  .elevate-cpo-cta__btn:focus-visible {
+    outline: 0.125rem solid #fff;
+    outline-offset: 0.125rem;
+  }
+
+  .elevate-cpo-cta__btn--primary {
+    background: #E31E24;
+    color: #FDFCFC;
+    border: none;
+    gap: 0.5rem;
+  }
+
+  .elevate-cpo-cta__btn--primary svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .elevate-cpo-cta__btn--primary:hover {
+    background: #c8191e;
+  }
+
+  .elevate-cpo-cta__btn--secondary {
+    background: transparent;
+    color: #FDFCFC;
+    border: 0.03125rem solid #FDFCFC;
+  }
+
+  .elevate-cpo-cta__btn--secondary:hover {
+    border-color: #fff;
+  }
+
+  /* ── USP strip ── */
+  .elevate-cpo-cta__usps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+    list-style: none;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    width: 100%;
+  }
+
+  .elevate-cpo-cta__usp {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 0.25rem;
+  }
+
+  .elevate-cpo-cta__usp-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #AEB2B8;
+  }
+
+  .elevate-cpo-cta__usp-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #AEB2B8;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-cpo-cta__inner {
+      align-items: center;
+      text-align: center;
+      padding-block: 4.5rem;
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-cpo-cta__buttons {
+      flex-direction: row;
+      justify-content: center;
+      gap: 1rem;
+      width: auto;
+    }
+
+    .elevate-cpo-cta__btn {
+      flex: 0 0 auto;
+      min-width: 13rem;
+    }
+
+    .elevate-cpo-cta__usps {
+      grid-template-columns: repeat(4, auto);
+      justify-content: center;
+      gap: 2rem;
+      width: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "CPO CTA",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "SHOP CERTIFIED GEAR"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Ready to upgrade? Shop bikes that have already proven themselves."
+    },
+    {
+      "type": "header",
+      "content": "Buttons"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Sell or trade your bike"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Secondary button link"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Shop Certified Bikes"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Primary button link"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "usp",
+      "name": "USP Item",
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "shipping-fast", "label": "Shipping" },
+            { "value": "return", "label": "Return" },
+            { "value": "return-circle", "label": "Return Circle" },
+            { "value": "certified", "label": "Certified" },
+            { "value": "recycle", "label": "Recycle" }
+          ],
+          "default": "shipping-fast"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Free US Shipping"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "CPO CTA",
+      "blocks": [
+        { "type": "usp", "settings": { "icon": "shipping-fast", "label": "Free US Shipping" } },
+        { "type": "usp", "settings": { "icon": "return", "label": "30-day free returns*" } },
+        { "type": "usp", "settings": { "icon": "certified", "label": "Certified Pre-Owned" } },
+        { "type": "usp", "settings": { "icon": "return-circle", "label": "Guaranteed Buyback" } }
+      ]
+    }
+  ]
+}
+{% endschema %}

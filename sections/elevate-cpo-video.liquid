@@ -1,0 +1,263 @@
+{%- doc -%}
+  Elevate Cycling — CPO "How It Works" video section.
+  Two-column layout: video thumbnail with play overlay (left),
+  caption + heading (right). Clicking play starts the native Shopify-hosted video.
+{%- enddoc -%}
+
+{%- liquid
+  assign video = section.settings.video
+  assign has_video = false
+  if video != blank
+    assign has_video = true
+  endif
+
+  assign has_poster = false
+  if section.settings.poster_image != blank
+    assign has_poster = true
+  endif
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-cpo-video"
+  data-scroll-reveal
+  style="
+    background: #FDFCFC;
+    --elevate-cpo-video-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-cpo-video-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-cpo-video__inner">
+    {%- comment -%} ── Video / poster ── {%- endcomment -%}
+    <div class="elevate-cpo-video__media" data-cpo-video-player>
+      {%- if has_video -%}
+        <video
+          class="elevate-cpo-video__video"
+          playsinline
+          controls
+          autoplay
+          muted
+          loop
+          {%- if has_poster %}
+            poster="{{ section.settings.poster_image | image_url: width: 1600 }}"
+          {%- endif %}
+          data-cpo-video
+        >
+          {%- for source in video.sources -%}
+            <source src="{{ source.url }}" type="{{ source.mime_type }}">
+          {%- endfor -%}
+        </video>
+      {%- elsif has_poster -%}
+        {%- assign img = section.settings.poster_image -%}
+        {{
+          img
+          | image_url: width: 1600
+          | image_tag:
+            widths: '375, 750, 1080, 1440, 1600',
+            sizes: '(min-width: 61.9375rem) 50vw, 100vw',
+            loading: 'lazy',
+            class: 'elevate-cpo-video__poster-img',
+            alt: section.settings.heading
+        }}
+      {%- endif -%}
+
+      {%- comment -%} ── Text content (inside media for border-radius clipping) ── {%- endcomment -%}
+      <div class="elevate-cpo-video__content">
+        {%- if section.settings.caption != blank -%}
+          <p class="elevate-cpo-video__caption">{{ section.settings.caption }}</p>
+        {%- endif -%}
+
+        {%- if section.settings.heading != blank -%}
+          <h2 class="elevate-cpo-video__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── CPO Video ─── */
+  .elevate-cpo-video {
+    padding-block-start: var(--elevate-cpo-video-pt);
+    padding-block-end: 0;
+  }
+
+  /* ── Mobile: video as full-width background, text overlaid ── */
+  .elevate-cpo-video__inner {
+    grid-column: 1 / -1;
+    position: relative;
+  }
+
+  .elevate-cpo-video__media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 0 0 1.5rem 1.5rem;
+  }
+
+  .elevate-cpo-video__video {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 0 0 1.5rem 1.5rem;
+  }
+
+  .elevate-cpo-video__poster-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    border-radius: 0 0 1.5rem 1.5rem;
+  }
+
+  /* ── Content: overlaid on video (inside __media for clipping) ── */
+  .elevate-cpo-video__content {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1.5rem 1.25rem 2rem;
+    z-index: 2;
+  }
+
+  .elevate-cpo-video__caption {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-cpo-video__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.15;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-cpo-video {
+      padding-block-end: var(--elevate-cpo-video-pb);
+    }
+
+    .elevate-cpo-video__inner {
+      grid-column: 2;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      gap: 2rem;
+      padding-inline: 4.375rem;
+      position: static;
+    }
+
+    .elevate-cpo-video__media {
+      display: contents;
+    }
+
+    .elevate-cpo-video__video {
+      flex: 1 1 60%;
+      min-width: 0;
+      aspect-ratio: 16 / 9;
+      border-radius: 2rem;
+    }
+
+    .elevate-cpo-video__poster-img {
+      flex: 1 1 60%;
+      min-width: 0;
+      aspect-ratio: 16 / 9;
+      border-radius: 2rem;
+    }
+
+    .elevate-cpo-video__content {
+      position: static;
+      flex: 1 1 40%;
+      min-width: 0;
+      gap: 1rem;
+      padding: 0;
+    }
+
+    .elevate-cpo-video__heading {
+      font-size: 3rem;
+      color: #36393F;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "CPO Video",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "HOW IT WORKS"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Watch our mechanic walk through a full CPO inspection"
+    },
+    {
+      "type": "header",
+      "content": "Video"
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "image_picker",
+      "id": "poster_image",
+      "label": "Poster / thumbnail image"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "presets": [
+    {
+      "name": "CPO Video"
+    }
+  ]
+}
+{% endschema %}

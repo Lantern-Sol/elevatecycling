@@ -1,0 +1,457 @@
+{%- doc -%}
+  Elevate Cycling — LP 6-Point Inspection Section.
+  White background section with eyebrow, heading, 3×2 card grid showing
+  the 6-step certification process, arrow connectors between cards,
+  and a CTA row at the bottom.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-lp-inspection"
+  data-scroll-reveal
+  style="
+    background: #FDFCFC;
+    --insp-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --insp-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-lp-inspection__inner">
+    {%- comment -%} ── Header ── {%- endcomment -%}
+    <div class="elevate-lp-inspection__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="elevate-lp-inspection__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.title != blank -%}
+        <h2 class="elevate-lp-inspection__title">{{ section.settings.title }}</h2>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── 3×2 Card Grid ── {%- endcomment -%}
+    <div class="elevate-lp-inspection__grid">
+      {%- for block in section.blocks -%}
+        <div class="elevate-lp-inspection__card" {{ block.shopify_attributes }}>
+          <div class="elevate-lp-inspection__card-top">
+            <span class="elevate-lp-inspection__badge" aria-hidden="true">{{ block.settings.number }}</span>
+            <p class="elevate-lp-inspection__card-title">{{ block.settings.title }}</p>
+          </div>
+          <p class="elevate-lp-inspection__card-desc">{{ block.settings.description }}</p>
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} ── CTA Row ── {%- endcomment -%}
+    {%- if section.settings.secondary_label != blank or section.settings.primary_label != blank -%}
+      <div class="elevate-lp-inspection__cta-row">
+        {%- if section.settings.secondary_label != blank -%}
+          <a href="{{ section.settings.secondary_url }}" class="elevate-lp-inspection__btn elevate-lp-inspection__btn--secondary">
+            {{ section.settings.secondary_label }}
+          </a>
+        {%- endif -%}
+
+        {%- if section.settings.primary_label != blank -%}
+          <a href="{{ section.settings.primary_url }}" class="elevate-lp-inspection__btn elevate-lp-inspection__btn--primary">
+            <span>{{ section.settings.primary_label }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── LP 6-Point Inspection ─── */
+  .elevate-lp-inspection {
+    padding-block: var(--insp-pt) var(--insp-pb);
+  }
+
+  .elevate-lp-inspection__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    max-width: 80rem;
+    margin-inline: auto;
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Header ── */
+  .elevate-lp-inspection__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-lp-inspection__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.045rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-lp-inspection__title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.1;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-lp-inspection__title span {
+    color: #E31E24;
+  }
+
+  /* ── Card Grid ── */
+  .elevate-lp-inspection__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-lp-inspection__card {
+    position: relative;
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .elevate-lp-inspection__card-top {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .elevate-lp-inspection__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    min-width: 2rem;
+    background: #E31E24;
+    border-radius: 1rem;
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1;
+    color: #FDFCFC;
+  }
+
+  .elevate-lp-inspection__card-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-lp-inspection__card-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  /* ── Arrow connectors (mobile — vertical, between cards) ── */
+  .elevate-lp-inspection__card + .elevate-lp-inspection__card::before {
+    content: '';
+    position: absolute;
+    top: -0.5rem;
+    right: 1.5rem;
+    transform: translateY(-50%);
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #141517;
+    border: 0.25rem solid #FDFCFC;
+    border-radius: 50%;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 4.25a.75.75 0 0 1 .75.75v14.19l4.72-4.72a.75.75 0 1 1 1.06 1.06l-6 6a.75.75 0 0 1-1.06 0l-6-6a.75.75 0 1 1 1.06-1.06l4.72 4.72V5a.75.75 0 0 1 .75-.75Z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 1rem;
+    z-index: 1;
+  }
+
+  /* ── CTA Row ── */
+  .elevate-lp-inspection__cta-row {
+    display: none;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+    max-width: 36.5rem;
+    margin-inline: auto;
+  }
+
+  .elevate-lp-inspection__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.875rem 1.75rem;
+    border-radius: 624.9375rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    text-decoration: none;
+    cursor: pointer;
+    transition:
+      background 0.2s ease-in-out,
+      border-color 0.2s ease-in-out,
+      opacity 0.2s ease-in-out;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+
+  .elevate-lp-inspection__btn:focus-visible {
+    outline: 0.125rem solid #36393F;
+    outline-offset: 0.125rem;
+  }
+
+  .elevate-lp-inspection__btn--secondary {
+    background: transparent;
+    color: #36393F;
+    border: 0.0625rem solid rgba(54, 57, 63, 0.3);
+  }
+
+  .elevate-lp-inspection__btn--secondary:hover {
+    border-color: #36393F;
+  }
+
+  .elevate-lp-inspection__btn--primary {
+    background: #E31E24;
+    color: #FDFCFC;
+    border: none;
+    gap: 0.5rem;
+  }
+
+  .elevate-lp-inspection__btn--primary svg {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .elevate-lp-inspection__btn--primary:hover {
+    background: #c8191e;
+  }
+
+  /* ── Desktop (990px+) ── */
+  @media (min-width: 61.9375rem) {
+    .elevate-lp-inspection__inner {
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-lp-inspection__title {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-lp-inspection__grid {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      gap: 1.5rem;
+    }
+
+    .elevate-lp-inspection__card {
+      flex: 0 0 calc((100% - 3rem) / 3);
+      min-width: 0;
+    }
+
+    /* Desktop: hide mobile down-arrows, show horizontal arrows between cards in same row */
+    .elevate-lp-inspection__card + .elevate-lp-inspection__card::before {
+      display: none;
+    }
+
+    .elevate-lp-inspection__card:nth-child(n+2):not(:nth-child(3n+1))::before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: -0.75rem;
+      transform: translate(-50%, -50%);
+      width: 2rem;
+      height: 2rem;
+      background: #141517;
+      border: 0.25rem solid #FDFCFC;
+      border-radius: 50%;
+      box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08);
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M13.47 5.47a.75.75 0 0 1 1.06 0l6 6a.75.75 0 0 1 0 1.06l-6 6a.75.75 0 1 1-1.06-1.06l4.72-4.72H4a.75.75 0 0 1 0-1.5h14.19l-4.72-4.72a.75.75 0 0 1 0-1.06Z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 0.875rem;
+      z-index: 1;
+    }
+
+    .elevate-lp-inspection__cta-row {
+      display: flex;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "LP — 6-Point Inspection",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "HOW WE CERTIFY"
+    },
+    {
+      "type": "richtext",
+      "id": "title",
+      "label": "Title",
+      "default": "<p>6-point inspection. <span>Nothing hidden.</span></p>"
+    },
+    {
+      "type": "header",
+      "content": "CTAs"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Secondary button label",
+      "default": "Learn About CPO"
+    },
+    {
+      "type": "url",
+      "id": "secondary_url",
+      "label": "Secondary button URL"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Primary button label",
+      "default": "Shop Certified Bikes"
+    },
+    {
+      "type": "url",
+      "id": "primary_url",
+      "label": "Primary button URL"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Step number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Step title"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Step description goes here."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LP — 6-Point Inspection",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "title": "Intake & Identity Check",
+            "description": "Serial number logged. Frame matched to original spec sheet. Stolen-bike databases checked."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "title": "Frame & Fork Inspection",
+            "description": "Checked for cracks, dents, and alignment issues under studio lighting. Carbon frames UV-inspected."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "title": "Drivetrain Assessment",
+            "description": "Chain wear measured, cassette and chainring teeth checked, derailleur hanger alignment verified."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "number": "04",
+            "title": "Brake & Safety Systems",
+            "description": "Brake pad thickness, rotor trueness, and hydraulic line integrity tested under load."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "number": "05",
+            "title": "Wheel & Bearing Check",
+            "description": "Spoke tension gauged. Hubs, headset, and bottom bracket bearings tested for play and noise."
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "number": "06",
+            "title": "Final Grade & Documentation",
+            "description": "Condition grade assigned. Mechanic's Notes written. High-res photos shot. Listing goes live."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
