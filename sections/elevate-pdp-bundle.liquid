@@ -302,22 +302,26 @@
         });
     }
 
-    /* ── Add one or more items to cart (sequentially) then open drawer ── */
+    /* ── Add one or more items to cart (atomic batch) then open drawer ── */
     function addToCart(items, btn) {
       btn.disabled = true;
       btn.setAttribute('aria-busy', 'true');
 
-      var chain = Promise.resolve();
-      items.forEach(function (item, i) {
-        var isLast = i === items.length - 1;
-        chain = chain.then(function () {
-          return postCartAdd(item, isLast);
-        });
-      });
+      var payload = {
+        items: items.map(function (item) { return { id: item.id, quantity: item.quantity }; })
+      };
+      var sectionIds = getCartSectionIds();
+      if (sectionIds.length) payload.sections = sectionIds.join(',');
 
-      chain
-        .then(function (lastResponse) {
-          morphCartSections(lastResponse && lastResponse.sections);
+      fetch(Theme.routes.cart_add_url, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function (res) { return res.json(); })
+        .then(function (data) {
+          if (data.status && data.status !== 200) throw new Error(data.message || 'Add to cart failed');
+          morphCartSections(data && data.sections);
           openCartDrawer();
         })
         .catch(function (err) {

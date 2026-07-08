@@ -55,7 +55,13 @@
         {%- endif -%}
 
         {%- assign upper_line = trimmed | upcase -%}
+        {%- assign is_header = false -%}
         {%- if upper_line == trimmed and trimmed contains ' ' or trimmed == upper_line and trimmed.size > 2 -%}
+          {%- unless trimmed contains ':' -%}
+            {%- assign is_header = true -%}
+          {%- endunless -%}
+        {%- endif -%}
+        {%- if is_header -%}
           {%- comment -%} ALL CAPS = group header {%- endcomment -%}
           {%- if current_group_open -%}
             </div></div>

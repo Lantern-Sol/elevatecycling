@@ -57,11 +57,11 @@
           {%- assign highlight_lines = highlights_raw | split: newline -%}
           {%- for line in highlight_lines -%}
             {%- assign trimmed = line | strip -%}
-            {%- if trimmed != blank -%}
+            {%- if trimmed != blank and trimmed contains ':' -%}
               {%- assign kv = trimmed | split: ':' -%}
               {%- assign hl_label = kv[0] | strip -%}
               {%- assign hl_value = trimmed | split: ':' | last | strip -%}
-              {%- if hl_label != blank and hl_value != blank -%}
+              {%- if hl_label != blank and hl_value != blank and hl_label != hl_value -%}
                 <div class="elevate-mechanic__highlight">
                   <span class="elevate-mechanic__hl-label">{{ hl_label }}</span>
                   <span class="elevate-mechanic__hl-value">{{ hl_value }}</span>

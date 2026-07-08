@@ -1,7 +1,6 @@
 import { formatMoney } from '@theme/money-formatting';
 import { CartLinesUpdateEvent } from '@shopify/events';
 import { fetchConfig } from '@theme/utilities';
-import { sectionRenderer } from '@theme/section-renderer';
 
 const RECENTLY_VIEWED_KEY = 'viewedProducts';
 const MIN_RECENTLY_VIEWED = 3;
@@ -100,7 +99,7 @@ class CartDrawerRecs extends HTMLElement {
           price: Number(p.price || 0) * 100,
           available: p.available,
           variantId: p.variants?.[0]?.id,
-          handle: cleanUrl.split('/').pop() || '',
+          handle: (cleanUrl.split('/products/')[1] || '').split('/')[0] || '',
           tags: [],
         };
       });

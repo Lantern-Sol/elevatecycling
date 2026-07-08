@@ -203,7 +203,7 @@
 
             {%- if geo_label != blank and geo_val != blank -%}
               {%- assign letter = letters[letter_index] | default: '' -%}
-              <div class="elevate-geo-media__table-row{% if forloop.last %} elevate-geo-media__table-row--last{% endif %}">
+              <div class="elevate-geo-media__table-row">
                 <div class="elevate-geo-media__table-label">
                   {%- if letter != blank -%}
                     <span class="elevate-geo-media__table-badge">{{ letter }}</span>
@@ -212,9 +212,6 @@
                 </div>
                 <span class="elevate-geo-media__table-value">{{ geo_val }}{% if geo_unit != blank %} {{ geo_unit }}{% endif %}</span>
               </div>
-              {%- unless forloop.last -%}
-                <div class="elevate-geo-media__table-divider"></div>
-              {%- endunless -%}
               {%- assign letter_index = letter_index | plus: 1 -%}
             {%- endif -%}
           {%- endfor -%}
@@ -470,9 +467,11 @@
     align-items: center;
     justify-content: space-between;
     padding: 0.5rem;
+    border-bottom: 0.0625rem solid #AEB2B8;
   }
 
-  .elevate-geo-media__table-row--last {
+  .elevate-geo-media__table-row:last-child {
+    border-bottom: none;
     padding-bottom: 1rem;
   }
 
@@ -518,12 +517,6 @@
     color: #36393F;
     white-space: nowrap;
     flex-shrink: 0;
-  }
-
-  .elevate-geo-media__table-divider {
-    height: 0;
-    width: 100%;
-    border-top: 0.0625rem solid #AEB2B8;
   }
 
   /* ── Mechanic Callout ── */
