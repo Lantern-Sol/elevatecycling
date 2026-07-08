@@ -15,7 +15,7 @@
         "stat_bikes": {
           "type": "stat",
           "settings": {
-            "value": "3,500+",
+            "value": "5,500+",
             "label": "bikes bought"
           }
         },
@@ -29,7 +29,7 @@
         "stat_paid": {
           "type": "stat",
           "settings": {
-            "value": "$5.4M",
+            "value": "$8.5M+",
             "label": "paid out"
           }
         },
@@ -130,7 +130,7 @@
       ],
       "settings": {
         "label": "WHAT WE ACCEPT",
-        "heading": "We buy performance gear, not garage sales",
+        "heading": "We buy performance gear",
         "subtitle": "Road, gravel, and triathlon. Complete bikes, frames, wheels, groupsets, and components from major brands. If it's high-end and rideable, we want it.",
         "padding_top": 40,
         "padding_bottom": 72
