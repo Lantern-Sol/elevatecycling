@@ -1,0 +1,385 @@
+{%- comment -%}
+  Elevate Cycling — PDP Sidecar (top)
+  Renders above variant-picker + buy-buttons inside _product-details.
+  Receives: product (product object)
+{%- endcomment -%}
+
+{%- liquid
+  assign current_variant = product.selected_or_first_available_variant
+  assign sku = current_variant.sku
+  assign msrp_raw = product.metafields.custom.msrp.value
+  assign condition_rating = product.metafields.custom.condition_rating.value
+  assign mechanical_integrity = product.metafields.custom.mechanical_integrity.value
+  assign spec_level = product.metafields.custom.spec_level.value
+  assign size_fit = product.metafields.custom.size_fit.value
+  assign spec_summary = product.metafields.custom.spec_summary.value
+
+  comment
+    Badge detection from product tags
+  endcomment
+  assign has_new = false
+  assign has_new_arrival = false
+  assign has_cpo = false
+  assign has_clearance = false
+
+  for tag in product.tags
+    assign tag_lower = tag | downcase
+    if tag_lower == 'new'
+      assign has_new = true
+    elsif tag_lower == 'new arrival'
+      assign has_new_arrival = true
+    elsif tag_lower == 'cpo'
+      assign has_cpo = true
+    elsif tag_lower == 'clearance'
+      assign has_clearance = true
+    endif
+  endfor
+
+  assign has_any_badge = false
+  if has_new or has_new_arrival or has_cpo or has_clearance
+    assign has_any_badge = true
+  endif
+
+  comment
+    MSRP savings calculation
+  endcomment
+  assign has_msrp = false
+  assign savings_pct = 0
+  if msrp_raw != blank
+    assign msrp_cents = msrp_raw | times: 100 | round
+    assign price_cents = current_variant.price
+    if msrp_cents > price_cents
+      assign has_msrp = true
+      assign diff = msrp_cents | minus: price_cents
+      assign savings_pct = diff | times: 100 | divided_by: msrp_cents
+    endif
+  endif
+
+  comment
+    Grade derivation from condition_rating
+  endcomment
+  assign has_condition = false
+  assign grade_letter = ''
+  assign grade_label = ''
+  if condition_rating != blank
+    assign has_condition = true
+    assign cr_num = condition_rating | times: 1.0
+    if cr_num >= 9
+      assign grade_letter = 'A+'
+      assign grade_label = 'New'
+    elsif cr_num >= 8
+      assign grade_letter = 'A'
+      assign grade_label = 'Like New'
+    elsif cr_num >= 7
+      assign grade_letter = 'B+'
+      assign grade_label = 'Good'
+    elsif cr_num >= 6
+      assign grade_letter = 'B'
+      assign grade_label = 'Fair'
+    else
+      assign grade_letter = 'C'
+      assign grade_label = 'Poor'
+    endif
+  endif
+
+  comment
+    Spec level bar width
+  endcomment
+  assign spec_width = 0
+  if spec_level != blank
+    assign spec_lower = spec_level | downcase
+    if spec_lower == 'entry'
+      assign spec_width = 33
+    elsif spec_lower == 'medium'
+      assign spec_width = 66
+    elsif spec_lower == 'pro'
+      assign spec_width = 100
+    endif
+  endif
+
+  comment
+    Determine if stats section should show
+  endcomment
+  assign has_mechanical = false
+  if mechanical_integrity != blank
+    assign has_mechanical = true
+  endif
+  assign has_spec = false
+  if spec_level != blank
+    assign has_spec = true
+  endif
+  assign has_any_stat = false
+  if has_condition or has_mechanical or has_msrp or has_spec
+    assign has_any_stat = true
+  endif
+-%}
+
+{%- comment -%} ── A. Badges row + SKU ── {%- endcomment -%}
+{%- if has_any_badge or sku != blank -%}
+  <div class="elevate-sidecar__badges-row">
+    <div class="elevate-sidecar__badges">
+      {%- if has_new -%}
+        <span class="elevate-badge elevate-badge--new">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M15.168 6.27344L10.082 5.73633L8 1.06641L5.91797 5.73633L0.832031 6.27344L4.63086 9.69727L3.57031 14.6992L8 12.1445L12.4297 14.6992L11.3691 9.69727L15.168 6.27344Z" fill="currentColor"/></svg>
+          New
+        </span>
+      {%- endif -%}
+      {%- if has_new_arrival -%}
+        <span class="elevate-badge elevate-badge--new-arrival">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M11.1716 6.42926C11.3753 6.17962 11.3336 5.81643 11.0797 5.61689C10.8259 5.41734 10.4544 5.45825 10.2515 5.70706L7.48794 9.09681L6.01014 7.96133C5.88943 7.86308 5.73511 7.81586 5.58008 7.82974C5.42506 7.84362 5.28158 7.9175 5.18024 8.03563C5.13073 8.09357 5.09333 8.16084 5.07026 8.23348C5.04719 8.30611 5.03891 8.38263 5.04592 8.45852C5.05292 8.53441 5.07507 8.60812 5.11105 8.67531C5.14702 8.74249 5.1961 8.80178 5.25538 8.84968L7.19238 10.3609C7.3147 10.4604 7.47141 10.5074 7.62831 10.4918C7.7852 10.4761 7.92954 10.3991 8.0298 10.2774L11.1691 6.42008L11.1716 6.42926Z" fill="currentColor"/><path fill-rule="evenodd" clip-rule="evenodd" d="M6.75489 1.91573C7.20073 1.58844 7.42365 1.4248 7.66494 1.36134C7.88055 1.30664 8.10641 1.30664 8.32202 1.36134C8.56582 1.4248 8.78957 1.58844 9.23208 1.91573L9.79731 2.33068C9.95177 2.44423 10.0294 2.501 10.1129 2.54525C10.1875 2.58421 10.2651 2.6165 10.3459 2.6421C10.4369 2.66965 10.5312 2.68385 10.7207 2.71307L11.4137 2.8191C11.9606 2.90259 12.2336 2.94517 12.449 3.07292C12.641 3.18563 12.8013 3.34593 12.914 3.53796C13.0418 3.75504 13.0835 4.02889 13.1679 4.57326L13.2739 5.26624C13.3031 5.45576 13.3173 5.55094 13.3449 5.64195C13.3699 5.72266 13.4022 5.80002 13.4417 5.87405C13.4868 5.95754 13.5427 6.03519 13.6563 6.18965L14.0712 6.75489C14.3985 7.20073 14.5622 7.42365 14.6256 7.66494C14.6803 7.88055 14.6803 8.10641 14.6256 8.32202C14.563 8.56582 14.3985 8.78957 14.0712 9.23208L13.6563 9.79731C13.5768 9.8969 13.5051 10.0024 13.4417 10.1129C13.4021 10.1876 13.3697 10.2659 13.3449 10.3467C13.3173 10.4369 13.3031 10.5312 13.2739 10.7207L13.1679 11.4137C13.0844 11.9606 13.0418 12.2336 12.914 12.449C12.8013 12.641 12.641 12.8013 12.449 12.914C12.2319 13.0418 11.9581 13.0835 11.4137 13.1679L10.7207 13.2739C10.5941 13.2883 10.4688 13.3123 10.3459 13.3457C10.2651 13.3702 10.1875 13.4025 10.1129 13.4425C10.0294 13.4868 9.95177 13.5427 9.79731 13.6571L9.23208 14.0721C8.78623 14.3994 8.56331 14.563 8.32202 14.6265C8.10641 14.6812 7.88055 14.6812 7.66494 14.6265C7.42115 14.563 7.19739 14.3994 6.75489 14.0721L6.18965 13.6571C6.09006 13.5777 5.98456 13.5059 5.87405 13.4425C5.79964 13.403 5.72164 13.3706 5.64111 13.3457C5.51816 13.3123 5.39284 13.2883 5.26624 13.2739L4.57326 13.1679C4.02639 13.0844 3.75254 13.0426 3.53796 12.914C3.34662 12.8002 3.18675 12.6403 3.07292 12.449C2.94517 12.2319 2.90343 11.9581 2.8191 11.4137L2.71307 10.7207C2.68385 10.5312 2.66965 10.4369 2.6421 10.3459C2.61774 10.2651 2.58529 10.1871 2.54525 10.1129C2.48186 10.0024 2.41012 9.8969 2.33068 9.79731L1.91573 9.23208C1.58844 8.78623 1.4248 8.56415 1.36134 8.32202C1.30664 8.10641 1.30664 7.88055 1.36134 7.66494C1.42396 7.42115 1.58844 7.19739 1.91573 6.75489L2.33068 6.18965C2.44423 6.03519 2.501 5.95754 2.54525 5.87405C2.58421 5.80002 2.6165 5.72238 2.6421 5.64111C2.66965 5.55011 2.68385 5.45576 2.71307 5.26624L2.8191 4.57326C2.90259 4.02639 2.94517 3.75254 3.07292 3.53796C3.18563 3.34593 3.34593 3.1873 3.53796 3.07292C3.75504 2.94517 4.02889 2.90343 4.57326 2.8191L5.26624 2.71307C5.45576 2.68468 5.55094 2.66965 5.64111 2.6421C5.72182 2.61705 5.79947 2.58477 5.87405 2.54525C5.95754 2.501 6.03519 2.44423 6.18965 2.33068L6.75489 1.91573ZM8.74198 2.58867L9.33561 3.02449C9.46168 3.11717 9.58608 3.20901 9.72468 3.28248C9.84713 3.3476 9.97404 3.4002 10.1054 3.44028C10.2556 3.4818 10.4084 3.51277 10.5629 3.53295L11.291 3.64483C11.9096 3.74001 11.9865 3.76589 12.0315 3.79261C12.1022 3.83491 12.1585 3.89113 12.2002 3.96126C12.2269 4.00635 12.2536 4.08316 12.348 4.70183L12.4599 5.42988C12.48 5.58436 12.511 5.73725 12.5525 5.88741C12.5932 6.01988 12.6458 6.14679 12.7103 6.26813C12.7838 6.40673 12.8756 6.53113 12.9683 6.6572L13.4041 7.25083C13.7748 7.75511 13.8099 7.82775 13.8233 7.87952C13.8425 7.95795 13.8425 8.03987 13.8233 8.1183C13.8099 8.16923 13.7748 8.24187 13.4041 8.74699L12.9683 9.34062C12.8756 9.46669 12.7838 9.59109 12.7103 9.72969C12.6458 9.8513 12.5929 9.97878 12.5525 10.1104C12.511 10.2606 12.48 10.4135 12.4599 10.5679L12.348 11.296C12.2528 11.9147 12.2269 11.9915 12.2002 12.0366C12.1584 12.1055 12.1005 12.1634 12.0315 12.2052C11.9865 12.2319 11.9096 12.2586 11.291 12.353L10.5629 12.4649C10.4084 12.485 10.2556 12.516 10.1054 12.5575C9.97377 12.5979 9.84629 12.6508 9.72468 12.7153C9.58608 12.7888 9.46168 12.8807 9.33561 12.9733L8.74198 13.4092C8.2377 13.7799 8.16506 13.8149 8.11329 13.8283C8.03486 13.8475 7.95294 13.8475 7.87451 13.8283C7.82358 13.8149 7.75094 13.7799 7.24582 13.4092L6.65219 12.9733C6.52868 12.8784 6.39867 12.7922 6.26312 12.7153C6.14151 12.6508 6.01403 12.5979 5.8824 12.5575C5.73224 12.516 5.57936 12.485 5.42487 12.4649L4.69682 12.353C4.07815 12.2578 4.00134 12.2319 3.95626 12.2052C3.88728 12.1634 3.82942 12.1055 3.7876 12.0366C3.76089 11.9915 3.73417 11.9147 3.63982 11.296L3.52794 10.5679C3.50776 10.4135 3.4768 10.2606 3.43527 10.1104C3.39486 9.97878 3.34203 9.8513 3.27747 9.72969C3.204 9.59109 3.11216 9.46669 3.01948 9.34062L2.58366 8.74699C2.21295 8.2427 2.17789 8.17007 2.16453 8.1183C2.14528 8.03987 2.14528 7.95795 2.16453 7.87952C2.17789 7.82859 2.21295 7.75595 2.58366 7.25083L3.01948 6.6572C3.11216 6.53113 3.204 6.40673 3.27747 6.26813C3.34204 6.14568 3.39464 6.01877 3.43527 5.88741C3.4768 5.73725 3.50776 5.58436 3.52794 5.42988L3.63982 4.70183C3.735 4.08316 3.76089 4.00635 3.7876 3.96126C3.82942 3.89229 3.88728 3.83443 3.95626 3.79261C4.00134 3.76589 4.07815 3.73918 4.69682 3.64483L5.42487 3.53295C5.57936 3.51277 5.73224 3.4818 5.8824 3.44028C6.01488 3.39965 6.14178 3.34705 6.26312 3.28248C6.40172 3.20901 6.52612 3.11717 6.65219 3.02449L7.24582 2.58867C7.75011 2.21796 7.82274 2.1829 7.87451 2.16954C7.95294 2.15029 8.03486 2.15029 8.11329 2.16954C8.16422 2.1829 8.23686 2.21796 8.74198 2.58867Z" fill="currentColor"/></svg>
+          New Arrival
+        </span>
+      {%- endif -%}
+      {%- if has_cpo -%}
+        <span class="elevate-badge elevate-badge--cpo">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6.20312 0L6.04688 0.140625L0.34375 5.90625L0 6.25L0.34375 6.60938L5.09375 11.3594L5.45312 11.7031L5.79688 11.3594L11.5625 5.65625L11.7031 5.5V0H6.20312ZM6.625 1H10.7031V5.07812L5.45312 10.2969L1.40625 6.25L6.625 1ZM9.20312 2C8.92773 2 8.70312 2.22461 8.70312 2.5C8.70312 2.77539 8.92773 3 9.20312 3C9.47852 3 9.70312 2.77539 9.70312 2.5C9.70312 2.22461 9.47852 2 9.20312 2Z" fill="currentColor"/></svg>
+          Pre-owned
+        </span>
+      {%- endif -%}
+      {%- if has_clearance -%}
+        <span class="elevate-badge elevate-badge--clearance">
+          <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true"><path d="M6.20312 0L6.04688 0.140625L0.34375 5.90625L0 6.25L0.34375 6.60938L5.09375 11.3594L5.45312 11.7031L5.79688 11.3594L11.5625 5.65625L11.7031 5.5V0H6.20312ZM6.625 1H10.7031V5.07812L5.45312 10.2969L1.40625 6.25L6.625 1ZM9.20312 2C8.92773 2 8.70312 2.22461 8.70312 2.5C8.70312 2.77539 8.92773 3 9.20312 3C9.47852 3 9.70312 2.77539 9.70312 2.5C9.70312 2.22461 9.47852 2 9.20312 2Z" fill="currentColor"/></svg>
+          Clearance
+        </span>
+      {%- endif -%}
+    </div>
+    {%- if sku != blank -%}
+      <span class="elevate-sidecar__sku">SKU: {{ sku }}</span>
+    {%- endif -%}
+  </div>
+{%- endif -%}
+
+{%- comment -%} ── B. Product title ── {%- endcomment -%}
+<h1 class="elevate-sidecar__title">{{ product.title }}</h1>
+
+{%- comment -%} ── C. eBay stars row ── {%- endcomment -%}
+<div class="elevate-sidecar__stars">
+  <span class="elevate-sidecar__stars-icons" aria-hidden="true">&#9733;&#9733;&#9733;&#9733;&#9733;</span>
+  <span class="elevate-sidecar__stars-pct">99.8%</span>
+  <span class="elevate-sidecar__stars-text">Positive feedback on ebay</span>
+</div>
+
+{%- comment -%} ── D. Price + MSRP ── {%- endcomment -%}
+<div class="elevate-sidecar__price-block">
+  <span class="elevate-sidecar__price">
+    {{ current_variant.price | money_without_trailing_zeros }}
+  </span>
+  {%- if current_variant.compare_at_price > current_variant.price -%}
+    <div class="elevate-sidecar__compare-row">
+      <span class="elevate-sidecar__compare-at">
+        {{ current_variant.compare_at_price | money_without_trailing_zeros }}
+      </span>
+      {%- assign discount_diff = current_variant.compare_at_price | minus: current_variant.price -%}
+      {%- assign discount_pct = discount_diff | times: 100 | divided_by: current_variant.compare_at_price -%}
+      <span class="elevate-sidecar__discount-badge">{{ discount_pct }}% OFF</span>
+    </div>
+  {%- endif -%}
+  {%- if has_msrp -%}
+    <div class="elevate-sidecar__msrp">
+      <span class="elevate-sidecar__msrp-label">
+        Retail Price: ~{{ msrp_cents | money_without_trailing_zeros }}
+      </span>
+      <span class="elevate-sidecar__savings-badge">
+        Save ~{{ savings_pct }}% off retail
+      </span>
+    </div>
+  {%- endif -%}
+</div>
+
+{%- comment -%} ── E. General Stats ── {%- endcomment -%}
+{%- if has_any_stat -%}
+  <div class="elevate-stats">
+    <div class="elevate-stats__header">
+      <span class="elevate-stats__heading">General Stats</span>
+      {%- if has_condition -%}
+        <span class="elevate-grade">
+          <span class="elevate-grade__text">Grade {{ grade_letter }} &mdash; {{ grade_label }}</span>
+          <span class="elevate-grade__pill">{{ grade_letter }}</span>
+        </span>
+      {%- endif -%}
+    </div>
+
+    <div class="elevate-stats__grid">
+      {%- comment -%} Condition ── {%- endcomment -%}
+      {%- if has_condition -%}
+        {%- assign condition_width = condition_rating | times: 10 | round -%}
+        <div class="elevate-stat">
+          <div class="elevate-stat__row">
+            <svg class="elevate-stat__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2C6.875 2 6.11719 2.44336 5.4375 2.8125C4.75781 3.18164 4.14062 3.5 3 3.5H2.5V4C2.5 7.85938 3.80469 10.3711 5.125 11.8906C6.44531 13.4102 7.8125 13.9688 7.8125 13.9688L8 14.0312L8.1875 13.9688C8.1875 13.9688 9.55469 13.4219 10.875 11.9062C12.1953 10.3906 13.5 7.87305 13.5 4V3.5H13C11.8652 3.5 11.2422 3.18164 10.5625 2.8125C9.88281 2.44336 9.125 2 8 2ZM8 3C8.875 3 9.37695 3.30664 10.0781 3.6875C10.6699 4.00977 11.4551 4.31836 12.4688 4.42188C12.373 7.80469 11.2539 9.95508 10.125 11.25C9.10156 12.4238 8.24219 12.8145 8 12.9219C7.75586 12.8125 6.89844 12.4121 5.875 11.2344C4.74609 9.93555 3.62695 7.78906 3.53125 4.42188C4.54883 4.31836 5.33008 4.00977 5.92188 3.6875C6.62305 3.30664 7.125 3 8 3Z" fill="#141517"/></svg>
+            <span class="elevate-stat__label">Condition</span>
+            <span class="elevate-stat__value elevate-stat__value--green">{{ condition_rating }}/10</span>
+          </div>
+          <div class="elevate-stat__bar">
+            <div class="elevate-stat__fill" style="width: {{ condition_width }}%"></div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Mechanical integrity ── {%- endcomment -%}
+      {%- if has_mechanical -%}
+        {%- assign mech_width = mechanical_integrity | times: 10 | round -%}
+        <div class="elevate-stat">
+          <div class="elevate-stat__row">
+            <svg class="elevate-stat__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M2.625 1.375L2.34375 1.64062L1.64062 2.34375L1.375 2.625L1.57812 2.95312L2.625 4.70312L2.76562 4.95312H4.23438L6.23438 6.9375C4.44727 8.73242 2.17383 11.0137 2.09375 11.0937C1.31055 11.877 1.30859 13.1602 2.10938 13.9062C2.89062 14.6777 4.16406 14.6973 4.90625 13.9062C4.91211 13.9004 4.91602 13.8965 4.92188 13.8906L8 10.7969L11.0938 13.9062L11.1406 13.9375C11.9258 14.6777 13.1738 14.6875 13.9062 13.9062V13.8906H13.9219C14.6875 13.1074 14.6953 11.834 13.9062 11.0937L13.8906 11.0781L11.2812 8.48437C13.0371 8.32031 14.4121 6.83789 14.4375 5.04687H14.4531C14.4551 5.03711 14.4531 5.02539 14.4531 5.01562C14.4531 5.00977 14.4531 5.00586 14.4531 5C14.502 4.42187 14.377 3.86914 14.0781 3.39062L13.7344 2.85937L11.4062 5.1875L10.7031 4.45312L13.0781 2.07812L12.3906 1.79687C11.9883 1.625 11.5234 1.5 11 1.5C9.07812 1.5 7.5 3.07812 7.5 5C7.5 5.20898 7.54492 5.39062 7.57812 5.57812C7.35938 5.79687 7.19531 5.97656 6.9375 6.23437L4.95312 4.25V2.76562L4.70312 2.625L2.95312 1.57812L2.625 1.375ZM11 2.5C11.0703 2.5 11.1191 2.54102 11.1875 2.54687L9.29688 4.4375L9.64062 4.79687L11.0469 6.25L11.3906 6.60937L13.375 4.625C13.3848 4.74023 13.4668 4.82422 13.4531 4.95312V5C13.4531 6.37695 12.3301 7.5 10.9531 7.5C10.7695 7.5 10.5469 7.45703 10.2969 7.40625L10.0312 7.35937L9.84375 7.54687L4.20312 13.2031H4.1875V13.2187C3.83203 13.6074 3.21094 13.6172 2.79688 13.2031V13.1875H2.78125C2.39258 12.832 2.38281 12.2109 2.79688 11.7969C2.98633 11.6074 6.65625 7.90625 8.45312 6.10937L8.65625 5.90625L8.57812 5.625C8.53711 5.46289 8.5 5.18359 8.5 5C8.5 3.62305 9.62305 2.5 11 2.5ZM2.78125 2.625L3.95312 3.34375V3.84375L3.84375 3.95312H3.34375L2.625 2.78125L2.78125 2.625ZM10.0938 8.70312L13.2031 11.7969V11.8125H13.2188C13.6074 12.168 13.6172 12.7891 13.2031 13.2031H13.1875V13.2187C12.832 13.6074 12.2109 13.6172 11.7969 13.2031L8.70312 10.0937L10.0938 8.70312Z" fill="#141517"/></svg>
+            <span class="elevate-stat__label">Mechanical integrity</span>
+            <span class="elevate-stat__value elevate-stat__value--green">{{ mechanical_integrity }}/10</span>
+          </div>
+          <div class="elevate-stat__bar">
+            <div class="elevate-stat__fill" style="width: {{ mech_width }}%"></div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Value vs. retail ── {%- endcomment -%}
+      {%- if has_msrp -%}
+        <div class="elevate-stat">
+          <div class="elevate-stat__row">
+            <svg class="elevate-stat__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 2.5L7.84375 2.64062L2.14062 8.40625L1.79688 8.75L2.14062 9.10938L6.89062 13.8594L7.25 14.2031L7.59375 13.8594L13.3594 8.15625L13.5 8V2.5H8ZM8.42188 3.5H12.5V7.57812L7.25 12.7969L3.20312 8.75L8.42188 3.5ZM11 4.5C10.7246 4.5 10.5 4.72461 10.5 5C10.5 5.27539 10.7246 5.5 11 5.5C11.2754 5.5 11.5 5.27539 11.5 5C11.5 4.72461 11.2754 4.5 11 4.5Z" fill="#141517"/></svg>
+            <span class="elevate-stat__label">Value vs. retail</span>
+            <span class="elevate-stat__value elevate-stat__value--green">{{ savings_pct }}% Less</span>
+          </div>
+          <div class="elevate-stat__bar">
+            <div class="elevate-stat__fill" style="width: {{ savings_pct }}%"></div>
+          </div>
+        </div>
+      {%- endif -%}
+
+      {%- comment -%} Spec level ── {%- endcomment -%}
+      {%- if has_spec -%}
+        <div class="elevate-stat">
+          <div class="elevate-stat__row">
+            <svg class="elevate-stat__icon" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M8 3C4.69141 3 2 5.69141 2 9C2 10.4473 2.51758 11.7754 3.375 12.8125L3.51562 13H12.4844L12.625 12.8125C13.4824 11.7754 14 10.4473 14 9C14 5.69141 11.3086 3 8 3ZM8 4C10.7676 4 13 6.23242 13 9C13 10.1328 12.6035 11.1621 11.9688 12H4.03125C3.39648 11.1621 3 10.1328 3 9C3 6.23242 5.23242 4 8 4ZM8 4.5C7.72461 4.5 7.5 4.72461 7.5 5C7.5 5.27539 7.72461 5.5 8 5.5C8.27539 5.5 8.5 5.27539 8.5 5C8.5 4.72461 8.27539 4.5 8 4.5ZM6 5.03125C5.72461 5.03125 5.5 5.25586 5.5 5.53125C5.5 5.80664 5.72461 6.03125 6 6.03125C6.27539 6.03125 6.5 5.80664 6.5 5.53125C6.5 5.25586 6.27539 5.03125 6 5.03125ZM10 5.03125C9.72461 5.03125 9.5 5.25586 9.5 5.53125C9.5 5.80664 9.72461 6.03125 10 6.03125C10.2754 6.03125 10.5 5.80664 10.5 5.53125C10.5 5.25586 10.2754 5.03125 10 5.03125ZM4.53125 6.5C4.25586 6.5 4.03125 6.72461 4.03125 7C4.03125 7.27539 4.25586 7.5 4.53125 7.5C4.80664 7.5 5.03125 7.27539 5.03125 7C5.03125 6.72461 4.80664 6.5 4.53125 6.5ZM11.3281 6.51562L8.5 8.14062C8.35352 8.05469 8.18164 8 8 8C7.44727 8 7 8.44727 7 9C7 9.55273 7.44727 10 8 10C8.54688 10 8.99219 9.56055 9 9.01562C9 9.00977 9 9.00586 9 9L11.8281 7.39062L11.3281 6.51562ZM4 8.5C3.72461 8.5 3.5 8.72461 3.5 9C3.5 9.27539 3.72461 9.5 4 9.5C4.27539 9.5 4.5 9.27539 4.5 9C4.5 8.72461 4.27539 8.5 4 8.5ZM12 8.5C11.7246 8.5 11.5 8.72461 11.5 9C11.5 9.27539 11.7246 9.5 12 9.5C12.2754 9.5 12.5 9.27539 12.5 9C12.5 8.72461 12.2754 8.5 12 8.5ZM4.53125 10.5C4.25586 10.5 4.03125 10.7246 4.03125 11C4.03125 11.2754 4.25586 11.5 4.53125 11.5C4.80664 11.5 5.03125 11.2754 5.03125 11C5.03125 10.7246 4.80664 10.5 4.53125 10.5ZM11.4688 10.5C11.1934 10.5 10.9688 10.7246 10.9688 11C10.9688 11.2754 11.1934 11.5 11.4688 11.5C11.7441 11.5 11.9688 11.2754 11.9688 11C11.9688 10.7246 11.7441 10.5 11.4688 10.5Z" fill="#141517"/></svg>
+            <span class="elevate-stat__label">Spec Level</span>
+            <span class="elevate-stat__value">{{ spec_level }}</span>
+          </div>
+          <div class="elevate-stat__bar">
+            <div class="elevate-stat__fill" style="width: {{ spec_width }}%"></div>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+{%- comment -%} ── F. Size / fit card (bikes) OR spec summary card (components) ── {%- endcomment -%}
+{%- if spec_summary != blank -%}
+  {%- comment -%} Inline spec summary for components (groupsets, etc.) {%- endcomment -%}
+  <div class="elevate-spec-summary">
+    <svg class="elevate-spec-summary__icon" width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <path d="M16 3C8.832 3 3 8.832 3 16s5.832 13 13 13 13-5.832 13-13S23.168 3 16 3zm0 2c6.087 0 11 4.913 11 11s-4.913 11-11 11S5 22.087 5 16 9.913 5 16 5zm-1 5v2h2v-2h-2zm0 4v8h2v-8h-2z" fill="#36393F"/>
+    </svg>
+    <div class="elevate-spec-summary__text">
+      {%- assign spec_lines = spec_summary | newline_to_br | split: '<br />' -%}
+      {%- for line in spec_lines -%}
+        {%- assign trimmed = line | strip -%}
+        {%- if trimmed != blank -%}
+          <p class="elevate-spec-summary__line">{{ trimmed }}</p>
+        {%- endif -%}
+      {%- endfor -%}
+    </div>
+  </div>
+{%- elsif size_fit != blank or size_fit == blank -%}
+  {%- comment -%} Size / fit card + popup for bikes {%- endcomment -%}
+  <script src="{{ 'dialog.js' | asset_url }}" type="module"></script>
+  <dialog-component class="elevate-size-dialog">
+    <div class="elevate-size-card">
+      <svg class="elevate-size-card__icon" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <path d="M19.5 5C17.5781 5 16 6.57812 16 8.5C16 10.4219 17.5781 12 19.5 12C21.4219 12 23 10.4219 23 8.5C23 6.57812 21.4219 5 19.5 5ZM19.5 7C20.3398 7 21 7.66016 21 8.5C21 9.33984 20.3398 10 19.5 10C18.6602 10 18 9.33984 18 8.5C18 7.66016 18.6602 7 19.5 7ZM15.0938 10.5312C14.5859 10.582 14.0938 10.832 13.75 11.25L11.4062 14.0938C10.5977 15.0781 10.9492 16.6328 12.0938 17.1875L15.5312 18.875L14.625 23.875L16.5938 24.2188L17.6562 18.4688L17.7812 17.7188L17.0938 17.375L12.9375 15.375L15.3125 12.5L19.375 15.7812L19.6562 16H25V14H20.3438L16.5625 10.9688C16.1406 10.6289 15.6016 10.4805 15.0938 10.5312ZM8.5 18C6.03125 18 4 20.0312 4 22.5C4 24.9688 6.03125 27 8.5 27C10.9688 27 13 24.9688 13 22.5C13 20.0312 10.9688 18 8.5 18ZM23.5 18C21.0312 18 19 20.0312 19 22.5C19 24.9688 21.0312 27 23.5 27C25.9688 27 28 24.9688 28 22.5C28 20.0312 25.9688 18 23.5 18ZM8.5 20C9.87891 20 11 21.1211 11 22.5C11 23.8789 9.87891 25 8.5 25C7.12109 25 6 23.8789 6 22.5C6 21.1211 7.12109 20 8.5 20ZM23.5 20C24.8789 20 26 21.1211 26 22.5C26 23.8789 24.8789 25 23.5 25C22.1211 25 21 23.8789 21 22.5C21 21.1211 22.1211 20 23.5 20Z" fill="#36393F"/>
+      </svg>
+      <div class="elevate-size-card__text">
+        <span class="elevate-size-card__fit">
+          {%- if size_fit != blank -%}Fits riders {{ size_fit }}{%- else -%}Frame Size Reference Guide{%- endif -%}
+        </span>
+        <button type="button" on:click="/showDialog" class="elevate-size-card__link elevate-size-card__trigger">Check our <span class="elevate-size-card__underline">Frame Size Reference</span></button>
+      </div>
+    </div>
+
+    {%- comment -%} Size reference popup modal {%- endcomment -%}
+    <dialog
+      ref="dialog"
+      class="elevate-size-popup dialog-modal"
+      scroll-lock
+      aria-labelledby="elevate-size-popup-heading"
+    >
+      {%- comment -%} Header bar {%- endcomment -%}
+      <div class="elevate-size-popup__header">
+        <h2 id="elevate-size-popup-heading" class="elevate-size-popup__title">Frame Size Reference Guide</h2>
+        <button
+          ref="closeButton"
+          on:click="/closeDialog"
+          type="button"
+          class="elevate-size-popup__close"
+          aria-label="Close"
+        >
+          <svg width="32" height="32" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32C7.16344 32 0 24.8366 0 16Z" fill="#E2E3E5"/>
+            <path d="M10 10L22 22M22 10L10 22" stroke="#555860" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+
+      {%- comment -%} Body {%- endcomment -%}
+      <div class="elevate-size-popup__body">
+        <p class="elevate-size-popup__intro">
+          Heights are a starting point. A &ldquo;Large&rdquo; Trek and a &ldquo;Large&rdquo; Specialized are not the same bike &mdash; <strong>Every item listed has their exact geometry.</strong>
+        </p>
+        <p class="elevate-size-popup__intro">
+          Saddle height, cleat position, and stem length all move. If the frame is right, the fit follows.
+        </p>
+
+        {%- comment -%} Disclaimer {%- endcomment -%}
+        <div class="elevate-size-popup__disclaimer">
+          <svg class="elevate-size-popup__info-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <circle cx="10" cy="10" r="9" stroke="currentColor" stroke-width="1.5"/>
+            <path d="M10 9v5M10 6.5v.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <p class="elevate-size-popup__disclaimer-text">
+            General starting point only &mdash; not a fit guarantee. Each listing has exact geometry. Confirm sizing there before you buy.
+          </p>
+        </div>
+
+        {%- comment -%} Divider {%- endcomment -%}
+        <hr class="elevate-size-popup__divider">
+
+        {%- comment -%} Size table {%- endcomment -%}
+        <div class="elevate-size-popup__table-wrap">
+          <div class="elevate-size-popup__table-header">
+            <span>Size</span>
+            <span>Frame</span>
+            <span>Rider Height</span>
+          </div>
+          <div class="elevate-size-popup__table-row">
+            <span>XS</span>
+            <span>13 in / 33 cm</span>
+            <span>4&rsquo;10&Prime; &ndash; 5&rsquo;2&Prime;</span>
+          </div>
+          <div class="elevate-size-popup__table-row">
+            <span>S</span>
+            <span>15 in / 38 cm</span>
+            <span>5&rsquo;2&Prime; &ndash; 5&rsquo;6&Prime;</span>
+          </div>
+          <div class="elevate-size-popup__table-row">
+            <span>M</span>
+            <span>17 in / 43 cm</span>
+            <span>5&rsquo;6&Prime; &ndash; 5&rsquo;10&Prime;</span>
+          </div>
+          <div class="elevate-size-popup__table-row">
+            <span>L</span>
+            <span>19 in / 48 cm</span>
+            <span>5&rsquo;10&Prime; &ndash; 6&rsquo;2&Prime;</span>
+          </div>
+          <div class="elevate-size-popup__table-row">
+            <span>XL</span>
+            <span>21 in / 53 cm</span>
+            <span>6&rsquo;2&Prime; &ndash; 6&rsquo;5&Prime;</span>
+          </div>
+        </div>
+
+        {%- comment -%} CTA {%- endcomment -%}
+        <p class="elevate-size-popup__cta">
+          Unsure about a specific listing? <a href="/pages/ask-a-mechanic" class="elevate-size-popup__cta-link">Ask to our Mechanics</a>
+        </p>
+      </div>
+    </dialog>
+  </dialog-component>
+{%- endif -%}

@@ -1,0 +1,71 @@
+{%- comment -%}
+  Lightweight section for the Section Rendering API.
+  Outputs product stats as JSON so client-side cards (cart drawer recs)
+  can fetch metafield data that isn't available from AJAX product APIs.
+
+  Usage: fetch('/products/{handle}?sections=product-stats-api')
+{%- endcomment -%}
+
+{%- liquid
+  assign cr = product.metafields.custom.condition_rating.value
+  assign mi = product.metafields.custom.mechanical_integrity.value
+  assign msrp_raw = product.metafields.custom.msrp.value
+  assign sl = product.metafields.custom.spec_level.value
+
+  assign grade_letter = ''
+  assign grade_label = ''
+  if cr != blank
+    assign cr_num = cr | times: 1.0
+    if cr_num >= 9
+      assign grade_letter = 'A+'
+      assign grade_label = 'New'
+    elsif cr_num >= 8
+      assign grade_letter = 'A'
+      assign grade_label = 'Like New'
+    elsif cr_num >= 6
+      assign grade_letter = 'B'
+      assign grade_label = 'Wear use'
+    else
+      assign grade_letter = 'C'
+      assign grade_label = 'Good'
+    endif
+  endif
+
+  assign savings_pct = 0
+  assign has_msrp = false
+  if msrp_raw != blank
+    assign msrp_cents = msrp_raw | times: 100 | round
+    assign price_cents = product.price
+    if msrp_cents > price_cents
+      assign has_msrp = true
+      assign diff = msrp_cents | minus: price_cents
+      assign savings_pct = diff | times: 100 | divided_by: msrp_cents
+    endif
+  endif
+
+  assign spec_label = ''
+  if sl != blank
+    assign sl_lower = sl | downcase
+    if sl_lower == 'entry'
+      assign spec_label = 'Entry'
+    elsif sl_lower == 'medium'
+      assign spec_label = 'Medium'
+    elsif sl_lower == 'pro'
+      assign spec_label = 'Pro'
+    else
+      assign spec_label = sl
+    endif
+  endif
+-%}
+
+<script type="application/json" data-product-stats>
+{
+  "cr": {{ cr | default: "null" }},
+  "mi": {{ mi | default: "null" }},
+  "gradeLetter": {{ grade_letter | json }},
+  "gradeLabel": {{ grade_label | json }},
+  "hasMsrp": {{ has_msrp }},
+  "savingsPct": {{ savings_pct }},
+  "specLabel": {{ spec_label | json }}
+}
+</script>

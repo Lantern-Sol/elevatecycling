@@ -1,0 +1,101 @@
+{%- comment -%}
+  Elevate Cycling — PDP Sidecar (bottom)
+  "Ask a Mechanic" button + trust icons row.
+  Rendered inside .elevate-cta-card after buy-buttons.
+{%- endcomment -%}
+
+<a href="/pages/ask-a-mechanic" class="elevate-cta-card__ask-btn">
+  Ask a Mechanic
+</a>
+
+<script>
+  (function () {
+    var card = document.querySelector('.elevate-cta-card');
+    if (!card) return;
+
+    var arrowSvg = '<svg class="elevate-atc-arrow" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M14.0391 5.08594l-1.0782 1.07812L18.0469 11.25H3v1.5h15.0469l-5.086 5.0859 1.0782 1.0782L20.4141 12.539 20.9297 12l-.5156-.5391L14.0391 5.08594z" fill="currentColor"/></svg>';
+
+    function formatPrice(cents) {
+      var dollars = (cents / 100).toFixed(2);
+      return '$' + dollars.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    }
+
+    function updateButton() {
+      var btn = card.querySelector('button[name="add"]');
+      if (!btn) return;
+
+      var textEl = btn.querySelector('.add-to-cart-text__content span span');
+      if (!textEl || textEl.dataset.elevatePatched) return;
+
+      var form = btn.closest('form[action*="/cart/add"]') || btn.closest('form');
+      var priceText = '';
+
+      /* Try to read price from the selected variant */
+      var selectEl = form ? form.querySelector('select[name="id"]') : null;
+      if (selectEl) {
+        var opt = selectEl.selectedOptions[0];
+        if (opt && opt.dataset.price) {
+          priceText = formatPrice(parseInt(opt.dataset.price, 10));
+        }
+      }
+
+      /* Fallback: read from sidecar price block */
+      if (!priceText) {
+        var sidecarPrice = document.querySelector('.elevate-sidecar__price');
+        if (sidecarPrice) {
+          priceText = sidecarPrice.textContent.trim();
+        }
+      }
+
+      textEl.dataset.elevatePatched = 'true';
+      textEl.innerHTML = 'Add to Cart' + (priceText ? ' — ' + priceText : '') + ' ' + arrowSvg;
+    }
+
+    /* Run on load + observe for Horizon's async rendering */
+    updateButton();
+    var observer = new MutationObserver(function () { updateButton(); });
+    observer.observe(card, { childList: true, subtree: true });
+
+    /* Update on variant change */
+    document.addEventListener('variant:changed', function () {
+      var btn = card.querySelector('button[name="add"]');
+      if (btn) {
+        var textEl = btn.querySelector('.add-to-cart-text__content span span');
+        if (textEl) {
+          textEl.dataset.elevatePatched = '';
+          updateButton();
+        }
+      }
+    });
+  })();
+</script>
+
+<div class="elevate-trust">
+  <div class="elevate-trust__item">
+    <svg class="elevate-trust__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M2.63636 5C2.28491 5 2 5.28491 2 5.63636C2 5.98782 2.28491 6.27273 2.63636 6.27273H13.1328C13.5427 6.27273 13.875 6.60502 13.875 7.01491V15.8182H10.0273C9.74902 14.7244 8.78223 13.9091 7.625 13.9091C6.46777 13.9091 5.50098 14.7244 5.22266 15.8182C4.82354 15.8182 4.5 15.4946 4.5 15.0955V12.6364H3.25V15.1183C3.25 16.2077 4.13319 17.0909 5.22266 17.0909C5.50098 18.1847 6.46777 19 7.625 19C8.78223 19 9.74902 18.1847 10.0273 17.0909H15.2227C15.501 18.1847 16.4678 19 17.625 19C18.7822 19 19.749 18.1847 20.0273 17.0909C21.1168 17.0909 22 16.2077 22 15.1183V11.9006L21.9609 11.8011L21.1667 9.24242C20.8119 8.22618 19.8532 7.54545 18.7768 7.54545H15.125V7.1875C15.125 5.97938 14.1456 5 12.9375 5H2.63636ZM3.26136 7.54545C2.90991 7.54545 2.625 7.83036 2.625 8.18182C2.625 8.53327 2.90991 8.81818 3.26136 8.81818H7.61364C7.96509 8.81818 8.25 8.53327 8.25 8.18182C8.25 7.83036 7.96509 7.54545 7.61364 7.54545H3.26136ZM15.125 8.81818H18.9523C19.3841 8.81818 19.767 9.09527 19.9021 9.50534L20.75 12.0795V15.0955C20.75 15.4946 20.4265 15.8182 20.0273 15.8182C19.749 14.7244 18.7822 13.9091 17.625 13.9091C16.4678 13.9091 15.501 14.7244 15.2227 15.8182H15.125V8.81818ZM3.88636 10.0909C3.53491 10.0909 3.25 10.3758 3.25 10.7273C3.25 11.0787 3.53491 11.3636 3.88636 11.3636H6.36364C6.71509 11.3636 7 11.0787 7 10.7273C7 10.3758 6.71509 10.0909 6.36364 10.0909H3.88636ZM7.625 15.1818C8.32324 15.1818 8.875 15.7436 8.875 16.4545C8.875 17.1655 8.32324 17.7273 7.625 17.7273C6.92676 17.7273 6.375 17.1655 6.375 16.4545C6.375 15.7436 6.92676 15.1818 7.625 15.1818ZM17.625 15.1818C18.3232 15.1818 18.875 15.7436 18.875 16.4545C18.875 17.1655 18.3232 17.7273 17.625 17.7273C16.9268 17.7273 16.375 17.1655 16.375 16.4545C16.375 15.7436 16.9268 15.1818 17.625 15.1818Z" fill="#E31E24"/>
+    </svg>
+    <span class="elevate-trust__text">Free US<br>Shipping</span>
+  </div>
+
+  <div class="elevate-trust__item">
+    <svg class="elevate-trust__icon" width="19" height="17" viewBox="0 0 19 17" fill="none" aria-hidden="true">
+      <path d="M6.51562 0L0.515625 6L0 6.53906L0.515625 7.07812L6.51562 13.0781L7.59375 12L2.88281 7.28906H13.0547C15.1348 7.28906 16.8047 8.95898 16.8047 11.0391C16.8047 13.1191 15.1348 14.7891 13.0547 14.7891V16.2891C15.9463 16.2891 18.3047 13.9307 18.3047 11.0391C18.3047 8.14746 15.9463 5.78906 13.0547 5.78906H2.88281L7.59375 1.07812L6.51562 0Z" fill="#E31E24"/>
+    </svg>
+    <span class="elevate-trust__text">30-day free<br>returns*</span>
+  </div>
+
+  <div class="elevate-trust__item">
+    <svg class="elevate-trust__icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 2.25C11.5312 2.25 11.0654 2.4082 10.6641 2.69531L9.42188 3.5625L7.99219 3.75H7.96875L7.94531 3.77344C6.99023 3.9873 6.2373 4.74023 6.02344 5.69531L6 5.71875V5.74219L5.8125 7.19531L4.94531 8.32031L4.92188 8.34375V8.36719C4.39746 9.20508 4.37402 10.2861 4.94531 11.0859L5.83594 12.3281L6.07031 13.6172L3.65625 17.2969L2.88281 18.4453H6.46875L7.33594 20.4609L7.875 21.75L8.64844 20.5781L11.0156 17.0156C11.6514 17.2764 12.3691 17.2998 12.9844 17.0156L15.3516 20.5781L16.125 21.75L16.6641 20.4609L17.5312 18.4453H21.1172L20.3438 17.2969L18 13.7344L18.1875 12.3281L19.0547 11.0859L19.0781 11.0625V11.0391C19.6025 10.2012 19.626 9.14355 19.0547 8.34375L18.1875 7.10156L17.9062 5.69531H17.9297C17.9268 5.67773 17.9092 5.66602 17.9062 5.64844C17.7715 4.66699 16.9951 3.87012 16.0078 3.75H15.9844L14.5781 3.5625L13.3359 2.69531C12.9346 2.4082 12.4688 2.25 12 2.25ZM12 3.77344C12.1729 3.77344 12.3428 3.82617 12.4688 3.91406L13.8047 4.875L13.9688 4.99219L14.1562 5.01562L15.7969 5.25H15.8203C16.1572 5.28809 16.3916 5.52246 16.4297 5.85938V5.90625L16.7344 7.57031L16.7578 7.73438L16.875 7.875L17.8359 9.21094C18.0146 9.45996 18.0381 9.88184 17.8125 10.2422L16.7578 11.7188L16.7344 11.9062L16.5 13.5469V13.5703C16.4854 13.6934 16.4443 13.8076 16.3828 13.8984L16.3359 13.9219V13.9453C16.2275 14.0742 16.0781 14.1592 15.8906 14.1797H15.8438L14.1328 14.4844L13.9453 14.5078L13.8047 14.625L12.4688 15.5859C12.2197 15.7646 11.7744 15.7881 11.4141 15.5625L10.1953 14.625L10.0547 14.5078L9.84375 14.4844L8.20312 14.25H8.17969C7.94824 14.2236 7.76953 14.1035 7.66406 13.9219C7.61719 13.8398 7.58203 13.7432 7.57031 13.6406V13.5938L7.26562 11.8828L7.24219 11.6953L7.125 11.5547L6.16406 10.2188C5.98535 9.96973 5.96191 9.52441 6.1875 9.16406L7.125 7.94531L7.24219 7.80469L7.26562 7.59375L7.47656 6.02344C7.47949 6.01172 7.49707 6.01172 7.5 6C7.59375 5.63379 7.88379 5.34375 8.25 5.25C8.26172 5.24707 8.26172 5.22949 8.27344 5.22656L9.84375 5.01562L10.0312 4.99219L10.1953 4.875L11.5312 3.91406C11.6572 3.82617 11.8271 3.77344 12 3.77344ZM17.1797 15.1875L18.3281 16.9453H16.5234L16.3359 17.4141L15.8203 18.6094L14.2266 16.1719L14.5781 15.9141L16.0547 15.6562V15.6797C16.0723 15.6768 16.084 15.6592 16.1016 15.6562C16.5059 15.6006 16.8721 15.4307 17.1797 15.1875ZM6.82031 15.2109C7.13965 15.498 7.54688 15.6973 7.99219 15.75C8.00098 15.75 8.00684 15.75 8.01562 15.75L9.44531 15.9375L9.77344 16.1953L8.17969 18.6094L7.66406 17.4141L7.47656 16.9453H5.67188L6.82031 15.2109Z" fill="#E31E24"/>
+    </svg>
+    <span class="elevate-trust__text">Certified<br>Pre-Owned</span>
+  </div>
+
+  <div class="elevate-trust__item">
+    <svg class="elevate-trust__icon" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <path d="M12 2.25C6.62402 2.25 2.25 6.62402 2.25 12C2.25 17.376 6.62402 21.75 12 21.75C17.376 21.75 21.75 17.376 21.75 12H20.25C20.25 16.5645 16.5645 20.25 12 20.25C7.43555 20.25 3.75 16.5645 3.75 12C3.75 7.43555 7.43555 3.75 12 3.75C14.9062 3.75 17.4463 5.23828 18.9141 7.5H15V9H21V3H19.5V5.78906C17.7129 3.63281 15.0146 2.25 12 2.25Z" fill="#E31E24"/>
+    </svg>
+    <span class="elevate-trust__text">Guaranteed<br>Buyback</span>
+  </div>
+</div>

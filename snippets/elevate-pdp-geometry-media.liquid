@@ -1,0 +1,594 @@
+{%- doc -%}
+  Elevate Cycling — PDP Geometry (media column snippet).
+  SVG diagram, stat cards with letter badges, fit range badge,
+  collapsible full geometry table, and mechanic callout.
+  Metafield: custom.geometry (multi_line_text_field)
+  Format: Label: Value | Unit (one per line)
+{%- enddoc -%}
+
+{%- liquid
+  assign geo_raw = product.metafields.custom.geometry.value
+  if geo_raw == blank
+    assign geo_raw = product.metafields.custom.geometry
+  endif
+
+  assign is_component = false
+  if product.metafields.custom.spec_summary.value != blank
+    assign is_component = true
+  endif
+-%}
+
+{%- unless geo_raw == blank -%}
+
+{%- if is_component -%}
+  {%- comment -%} ── Component: editorial paragraphs ── {%- endcomment -%}
+  <div class="elevate-geo-media elevate-geo-media--editorial" data-scroll-reveal>
+    <div class="elevate-geo-media__editorial-card">
+      <div class="elevate-geo-media__diagram-header">
+        <p class="elevate-geo-media__eyebrow">BUILD DESCRIPTION</p>
+        <h2 class="elevate-geo-media__heading">Why we like this {{ product.type | default: 'build' | downcase }}</h2>
+      </div>
+      <div class="elevate-geo-media__editorial-body rte">
+        {{ geo_raw }}
+      </div>
+    </div>
+  </div>
+
+{%- else -%}
+  {%- comment -%} ── Bike: geometry diagram + stats + table ── {%- endcomment -%}
+{%- capture newline %}
+{% endcapture -%}
+{%- liquid
+  assign geo_lines = geo_raw | split: newline
+
+  comment
+    Extract key stats for highlight cards
+  endcomment
+  assign stat_reach = ''
+  assign stat_reach_unit = ''
+  assign stat_stack = ''
+  assign stat_stack_unit = ''
+  assign stat_ett = ''
+  assign stat_ett_unit = ''
+  assign stat_standover = ''
+  assign stat_standover_unit = ''
+  assign stat_head_angle = ''
+  assign stat_head_angle_unit = ''
+  assign stat_seat_angle = ''
+  assign stat_seat_angle_unit = ''
+
+  for line in geo_lines
+    assign trimmed = line | strip
+    if trimmed == blank
+      continue
+    endif
+
+    assign label_split = trimmed | split: ':'
+    assign geo_label = label_split[0] | strip
+    assign rest = trimmed | split: ':' | last | strip
+    assign val_unit = rest | split: '|'
+    assign geo_val = val_unit[0] | strip
+    assign geo_unit = val_unit[1] | strip | default: ''
+    assign geo_label_lower = geo_label | downcase
+
+    if geo_label_lower == 'reach'
+      assign stat_reach = geo_val
+      assign stat_reach_unit = geo_unit
+    elsif geo_label_lower == 'stack'
+      assign stat_stack = geo_val
+      assign stat_stack_unit = geo_unit
+    elsif geo_label_lower contains 'effective top tube' or geo_label_lower contains 'top tube'
+      assign stat_ett = geo_val
+      assign stat_ett_unit = geo_unit
+    elsif geo_label_lower == 'standover'
+      assign stat_standover = geo_val
+      assign stat_standover_unit = geo_unit
+    elsif geo_label_lower == 'head angle'
+      assign stat_head_angle = geo_val
+      assign stat_head_angle_unit = geo_unit
+    elsif geo_label_lower == 'seat angle'
+      assign stat_seat_angle = geo_val
+      assign stat_seat_angle_unit = geo_unit
+    endif
+  endfor
+-%}
+
+<div class="elevate-geo-media" data-scroll-reveal>
+  <div class="elevate-geo-media__body">
+
+    {%- comment -%} ── Left: Diagram ── {%- endcomment -%}
+    <div class="elevate-geo-media__diagram-col">
+      <div class="elevate-geo-media__diagram-card">
+        <div class="elevate-geo-media__diagram-header">
+          <p class="elevate-geo-media__eyebrow">SIZING</p>
+          <h2 class="elevate-geo-media__heading">Geometry</h2>
+        </div>
+        <div class="elevate-geo-media__img-wrap">
+          <img
+            class="elevate-geo-media__diagram-img"
+            src="{{ 'elevate-geometry-diagram.png' | asset_url }}"
+            alt="Bike geometry diagram showing measurement points A through H"
+            loading="lazy"
+            width="932"
+            height="662"
+          >
+        </div>
+      </div>
+    </div>
+
+    {%- comment -%} ── Right: Stats + Table ── {%- endcomment -%}
+    <div class="elevate-geo-media__stats-col">
+
+      {%- comment -%} Fit Range Badge {%- endcomment -%}
+      {%- assign product_size = product.metafields.custom.frame_size.value | default: product.metafields.custom.frame_size | default: 'Small' -%}
+      <div class="elevate-geo-media__fit-badge">
+        <svg aria-hidden="true" width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19.5 5C17.5781 5 16 6.57812 16 8.5C16 10.4219 17.5781 12 19.5 12C21.4219 12 23 10.4219 23 8.5C23 6.57812 21.4219 5 19.5 5ZM19.5 7C20.3398 7 21 7.66016 21 8.5C21 9.33984 20.3398 10 19.5 10C18.6602 10 18 9.33984 18 8.5C18 7.66016 18.6602 7 19.5 7ZM15.0938 10.5312C14.5859 10.582 14.0938 10.832 13.75 11.25L11.4062 14.0938C10.5977 15.0781 10.9492 16.6328 12.0938 17.1875L15.5312 18.875L14.625 23.875L16.5938 24.2188L17.6562 18.4688L17.7812 17.7188L17.0938 17.375L12.9375 15.375L15.3125 12.5L19.375 15.7812L19.6562 16H25V14H20.3438L16.5625 10.9688C16.1406 10.6289 15.6016 10.4805 15.0938 10.5312ZM8.5 18C6.03125 18 4 20.0312 4 22.5C4 24.9688 6.03125 27 8.5 27C10.9688 27 13 24.9688 13 22.5C13 20.0312 10.9688 18 8.5 18ZM23.5 18C21.0312 18 19 20.0312 19 22.5C19 24.9688 21.0312 27 23.5 27C25.9688 27 28 24.9688 28 22.5C28 20.0312 25.9688 18 23.5 18ZM8.5 20C9.87891 20 11 21.1211 11 22.5C11 23.8789 9.87891 25 8.5 25C7.12109 25 6 23.8789 6 22.5C6 21.1211 7.12109 20 8.5 20ZM23.5 20C24.8789 20 26 21.1211 26 22.5C26 23.8789 24.8789 25 23.5 25C22.1211 25 21 23.8789 21 22.5C21 21.1211 22.1211 20 23.5 20Z" fill="#FDFCFC"/>
+        </svg>
+        <div class="elevate-geo-media__fit-text">
+          <span class="elevate-geo-media__fit-label">FIT RANGE — {{ product_size | upcase }}</span>
+          <span class="elevate-geo-media__fit-range">5'2" – 5'6"</span>
+        </div>
+      </div>
+
+      {%- comment -%} Stat Cards Grid {%- endcomment -%}
+      <div class="elevate-geo-media__stat-grid">
+        {%- if stat_reach != blank -%}
+          <div class="elevate-geo-media__stat-card">
+            <div class="elevate-geo-media__stat-header">
+              <span class="elevate-geo-media__stat-badge">G</span>
+              <span class="elevate-geo-media__stat-name">Reach</span>
+            </div>
+            <p class="elevate-geo-media__stat-value">{{ stat_reach }} {{ stat_reach_unit }}</p>
+            <p class="elevate-geo-media__stat-desc">Compact — upright position</p>
+          </div>
+        {%- endif -%}
+
+        {%- if stat_stack != blank -%}
+          <div class="elevate-geo-media__stat-card">
+            <div class="elevate-geo-media__stat-header">
+              <span class="elevate-geo-media__stat-badge">F</span>
+              <span class="elevate-geo-media__stat-name">Stack</span>
+            </div>
+            <p class="elevate-geo-media__stat-value">{{ stat_stack }} {{ stat_stack_unit }}</p>
+            <p class="elevate-geo-media__stat-desc">Tall front end — less strain</p>
+          </div>
+        {%- endif -%}
+
+        {%- if stat_ett != blank -%}
+          <div class="elevate-geo-media__stat-card">
+            <div class="elevate-geo-media__stat-header">
+              <span class="elevate-geo-media__stat-badge">A</span>
+              <span class="elevate-geo-media__stat-name">Effective top tube</span>
+            </div>
+            <p class="elevate-geo-media__stat-value">{{ stat_ett }} {{ stat_ett_unit }}</p>
+            <p class="elevate-geo-media__stat-desc">Traditional size reference</p>
+          </div>
+        {%- endif -%}
+
+        {%- if stat_standover != blank -%}
+          <div class="elevate-geo-media__stat-card">
+            <div class="elevate-geo-media__stat-header">
+              <span class="elevate-geo-media__stat-badge">H</span>
+              <span class="elevate-geo-media__stat-name">Standover</span>
+            </div>
+            <p class="elevate-geo-media__stat-value">{{ stat_standover }} {{ stat_standover_unit }}</p>
+            <p class="elevate-geo-media__stat-desc">Min. inseam ~780 mm recommended</p>
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- comment -%} Collapsible full geometry table {%- endcomment -%}
+      <details class="elevate-geo-media__details">
+        <summary class="elevate-geo-media__summary-btn">
+          <span class="elevate-geo-media__summary-text-closed">Full geometry table</span>
+          <span class="elevate-geo-media__summary-text-open">Hide full geometry table</span>
+          <svg class="elevate-geo-media__chevron" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </summary>
+        <div class="elevate-geo-media__table-wrap">
+          {%- assign letter_index = 0 -%}
+          {%- assign letters = 'A,B,C,D,E,F,G,H,I,J,K,L' | split: ',' -%}
+          {%- for line in geo_lines -%}
+            {%- assign trimmed = line | strip -%}
+            {%- if trimmed == blank -%}{%- continue -%}{%- endif -%}
+
+            {%- assign label_split = trimmed | split: ':' -%}
+            {%- assign geo_label = label_split[0] | strip -%}
+            {%- assign rest = trimmed | split: ':' | last | strip -%}
+            {%- assign val_unit = rest | split: '|' -%}
+            {%- assign geo_val = val_unit[0] | strip -%}
+            {%- assign geo_unit = val_unit[1] | strip | default: '' -%}
+
+            {%- if geo_label != blank and geo_val != blank -%}
+              {%- assign letter = letters[letter_index] | default: '' -%}
+              <div class="elevate-geo-media__table-row">
+                <div class="elevate-geo-media__table-label">
+                  {%- if letter != blank -%}
+                    <span class="elevate-geo-media__table-badge">{{ letter }}</span>
+                  {%- endif -%}
+                  <span class="elevate-geo-media__table-name">{{ geo_label }}</span>
+                </div>
+                <span class="elevate-geo-media__table-value">{{ geo_val }}{% if geo_unit != blank %} {{ geo_unit }}{% endif %}</span>
+              </div>
+              {%- assign letter_index = letter_index | plus: 1 -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      </details>
+
+      {%- comment -%} Mechanic Callout {%- endcomment -%}
+      <div class="elevate-geo-media__callout">
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M12 16v-4m0-4h.01M22 12a10 10 0 11-20 0 10 10 0 0120 0z" stroke="#6B7280" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        <p>Geometry measured from original sizing data. Not sure if this size fits? Ask a mechanic — we'll confirm before you order.</p>
+      </div>
+    </div>
+
+  </div>
+</div>
+{%- endif -%}
+
+<style>
+  /* ─── PDP — Geometry (media column) ─── */
+  .elevate-geo-media {
+    padding: 1.5rem 0;
+  }
+
+  .elevate-geo-media__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* ── Diagram column ── */
+  .elevate-geo-media__diagram-col {
+    width: 100%;
+  }
+
+  .elevate-geo-media__diagram-card {
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    overflow: hidden;
+    height: 100%;
+  }
+
+  .elevate-geo-media__diagram-header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+    align-items: flex-start;
+  }
+
+  .elevate-geo-media__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-geo-media__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-geo-media__img-wrap {
+    width: 100%;
+  }
+
+  .elevate-geo-media__diagram-img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* ── Stats column ── */
+  .elevate-geo-media__stats-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* ── Fit Range Badge ── */
+  .elevate-geo-media__fit-badge {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: #E31E24;
+    border-radius: 1rem;
+    padding: 0.75rem 1rem;
+    height: 4.125rem;
+    overflow: hidden;
+  }
+
+  .elevate-geo-media__fit-badge svg {
+    flex-shrink: 0;
+  }
+
+  .elevate-geo-media__fit-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .elevate-geo-media__fit-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.6875rem;
+    letter-spacing: 0.07em;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .elevate-geo-media__fit-range {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 1.125rem;
+    color: #fff;
+  }
+
+  /* ── Stat Cards Grid ── */
+  .elevate-geo-media__stat-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    column-gap: 0.5rem;
+    row-gap: 1rem;
+  }
+
+  .elevate-geo-media__stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1rem;
+    padding: 0.5rem 1rem;
+    overflow: hidden;
+  }
+
+  .elevate-geo-media__stat-header {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+
+  .elevate-geo-media__stat-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.875rem;
+    height: auto;
+    background: #E31E24;
+    border-radius: 62.4375rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #FDFCFC;
+    text-align: center;
+  }
+
+  .elevate-geo-media__stat-name {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #E31E24;
+  }
+
+  .elevate-geo-media__stat-value {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #141517;
+    margin: 0;
+  }
+
+  .elevate-geo-media__stat-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #6B7280;
+    margin: 0;
+  }
+
+  /* ── Collapsible table ── */
+  .elevate-geo-media__details {
+    margin-top: 0.25rem;
+  }
+
+  .elevate-geo-media__summary-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.75rem 0;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .elevate-geo-media__summary-btn::-webkit-details-marker {
+    display: none;
+  }
+
+  .elevate-geo-media__summary-text-open {
+    display: none;
+  }
+
+  .elevate-geo-media__details[open] .elevate-geo-media__summary-text-closed {
+    display: none;
+  }
+
+  .elevate-geo-media__details[open] .elevate-geo-media__summary-text-open {
+    display: inline;
+  }
+
+  .elevate-geo-media__chevron {
+    transition: transform 0.3s ease;
+  }
+
+  .elevate-geo-media__details[open] .elevate-geo-media__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* ── Table rows ── */
+  .elevate-geo-media__table-wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .elevate-geo-media__table-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem;
+    border-bottom: 0.0625rem solid #AEB2B8;
+  }
+
+  .elevate-geo-media__table-row:last-child {
+    border-bottom: none;
+    padding-bottom: 1rem;
+  }
+
+  .elevate-geo-media__table-label {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .elevate-geo-media__table-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.875rem;
+    flex-shrink: 0;
+    background: #AEB2B8;
+    border-radius: 62.4375rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #FDFCFC;
+    text-align: center;
+  }
+
+  .elevate-geo-media__table-name {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #AEB2B8;
+    white-space: nowrap;
+  }
+
+  .elevate-geo-media__table-value {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: #36393F;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* ── Mechanic Callout ── */
+  .elevate-geo-media__callout {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .elevate-geo-media__callout svg {
+    flex-shrink: 0;
+  }
+
+  .elevate-geo-media__callout p {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Editorial card (components) ── */
+  .elevate-geo-media__editorial-card {
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1.5rem;
+    padding: 1.5rem 1rem;
+  }
+
+  .elevate-geo-media__editorial-body {
+    margin-top: 1rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+  }
+
+  .elevate-geo-media__editorial-body p {
+    margin: 0 0 1rem;
+  }
+
+  .elevate-geo-media__editorial-body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ─── Desktop: side by side ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-geo-media__body {
+      flex-direction: row;
+      gap: 1.5rem;
+    }
+
+    .elevate-geo-media__diagram-col {
+      width: 22.3125rem;
+      flex-shrink: 0;
+    }
+
+    .elevate-geo-media__diagram-card {
+      position: sticky;
+      top: 0;
+      max-height: 27.875rem;
+    }
+
+    .elevate-geo-media__stats-col {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+</style>
+{%- endunless -%}

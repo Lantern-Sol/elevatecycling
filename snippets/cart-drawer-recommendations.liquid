@@ -71,6 +71,7 @@
   /* ── Rec card — matches elevate-arrivals card design ── */
 
   .ls-rec-card {
+    position: relative;
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -98,6 +99,253 @@
     height: 100%;
     object-fit: cover;
     display: block;
+  }
+
+  /* ── Badges — bottom-left of image ── */
+
+  .ls-rec-card__badges {
+    position: absolute;
+    bottom: 0.5rem;
+    left: 0.5rem;
+    display: flex;
+    gap: 0.25rem;
+    z-index: 1;
+  }
+
+  .ls-rec-card__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 0.5rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.5;
+    white-space: nowrap;
+  }
+
+  .ls-rec-card__badge--new {
+    background: #4ade80;
+    color: #36393f;
+  }
+
+  .ls-rec-card__badge--arrival {
+    background: #f9d44e;
+    color: #141517;
+  }
+
+  .ls-rec-card__badge--cpo {
+    background: #2dd4bf;
+    color: #042f2e;
+  }
+
+  .ls-rec-card__badge--clearance {
+    background: #ef4444;
+    color: #fff;
+  }
+
+  .ls-rec-card__badge svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+  }
+
+  /* ── Grade pill — bottom-right of image ── */
+
+  .ls-rec-card__grade {
+    position: absolute;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    padding: 0.25rem 0.5rem;
+    border-radius: 6.25rem;
+    font-family: "Inter", sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #fdfcfc;
+    z-index: 1;
+  }
+
+  .ls-rec-card__grade--aplus,
+  .ls-rec-card__grade--a {
+    background-color: #4ade80;
+  }
+
+  .ls-rec-card__grade--b {
+    background-color: #3b82f6;
+  }
+
+  .ls-rec-card__grade--c {
+    background-color: #6B7280;
+  }
+
+  /* ── Allow overflow when stats panel is open ── */
+  .ls-rec-card.is-open {
+    overflow: visible;
+  }
+
+  /* ── Stats toggle icon swap ── */
+  .ls-rec-card__icon-close { display: none; }
+  .ls-rec-card.is-open .ls-rec-card__icon-chart { display: none; }
+  .ls-rec-card.is-open .ls-rec-card__icon-close { display: block; }
+
+  /* ── Stats panel (absolute overlay inside card) ── */
+  .ls-rec-card__stats-panel {
+    position: absolute;
+    bottom: 50px;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    background-color: #FDFCFC;
+    border-radius: 1.5rem;
+    padding: 0.5rem 1rem;
+    opacity: 0;
+    transform: translateY(1rem);
+    pointer-events: none;
+    transition: opacity 0.25s ease, transform 0.25s ease;
+    z-index: 2;
+  }
+
+  .ls-rec-card.is-open .ls-rec-card__stats-panel {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .ls-rec-card__stats-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
+  .ls-rec-card__stats-title {
+    font-family: "Inter", var(--font-paragraph--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    letter-spacing: -0.0125rem;
+    color: #141517;
+  }
+
+  /* Grade detailed pill — default: dark bg */
+  .ls-rec-card__stats-grade {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: "Inter", var(--font-paragraph--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #FDFCFC;
+    background-color: #141517;
+    border-radius: 999px;
+    padding: 0.25rem 0.25rem 0.25rem 0.75rem;
+    white-space: nowrap;
+  }
+
+  .ls-rec-card__stats-grade--aplus {
+    background-color: #4ade80;
+    color: #FDFCFC;
+  }
+
+  /* Letter circle — default: green */
+  .ls-rec-card__stats-grade-letter {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #4ade80;
+    color: #FDFCFC;
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    border-radius: 999px;
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .ls-rec-card__stats-grade-letter--aplus { background-color: #141517; }
+  .ls-rec-card__stats-grade-letter--b { background-color: #3b82f6; }
+  .ls-rec-card__stats-grade-letter--c { background-color: #6B7280; }
+
+  .ls-rec-card__stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .ls-rec-card__stats-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .ls-rec-card__stats-row-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.25rem;
+  }
+
+  .ls-rec-card__stats-label {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-family: "Inter", var(--font-paragraph--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #141517;
+    white-space: nowrap;
+  }
+
+  .ls-rec-card__stats-label svg {
+    width: 1rem;
+    height: 1rem;
+    flex-shrink: 0;
+  }
+
+  .ls-rec-card__stats-value {
+    font-family: "Inter", var(--font-paragraph--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #141517;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  .ls-rec-card__stats-value--green { color: #4ade80; }
+
+  .ls-rec-card__stats-bar {
+    width: 100%;
+    height: 0.75rem;
+    background-color: #E2E3E5;
+    border-radius: 999px;
+    overflow: hidden;
+  }
+
+  .ls-rec-card__stats-bar-fill {
+    height: 100%;
+    background-color: #4ade80;
+    border-radius: 999px;
+    transition: width 0.4s ease;
+  }
+
+  .ls-rec-card__stats-loading,
+  .ls-rec-card__stats-empty {
+    font-family: "Inter", var(--font-paragraph--family), sans-serif;
+    font-size: 0.875rem;
+    color: #6B7280;
+    text-align: center;
+    padding: 1rem 0;
   }
 
   /* ── Meta: vendor brand ── */
@@ -166,6 +414,10 @@
     display: flex;
     gap: 1rem;
     align-items: flex-start;
+  }
+
+  .ls-rec-card__btn-stats[hidden] {
+    display: none;
   }
 
   .ls-rec-card__btn-stats {
@@ -245,6 +497,13 @@
     }
 
     .ls-recs__scroll::-webkit-scrollbar {
+      display: none;
+    }
+
+    /* Hide badges/grade/stats on compact mobile cards */
+    .ls-rec-card__badges,
+    .ls-rec-card__grade,
+    .ls-rec-card__stats-panel {
       display: none;
     }
 

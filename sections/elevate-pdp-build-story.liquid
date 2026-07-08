@@ -1,0 +1,144 @@
+{%- doc -%}
+  Elevate Cycling — PDP "Why We Love This Build" section.
+  Renders product.description in a light card with eyebrow + product title.
+  Only visible when product.description is populated.
+{%- enddoc -%}
+
+{%- unless product.description == blank -%}
+<div
+  class="section section--page-width page-width-normal elevate-build-story"
+  data-scroll-reveal
+  style="
+    background: #f7f7f7;
+    --elevate-build-story-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-build-story-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-build-story__inner">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="elevate-build-story__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+
+    <h2 class="elevate-build-story__heading">{{ product.title }}</h2>
+
+    <div class="elevate-build-story__body rte">
+      {{ product.description }}
+    </div>
+  </div>
+</div>
+{%- endunless -%}
+
+{% stylesheet %}
+  /* ─── PDP — Why We Love This Build ─── */
+  .elevate-build-story {
+    padding-block-start: var(--elevate-build-story-pt);
+    padding-block-end: var(--elevate-build-story-pb);
+    border-radius: 1.5rem;
+    overflow: hidden;
+  }
+
+  .elevate-build-story__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-inline: 0.5rem;
+  }
+
+  .elevate-build-story__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-build-story__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #141517;
+    margin: 0;
+  }
+
+  .elevate-build-story__body {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #36393F;
+  }
+
+  .elevate-build-story__body p {
+    margin: 0 0 1rem;
+  }
+
+  .elevate-build-story__body p:last-child {
+    margin-bottom: 0;
+  }
+
+  /* ─── Desktop ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-build-story__inner {
+      padding-inline: 4.375rem;
+      max-width: 52rem;
+    }
+
+    .elevate-build-story__heading {
+      font-size: 2.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP — Build Story",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "WHY WE LOVE THIS BUILD"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP — Build Story"
+    }
+  ]
+}
+{% endschema %}

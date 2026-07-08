@@ -1,0 +1,388 @@
+{%- doc -%}
+  Elevate Cycling — PDP Mechanic's Notes section.
+  Dark card with summary, highlight pills, and CPO condition sidebar.
+  Metafield: custom.mechanic_notes (multi_line_text_field)
+  Format:
+    Summary paragraph
+    ---
+    highlight_label: highlight_value
+    highlight_label: highlight_value
+    ---
+    Inspector Name
+{%- enddoc -%}
+
+{%- liquid
+  assign notes_raw = product.metafields.custom.mechanic_notes.value
+  if notes_raw == blank
+    assign notes_raw = product.metafields.custom.mechanic_notes
+  endif
+-%}
+
+{%- unless notes_raw == blank -%}
+{%- capture newline %}
+{% endcapture -%}
+{%- liquid
+  assign parts = notes_raw | split: '---'
+  assign summary = parts[0] | strip
+  assign highlights_raw = parts[1] | strip
+  assign inspector = parts[2] | strip
+
+  assign condition_rating = product.metafields.custom.condition_rating.value | default: product.metafields.custom.condition_rating
+  assign mechanical_integrity = product.metafields.custom.mechanical_integrity.value | default: product.metafields.custom.mechanical_integrity
+  assign spec_level = product.metafields.custom.spec_level.value | default: product.metafields.custom.spec_level
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-mechanic"
+  data-scroll-reveal
+  style="
+    background: #141517;
+    border-radius: 1.5rem;
+    --elevate-mechanic-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-mechanic-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-mechanic__inner">
+
+    {%- comment -%} ── Left column: notes content ── {%- endcomment -%}
+    <div class="elevate-mechanic__content">
+      <p class="elevate-mechanic__eyebrow">{{ section.settings.eyebrow }}</p>
+
+      {%- if summary != blank -%}
+        <p class="elevate-mechanic__summary">{{ summary }}</p>
+      {%- endif -%}
+
+      {%- if highlights_raw != blank -%}
+        <div class="elevate-mechanic__highlights">
+          {%- assign highlight_lines = highlights_raw | split: newline -%}
+          {%- for line in highlight_lines -%}
+            {%- assign trimmed = line | strip -%}
+            {%- if trimmed != blank and trimmed contains ':' -%}
+              {%- assign kv = trimmed | split: ':' -%}
+              {%- assign hl_label = kv[0] | strip -%}
+              {%- assign hl_value = trimmed | split: ':' | last | strip -%}
+              {%- if hl_label != blank and hl_value != blank and hl_label != hl_value -%}
+                <div class="elevate-mechanic__highlight">
+                  <span class="elevate-mechanic__hl-label">{{ hl_label }}</span>
+                  <span class="elevate-mechanic__hl-value">{{ hl_value }}</span>
+                </div>
+              {%- endif -%}
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+
+      {%- if inspector != blank -%}
+        <p class="elevate-mechanic__inspector">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+          Inspected by {{ inspector }}
+        </p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Right sidebar: CPO condition ── {%- endcomment -%}
+    {%- if condition_rating != blank or mechanical_integrity != blank or spec_level != blank -%}
+      <aside class="elevate-mechanic__sidebar" aria-label="Condition assessment">
+
+        {%- if condition_rating != blank -%}
+          <div class="elevate-mechanic__sidebar-block">
+            <p class="elevate-mechanic__sidebar-label">Condition Rating</p>
+            <div class="elevate-mechanic__condition-badge">
+              {%- assign rating_num = condition_rating | plus: 0 -%}
+              {%- if rating_num >= 9 -%}
+                <span class="elevate-mechanic__badge elevate-mechanic__badge--excellent">{{ condition_rating }}/10</span>
+              {%- elsif rating_num >= 7 -%}
+                <span class="elevate-mechanic__badge elevate-mechanic__badge--good">{{ condition_rating }}/10</span>
+              {%- else -%}
+                <span class="elevate-mechanic__badge elevate-mechanic__badge--fair">{{ condition_rating }}/10</span>
+              {%- endif -%}
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if mechanical_integrity != blank -%}
+          <div class="elevate-mechanic__sidebar-block">
+            <p class="elevate-mechanic__sidebar-label">Mechanical Integrity</p>
+            <div class="elevate-mechanic__bar-wrap">
+              <div class="elevate-mechanic__bar">
+                <div class="elevate-mechanic__bar-fill" style="width: {{ mechanical_integrity }}%;"></div>
+              </div>
+              <span class="elevate-mechanic__bar-value">{{ mechanical_integrity }}%</span>
+            </div>
+          </div>
+        {%- endif -%}
+
+        {%- if spec_level != blank -%}
+          <div class="elevate-mechanic__sidebar-block">
+            <p class="elevate-mechanic__sidebar-label">Spec Level</p>
+            <span class="elevate-mechanic__spec-pill">{{ spec_level }}</span>
+          </div>
+        {%- endif -%}
+
+      </aside>
+    {%- endif -%}
+
+  </div>
+</div>
+{%- endunless -%}
+
+{% stylesheet %}
+  /* ─── PDP — Mechanic's Notes ─── */
+  .elevate-mechanic {
+    padding-block-start: var(--elevate-mechanic-pt);
+    padding-block-end: var(--elevate-mechanic-pb);
+    overflow: hidden;
+  }
+
+  .elevate-mechanic__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Content column ── */
+  .elevate-mechanic__content {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-mechanic__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-mechanic__summary {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.85);
+    margin: 0;
+  }
+
+  /* ── Highlight pills ── */
+  .elevate-mechanic__highlights {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .elevate-mechanic__highlight {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    background: rgba(255, 255, 255, 0.08);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.12);
+    border-radius: 62.4375rem;
+    padding: 0.375rem 0.75rem;
+  }
+
+  .elevate-mechanic__hl-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.8125rem;
+    color: #AEB2B8;
+  }
+
+  .elevate-mechanic__hl-value {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: #fff;
+  }
+
+  /* ── Inspector attribution ── */
+  .elevate-mechanic__inspector {
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 500;
+    font-size: 0.8125rem;
+    color: #4ade80;
+    margin: 0.5rem 0 0;
+  }
+
+  .elevate-mechanic__inspector svg {
+    flex-shrink: 0;
+  }
+
+  /* ── Sidebar ── */
+  .elevate-mechanic__sidebar {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.1);
+    border-radius: 1rem;
+    padding: 1.25rem;
+  }
+
+  .elevate-mechanic__sidebar-block {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .elevate-mechanic__sidebar-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 500;
+    font-size: 0.75rem;
+    letter-spacing: 0.03em;
+    color: #AEB2B8;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* Condition badge */
+  .elevate-mechanic__badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1;
+    padding: 0.5rem 1rem;
+    border-radius: 0.75rem;
+    width: fit-content;
+  }
+
+  .elevate-mechanic__badge--excellent {
+    background: #166534;
+    color: #4ade80;
+  }
+
+  .elevate-mechanic__badge--good {
+    background: #854d0e;
+    color: #fbbf24;
+  }
+
+  .elevate-mechanic__badge--fair {
+    background: #7f1d1d;
+    color: #f87171;
+  }
+
+  /* Integrity bar */
+  .elevate-mechanic__bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .elevate-mechanic__bar {
+    flex: 1;
+    height: 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 62.4375rem;
+    overflow: hidden;
+  }
+
+  .elevate-mechanic__bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #4ade80, #22c55e);
+    border-radius: 62.4375rem;
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .elevate-mechanic__bar-value {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  /* Spec level pill */
+  .elevate-mechanic__spec-pill {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.8125rem;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.1);
+    border: 0.0625rem solid rgba(255, 255, 255, 0.15);
+    border-radius: 62.4375rem;
+    padding: 0.375rem 0.875rem;
+    width: fit-content;
+  }
+
+  /* ─── Desktop ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-mechanic__inner {
+      flex-direction: row;
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-mechanic__content {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .elevate-mechanic__sidebar {
+      width: 16rem;
+      flex-shrink: 0;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP — Mechanic's Notes",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "MECHANIC'S NOTES"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP — Mechanic's Notes"
+    }
+  ]
+}
+{% endschema %}

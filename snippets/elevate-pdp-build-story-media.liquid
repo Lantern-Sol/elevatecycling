@@ -1,0 +1,131 @@
+{%- doc -%}
+  Elevate Cycling — PDP "Why We Love This Build" (media column snippet).
+  Collapsible accordion with product.description.
+  Only visible when product.description is populated.
+{%- enddoc -%}
+
+{%- unless product.description == blank -%}
+{%- liquid
+  assign is_component = false
+  if product.metafields.custom.spec_summary.value != blank
+    assign is_component = true
+  endif
+-%}
+<details class="elevate-build-story-media" open data-scroll-reveal>
+  <summary class="elevate-build-story-media__trigger">
+    <div class="elevate-build-story-media__header">
+      <p class="elevate-build-story-media__eyebrow">{% if is_component %}Product Description{% else %}Build Description{% endif %}</p>
+      <h2 class="elevate-build-story-media__heading">{% if is_component %}What's included{% else %}Why we love this build{% endif %}</h2>
+    </div>
+    <svg class="elevate-build-story-media__chevron" aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </summary>
+  <div class="elevate-build-story-media__body rte">
+    {{ product.description }}
+  </div>
+</details>
+<script>
+  /* Desktop: prevent <details> from toggling — always open */
+  (function() {
+    var mq = window.matchMedia('(min-width: 750px)');
+    document.querySelectorAll('.elevate-build-story-media summary').forEach(function(s) {
+      s.addEventListener('click', function(e) {
+        if (mq.matches) e.preventDefault();
+      });
+    });
+  })();
+</script>
+
+<style>
+  .elevate-build-story-media {
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1.5rem;
+    margin-top: 1.5rem;
+    overflow: hidden;
+  }
+
+  .elevate-build-story-media__trigger {
+    display: flex;
+    align-items: center;
+    gap: 2.5rem;
+    padding: 1rem;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .elevate-build-story-media__trigger::-webkit-details-marker {
+    display: none;
+  }
+
+  .elevate-build-story-media__header {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-build-story-media__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-build-story-media__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 400;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-build-story-media__chevron {
+    flex-shrink: 0;
+    color: #36393F;
+    transition: transform 0.3s ease;
+  }
+
+  .elevate-build-story-media[open] .elevate-build-story-media__chevron {
+    transform: rotate(180deg);
+  }
+
+  .elevate-build-story-media[open] .elevate-build-story-media__trigger {
+    padding-bottom: 0.5rem;
+  }
+
+  /* Desktop: always open — chevron hidden, summary non-interactive */
+  @media screen and (min-width: 750px) {
+    .elevate-build-story-media__trigger {
+      cursor: default;
+    }
+
+    .elevate-build-story-media__chevron {
+      display: none;
+    }
+  }
+
+  .elevate-build-story-media__body {
+    padding: 0.5rem 1rem 1rem 1rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+  }
+
+  .elevate-build-story-media__body p {
+    margin: 0 0 1rem;
+  }
+
+  .elevate-build-story-media__body p:last-child {
+    margin-bottom: 0;
+  }
+</style>
+{%- endunless -%}

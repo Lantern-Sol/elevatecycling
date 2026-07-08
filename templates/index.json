@@ -270,7 +270,7 @@
       "settings": {
         "padding_top": 0,
         "padding_bottom": 48,
-        "collection": "all-items",
+        "collection": "complete-bikes",
         "max_products": 6,
         "eyebrow": "NEW ARRIVALS",
         "heading": "Check what Just Dropped!",
@@ -521,7 +521,9 @@
         "heading": "Don't take our word for it.",
         "subtitle": "Real riders. Real builds. Real opinions.",
         "padding_top": 72,
-        "padding_bottom": 72
+        "padding_bottom": 72,
+        "reviews_cta_link": "",
+        "reviews_cta_text": "Read all reviews"
       }
     },
     "elevate_sell_or_trade": {

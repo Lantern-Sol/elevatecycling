@@ -1,0 +1,301 @@
+/* ==========================================================================
+   Elevate PDP Gallery — CSS overrides for Horizon's media-gallery carousel
+   Scoped to .product-information media-gallery to avoid leaking.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Arrow buttons — bordered squares flanking the image
+   Figma: 50×50px, 12px radius, 0.5px solid #141517, transparent bg
+   Arrows sit OUTSIDE the image with 24px gap (50px arrow + 24px = 74px)
+   -------------------------------------------------------------------------- */
+
+/* Space for arrows outside the image.
+   Padding goes on slideshow-container (not slideshow-component) because
+   slideshow-container has container-type:inline-size which creates layout
+   containment — children can't overflow it. By padding slideshow-container,
+   slideshow-arrows (position:absolute; inset:0) fills its padding box
+   edge-to-edge, while slideshow-slides is pushed inward by the padding.
+   Result: arrows at the edges, image narrower in the middle. */
+.product-information media-gallery.media-gallery--carousel slideshow-container {
+  padding-inline: 4.625rem; /* 50px arrow + 24px gap = 74px */
+  border-radius: 0;         /* remove radius from container — it now covers arrow zone too */
+  overflow: visible;         /* let arrows be visible in the padding area */
+}
+
+/* Move border-radius + clipping to slideshow-slides so only the image gets rounded corners */
+.product-information media-gallery.media-gallery--carousel slideshow-slides {
+  border-radius: var(--media-radius, 1.5rem);
+  overflow: hidden;
+}
+
+.product-information media-gallery slideshow-arrows {
+  mix-blend-mode: normal;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Arrow button: bordered square */
+.product-information media-gallery slideshow-arrows .slideshow-control {
+  width: 3.125rem;
+  height: 3.125rem;
+  border: 0.03125rem solid #141517;
+  border-radius: 0.75rem;
+  background: transparent;
+  opacity: 1;
+  color: #141517;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.125rem;
+  min-height: 3.125rem;
+}
+
+/* Arrow icon size */
+.product-information media-gallery slideshow-arrows .slideshow-control .svg-wrapper,
+.product-information media-gallery slideshow-arrows .slideshow-control svg {
+  width: 1.25rem;
+  height: 1.25rem;
+}
+
+/* --------------------------------------------------------------------------
+   2. Thumbnails — 120px wide, 16px radius, cover fit, red active border
+   -------------------------------------------------------------------------- */
+
+/* 120×120 square thumbnails */
+.product-information media-gallery .slideshow-controls__thumbnail {
+  width: 7.5rem;
+  height: 7.5rem;
+  border-radius: 1rem;
+  background-color: transparent;
+  --aspect-ratio: 1 !important;
+}
+
+.product-information media-gallery .slideshow-controls__thumbnail img {
+  border-radius: 1rem;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+/* All thumbnails full opacity — no dimming on inactive */
+.product-information media-gallery .slideshow-controls__thumbnail {
+  opacity: 1;
+}
+
+/* Active thumbnail: red border instead of theme default */
+.product-information media-gallery .slideshow-controls__thumbnail[aria-selected='true'] {
+  outline: 0.125rem solid #E31E24;
+  outline-offset: -0.125rem;
+}
+
+/* Thumbnail gap override */
+.product-information media-gallery slideshow-controls[thumbnails] .slideshow-controls__thumbnails {
+  gap: 0.5rem;
+}
+
+/* Remove scroll-hint fade/blur on thumbnail strip.
+   scroll-hint JS sets mask-image as inline style, so we need to
+   override it. Inline styles require this approach. */
+.product-information media-gallery slideshow-controls[thumbnails] .slideshow-controls__thumbnails-container {
+  mask-image: none !important;
+  -webkit-mask-image: none !important;
+}
+
+/* 16px gap between main image and thumbnail strip */
+.product-information media-gallery slideshow-controls[thumbnails]:not(.desktop\:hidden) {
+  margin-block-start: 1rem;
+}
+
+/* --------------------------------------------------------------------------
+   3. Counter pill overlay — "1 / 17" dark pill at bottom of main image
+   The mobile counter (desktop:hidden media-gallery__mobile-controls) contains
+   slideshow-controls__counter. We unhide it on desktop and overlay the image.
+   -------------------------------------------------------------------------- */
+
+/* Hide counter in its original position (child of slideshow-component) to
+   prevent a flash before JS moves it into slideshow-container.
+   Once moved, this selector no longer matches and the counter appears. */
+.product-information media-gallery slideshow-component > .media-gallery__mobile-controls {
+  opacity: 0;
+  position: absolute;
+  pointer-events: none;
+}
+
+/* Unhide mobile counter on desktop — desktop\:hidden uses display:none!important
+   at min-width:1025px in base.css, so we must match with !important here.
+   This is the only way to override a vendor utility without modifying vendor files. */
+.product-information media-gallery slideshow-controls.media-gallery__mobile-controls.desktop\:hidden {
+  display: flex !important;
+}
+
+/* Position as overlay on the main image.
+   The counter lives inside slideshow-container (position:relative).
+   Use inset-inline:0 to span full width, then center pill with justify-content. */
+.product-information media-gallery .media-gallery__mobile-controls {
+  position: absolute;
+  bottom: 2.125rem;
+  inset-inline: 0;
+  z-index: var(--layer-heightened, 2);
+  pointer-events: none;
+  justify-content: center;
+}
+
+/* Counter pill styling */
+.product-information media-gallery .slideshow-controls__counter {
+  background: #141517;
+  color: #FDFCFC;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+  padding: 0.25rem 0.75rem;
+  border-radius: 62.4375rem;
+  white-space: nowrap;
+}
+
+.product-information media-gallery .slideshow-controls__counter .slash {
+  margin-inline: 0.125rem;
+}
+
+/* --------------------------------------------------------------------------
+   4. Social proof bar — "7 people watching" pill below thumbnails
+   -------------------------------------------------------------------------- */
+
+.elevate-social-proof {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border: 0.0625rem solid #AEB2B8;
+  border-radius: 1rem;
+  padding: 0.375rem 1rem;
+  margin-block-start: 1.5rem;
+  width: fit-content;
+  margin-inline: auto;
+  font-size: 0.875rem;
+  line-height: 1.4;
+  color: #36393F;
+}
+
+.elevate-social-proof__icon {
+  flex-shrink: 0;
+  width: 1rem;
+  height: 1rem;
+  color: #36393F;
+}
+
+.elevate-social-proof p {
+  margin: 0;
+}
+
+.elevate-social-proof strong {
+  font-weight: 600;
+}
+
+/* --------------------------------------------------------------------------
+   5. Breadcrumbs — rendered inside media column via Liquid snippet
+   -------------------------------------------------------------------------- */
+
+.product-information__media {
+  padding-block-start: 1.5rem;
+}
+
+.elevate-breadcrumbs {
+  margin-block-end: 0.5rem;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.elevate-breadcrumbs__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25rem 0.5rem;
+  font-family: var(--font-body--family, sans-serif);
+  font-size: 0.8125rem;
+  font-weight: 400;
+  line-height: normal;
+  color: #908E8C;
+}
+
+.elevate-breadcrumbs__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+  min-width: 0;
+}
+
+/* Last item (product title) can shrink and truncate */
+.elevate-breadcrumbs__item:last-child {
+  flex-shrink: 1;
+  overflow: hidden;
+  max-width: 50%;
+}
+
+.elevate-breadcrumbs__item + .elevate-breadcrumbs__item::before {
+  content: '/';
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.elevate-breadcrumbs__link {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: from-font;
+}
+
+.elevate-breadcrumbs__link:hover,
+.elevate-breadcrumbs__link:focus-visible {
+  opacity: 0.7;
+}
+
+.elevate-breadcrumbs__current {
+  font-weight: 400;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+}
+
+/* --------------------------------------------------------------------------
+   6. Mobile overrides
+   -------------------------------------------------------------------------- */
+@media screen and (max-width: 749px) {
+  /* Remove arrow padding on mobile */
+  .product-information media-gallery.media-gallery--carousel slideshow-container {
+    padding-inline: 0;
+  }
+
+  /* Counter stays as overlay on mobile too (JS moves it into slideshow-container) */
+  .product-information media-gallery .media-gallery__mobile-controls {
+    bottom: 1rem;
+  }
+
+  /* Force-show thumbnail strip on mobile — Horizon's mobile:hidden
+     hides it with !important; this is the only way to override vendor utility
+     without modifying vendor files (same pattern as desktop:hidden override at line 128) */
+  .product-information media-gallery slideshow-controls[thumbnails].mobile\:hidden {
+    display: flex !important;
+  }
+
+  /* Mobile thumbnails: 64×64px */
+  .product-information media-gallery .slideshow-controls__thumbnail {
+    width: 4rem; /* 64px */
+    height: 4rem;
+  }
+
+  /* Social proof: full-width pill on mobile */
+  .elevate-social-proof {
+    width: 100%;
+    margin-block-start: 0.5rem;
+  }
+
+  /* Hide desktop breadcrumbs on mobile — mobile header has its own */
+  .elevate-breadcrumbs--desktop {
+    display: none;
+  }
+}

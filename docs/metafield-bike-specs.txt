@@ -1,0 +1,47 @@
+FRAME & BUILD
+Brand: TIME
+Model: Alpe d'Huez X 45
+Size: Small
+Frame material: BCS Carbon — Dyneema + Vectran
+Fork: TIME ADHX BCS Carbon, tapered
+Bottom bracket: PF BB386 EVO
+Headset: Integrated, tapered
+Tire clearance: Up to 38mm (700c)
+
+COCKPIT
+Handlebar: Confirm at intake
+Stem: Confirm at intake
+Seatpost: Confirm at intake
+Saddle: Confirm at intake
+
+POWER METER
+Brand: 4iiii Precision
+Type: Left crank — single-sided
+Accuracy: ±1.0%
+Connectivity: ANT+ and Bluetooth Smart
+Battery: CR2032 (user-replaceable)
+Compatibility: Shimano GRX RX810 crank
+
+DRIVETRAIN
+Groupset: Shimano GRX RX810
+Speeds: 2x11 (22 gears)
+Shift type: Mechanical
+Shifters: Shimano GRX RX600
+Front derailleur: Shimano GRX RX810-FD
+Rear derailleur: Shimano GRX RX810-RD
+Crankset: Shimano GRX RX810
+Chainring: Confirm at intake
+Cassette: Confirm at intake
+Chain: Shimano 11-speed
+
+BRAKES
+Brake type: Hydraulic disc — flat mount
+Levers: Shimano GRX RX600
+Rotor size: Confirm at intake
+
+WHEELS
+Wheelset: Hunt Carbon Gravel 45
+Rim depth: 45mm
+Rim type: Carbon, tubeless-ready, hookless
+Wheel size: 700c
+Axle standard: 12mm thru-axle F&R

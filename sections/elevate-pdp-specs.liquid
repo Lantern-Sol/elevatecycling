@@ -1,0 +1,367 @@
+{%- doc -%}
+  Elevate Cycling — PDP Specs section.
+  Two-column grouped spec table parsed from custom.bike_specs metafield.
+  Format:
+    ALL CAPS LINE = group header
+    Label: Value = spec row
+  Groups are collapsible — first 3 visible, rest behind <details>.
+{%- enddoc -%}
+
+{%- liquid
+  assign specs_raw = product.metafields.custom.bike_specs.value
+  if specs_raw == blank
+    assign specs_raw = product.metafields.custom.bike_specs
+  endif
+-%}
+
+{%- unless specs_raw == blank -%}
+{%- capture newline %}
+{% endcapture -%}
+{%- liquid
+  assign spec_lines = specs_raw | split: newline
+  assign group_count = 0
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-specs"
+  data-scroll-reveal
+  style="
+    background: #FDFCFC;
+    border-radius: 1.5rem;
+    --elevate-specs-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-specs-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-specs__inner">
+    <div class="elevate-specs__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="elevate-specs__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      <h2 class="elevate-specs__heading">{{ section.settings.heading }}</h2>
+    </div>
+
+    <div class="elevate-specs__grid" id="elevate-specs-grid-{{ section.id }}">
+      {%- comment -%}
+        We iterate lines and build groups.
+        ALL CAPS line → new group header.
+        Otherwise → label:value row.
+      {%- endcomment -%}
+
+      {%- assign current_group_open = false -%}
+      {%- for line in spec_lines -%}
+        {%- assign trimmed = line | strip -%}
+        {%- if trimmed == blank -%}
+          {%- continue -%}
+        {%- endif -%}
+
+        {%- assign upper_line = trimmed | upcase -%}
+        {%- assign is_header = false -%}
+        {%- if upper_line == trimmed and trimmed contains ' ' or trimmed == upper_line and trimmed.size > 2 -%}
+          {%- unless trimmed contains ':' -%}
+            {%- assign is_header = true -%}
+          {%- endunless -%}
+        {%- endif -%}
+        {%- if is_header -%}
+          {%- comment -%} ALL CAPS = group header {%- endcomment -%}
+          {%- if current_group_open -%}
+            </div></div>
+          {%- endif -%}
+          {%- assign group_count = group_count | plus: 1 -%}
+          <div class="elevate-specs__group" data-spec-group="{{ group_count }}">
+            <h3 class="elevate-specs__group-title">{{ trimmed }}</h3>
+            <div class="elevate-specs__rows">
+          {%- assign current_group_open = true -%}
+        {%- else -%}
+          {%- comment -%} Label: Value row {%- endcomment -%}
+          {%- assign colon_pos = trimmed | split: ':' -%}
+          {%- assign spec_label = colon_pos[0] | strip -%}
+          {%- assign spec_value_parts = '' -%}
+          {%- for part in colon_pos -%}
+            {%- if forloop.first -%}{%- continue -%}{%- endif -%}
+            {%- if spec_value_parts != '' -%}
+              {%- assign spec_value_parts = spec_value_parts | append: ':' | append: part -%}
+            {%- else -%}
+              {%- assign spec_value_parts = part -%}
+            {%- endif -%}
+          {%- endfor -%}
+          {%- assign spec_value = spec_value_parts | strip -%}
+
+          {%- unless current_group_open -%}
+            {%- assign group_count = group_count | plus: 1 -%}
+            <div class="elevate-specs__group" data-spec-group="{{ group_count }}">
+              <div class="elevate-specs__rows">
+            {%- assign current_group_open = true -%}
+          {%- endunless -%}
+
+          {%- if spec_label != blank and spec_value != blank -%}
+            <div class="elevate-specs__row">
+              <span class="elevate-specs__label">{{ spec_label }}</span>
+              <span class="elevate-specs__value">{{ spec_value }}</span>
+            </div>
+          {%- endif -%}
+        {%- endif -%}
+      {%- endfor -%}
+
+      {%- if current_group_open -%}
+        </div></div>
+      {%- endif -%}
+    </div>
+
+    {%- if group_count > 3 -%}
+      <button
+        type="button"
+        class="elevate-specs__toggle"
+        aria-expanded="false"
+        aria-controls="elevate-specs-grid-{{ section.id }}"
+        data-specs-toggle
+      >
+        <span data-toggle-text>Show all specs</span>
+        <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M19 9l-7 7-7-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
+    {%- endif -%}
+  </div>
+</div>
+
+{%- if group_count > 3 -%}
+<script>
+  (function () {
+    var section = document.querySelector('.elevate-specs [data-specs-toggle]');
+    if (!section) return;
+
+    var btn = section;
+    var grid = btn.closest('.elevate-specs__inner').querySelector('.elevate-specs__grid');
+    var textEl = btn.querySelector('[data-toggle-text]');
+    var groups = grid.querySelectorAll('[data-spec-group]');
+    var expanded = false;
+
+    /* Hide groups beyond the first 3 */
+    groups.forEach(function (g, i) {
+      if (i >= 3) g.style.display = 'none';
+    });
+
+    btn.addEventListener('click', function () {
+      expanded = !expanded;
+      btn.setAttribute('aria-expanded', expanded);
+      textEl.textContent = expanded ? 'Show less' : 'Show all specs';
+      btn.querySelector('svg').style.transform = expanded ? 'rotate(180deg)' : '';
+
+      groups.forEach(function (g, i) {
+        if (i >= 3) g.style.display = expanded ? '' : 'none';
+      });
+    });
+  })();
+</script>
+{%- endif -%}
+{%- endunless -%}
+
+{% stylesheet %}
+  /* ─── PDP — Specs ─── */
+  .elevate-specs {
+    padding-block-start: var(--elevate-specs-pt);
+    padding-block-end: var(--elevate-specs-pb);
+    overflow: hidden;
+  }
+
+  .elevate-specs__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-inline: 0.5rem;
+  }
+
+  .elevate-specs__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-specs__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-specs__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #141517;
+    margin: 0;
+  }
+
+  /* ── Grid ── */
+  .elevate-specs__grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  .elevate-specs__group {
+    break-inside: avoid;
+  }
+
+  .elevate-specs__group-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+    letter-spacing: 0.05em;
+    color: #141517;
+    text-transform: uppercase;
+    margin: 0 0 0.75rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 0.0625rem solid #e5e5e5;
+  }
+
+  .elevate-specs__rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .elevate-specs__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 1rem;
+    padding: 0.5rem 0;
+    border-bottom: 0.0625rem solid #f0f0f0;
+  }
+
+  .elevate-specs__row:last-child {
+    border-bottom: none;
+  }
+
+  .elevate-specs__label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #AEB2B8;
+    flex-shrink: 0;
+  }
+
+  .elevate-specs__value {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #141517;
+    text-align: right;
+  }
+
+  /* ── Toggle ── */
+  .elevate-specs__toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    align-self: center;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #141517;
+    background: none;
+    border: 0.0625rem solid #e5e5e5;
+    border-radius: 62.4375rem;
+    padding: 0.5rem 1.25rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease;
+  }
+
+  .elevate-specs__toggle:hover {
+    border-color: #141517;
+  }
+
+  .elevate-specs__toggle:focus-visible {
+    outline: 0.125rem solid #141517;
+    outline-offset: 0.125rem;
+  }
+
+  .elevate-specs__toggle svg {
+    transition: transform 0.3s ease;
+  }
+
+  /* ─── Desktop ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-specs__inner {
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-specs__heading {
+      font-size: 2.5rem;
+    }
+
+    .elevate-specs__grid {
+      column-count: 2;
+      column-gap: 3rem;
+    }
+
+    .elevate-specs__group {
+      break-inside: avoid;
+      margin-bottom: 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "PDP — Specs",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "FULL SPEC"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Specifications"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP — Specs"
+    }
+  ]
+}
+{% endschema %}
