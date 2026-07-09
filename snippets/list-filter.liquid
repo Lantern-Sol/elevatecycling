@@ -461,6 +461,31 @@
     color: var(--color-foreground-rgb);
   }
 
+  /* Elevate: vertical sidebar checkbox + label overrides */
+  .facets--vertical .checkbox .icon-checkmark {
+    width: 1.5rem;
+    height: 1.5rem;
+    min-width: 1.5rem;
+    border: 1.5px solid #6B7280;
+    border-radius: 0.25rem;
+  }
+
+  .facets--vertical .checkbox .checkbox__input:checked + .checkbox__label .icon-checkmark {
+    background-color: #E31E24;
+    border-color: #E31E24;
+  }
+
+  .facets--vertical .checkbox .checkbox__label-text {
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    color: #141517;
+  }
+
+  .facets--vertical .checkbox:not(.checkbox--disabled):hover .checkbox__label-text {
+    color: #141517;
+  }
+
   .facets .checkbox .checkbox__label-text {
     transition: color 0.2s ease, font-weight 0.2s ease;
   }

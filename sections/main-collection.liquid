@@ -1,3 +1,6 @@
+{{ 'elevate-product-card.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'elevate-product-card.js' | asset_url }}" defer></script>
+
 <script
   src="{{ 'results-list.js' | asset_url }}"
   type="module"
@@ -50,7 +53,7 @@
         results_size: collection.products_count
       %}
 
-      {% assign products_per_page = 24 %}
+      {% assign products_per_page = 12 %}
 
       {% if section.settings.enable_infinite_scroll == false %}
         {% assign products_per_page = section.settings.products_per_page %}
@@ -88,12 +91,7 @@
               data-product-id="{{ product.id }}"
               ref="cards[]"
             >
-              {% content_for 'block',
-                type: '_product-card',
-                id: 'product-card',
-                closest.product: product,
-                product_view_context: 'collection'
-              %}
+              {% render 'elevate-product-card', product: product %}
             </li>
           {% endfor %}
 
@@ -151,7 +149,110 @@
       display: none;
     }
   }
+
 {% endstylesheet %}
+
+{% style %}
+  @media screen and (min-width: 750px) {
+    .product-grid--{{ section.id }}:is(.product-grid--grid) {
+      --product-grid-columns-desktop: repeat(3, 1fr);
+    }
+  }
+{% endstyle %}
+
+{% style %}
+  /* ── Collection pagination – pill style per Figma ── */
+
+  .product-grid-container .pagination {
+    padding-block: 2.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .product-grid-container .pagination__list {
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  /* Kill theme hover-indicator pseudo-elements */
+  .product-grid-container .pagination__link::before,
+  .product-grid-container .pagination__list::before {
+    display: none !important;
+  }
+
+  /* ── Page pills ── */
+  .product-grid-container .pagination__link--page {
+    --pagination-size: auto;
+    width: 2rem;
+    height: 1.5rem;
+    min-width: 2rem;
+    aspect-ratio: unset;
+    border-radius: 999px;
+    background: #AEB2B8;
+    color: #FDFCFC;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: -0.14px;
+    line-height: 1.5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+  }
+
+  .product-grid-container .pagination__link--page:hover {
+    background: #9a9ea4;
+  }
+
+  /* Active page – red */
+  .product-grid-container .pagination__link--current {
+    background: #E31E24;
+    color: #FDFCFC;
+  }
+
+  .product-grid-container .pagination__link--current:hover {
+    background: #c91a1f;
+  }
+
+  /* ── Ellipsis ── */
+  .product-grid-container .pagination__link--gap {
+    color: #AEB2B8;
+    font-size: 0.75rem;
+    background: none;
+  }
+
+  /* ── Arrow buttons ── */
+  .product-grid-container .pagination__link--arrow {
+    --pagination-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    border: 0.5px solid #141517;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .product-grid-container .pagination__link--arrow:hover {
+    background: rgba(20, 21, 23, 0.06);
+  }
+
+  /* Disabled arrows */
+  .product-grid-container .pagination__link--disabled.pagination__link--arrow {
+    opacity: 0.3;
+    border-color: transparent;
+    pointer-events: none;
+  }
+
+  /* Gap between arrows and page pills */
+  .product-grid-container .pagination__item:first-child,
+  .product-grid-container .pagination__item:last-child {
+    margin-inline: 0.5rem;
+  }
+{% endstyle %}
 
 {% schema %}
 {

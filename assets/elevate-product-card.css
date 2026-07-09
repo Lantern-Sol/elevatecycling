@@ -1,0 +1,460 @@
+/* ─── Elevate Product Card — shared styles (mobile-first) ─── */
+
+/* ── Card ── */
+.elevate-arrivals__card {
+  position: relative;
+  flex: 0 0 21.375rem;
+  min-width: 21.375rem;
+  background-color: #FDFCFC;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  scroll-snap-align: start;
+  box-shadow: 0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1), 0 0.0625rem 0.125rem -0.0625rem rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── Image area ── */
+.elevate-arrivals__img-wrap {
+  position: relative;
+  display: block;
+  aspect-ratio: 342 / 228;
+  overflow: hidden;
+  border-radius: 1rem;
+  background-color: #f2f2f3;
+  text-decoration: none;
+}
+
+.elevate-arrivals__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.elevate-arrivals__img-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #e2e3e5;
+}
+
+/* ── Badges (bottom-left of image) ── */
+.elevate-arrivals__badges {
+  position: absolute;
+  bottom: 0.5rem;
+  left: 0.5rem;
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.elevate-arrivals__badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: 'Inter', var(--font-body--family), sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.5rem;
+  color: #141517;
+  letter-spacing: -0.0075rem;
+  white-space: nowrap;
+}
+
+.elevate-arrivals__badge svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.elevate-arrivals__badge--new {
+  background-color: #4ade80;
+}
+
+.elevate-arrivals__badge--arrival {
+  background-color: #f9d44e;
+}
+
+/* ── Grade pill (bottom-right of image) ── */
+.elevate-arrivals__grade {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 1.5rem;
+  padding-inline: 0.75rem;
+  font-family: 'Inter', var(--font-body--family), sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  letter-spacing: -0.0075rem;
+  border-radius: 999px;
+  color: #FDFCFC;
+  background-color: #6B7280;
+}
+
+.elevate-arrivals__grade--aplus,
+.elevate-arrivals__grade--a {
+  background-color: #4ade80;
+}
+
+.elevate-arrivals__grade--b {
+  background-color: #3b82f6;
+}
+
+.elevate-arrivals__grade--c {
+  background-color: #6B7280;
+}
+
+/* ── Brand / Condition row ── */
+.elevate-arrivals__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-inline: 0.75rem;
+  font-family: 'Inter', var(--font-body--family), sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  letter-spacing: -0.00875rem;
+}
+
+.elevate-arrivals__brand {
+  flex: 1;
+  min-width: 0;
+  color: #E31E24;
+}
+
+.elevate-arrivals__condition {
+  flex: 1;
+  min-width: 0;
+  color: #AEB2B8;
+  text-align: right;
+}
+
+/* ── Product title ── */
+.elevate-arrivals__name {
+  padding-inline: 0.75rem;
+}
+
+.elevate-arrivals__title {
+  font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+  font-weight: 400;
+  font-size: 1.125rem;
+  line-height: 1.2;
+  color: #141517;
+  text-decoration: none;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.elevate-arrivals__title:hover {
+  text-decoration: underline;
+}
+
+/* ── Price + CTA row ── */
+.elevate-arrivals__footer-row {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.25rem 0.5rem 0.5rem 0.75rem;
+  margin-top: auto;
+  background-color: #FDFCFC;
+}
+
+.elevate-arrivals__pricing {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  white-space: nowrap;
+}
+
+.elevate-arrivals__price {
+  font-family: 'Inter', var(--font-body--family), sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  letter-spacing: -0.0125rem;
+  color: #141517;
+}
+
+.elevate-arrivals__retail {
+  font-family: 'Inter', var(--font-body--family), sans-serif;
+  font-weight: 400;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  letter-spacing: -0.00875rem;
+  color: #AEB2B8;
+}
+
+/* ── Card CTA buttons ── */
+.elevate-arrivals__ctas {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.elevate-arrivals__btn-stats {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  border: 0.03125rem solid #141517;
+  background-color: transparent;
+  color: #141517;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.elevate-arrivals__btn-stats:hover {
+  background-color: rgba(20, 21, 23, 0.06);
+}
+
+.elevate-arrivals__btn-stats svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.elevate-arrivals__btn-atc {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  border-radius: 0.75rem;
+  border: none;
+  background-color: #E31E24;
+  color: #FDFCFC;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.elevate-arrivals__btn-atc:hover {
+  background-color: #c9191e;
+}
+
+.elevate-arrivals__btn-atc svg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.elevate-arrivals__btn-atc:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.elevate-arrivals__btn-atc.is-loading {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* ── Stats toggle icon swap ── */
+.elevate-arrivals__icon-close {
+  display: none;
+}
+
+.elevate-arrivals__card.is-open .elevate-arrivals__icon-chart {
+  display: none;
+}
+
+.elevate-arrivals__card.is-open .elevate-arrivals__icon-close {
+  display: block;
+}
+
+/* ── Stats panel (absolute overlay, rises above footer) ── */
+.elevate-arrivals__stats-panel {
+  position: absolute;
+  bottom: 4.5rem;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background-color: #FDFCFC;
+  border-radius: 1.5rem;
+  padding: 0.5rem 1rem 0.5rem;
+  opacity: 0;
+  transform: translateY(1rem);
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  z-index: 2;
+}
+
+.elevate-arrivals__card.is-open .elevate-arrivals__stats-panel {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+.elevate-arrivals__stats-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.elevate-arrivals__stats-title {
+  font-family: 'Inter', var(--font-body--family), sans-serif;
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  letter-spacing: -0.0125rem;
+  color: #141517;
+}
+
+/* Grade detailed pill — default: dark bg (A, B, C) */
+.elevate-arrivals__stats-grade {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Inter', var(--font-body--family), sans-serif;
+  font-weight: 700;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  letter-spacing: -0.00875rem;
+  color: #FDFCFC;
+  background-color: #141517;
+  border-radius: 999px;
+  padding: 0.25rem 0.25rem 0.25rem 0.75rem;
+  white-space: nowrap;
+}
+
+/* A+ variant: green bg */
+.elevate-arrivals__stats-grade--aplus {
+  background-color: #4ade80;
+  color: #FDFCFC;
+}
+
+/* Letter circle — default: green (A+, A) */
+.elevate-arrivals__stats-grade-letter {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #4ade80;
+  color: #FDFCFC;
+  font-weight: 700;
+  font-size: 0.75rem;
+  line-height: 1.5;
+  letter-spacing: -0.0075rem;
+  border-radius: 999px;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+/* A+ letter circle: dark bg */
+.elevate-arrivals__stats-grade-letter--aplus {
+  background-color: #141517;
+}
+
+/* B letter circle: blue */
+.elevate-arrivals__stats-grade-letter--b {
+  background-color: #3b82f6;
+}
+
+/* C letter circle: gray */
+.elevate-arrivals__stats-grade-letter--c {
+  background-color: #6B7280;
+}
+
+.elevate-arrivals__stats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.elevate-arrivals__stats-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.elevate-arrivals__stats-row-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+}
+
+.elevate-arrivals__stats-label {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-family: 'Inter', var(--font-body--family), sans-serif;
+  font-weight: 400;
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: -0.01rem;
+  color: #141517;
+  white-space: nowrap;
+}
+
+.elevate-arrivals__stats-label svg {
+  width: 1rem;
+  height: 1rem;
+  flex-shrink: 0;
+}
+
+.elevate-arrivals__stats-value {
+  font-family: 'Inter', var(--font-body--family), sans-serif;
+  font-weight: 700;
+  font-size: 1rem;
+  line-height: 1.5;
+  letter-spacing: -0.01rem;
+  color: #141517;
+  white-space: nowrap;
+  text-align: right;
+}
+
+.elevate-arrivals__stats-value--green {
+  color: #4ade80;
+}
+
+/* ── Progress bars ── */
+.elevate-arrivals__stats-bar {
+  width: 100%;
+  height: 0.75rem;
+  background-color: #E2E3E5;
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.elevate-arrivals__stats-bar-fill {
+  height: 100%;
+  background-color: #4ade80;
+  border-radius: 999px;
+  transition: width 0.4s ease;
+}
+
+/* ─── Desktop (48rem / 768px) ─── */
+@media (min-width: 48rem) {
+  .elevate-arrivals__card {
+    flex: 0 0 23.625rem;
+    min-width: 23.625rem;
+  }
+
+  .elevate-arrivals__title {
+    font-size: 1.25rem;
+  }
+
+  .elevate-arrivals__price {
+    font-size: 1.5rem;
+    letter-spacing: -0.015rem;
+  }
+}
+
+/* ─── Grid context: cards fill grid cells ─── */
+.product-grid .elevate-arrivals__card {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
+}

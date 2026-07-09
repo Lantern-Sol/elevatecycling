@@ -1,0 +1,228 @@
+{%- doc -%}
+  Elevate Cycling — Collection header section.
+  Breadcrumb nav, heading with accent on last word,
+  and configurable subtitle. Light background, left-aligned.
+{%- enddoc -%}
+
+{%- liquid
+  assign title_words = collection.title | split: ' '
+  assign word_count = title_words | size
+  assign last_word = title_words | last
+
+  if word_count > 1
+    assign first_words = ''
+    for word in title_words
+      if forloop.last == false
+        if first_words != ''
+          assign first_words = first_words | append: ' '
+        endif
+        assign first_words = first_words | append: word
+      endif
+    endfor
+  endif
+
+  assign root_label = section.settings.breadcrumb_root_label
+  assign root_link = section.settings.breadcrumb_root_link
+  if root_link == blank
+    assign root_link = '/collections/all'
+  endif
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-collection-header"
+  data-scroll-reveal
+  style="
+    background: #FDFCFC;
+    --ech-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --ech-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-collection-header__inner">
+    {%- comment -%} ── Breadcrumb ── {%- endcomment -%}
+    <nav class="elevate-collection-header__breadcrumb" aria-label="Breadcrumb">
+      <ol class="elevate-collection-header__breadcrumb-list">
+        <li class="elevate-collection-header__breadcrumb-item">
+          <a href="{{ root_link }}" class="elevate-collection-header__breadcrumb-link">
+            {{- root_label -}}
+          </a>
+        </li>
+        <li class="elevate-collection-header__breadcrumb-item" aria-current="page">
+          <span>{{ collection.title }}</span>
+        </li>
+      </ol>
+    </nav>
+
+    {%- comment -%} ── Heading with accent on last word ── {%- endcomment -%}
+    <h1 class="elevate-collection-header__heading">
+      {%- if word_count > 1 -%}
+        {{ first_words }} <span class="elevate-collection-header__accent">{{ last_word }}</span>
+      {%- else -%}
+        <span class="elevate-collection-header__accent">{{ last_word }}</span>
+      {%- endif -%}
+    </h1>
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="elevate-collection-header__subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Collection Header ─── */
+  .elevate-collection-header {
+    padding-block-start: var(--ech-pt);
+    padding-block-end: var(--ech-pb);
+  }
+
+  .elevate-collection-header__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Breadcrumb ── */
+  .elevate-collection-header__breadcrumb-list {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .elevate-collection-header__breadcrumb-item {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+  }
+
+  .elevate-collection-header__breadcrumb-item + .elevate-collection-header__breadcrumb-item::before {
+    content: '/';
+    margin-inline-end: 0.5rem;
+    color: #AEB2B8;
+  }
+
+  .elevate-collection-header__breadcrumb-link {
+    color: #36393F;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+
+  .elevate-collection-header__breadcrumb-link:hover {
+    color: #141517;
+    text-decoration: underline;
+  }
+
+  .elevate-collection-header__breadcrumb-link:focus-visible {
+    outline: 0.125rem solid #141517;
+    outline-offset: 0.125rem;
+    border-radius: 0.125rem;
+  }
+
+  /* ── Heading ── */
+  .elevate-collection-header__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #141517;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-collection-header__accent {
+    color: #E31E24;
+  }
+
+  /* ── Subtitle ── */
+  .elevate-collection-header__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-collection-header__inner {
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-collection-header__heading {
+      font-size: 4rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection Header",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Breadcrumb"
+    },
+    {
+      "type": "text",
+      "id": "breadcrumb_root_label",
+      "label": "Root label",
+      "default": "Shop"
+    },
+    {
+      "type": "url",
+      "id": "breadcrumb_root_link",
+      "label": "Root link",
+      "info": "Defaults to /collections/all if blank."
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "300–500 new items — Updated daily."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Header"
+    }
+  ]
+}
+{% endschema %}
