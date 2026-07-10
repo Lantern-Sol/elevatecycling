@@ -1,0 +1,242 @@
+{%- doc -%}
+  Elevate Cycling — Collection SEO title section.
+  Two-column layout with eyebrow + heading on the left,
+  richtext description + pill links to related collections on the right.
+  Pink-to-white gradient background. Sits below the product grid.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-col-title"
+  data-scroll-reveal
+  style="
+    background: linear-gradient(to bottom, #f1dbdc, #fdfcfc);
+    border-radius: 2rem;
+    padding-top: {{ section.settings.padding_top }}px;
+    padding-bottom: {{ section.settings.padding_bottom }}px;
+  "
+>
+  <div class="elevate-col-title__inner">
+    {%- comment -%} ── Left column: eyebrow + heading ── {%- endcomment -%}
+    <div class="elevate-col-title__left">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="elevate-col-title__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-col-title__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Right column: description + pill links ── {%- endcomment -%}
+    <div class="elevate-col-title__right">
+      {%- if section.settings.description != blank -%}
+        <div class="elevate-col-title__copy">
+          {{ section.settings.description }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.blocks.size > 0 -%}
+        <div class="elevate-col-title__pills">
+          {%- for block in section.blocks -%}
+            {%- if block.settings.label != blank -%}
+              <a
+                href="{{ block.settings.url | default: '#' }}"
+                class="elevate-col-title__pill"
+                {{ block.shopify_attributes }}
+              >
+                {{- block.settings.label -}}
+              </a>
+            {%- endif -%}
+          {%- endfor -%}
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Collection SEO Title ─── */
+  .elevate-col-title__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Left column ── */
+  .elevate-col-title__left {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-col-title__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    text-transform: uppercase;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-col-title__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 1.2;
+    color: #141517;
+    margin: 0;
+  }
+
+  /* ── Right column ── */
+  .elevate-col-title__right {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-col-title__copy {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #36393F;
+  }
+
+  .elevate-col-title__copy p {
+    margin: 0;
+  }
+
+  .elevate-col-title__copy p + p {
+    margin-top: 1rem;
+  }
+
+  /* ── Pill links ── */
+  .elevate-col-title__pills {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .elevate-col-title__pill {
+    display: inline-flex;
+    align-items: center;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #141517;
+    text-decoration: none;
+    border: 0.03125rem solid #141517;
+    border-radius: 0.75rem;
+    padding: 0.25rem 0.75rem;
+    white-space: nowrap;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .elevate-col-title__pill:hover {
+    background: #141517;
+    color: #FDFCFC;
+  }
+
+  .elevate-col-title__pill:focus-visible {
+    outline: 0.125rem solid #141517;
+    outline-offset: 0.125rem;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-col-title__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 2rem;
+      padding-inline: 10.875rem; /* 174px + 50px grid margin = 224px total */
+    }
+
+    .elevate-col-title__heading {
+      font-size: 3.5625rem; /* 57px */
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Collection Title",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "YOUR DREAM GEAR, UNDER RETAIL PRICE"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading"
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 32,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "default": 32,
+      "unit": "px"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "pill_link",
+      "name": "Pill link",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Title"
+    }
+  ]
+}
+{% endschema %}

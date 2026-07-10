@@ -3,6 +3,10 @@
  * Pure IntersectionObserver + CSS transitions (no GSAP dependency).
  * Loaded at end of <body> so DOM is already parsed.
  *
+ * ALL CSS (hidden state, transitions, revealed state) lives in a static
+ * <style> block in the <head> of theme.liquid so it's render-blocking and
+ * available from first paint. This JS only runs the observer.
+ *
  * Usage (Liquid):
  *   <div data-scroll-reveal>                → fade-up the whole element
  *   <div data-scroll-reveal="children">     → stagger-reveal each direct child
@@ -17,55 +21,6 @@
   'use strict';
 
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-
-  /* ── Inject reveal CSS ── */
-  var style = document.createElement('style');
-  style.textContent = [
-    /* Hidden state */
-    '[data-scroll-reveal]:not(.is-revealed) {',
-    '  opacity: 0;',
-    '  transform: translateY(1.875rem);',
-    '}',
-    '[data-scroll-reveal="fade"]:not(.is-revealed) {',
-    '  transform: none;',
-    '}',
-    /* Children mode: parent is visible, children are hidden */
-    '[data-scroll-reveal="children"] {',
-    '  opacity: 1 !important;',
-    '  transform: none !important;',
-    '}',
-    '[data-scroll-reveal="children"] > * {',
-    '  opacity: 0;',
-    '  transform: translateY(1.875rem);',
-    '  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);',
-    '}',
-    '[data-scroll-reveal="children"].is-revealed > * {',
-    '  opacity: 1;',
-    '  transform: none;',
-    '}',
-    /* Fade-children mode: stagger children with opacity only (no translateY) */
-    '[data-scroll-reveal="fade-children"] {',
-    '  opacity: 1 !important;',
-    '  transform: none !important;',
-    '}',
-    '[data-scroll-reveal="fade-children"] > * {',
-    '  opacity: 0;',
-    '  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);',
-    '}',
-    '[data-scroll-reveal="fade-children"].is-revealed > * {',
-    '  opacity: 1;',
-    '}',
-    /* Revealed state */
-    '.is-revealed {',
-    '  opacity: 1 !important;',
-    '  transform: none !important;',
-    '}',
-    /* Transition on the element itself */
-    '[data-scroll-reveal] {',
-    '  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);',
-    '}'
-  ].join('\n');
-  document.head.appendChild(style);
 
   /* ── Observer ── */
   var observer = new IntersectionObserver(function (entries) {
@@ -86,7 +41,13 @@
         el.style.transitionDelay = baseDelay + 's';
       }
 
-      el.classList.add('is-revealed');
+      /* Double-rAF ensures at least one full paint cycle has occurred
+         with the hidden state before .is-revealed triggers the transition */
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () {
+          el.classList.add('is-revealed');
+        });
+      });
       observer.unobserve(el);
     });
   }, {

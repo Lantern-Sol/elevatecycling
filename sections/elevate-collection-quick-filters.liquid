@@ -1,0 +1,811 @@
+{%- doc -%}
+  Elevate Cycling — Collection quick filters section.
+  Bike-type image cards, dynamic size chips, and price-range chips.
+  All filtering via URL navigation (no JS required).
+{%- enddoc -%}
+
+{%- liquid
+  comment
+    ── Capture current query string for active state detection ──
+  endcomment
+  assign current_qs = request.query_string | url_decode | default: ''
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-qf"
+  data-scroll-reveal
+  style="
+    background: #FDFCFC;
+    --eqf-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --eqf-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-qf__inner">
+    <hr class="elevate-qf__divider">
+
+    {%- comment -%} ── Header ── {%- endcomment -%}
+    <div class="elevate-qf__header">
+      <p class="elevate-qf__label">{{ section.settings.label }}</p>
+      <p class="elevate-qf__subtitle">{{ section.settings.subtitle }}</p>
+    </div>
+
+    {%- comment -%} ── Bike type cards ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-qf__types">
+        {%- for block in section.blocks -%}
+          {%- if block.type == 'type_card' -%}
+            {%- liquid
+              assign is_active = false
+              assign card_link = block.settings.link
+              if card_link != blank and card_link == collection.url
+                assign is_active = true
+              endif
+              if card_link != blank
+                assign card_link_handle = card_link | split: '/collections/' | last | split: '?' | first
+                assign current_handle = collection.handle
+                if card_link_handle == current_handle
+                  assign is_active = true
+                endif
+              endif
+            -%}
+            <a
+              href="{{ block.settings.link | default: '#' }}"
+              class="elevate-qf__type-card{% if is_active %} elevate-qf__type-card--active{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              {%- if block.settings.image != blank -%}
+                <img
+                  class="elevate-qf__type-img"
+                  src="{{ block.settings.image | image_url: width: 330 }}"
+                  alt="{{ block.settings.label | escape }}"
+                  width="165"
+                  height="100"
+                  loading="lazy"
+                >
+              {%- elsif block.settings.fallback_key != 'none' and block.settings.fallback_key != blank -%}
+                <img
+                  class="elevate-qf__type-img"
+                  src="{{ 'qf-' | append: block.settings.fallback_key | append: '.png' | asset_url }}"
+                  alt="{{ block.settings.label | escape }}"
+                  width="165"
+                  height="100"
+                  loading="lazy"
+                >
+              {%- else -%}
+                <div class="elevate-qf__type-img elevate-qf__type-img--placeholder"></div>
+              {%- endif -%}
+              <span class="elevate-qf__type-label">{{ block.settings.label }}</span>
+            </a>
+          {%- endif -%}
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Base URL for filter chips (preserves search query) ── {%- endcomment -%}
+    {%- liquid
+      assign base_url = collection.url
+      if base_url == blank
+        if request.page_type == 'search'
+          assign base_url = '/search'
+        else
+          assign base_url = '/collections/all'
+        endif
+      endif
+    -%}
+
+    {%- comment -%} ── Size filter chips (schema-based) ── {%- endcomment -%}
+    {%- liquid
+      assign has_size_chips = false
+      for i in (1..6)
+        assign label_key = 'size_' | append: i | append: '_label'
+        if section.settings[label_key] != blank
+          assign has_size_chips = true
+          break
+        endif
+      endfor
+    -%}
+    {%- if has_size_chips -%}
+      <div class="elevate-qf__filter-row">
+        <p class="elevate-qf__filter-label">{{ section.settings.size_label }}</p>
+        <div class="elevate-qf__chips">
+          {%- for i in (1..6) -%}
+            {%- liquid
+              assign label_key = 'size_' | append: i | append: '_label'
+              assign value_key = 'size_' | append: i | append: '_value'
+              assign chip_label = section.settings[label_key]
+              assign chip_value = section.settings[value_key]
+
+              if chip_label == blank
+                continue
+              endif
+
+              assign size_url = base_url | append: '?'
+              if request.page_type == 'search' and search.terms != blank
+                assign size_url = size_url | append: 'q=' | append: search.terms | url_encode | append: '&type=product&'
+              endif
+              assign size_url = size_url | append: section.settings.size_param_name | append: '=' | append: chip_value | url_encode
+
+              assign chip_is_active = false
+              assign expected_param = section.settings.size_param_name | append: '=' | append: chip_value
+              assign query_params = request.query_string | url_decode | split: '&'
+              for param in query_params
+                if param == expected_param
+                  assign chip_is_active = true
+                  break
+                endif
+              endfor
+            -%}
+            <a
+              href="{{ size_url }}"
+              class="elevate-qf__chip{% if chip_is_active %} elevate-qf__chip--active{% endif %}"
+            >
+              {{- chip_label -}}
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Price filter chips (schema-based) ── {%- endcomment -%}
+    {%- liquid
+      assign has_price_chips = false
+      for i in (1..4)
+        assign label_key = 'price_' | append: i | append: '_label'
+        if section.settings[label_key] != blank
+          assign has_price_chips = true
+          break
+        endif
+      endfor
+    -%}
+    {%- if has_price_chips -%}
+      <div class="elevate-qf__filter-row">
+        <p class="elevate-qf__filter-label">{{ section.settings.price_label }}</p>
+        <div class="elevate-qf__chips">
+          {%- for i in (1..4) -%}
+            {%- liquid
+              assign label_key = 'price_' | append: i | append: '_label'
+              assign min_key = 'price_' | append: i | append: '_min'
+              assign max_key = 'price_' | append: i | append: '_max'
+              assign chip_label = section.settings[label_key]
+              assign chip_min = section.settings[min_key]
+              assign chip_max = section.settings[max_key]
+
+              if chip_label == blank
+                continue
+              endif
+
+              comment
+                Build the filter URL
+              endcomment
+              assign price_url = base_url | append: '?'
+              if request.page_type == 'search' and search.terms != blank
+                assign price_url = price_url | append: 'q=' | append: search.terms | url_encode | append: '&type=product&'
+              endif
+              if chip_min != blank and chip_min != 0
+                assign price_url = price_url | append: 'filter.v.price.gte=' | append: chip_min | append: '&'
+              else
+                assign price_url = price_url | append: 'filter.v.price.gte=&'
+              endif
+              if chip_max != blank and chip_max != 0
+                assign price_url = price_url | append: 'filter.v.price.lte=' | append: chip_max
+              else
+                assign price_url = price_url | append: 'filter.v.price.lte='
+              endif
+
+              comment
+                Active state — check query string for matching gte/lte params
+              endcomment
+              assign chip_is_active = false
+              if current_qs != blank
+                assign query_params = current_qs | split: '&'
+                assign gte_match = false
+                assign lte_match = false
+
+                if chip_min != blank and chip_min != 0
+                  assign gte_param = 'filter.v.price.gte=' | append: chip_min
+                  for param in query_params
+                    if param == gte_param
+                      assign gte_match = true
+                      break
+                    endif
+                  endfor
+                else
+                  assign gte_match = true
+                endif
+
+                if chip_max != blank and chip_max != 0
+                  assign lte_param = 'filter.v.price.lte=' | append: chip_max
+                  for param in query_params
+                    if param == lte_param
+                      assign lte_match = true
+                      break
+                    endif
+                  endfor
+                else
+                  assign lte_match = true
+                endif
+
+                if gte_match and lte_match
+                  if chip_min != 0 or chip_max != 0
+                    assign chip_is_active = true
+                  endif
+                endif
+              endif
+            -%}
+            <a
+              href="{{ price_url }}"
+              class="elevate-qf__chip{% if chip_is_active %} elevate-qf__chip--active{% endif %}"
+            >
+              {{- chip_label -}}
+            </a>
+          {%- endfor -%}
+        </div>
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Quick Filters ─── */
+  .elevate-qf {
+    padding-block-start: var(--eqf-pt);
+    padding-block-end: var(--eqf-pb);
+  }
+
+  .elevate-qf__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Divider ── */
+  .elevate-qf__divider {
+    border: none;
+    border-top: 1px solid #E5E7EB;
+    margin: 0;
+  }
+
+  /* ── Header ── */
+  .elevate-qf__header {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .elevate-qf__label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-qf__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Type cards row ── */
+  .elevate-qf__types {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    padding-block: 0.25rem;
+    /* Peek: break out of inner padding + grid margin so last card peeks from viewport edge */
+    margin-inline: calc(-0.5rem - var(--page-margin, 0.75rem));
+    padding-inline-start: calc(0.5rem + var(--page-margin, 0.75rem));
+    padding-inline-end: 1rem;
+  }
+
+  .elevate-qf__types::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── Type card ── */
+  .elevate-qf__type-card {
+    flex: 0 0 10.3125rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0;
+    border: 1px solid #AEB2B8;
+    border-radius: 1rem;
+    background: #FDFCFC;
+    text-decoration: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+    overflow: hidden;
+  }
+
+  .elevate-qf__type-card:hover {
+    border-color: #E31E24;
+  }
+
+  .elevate-qf__type-card:focus-visible {
+    outline: 0.125rem solid #E31E24;
+    outline-offset: 0.125rem;
+  }
+
+  .elevate-qf__type-card--active {
+    background: #E31E24;
+    border-color: #E31E24;
+  }
+
+  /* ── Type card image ── */
+  .elevate-qf__type-img {
+    width: 100%;
+    aspect-ratio: 120 / 72;
+    object-fit: cover;
+  }
+
+  .elevate-qf__type-img--placeholder {
+    background: #E5E7EB;
+  }
+
+  /* ── Type card label ── */
+  .elevate-qf__type-label {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-size: 1.25rem;
+    font-weight: 700;
+    line-height: 1.2;
+    text-transform: uppercase;
+    color: #E31E24;
+    text-align: center;
+    padding-block-end: 0.5rem;
+  }
+
+  .elevate-qf__type-card--active .elevate-qf__type-label {
+    color: #FDFCFC;
+  }
+
+  /* ── Filter row ── */
+  .elevate-qf__filter-row {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .elevate-qf__filter-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #36393F;
+    margin: 0;
+    flex-shrink: 0;
+  }
+
+  /* ── Chips row ── */
+  .elevate-qf__chips {
+    display: flex;
+    flex-wrap: nowrap;
+    gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    margin-inline: calc(-0.5rem - var(--page-margin, 0.75rem));
+    padding-inline-start: calc(0.5rem + var(--page-margin, 0.75rem));
+    padding-inline-end: 1rem;
+  }
+
+  .elevate-qf__chips::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* ── Chip ── */
+  .elevate-qf__chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.25rem 0.75rem;
+    border: 1px solid #6B7280;
+    border-radius: 999px;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1.5;
+    color: #36393F;
+    text-decoration: none;
+    background: #FDFCFC;
+    white-space: nowrap;
+    transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+  }
+
+  .elevate-qf__chip:hover {
+    border-color: #E31E24;
+    color: #E31E24;
+  }
+
+  .elevate-qf__chip:focus-visible {
+    outline: 0.125rem solid #E31E24;
+    outline-offset: 0.125rem;
+  }
+
+  .elevate-qf__chip--active {
+    background: #E31E24;
+    color: #FDFCFC;
+    border-color: #E31E24;
+  }
+
+  .elevate-qf__chip--active:hover {
+    color: #FDFCFC;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-qf__inner {
+      padding-inline: 4.375rem; /* 70px + 50px grid margin = 120px total */
+    }
+
+    .elevate-qf__types {
+      overflow-x: visible;
+      flex-wrap: wrap;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+
+    .elevate-qf__filter-row {
+      gap: 1rem;
+    }
+
+    .elevate-qf__chips {
+      flex-wrap: wrap;
+      overflow-x: visible;
+      gap: 1rem;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+
+    .elevate-qf__chip {
+      min-width: 7.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Quick Filters",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Labels"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "QUICK FILTERS"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Shop by type"
+    },
+    {
+      "type": "text",
+      "id": "size_label",
+      "label": "Size filter label",
+      "default": "Filter by size"
+    },
+    {
+      "type": "text",
+      "id": "price_label",
+      "label": "Price filter label",
+      "default": "Filter by price"
+    },
+    {
+      "type": "header",
+      "content": "Size filters"
+    },
+    {
+      "type": "text",
+      "id": "size_param_name",
+      "label": "Size filter param name",
+      "info": "The Shopify filter query param for size.",
+      "default": "filter.v.option.size"
+    },
+    {
+      "type": "header",
+      "content": "Size 1"
+    },
+    {
+      "type": "text",
+      "id": "size_1_label",
+      "label": "Label",
+      "default": "XS / 48-50cm"
+    },
+    {
+      "type": "text",
+      "id": "size_1_value",
+      "label": "Filter value",
+      "default": "XS"
+    },
+    {
+      "type": "header",
+      "content": "Size 2"
+    },
+    {
+      "type": "text",
+      "id": "size_2_label",
+      "label": "Label",
+      "default": "S / 51-53cm"
+    },
+    {
+      "type": "text",
+      "id": "size_2_value",
+      "label": "Filter value",
+      "default": "S"
+    },
+    {
+      "type": "header",
+      "content": "Size 3"
+    },
+    {
+      "type": "text",
+      "id": "size_3_label",
+      "label": "Label",
+      "default": "M / 54-56cm"
+    },
+    {
+      "type": "text",
+      "id": "size_3_value",
+      "label": "Filter value",
+      "default": "M"
+    },
+    {
+      "type": "header",
+      "content": "Size 4"
+    },
+    {
+      "type": "text",
+      "id": "size_4_label",
+      "label": "Label",
+      "default": "M/L / 55-57cm"
+    },
+    {
+      "type": "text",
+      "id": "size_4_value",
+      "label": "Filter value",
+      "default": "M/L"
+    },
+    {
+      "type": "header",
+      "content": "Size 5"
+    },
+    {
+      "type": "text",
+      "id": "size_5_label",
+      "label": "Label",
+      "default": "L / 57-59cm"
+    },
+    {
+      "type": "text",
+      "id": "size_5_value",
+      "label": "Filter value",
+      "default": "L"
+    },
+    {
+      "type": "header",
+      "content": "Size 6"
+    },
+    {
+      "type": "text",
+      "id": "size_6_label",
+      "label": "Label",
+      "default": "XL / 60cm+"
+    },
+    {
+      "type": "text",
+      "id": "size_6_value",
+      "label": "Filter value",
+      "default": "XL"
+    },
+    {
+      "type": "header",
+      "content": "Price range 1"
+    },
+    {
+      "type": "text",
+      "id": "price_1_label",
+      "label": "Label",
+      "default": "Under $2K"
+    },
+    {
+      "type": "number",
+      "id": "price_1_min",
+      "label": "Min price",
+      "default": 0
+    },
+    {
+      "type": "number",
+      "id": "price_1_max",
+      "label": "Max price",
+      "default": 2000
+    },
+    {
+      "type": "header",
+      "content": "Price range 2"
+    },
+    {
+      "type": "text",
+      "id": "price_2_label",
+      "label": "Label",
+      "default": "$2K\u2013$4K"
+    },
+    {
+      "type": "number",
+      "id": "price_2_min",
+      "label": "Min price",
+      "default": 2000
+    },
+    {
+      "type": "number",
+      "id": "price_2_max",
+      "label": "Max price",
+      "default": 4000
+    },
+    {
+      "type": "header",
+      "content": "Price range 3"
+    },
+    {
+      "type": "text",
+      "id": "price_3_label",
+      "label": "Label",
+      "default": "$4K\u2013$6K"
+    },
+    {
+      "type": "number",
+      "id": "price_3_min",
+      "label": "Min price",
+      "default": 4000
+    },
+    {
+      "type": "number",
+      "id": "price_3_max",
+      "label": "Max price",
+      "default": 6000
+    },
+    {
+      "type": "header",
+      "content": "Price range 4"
+    },
+    {
+      "type": "text",
+      "id": "price_4_label",
+      "label": "Label",
+      "default": "Over $6K"
+    },
+    {
+      "type": "number",
+      "id": "price_4_min",
+      "label": "Min price",
+      "default": 6000
+    },
+    {
+      "type": "number",
+      "id": "price_4_max",
+      "label": "Max price",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 8
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "blocks": [
+    {
+      "type": "type_card",
+      "name": "Bike Type",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "select",
+          "id": "fallback_key",
+          "label": "Default image",
+          "info": "Used when no custom image is uploaded.",
+          "options": [
+            { "value": "all-bikes", "label": "All Bikes" },
+            { "value": "cx-gravel", "label": "CX/Gravel" },
+            { "value": "road", "label": "Road" },
+            { "value": "triathlon-tt", "label": "Triathlon/TT" },
+            { "value": "clearance", "label": "Clearance" },
+            { "value": "none", "label": "None" }
+          ],
+          "default": "none"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Collection link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Quick Filters",
+      "blocks": [
+        {
+          "type": "type_card",
+          "settings": {
+            "label": "All Bikes",
+            "fallback_key": "all-bikes"
+          }
+        },
+        {
+          "type": "type_card",
+          "settings": {
+            "label": "CX/Gravel",
+            "fallback_key": "cx-gravel"
+          }
+        },
+        {
+          "type": "type_card",
+          "settings": {
+            "label": "Road",
+            "fallback_key": "road"
+          }
+        },
+        {
+          "type": "type_card",
+          "settings": {
+            "label": "Triathlon/TT",
+            "fallback_key": "triathlon-tt"
+          }
+        },
+        {
+          "type": "type_card",
+          "settings": {
+            "label": "Clearance",
+            "fallback_key": "clearance"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

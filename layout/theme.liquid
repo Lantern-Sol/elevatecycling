@@ -43,6 +43,58 @@
     {%- endif -%}
 
     {{ content_for_header }}
+
+    {%- comment -%}
+      Scroll-reveal: ALL reveal CSS lives here (render-blocking) so it's
+      available from first paint. The JS only runs the IntersectionObserver.
+    {%- endcomment -%}
+    <style>
+      @media (prefers-reduced-motion: no-preference) {
+        /* Hidden state */
+        [data-scroll-reveal]:not(.is-revealed) {
+          opacity: 0;
+          transform: translateY(1.875rem);
+        }
+        [data-scroll-reveal="fade"]:not(.is-revealed) {
+          transform: none;
+        }
+        /* Children/fade-children: parent visible, children hidden */
+        [data-scroll-reveal="children"],
+        [data-scroll-reveal="fade-children"] {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        [data-scroll-reveal="children"]:not(.is-revealed) > *,
+        [data-scroll-reveal="fade-children"]:not(.is-revealed) > * {
+          opacity: 0;
+        }
+        [data-scroll-reveal="children"]:not(.is-revealed) > * {
+          transform: translateY(1.875rem);
+        }
+        /* Transitions */
+        [data-scroll-reveal] {
+          transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        [data-scroll-reveal="children"] > * {
+          transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        [data-scroll-reveal="fade-children"] > * {
+          transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        /* Revealed state */
+        .is-revealed {
+          opacity: 1 !important;
+          transform: none !important;
+        }
+        [data-scroll-reveal="children"].is-revealed > *,
+        [data-scroll-reveal="fade-children"].is-revealed > * {
+          opacity: 1;
+        }
+        [data-scroll-reveal="children"].is-revealed > * {
+          transform: none;
+        }
+      }
+    </style>
   </head>
 
   <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">

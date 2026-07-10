@@ -9,90 +9,99 @@
  */
 {
   "sections": {
-    "section": {
-      "type": "section",
+    "collection_header": {
+      "type": "elevate-collection-header",
+      "settings": {
+        "breadcrumb_root_label": "Shop",
+        "breadcrumb_root_link": "",
+        "subtitle": "300–500 new items — Updated daily.",
+        "padding_top": 24,
+        "padding_bottom": 24
+      }
+    },
+    "elevate_quick_filters": {
+      "type": "elevate-collection-quick-filters",
       "blocks": {
-        "text_tqQTNE": {
-          "type": "text",
-          "name": "Title",
+        "type_all_bikes": {
+          "type": "type_card",
           "settings": {
-            "text": "<h1>{{ closest.collection.title }}</h1>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "fallback_key": "all-bikes",
+            "label": "All Bikes",
+            "link": "/collections/all"
+          }
         },
-        "text_twGGkJ": {
-          "type": "text",
-          "name": "Description",
+        "type_cx_gravel": {
+          "type": "type_card",
           "settings": {
-            "text": "{{ closest.collection.description }}",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "fallback_key": "cx-gravel",
+            "label": "CX/Gravel",
+            "link": "/collections/cx-gravel"
+          }
+        },
+        "type_road": {
+          "type": "type_card",
+          "settings": {
+            "fallback_key": "road",
+            "label": "Road",
+            "link": "/collections/road"
+          }
+        },
+        "type_triathlon": {
+          "type": "type_card",
+          "settings": {
+            "fallback_key": "triathlon-tt",
+            "label": "Triathlon/TT",
+            "link": "/collections/triathlon-tt"
+          }
+        },
+        "type_clearance": {
+          "type": "type_card",
+          "settings": {
+            "fallback_key": "clearance",
+            "label": "Clearance",
+            "link": "/collections/clearance"
+          }
         }
       },
       "block_order": [
-        "text_tqQTNE",
-        "text_twGGkJ"
+        "type_all_bikes",
+        "type_cx_gravel",
+        "type_road",
+        "type_triathlon",
+        "type_clearance"
       ],
-      "name": "Collection heading",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "page-width",
-        "section_height": "",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "label": "QUICK FILTERS",
+        "subtitle": "Shop by type",
+        "size_label": "Filter by size",
+        "price_label": "Filter by price",
+        "size_param_name": "filter.v.option.size",
+        "size_1_label": "XS / 48-50cm",
+        "size_1_value": "XS",
+        "size_2_label": "S / 51-53cm",
+        "size_2_value": "S",
+        "size_3_label": "M / 54-56cm",
+        "size_3_value": "M",
+        "size_4_label": "M/L / 55-57cm",
+        "size_4_value": "M/L",
+        "size_5_label": "L / 57-59cm",
+        "size_5_value": "L",
+        "size_6_label": "XL / 60cm+",
+        "size_6_value": "XL",
+        "price_1_label": "Under $2K",
+        "price_1_min": 0,
+        "price_1_max": 2000,
+        "price_2_label": "$2K–$4K",
+        "price_2_min": 2000,
+        "price_2_max": 4000,
+        "price_3_label": "$4K–$6K",
+        "price_3_min": 4000,
+        "price_3_max": 6000,
+        "price_4_label": "Over $6K",
+        "price_4_min": 6000,
+        "price_4_max": 0,
+        "padding_top": 8,
+        "padding_bottom": 24
       }
     },
     "main": {
@@ -103,122 +112,385 @@
           "static": true,
           "settings": {
             "enable_filtering": true,
-            "filter_style": "horizontal",
+            "use_drawer_on_desktop": false,
+            "filter_style": "vertical",
             "filter_width": "centered",
             "text_label_case": "default",
             "show_swatch_label": false,
             "show_filter_label": false,
             "enable_sorting": true,
             "enable_grid_density": true,
-            "padding-block-start": 8,
-            "padding-block-end": 8,
+            "background_color": "",
+            "text_color": "",
+            "padding-block-start": 0,
+            "padding-block-end": 0,
             "padding-inline-start": 0,
             "padding-inline-end": 0,
             "facets_margin_bottom": 8,
             "facets_margin_right": 20
           },
           "blocks": {}
-        },
-        "product-card": {
-          "type": "_product-card",
-          "static": true,
-          "settings": {
-            "product_card_gap": 4,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "card-gallery": {
-              "type": "_product-card-gallery",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_4nY4eT": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "paragraph",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_EzJzMm": {
-              "type": "price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "card-gallery",
-            "product_title_4nY4eT",
-            "price_EzJzMm"
-          ]
         }
       },
       "settings": {
         "layout_type": "grid",
         "product_card_size": "medium",
         "mobile_product_card_size": "small",
+        "enable_infinite_scroll": false,
+        "products_per_page": 12,
         "product_grid_width": "centered",
         "full_width_on_mobile": true,
-        "columns_gap_horizontal": 16,
-        "columns_gap_vertical": 24,
+        "columns_gap_horizontal": 8,
+        "columns_gap_vertical": 16,
         "padding-inline-start": 0,
         "padding-inline-end": 0,
+        "background_color": "",
         "padding-block-start": 0,
         "padding-block-end": 32
+      }
+    },
+    "collection_title": {
+      "type": "elevate-collection-title",
+      "blocks": {
+        "pill_gravel": {
+          "type": "pill_link",
+          "settings": {
+            "label": "Used Gravel Bikes",
+            "url": "/collections/cx-gravel"
+          }
+        },
+        "pill_carbon": {
+          "type": "pill_link",
+          "settings": {
+            "label": "Carbon Road Bikes",
+            "url": "/collections/road"
+          }
+        },
+        "pill_specialized": {
+          "type": "pill_link",
+          "settings": {
+            "label": "Used Specialized Bikes",
+            "url": "/collections/all"
+          }
+        },
+        "pill_ultegra": {
+          "type": "pill_link",
+          "settings": {
+            "label": "Shimano Ultegra Bikes",
+            "url": "/collections/all"
+          }
+        },
+        "pill_trek": {
+          "type": "pill_link",
+          "settings": {
+            "label": "Used Trek Bikes",
+            "url": "/collections/all"
+          }
+        },
+        "pill_under2k": {
+          "type": "pill_link",
+          "settings": {
+            "label": "Bikes Under $2,000",
+            "url": "/collections/all"
+          }
+        }
+      },
+      "block_order": [
+        "pill_gravel",
+        "pill_carbon",
+        "pill_specialized",
+        "pill_ultegra",
+        "pill_trek",
+        "pill_under2k"
+      ],
+      "settings": {
+        "eyebrow": "YOUR DREAM GEAR, UNDER RETAIL PRICE",
+        "heading": "Road Bikes — New & Certified Pre-Owned",
+        "description": "<p>Shop our curated selection of new and certified pre-owned road bikes from the world's top brands. Every CPO bike is professionally inspected, tuned, and backed by our quality guarantee — so you ride with total confidence.</p><p>Whether you're chasing KOMs, training for your first century, or upgrading your daily commuter, find your perfect ride at a fraction of retail.</p>",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "marquee_dy3VmC": {
+      "type": "marquee",
+      "blocks": {
+        "icon_Vx4TbT": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-specialized.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "icon_tmU4h9": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-sram.svg",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "icon_MFCNMD": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-shimano.svg",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "icon_DVxUxb": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-campagnolo.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "icon_4PbaAt": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-colnago.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "icon_kCMnkN": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-zipp.png",
+            "invert_colors": false,
+            "width": 164,
+            "width-mobile": 120,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        },
+        "icon_NAEnVt": {
+          "type": "icon",
+          "settings": {
+            "icon": "none",
+            "theme_asset": "brand-roval.png",
+            "invert_colors": false,
+            "width": 100,
+            "width-mobile": 80,
+            "link": "",
+            "open_in_new_tab": false,
+            "icon_color": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "icon_Vx4TbT",
+        "icon_tmU4h9",
+        "icon_MFCNMD",
+        "icon_DVxUxb",
+        "icon_4PbaAt",
+        "icon_kCMnkN",
+        "icon_NAEnVt"
+      ],
+      "settings": {
+        "movement_direction": "normal",
+        "background_color": "#ffffff",
+        "padding-block-start": 24,
+        "padding-block-end": 24,
+        "gap_between_elements": 48
+      }
+    },
+    "elevate_what_we_carry_RtGfBB": {
+      "type": "elevate-what-we-carry",
+      "blocks": {
+        "inventory_card_Gd774K": {
+          "type": "inventory_card",
+          "settings": {
+            "badge_icon": "star",
+            "badge_text": "NEW · BELOW RETAIL",
+            "description": "We source directly from brands — overstock, closeouts, and bulk deals — so you get current-model gear at prices you won't find at a standard retailer.",
+            "feature_1": "100% brand new, never ridden",
+            "feature_2": "Direct from the brand, not gray market",
+            "feature_3": "Full manufacturer's warranty applies",
+            "feature_4": "Inspected and packaged before it ships",
+            "cta_label": "SHOP NEW STOCK",
+            "cta_link": ""
+          }
+        },
+        "inventory_card_f7wr6b": {
+          "type": "inventory_card",
+          "settings": {
+            "badge_icon": "certificate-solid",
+            "badge_text": "CERTIFIED PRE-OWNED",
+            "description": "Every used item goes through our in-house inspection process — cleaned, photographed, condition-graded, and fully spec'd — so there are no surprises when it arrives.",
+            "feature_1": "Mechanic-inspected and condition-graded",
+            "feature_2": "Full spec sheet on every listing",
+            "feature_3": "Honest condition descriptions, no fluff",
+            "feature_4": "30-day returns if it's not as described",
+            "cta_label": "SHOP CERTIFIED PRE-OWNED",
+            "cta_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "inventory_card_Gd774K",
+        "inventory_card_f7wr6b"
+      ],
+      "settings": {
+        "background_color": "#e2e3e5",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "eyebrow": "OUR INVENTORY",
+        "heading": "WHAT WE CARRY",
+        "subtitle": "Two types of inventory. One standard: every item inspected, spec'd, and priced right before it ships."
+      }
+    },
+    "collection_cta": {
+      "type": "elevate-collection-cta",
+      "settings": {
+        "eyebrow": "PAY WITH YOUR OLD GEAR",
+        "heading": "Sell or trade in",
+        "button_label": "Get a Quote",
+        "button_link": "/pages/sell-or-trade",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "newsletter": {
+      "type": "elevate-collection-newsletter",
+      "settings": {
+        "eyebrow": "SUBSCRIBE",
+        "heading": "Save your search, get $50 OFF",
+        "heading_accent": "get $50 OFF",
+        "body": "300–500 new listings each week — get notified when similar gear gets listed.",
+        "email_label": "Email",
+        "email_placeholder": "johndoe@email.com",
+        "button_label": "Subscribe to Newsletter",
+        "success_message": "You're in! We'll notify you of new listings.",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "elevate_faq_mEJhLE": {
+      "type": "elevate-faq",
+      "blocks": {
+        "faq_yPdnKD": {
+          "type": "faq",
+          "settings": {
+            "question": "What types of inventory does Elevate carry?",
+            "answer": "Elevate carries two types of inventory: brand-new gear sourced directly from brands at below-retail prices, and certified pre-owned gear bought from cyclists. Every item — new or pre-owned — is inspected, cleaned, and fully documented by our in-house mechanics before it goes live. We list condition honestly so you know exactly what you're getting before you decide."
+          }
+        },
+        "faq_9G8k3k": {
+          "type": "faq",
+          "settings": {
+            "question": "How accurate are the condition descriptions?",
+            "answer": "Every listing includes Mechanic's Notes written by the tech who inspected the item — specific, honest, and not filtered through a marketing lens. If there's a scratch on the chainstay or wear on the cassette, it'll say so. We'd rather lose a sale than have a customer surprised by something we didn't disclose."
+          }
+        },
+        "faq_wnb7im": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I return an item if it doesn't match the description?",
+            "answer": "Yes — we offer a 30-day satisfaction guarantee on all purchases. If the item doesn't match what was described, contact us and we'll make it right. Free return shipping is included for condition discrepancies. We stand behind every listing."
+          }
+        },
+        "faq_d3UKbp": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I know if the geometry fits me?",
+            "answer": "Every complete bike listing includes the full geometry table — top tube, stack, reach, head tube angle, and more. If you're unsure, contact our mechanics before you buy. We're familiar with most frames in our catalog and can help you compare to what you're currently riding."
+          }
+        },
+        "faq_ixxAY3": {
+          "type": "faq",
+          "settings": {
+            "question": "How does the sell or trade program work?",
+            "answer": "Submit your gear details through our sell form — takes about 2 minutes. We'll send a fair cash or store credit offer within 24hrs. Store credit runs 15–20% higher than cash and can be applied to anything in the catalog. If you accept, we send a free shipping label. Payment is processed within 48hrs of inspection."
+          }
+        },
+        "faq_QEYzmF": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "Yes. We ship to most countries outside the US. International shipping rates are calculated at checkout based on destination and item weight. Complete bikes ship fully assembled and boxed by our mechanics. All international orders are fully insured and tracked."
+          }
+        }
+      },
+      "block_order": [
+        "faq_yPdnKD",
+        "faq_9G8k3k",
+        "faq_wnb7im",
+        "faq_d3UKbp",
+        "faq_ixxAY3",
+        "faq_QEYzmF"
+      ],
+      "settings": {
+        "padding_top": 72,
+        "padding_bottom": 40,
+        "show_divider": true,
+        "heading_line_1": "Questions?",
+        "heading_line_2": "we got the answers",
+        "phone_label": "Call or text us",
+        "phone": "(714) 248-5066",
+        "phone_note": "Mon–Fri, 9AM–5PM PST",
+        "phone_link": "",
+        "email_label": "Email support",
+        "email": "support@elevatecycling.com",
+        "email_note": "Response within 24hrs",
+        "email_link": "",
+        "location_label": "Visit us",
+        "location": "Santa Ana, CA",
+        "location_note": "Warehouse order pickup available",
+        "location_link": "",
+        "help_eyebrow": "NEED MORE HELP?",
+        "help_text": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is.",
+        "primary_label": "Visit FAQs",
+        "primary_link": "",
+        "secondary_label": "Contact Our Mechanics",
+        "secondary_link": ""
       }
     }
   },
   "order": [
-    "section",
-    "main"
+    "collection_header",
+    "elevate_quick_filters",
+    "main",
+    "collection_title",
+    "marquee_dy3VmC",
+    "elevate_what_we_carry_RtGfBB",
+    "collection_cta",
+    "newsletter",
+    "elevate_faq_mEJhLE"
   ]
 }
