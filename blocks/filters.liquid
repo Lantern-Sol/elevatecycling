@@ -645,6 +645,8 @@
 <script>
   /* Sync sidebar height to product grid height */
   (function() {
+    if (window.__elevateSidebarSyncInit) return;
+    window.__elevateSidebarSyncInit = true;
     if (window.matchMedia('(max-width: 749px)').matches) return;
 
     var MIN_HEIGHT = 600;

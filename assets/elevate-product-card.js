@@ -4,6 +4,9 @@
  * Uses document-level event delegation so it works regardless of context.
  */
 (function () {
+  if (window.__elevateProductCardInit) return;
+  window.__elevateProductCardInit = true;
+
   /* ─── Stats panel toggle ─── */
   document.addEventListener('click', function (e) {
     var btn = e.target.closest('[data-arrivals-stats-toggle]');

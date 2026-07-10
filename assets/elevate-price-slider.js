@@ -4,6 +4,9 @@
  * Event-delegated so it survives morph updates.
  */
 (function () {
+  if (window.__elevatePriceSliderInit) return;
+  window.__elevatePriceSliderInit = true;
+
   /** Convert cents to display value (e.g. 1050 → "10.50" for USD). */
   function centsToDisplay(cents) {
     return (cents / 100).toFixed(2);

@@ -37,7 +37,7 @@
             {%- liquid
               assign is_active = false
               assign card_link = block.settings.link
-              if card_link == collection.url
+              if card_link != blank and card_link == collection.url
                 assign is_active = true
               endif
               if card_link != blank
@@ -81,6 +81,18 @@
       </div>
     {%- endif -%}
 
+    {%- comment -%} ── Base URL for filter chips (preserves search query) ── {%- endcomment -%}
+    {%- liquid
+      assign base_url = collection.url
+      if base_url == blank
+        if request.page_type == 'search'
+          assign base_url = '/search'
+        else
+          assign base_url = '/collections/all'
+        endif
+      endif
+    -%}
+
     {%- comment -%} ── Size filter chips (schema-based) ── {%- endcomment -%}
     {%- liquid
       assign has_size_chips = false
@@ -107,7 +119,11 @@
                 continue
               endif
 
-              assign size_url = collection.url | append: '?' | append: section.settings.size_param_name | append: '=' | append: chip_value
+              assign size_url = base_url | append: '?'
+              if request.page_type == 'search' and search.terms != blank
+                assign size_url = size_url | append: 'q=' | append: search.terms | url_encode | append: '&type=product&'
+              endif
+              assign size_url = size_url | append: section.settings.size_param_name | append: '=' | append: chip_value
 
               assign chip_is_active = false
               assign expected_param = section.settings.size_param_name | append: '=' | append: chip_value
@@ -161,7 +177,10 @@
               comment
                 Build the filter URL
               endcomment
-              assign price_url = collection.url | append: '?'
+              assign price_url = base_url | append: '?'
+              if request.page_type == 'search' and search.terms != blank
+                assign price_url = price_url | append: 'q=' | append: search.terms | url_encode | append: '&type=product&'
+              endif
               if chip_min != blank and chip_min != 0
                 assign price_url = price_url | append: 'filter.v.price.gte=' | append: chip_min | append: '&'
               else
