@@ -1,3 +1,6 @@
+{{ 'elevate-product-card.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'elevate-product-card.js' | asset_url }}" defer></script>
+
 <script
   src="{{ 'results-list.js' | asset_url }}"
   type="module"
@@ -51,12 +54,7 @@
             data-product-id="{{ product.id }}"
             ref="cards[]"
           >
-            {% content_for 'block',
-              type: '_product-card',
-              id: 'product-card',
-              closest.product: product,
-              product_view_context: 'search'
-            %}
+            {% render 'elevate-product-card', product: product %}
           </li>
         {% endfor %}
       {% endcapture %}
@@ -72,6 +70,184 @@
     {% endpaginate %}
   </div>
 </results-list>
+
+{% stylesheet %}
+  /* Reduce page-margin to 32px on search page to match collection */
+  .product-grid-container {
+    @media screen and (min-width: 750px) {
+      --page-margin: 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% style %}
+  @media screen and (min-width: 750px) {
+    .product-grid--{{ section.id }}:is(.product-grid--grid) {
+      --product-grid-columns-desktop: repeat(3, 1fr);
+    }
+  }
+{% endstyle %}
+
+{% style %}
+  /* ── Search pagination – pill style matching collection ── */
+
+  .product-grid-container .pagination {
+    padding-block: 2.5rem;
+    display: flex;
+    justify-content: center;
+  }
+
+  .product-grid-container .pagination__list {
+    gap: 1.5rem;
+    align-items: center;
+  }
+
+  /* Kill theme hover-indicator pseudo-elements */
+  .product-grid-container .pagination__link::before,
+  .product-grid-container .pagination__list::before {
+    display: none !important;
+  }
+
+  /* ── Page pills ── */
+  .product-grid-container .pagination__link--page {
+    --pagination-size: auto;
+    width: 2rem;
+    height: 1.5rem;
+    min-width: 2rem;
+    aspect-ratio: unset;
+    border-radius: 999px;
+    background: #AEB2B8;
+    color: #FDFCFC;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: -0.14px;
+    line-height: 1.5;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease;
+  }
+
+  .product-grid-container .pagination__link--page:hover {
+    background: #9a9ea4;
+  }
+
+  /* Active page – red */
+  .product-grid-container .pagination__link--current {
+    background: #E31E24;
+    color: #FDFCFC;
+  }
+
+  .product-grid-container .pagination__link--current:hover {
+    background: #c91a1f;
+  }
+
+  /* ── Ellipsis ── */
+  .product-grid-container .pagination__link--gap {
+    color: #AEB2B8;
+    font-size: 0.75rem;
+    background: none;
+    width: 1.5rem;
+    text-align: center;
+  }
+
+  /* ── Arrow buttons ── */
+  .product-grid-container .pagination__link--arrow {
+    --pagination-size: 3rem;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    border: 0.5px solid #141517;
+    background: transparent;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.2s ease, opacity 0.2s ease;
+  }
+
+  .product-grid-container .pagination__link--arrow:hover {
+    background: rgba(20, 21, 23, 0.06);
+  }
+
+  /* Disabled arrows */
+  .product-grid-container .pagination__link--disabled.pagination__link--arrow {
+    opacity: 0.3;
+    border-color: transparent;
+    pointer-events: none;
+  }
+
+  /* Replace theme chevron SVGs with solid-fill arrows */
+  .product-grid-container .pagination__link--arrow svg {
+    display: none;
+  }
+  .product-grid-container .pagination__link--arrow::after {
+    content: '';
+    display: block;
+    width: 1.125rem;
+    height: 0.875rem;
+    background-color: #141517;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+  /* Previous arrow (left) */
+  .product-grid-container .pagination__item:first-child .pagination__link--arrow::after {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 14' fill='%23141517'%3E%3Cpath d='M6.9609 0.0859L0.5859 6.4609L0.0703 7L0.5859 7.5391L6.9609 13.9141L8.0391 12.8359L2.9531 7.75H18V6.25H2.9531L8.0391 1.1641L6.9609 0.0859Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 14' fill='%23141517'%3E%3Cpath d='M6.9609 0.0859L0.5859 6.4609L0.0703 7L0.5859 7.5391L6.9609 13.9141L8.0391 12.8359L2.9531 7.75H18V6.25H2.9531L8.0391 1.1641L6.9609 0.0859Z'/%3E%3C/svg%3E");
+  }
+  /* Next arrow (right) */
+  .product-grid-container .pagination__item:last-child .pagination__link--arrow::after {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 14' fill='%23141517'%3E%3Cpath d='M11.0391 0.0859L9.9609 1.1641L15.0469 6.25H0V7.75H15.0469L9.9609 12.8359L11.0391 13.9141L17.4141 7.5391L17.9297 7L17.4141 6.4609L11.0391 0.0859Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 14' fill='%23141517'%3E%3Cpath d='M11.0391 0.0859L9.9609 1.1641L15.0469 6.25H0V7.75H15.0469L9.9609 12.8359L11.0391 13.9141L17.4141 7.5391L17.9297 7L17.4141 6.4609L11.0391 0.0859Z'/%3E%3C/svg%3E");
+  }
+
+  /* Arrow-to-pills spacing */
+  .product-grid-container .pagination__item:first-child {
+    margin-inline-end: 1rem;
+  }
+  .product-grid-container .pagination__item:last-child {
+    margin-inline-start: 1rem;
+  }
+
+  /* ── Mobile pagination ── */
+  @media screen and (max-width: 749px) {
+    .product-grid-container .pagination__item {
+      width: auto;
+      aspect-ratio: unset;
+    }
+
+    .product-grid-container .pagination__list {
+      gap: 0.5rem;
+    }
+
+    .product-grid-container .pagination__link--page {
+      width: 1.5rem;
+      height: 1rem;
+      min-width: 1.5rem;
+      font-size: 0.625rem;
+    }
+
+    .product-grid-container .pagination__link--arrow {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .product-grid-container .pagination__item:first-child {
+      margin-inline-end: 0.5rem;
+    }
+    .product-grid-container .pagination__item:last-child {
+      margin-inline-start: 0.5rem;
+    }
+
+    .product-grid-container .pagination__link--gap {
+      width: 1rem;
+    }
+  }
+{% endstyle %}
 
 {% schema %}
 {

@@ -5,7 +5,16 @@
 {%- enddoc -%}
 
 {%- liquid
-  assign title_words = collection.title | split: ' '
+  assign page_title = collection.title
+  if page_title == blank
+    if request.page_type == 'search'
+      assign page_title = 'Search Results'
+    else
+      assign page_title = 'All Collections'
+    endif
+  endif
+
+  assign title_words = page_title | split: ' '
   assign word_count = title_words | size
   assign last_word = title_words | last
 
@@ -47,7 +56,7 @@
           </a>
         </li>
         <li class="elevate-collection-header__breadcrumb-item" aria-current="page">
-          <span>{{ collection.title }}</span>
+          <span>{{ page_title }}</span>
         </li>
       </ol>
     </nav>
@@ -63,6 +72,37 @@
 
     {%- if section.settings.subtitle != blank -%}
       <p class="elevate-collection-header__subtitle">{{ section.settings.subtitle }}</p>
+    {%- endif -%}
+
+    {%- if request.page_type == 'search' -%}
+      <script src="{{ 'search-page-input.js' | asset_url }}" defer type="module"></script>
+      <form action="/search" method="get" role="search" class="elevate-collection-header__search">
+        <search-page-input-component class="elevate-collection-header__search-wrap">
+          <label for="EchSearchInput" class="visually-hidden">{{ 'content.search' | t }}</label>
+          <span class="elevate-collection-header__search-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <path d="M11.7891 0C7.65527 0 4.28906 3.36621 4.28906 7.5C4.28906 9.2959 4.91895 10.9424 5.97656 12.2344L0 18.2109L1.07812 19.2891L7.05469 13.3125C8.34668 14.3701 9.99316 15 11.7891 15C15.9229 15 19.2891 11.6338 19.2891 7.5C19.2891 3.36621 15.9229 0 11.7891 0ZM11.7891 1.5C15.1113 1.5 17.7891 4.17773 17.7891 7.5C17.7891 10.8223 15.1113 13.5 11.7891 13.5C8.4668 13.5 5.78906 10.8223 5.78906 7.5C5.78906 4.17773 8.4668 1.5 11.7891 1.5Z" fill="currentColor"/>
+            </svg>
+          </span>
+          <input name="type" value="product" type="hidden">
+          <input
+            class="elevate-collection-header__search-input"
+            id="EchSearchInput"
+            type="search"
+            name="q"
+            ref="searchPageInput"
+            on:keydown="/handleKeyDown"
+            value="{{ search.terms | escape }}"
+            placeholder="{{ 'content.search' | t }}"
+          >
+          <a href="/search?type=product&q=" class="elevate-collection-header__search-reset" aria-label="{{ 'content.clear' | t | default: 'Clear' }}">
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+              <circle cx="10" cy="10" r="6.25" stroke="currentColor" stroke-width="1.5"/>
+              <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m12.5 7.5-5 5M12.5 12.5l-5-5"/>
+            </svg>
+          </a>
+        </search-page-input-component>
+      </form>
     {%- endif -%}
   </div>
 </div>
@@ -150,6 +190,59 @@
     margin: 0;
   }
 
+  /* ── Search input (search page only) ── */
+  .elevate-collection-header__search {
+    width: 100%;
+    max-width: 28rem;
+  }
+
+  .elevate-collection-header__search-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 0.0625rem solid #AEB2B8;
+    border-radius: 0.5rem;
+    padding: 0.625rem 0.75rem;
+    background: #fff;
+    transition: border-color 0.2s ease;
+  }
+
+  .elevate-collection-header__search-wrap:focus-within {
+    border-color: #141517;
+  }
+
+  .elevate-collection-header__search-icon {
+    display: flex;
+    flex-shrink: 0;
+    color: #AEB2B8;
+  }
+
+  .elevate-collection-header__search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #141517;
+  }
+
+  .elevate-collection-header__search-input::placeholder {
+    color: #AEB2B8;
+  }
+
+  .elevate-collection-header__search-reset {
+    display: flex;
+    flex-shrink: 0;
+    color: #AEB2B8;
+    transition: color 0.2s ease;
+  }
+
+  .elevate-collection-header__search-reset:hover {
+    color: #141517;
+  }
+
   /* ─── Desktop (990px+) ─── */
   @media (min-width: 61.9375rem) {
     .elevate-collection-header__inner {
@@ -158,6 +251,96 @@
 
     .elevate-collection-header__heading {
       font-size: 4rem;
+    }
+  }
+
+  /* ─── Collection List — card overrides to match product grid ─── */
+
+  /* Grid gaps to match product-grid */
+  .section-resource-list .resource-list--grid {
+    --resource-list-column-gap-desktop: 0.5rem;
+    --resource-list-row-gap-desktop: 1rem;
+  }
+
+  /* Card container: match elevate-arrivals__card */
+  .section-resource-list .collection-card {
+    background-color: #FDFCFC;
+    border-radius: 1.5rem;
+    overflow: hidden;
+    box-shadow:
+      0 0.0625rem 0.1875rem rgba(0, 0, 0, 0.1),
+      0 0.0625rem 0.125rem -0.0625rem rgba(0, 0, 0, 0.1);
+  }
+
+  .section-resource-list .collection-card__inner {
+    gap: 0.75rem;
+  }
+
+  /* Image: match elevate-arrivals__img-wrap */
+  .section-resource-list .collection-card__image {
+    aspect-ratio: 342 / 228;
+    border-radius: 1rem;
+    overflow: hidden;
+    background-color: #f2f2f3;
+  }
+
+  .section-resource-list .collection-card__image .resource-image__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  /* Title text: match elevate-arrivals__title */
+  .section-resource-list .collection-card__content .text-block p {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 400;
+    font-size: 1.125rem;
+    line-height: 1.2;
+    color: #141517;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  /* Content padding to match product card inner spacing */
+  .section-resource-list .collection-card__content {
+    padding-inline: 0.75rem;
+    padding-block-end: 0.75rem;
+  }
+
+  /* ── Mobile: smaller variant ── */
+  @media (max-width: 47.9375rem) {
+    .section-resource-list .collection-card {
+      border-radius: 1rem;
+    }
+
+    .section-resource-list .collection-card__inner {
+      gap: 0.5rem;
+    }
+
+    .section-resource-list .collection-card__image {
+      border-radius: 0.5rem;
+    }
+
+    .section-resource-list .collection-card__content .text-block p {
+      font-family: 'Inter', var(--font-body--family), sans-serif;
+      font-size: 0.875rem;
+      font-weight: 400;
+      line-height: 1.5;
+      letter-spacing: -0.00875rem;
+    }
+
+    .section-resource-list .collection-card__content {
+      padding-inline: 0.5rem;
+      padding-block-end: 0.5rem;
+    }
+  }
+
+  /* ── Desktop: larger title ── */
+  @media (min-width: 48rem) {
+    .section-resource-list .collection-card__content .text-block p {
+      font-size: 1.25rem;
     }
   }
 {% endstylesheet %}
