@@ -116,25 +116,28 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 0.5rem;
   padding-inline: 0.75rem;
   font-family: 'Inter', var(--font-body--family), sans-serif;
   font-weight: 400;
   font-size: 0.875rem;
   line-height: 1.5;
   letter-spacing: -0.00875rem;
+  white-space: nowrap;
 }
 
 .elevate-arrivals__brand {
-  flex: 1;
+  flex-shrink: 0;
   min-width: 0;
   color: #E31E24;
 }
 
 .elevate-arrivals__condition {
-  flex: 1;
   min-width: 0;
   color: #AEB2B8;
   text-align: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 /* ── Product title ── */
@@ -164,9 +167,9 @@
   position: relative;
   z-index: 3;
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0.25rem 0.5rem 0.5rem 0.75rem;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0 0.75rem 0.5rem;
   margin-top: auto;
   background-color: #FDFCFC;
 }
@@ -199,8 +202,19 @@
 /* ── Card CTA buttons ── */
 .elevate-arrivals__ctas {
   display: flex;
-  gap: 1rem;
-  align-items: flex-start;
+  gap: 0.5rem;
+  align-items: stretch;
+  justify-content: flex-end;
+  width: 100%;
+}
+
+.elevate-arrivals__btn-stats {
+  flex: 1;
+}
+
+/* ATC only grows when stats button is also present */
+.elevate-arrivals__btn-stats ~ .elevate-arrivals__btn-atc {
+  flex: 1;
 }
 
 .elevate-arrivals__btn-stats {
@@ -457,4 +471,70 @@
   flex: 1 1 auto;
   min-width: 0;
   width: 100%;
+}
+
+/* ─── Mobile grid: small card variant (matches Figma mobile-v2-small) ─── */
+@media (max-width: 47.9375rem) {
+  /* Override Horizon's [product-grid-view='default'] gap (16px uniform)
+     to use the per-section gap vars from product-grid.liquid */
+  .product-grid.product-grid {
+    --product-grid-gap: var(--product-grid-gap-mobile);
+    padding-inline: 0.5rem;
+  }
+
+  .product-grid .elevate-arrivals__card {
+    gap: 0.5rem;
+    border-radius: 1rem;
+  }
+
+  .product-grid .elevate-arrivals__img-wrap {
+    border-radius: 0.5rem;
+  }
+
+  .product-grid .elevate-arrivals__meta {
+    font-size: 0.75rem;
+    letter-spacing: -0.0075rem;
+  }
+
+  .product-grid .elevate-arrivals__title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+  }
+
+  .product-grid .elevate-arrivals__price {
+    font-size: 1.5rem;
+    letter-spacing: -0.015rem;
+  }
+
+  .product-grid .elevate-arrivals__retail {
+    font-size: 0.75rem;
+  }
+
+  .product-grid .elevate-arrivals__ctas {
+    gap: 0.5rem;
+  }
+
+  .product-grid .elevate-arrivals__footer-row {
+    padding: 0 0.5rem 0.5rem;
+  }
+
+  .product-grid .elevate-arrivals__stats-panel {
+    border-radius: 1rem;
+    padding: 0.5rem 0.75rem;
+  }
+
+  .product-grid .elevate-arrivals__stats-title {
+    font-size: 1rem;
+  }
+
+  .product-grid .elevate-arrivals__stats-label {
+    font-size: 0.625rem;
+  }
+
+  .product-grid .elevate-arrivals__stats-value {
+    font-size: 0.75rem;
+  }
 }

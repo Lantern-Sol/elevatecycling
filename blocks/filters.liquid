@@ -110,10 +110,51 @@
 %}
 
 {% if block_settings.enable_filtering or block_settings.enable_sorting or block_settings.enable_grid_density %}
+  {% if block_settings.filter_style == 'vertical' and should_show_pane %}
+    <facets-form-component
+      class="elevate-active-filters__form"
+      section-id="{{ section.id }}"
+      form-style="{{ block_settings.filter_style }}"
+      {{ collection_id_attribute }}
+      {{ collection_handle_attribute }}
+      {{ page_type_attribute }}
+      {{ results_count_attribute }}
+    >
+      <form action="{{ results_url }}" class="elevate-active-filters__form-inner">
+        <div class="elevate-active-filters" data-scroll-reveal>
+          <button
+            class="elevate-active-filters__filter-btn"
+            on:click="#filters-drawer/open"
+            type="button"
+            aria-haspopup="dialog"
+          >
+            <span class="svg-wrapper">
+              {{ 'icon-filter.svg' | inline_asset_content }}
+            </span>
+            Filters
+            {%- if total_active_values > 0 -%}
+              <span class="elevate-active-filters__count" aria-label="{{ total_active_values }} active filters">
+                {{- total_active_values -}}
+              </span>
+            {%- endif -%}
+          </button>
+          <span class="elevate-active-filters__label">Active Filters</span>
+          {% render 'filter-remove-buttons',
+            filters: filters,
+            results_url: results_url,
+            show_filter_label: false,
+            should_show_clear_all: false
+          %}
+        </div>
+      </form>
+    </facets-form-component>
+  {% endif %}
+
   {% if block_settings.filter_style == 'vertical' %}
     {% # These elements are always rendered in the horizontal bar that's why we apply the .facets--horizontal class %}
     <div
       class="facets facets--horizontal facets-controls-wrapper spacing-style{{ desktop_drawer_class }}"
+      data-scroll-reveal
       style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}"
     >
       {% if block_settings.enable_filtering %}
@@ -154,6 +195,8 @@
           {% if products_count > 25000 %}
             {{- 'content.item_count_cutoff' | t: count: 25000 -}}
           {% else %}
+            <span class="elevate-product-count__current">{{ collection.products.size }}</span>
+            /
             <span class="elevate-product-count__total">{{ products_count }} Products</span>
           {% endif %}
         </span>
@@ -171,9 +214,7 @@
         %}
       {% endif %}
 
-      {% if block_settings.enable_grid_density %}
-        {% render 'grid-density-controls', viewport: 'desktop' %}
-      {% endif %}
+      {%- comment -%} Desktop grid density hidden — only mobile picker is used {%- endcomment -%}
     </div>
   {% endif %}
 
@@ -188,6 +229,7 @@
       {%- if block_settings.filter_width == 'full-width' %} facets-block-wrapper--full-width{% endif %}
       {{ desktop_drawer_class }}
     "
+    data-scroll-reveal
     style="
       --grid-column--desktop:
         {%- if block_settings.filter_style == 'horizontal' -%}
@@ -222,12 +264,14 @@
           ref="facetsForm"
         >
           {% if should_show_pane %}
-            {% render 'filter-remove-buttons',
-              filters: filters,
-              results_url: results_url,
-              show_filter_label: block_settings.show_filter_label,
-              should_show_clear_all: true
-            %}
+            {% unless block_settings.filter_style == 'vertical' %}
+              {% render 'filter-remove-buttons',
+                filters: filters,
+                results_url: results_url,
+                show_filter_label: block_settings.show_filter_label,
+                should_show_clear_all: true
+              %}
+            {% endunless %}
 
             {% if block_settings.enable_filtering %}
               {% assign total_active_values = 0 %}
@@ -315,8 +359,8 @@
                   <div class="elevate-filter-search">
                     <label for="elevate-filter-search-input" class="visually-hidden">{{ 'actions.search' | t }}</label>
                     <span class="elevate-filter-search__icon" aria-hidden="true">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7.333 12.667A5.333 5.333 0 1 0 7.333 2a5.333 5.333 0 0 0 0 10.667ZM14 14l-2.9-2.9" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M14.25 2.25C10.1162 2.25 6.75 5.61621 6.75 9.75C6.75 11.5459 7.37988 13.1924 8.4375 14.4844L2.46094 20.4609L3.53906 21.5391L9.51562 15.5625C10.8076 16.6201 12.4541 17.25 14.25 17.25C18.3838 17.25 21.75 13.8838 21.75 9.75C21.75 5.61621 18.3838 2.25 14.25 2.25ZM14.25 3.75C17.5723 3.75 20.25 6.42773 20.25 9.75C20.25 13.0723 17.5723 15.75 14.25 15.75C10.9277 15.75 8.25 13.0723 8.25 9.75C8.25 6.42773 10.9277 3.75 14.25 3.75Z" fill="currentColor"/>
                       </svg>
                     </span>
                     <input
@@ -391,45 +435,20 @@
       {%- if block_settings.enable_filtering == false %} facets-toggle--no-filters{% endif %}
       {%- if block_settings.filter_style == 'horizontal' and has_custom_color %} color-custom-{{ block.id }}{% endif %}
     "
+    data-scroll-reveal
     style="
       --facets-inner-padding-block: {{ block_settings.padding-block-start }}px {{ block_settings.padding-block-end }}px; --facets-inner-padding-inline: var(--padding-lg);
       {{ facets_margin_style }}
     "
   >
-    {% if block_settings.enable_filtering %}
-      <div class="facets-toggle__wrapper">
-        <button
-          class="button facets-toggle__button button-unstyled button-unstyled--with-icon"
-          on:click="#filters-drawer/open"
-          type="button"
-          aria-haspopup="dialog"
-        >
-          <span class="svg-wrapper">
-            {{ 'icon-filter.svg' | inline_asset_content }}
-          </span>
-
-          {{ 'actions.show_filters' | t }}
-
-          {% if total_active_values > 0 %}
-            <div
-              id="filter-count-bubble-toggle"
-              class="filter-count-bubble"
-              aria-label="{{ 'accessibility.filter_count' | t: count: total_active_values }}"
-            >
-              <span class="filter-count-bubble__background"></span>
-
-              <span
-                ref="cartBubbleText"
-                class="filter-count-bubble__text"
-                aria-hidden="true"
-              >
-                {{ total_active_values }}
-              </span>
-            </div>
-          {% endif %}
-        </button>
-      </div>
-    {% endif %}
+    {%- comment -%} ── Mobile product count ── {%- endcomment -%}
+    <div class="facets-toggle__count">
+      <span class="elevate-product-count">
+        <span class="elevate-product-count__current">{{ collection.products.size }}</span>
+        /
+        <span class="elevate-product-count__total">{{ products_count }} Products</span>
+      </span>
+    </div>
 
     {% liquid
       assign child_count = 0
@@ -533,14 +552,22 @@
             class="facets-drawer__filters"
           >
             {% if block_settings.enable_filtering %}
-              {% render 'filter-remove-buttons',
-                filters: filters,
-                results_url: results_url,
-                show_filter_label: block_settings.show_filter_label,
-                should_show_clear_all: false
-              %}
-
               <div class="facets__filters-wrapper">
+                <div class="elevate-filter-search">
+                  <label for="elevate-drawer-filter-search-input" class="visually-hidden">{{ 'actions.search' | t }}</label>
+                  <span class="elevate-filter-search__icon" aria-hidden="true">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M14.25 2.25C10.1162 2.25 6.75 5.61621 6.75 9.75C6.75 11.5459 7.37988 13.1924 8.4375 14.4844L2.46094 20.4609L3.53906 21.5391L9.51562 15.5625C10.8076 16.6201 12.4541 17.25 14.25 17.25C18.3838 17.25 21.75 13.8838 21.75 9.75C21.75 5.61621 18.3838 2.25 14.25 2.25ZM14.25 3.75C17.5723 3.75 20.25 6.42773 20.25 9.75C20.25 13.0723 17.5723 15.75 14.25 15.75C10.9277 15.75 8.25 13.0723 8.25 9.75C8.25 6.42773 10.9277 3.75 14.25 3.75Z" fill="currentColor"/>
+                    </svg>
+                  </span>
+                  <input
+                    type="text"
+                    id="elevate-drawer-filter-search-input"
+                    class="elevate-filter-search__input"
+                    placeholder="Search Filter"
+                    autocomplete="off"
+                  >
+                </div>
                 {% assign total_active_values = 0 %}
                 {% assign is_active = false %}
 
@@ -577,6 +604,14 @@
       <div
         class="facets__drawer-actions"
       >
+        {% render 'filter-remove-buttons',
+          filters: filters,
+          results_url: results_url,
+          show_filter_label: block_settings.show_filter_label,
+          should_show_clear_all: false
+        %}
+
+        <div class="facets__drawer-actions-buttons">
         <facet-remove-component
           data-url="{{ results_url }}"
           active-class="facets__clear-all--active"
@@ -601,10 +636,41 @@
             {{- 'actions.see_items' | t: count: products_count -}}
           </button>
         {% endif %}
+        </div>
       </div>
     </dialog>
   </theme-drawer>
 {% endif %}
+
+<script>
+  /* Sync sidebar height to product grid height */
+  (function() {
+    if (window.matchMedia('(max-width: 749px)').matches) return;
+
+    var MIN_HEIGHT = 600;
+
+    function syncHeight() {
+      var sidebar = document.querySelector('.facets-block-wrapper--vertical:not(theme-drawer)');
+      var grid = document.querySelector('.product-grid[data-testid="product-grid"]');
+      if (!sidebar || !grid) return;
+      var h = Math.max(grid.offsetHeight, MIN_HEIGHT);
+      sidebar.style.maxHeight = h + 'px';
+    }
+
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', syncHeight);
+    } else {
+      syncHeight();
+    }
+
+    window.addEventListener('resize', syncHeight);
+
+    /* Re-sync after filter changes (Shopify re-renders the grid) */
+    var observer = new MutationObserver(syncHeight);
+    var target = document.querySelector('.product-grid-container');
+    if (target) observer.observe(target, { childList: true, subtree: true });
+  })();
+</script>
 
 {% stylesheet %}
   .facets-block-wrapper {
@@ -621,45 +687,55 @@
   }
 
   .facets-toggle {
-    --icon-offset: -3px;
-
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    height: var(--minimum-touch-target);
+    justify-content: space-between;
+    gap: 0.5rem;
     margin: var(--facets-margin);
-    padding-block: var(--facets-inner-padding-block);
-    padding-inline: var(--facets-inner-padding-inline);
+    padding: 1rem;
+    background: #FDFCFC;
 
     @media screen and (min-width: 750px) {
       display: none;
     }
-  }
-
-  .facets-toggle__wrapper {
-    margin-left: var(--icon-offset);
   }
 
   .facets-toggle__button {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 0.5px solid #141517;
+    border-radius: 999px;
+    padding: 0.25rem 0.5rem;
     box-shadow: none;
-    text-transform: capitalize;
+    font-family: 'Inter', sans-serif;
     font-weight: 400;
+    font-size: 1rem;
+    color: #141517;
+    text-transform: capitalize;
+    background: transparent;
 
     @media screen and (min-width: 750px) {
       display: none;
     }
+  }
+
+  .facets-toggle__button .svg-wrapper {
+    width: 1rem;
+    height: 1rem;
   }
 
   .filter-count-bubble {
     position: relative;
-    width: 20px;
-    aspect-ratio: 1;
+    width: 1rem;
+    height: 1rem;
     border-radius: 50%;
     display: grid;
-    line-height: normal;
     place-content: center;
-    color: var(--color-foreground);
-    border: var(--icon-stroke-width) solid var(--color-background);
+    background: #E31E24;
+    color: #FDFCFC;
+    line-height: 1;
+    border: none;
   }
 
   .facets-mobile__title-wrapper .h3 {
@@ -679,16 +755,14 @@
   }
 
   .filter-count-bubble__background {
-    position: absolute;
-    inset: 0;
-    background-color: rgb(var(--color-foreground-rgb) / var(--opacity-10-25));
-    border-radius: var(--style-border-radius-50);
+    display: none;
   }
 
   .filter-count-bubble__text {
-    font-size: 11px;
-    font-weight: var(--font-paragraph--weight);
-    aspect-ratio: 1 / 1;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: #FDFCFC;
+    line-height: 1;
   }
 
   .facets-toggle--no-filters {
@@ -807,12 +881,17 @@
     overflow: visible;
   }
 
+  .facets--drawer .facets__filters-wrapper {
+    background-color: #F2F2F3;
+  }
+
   .facets.facets-controls-wrapper {
     @media screen and (min-width: 750px) {
       grid-column: column-1 / column-12;
       color: rgb(var(--color-foreground-rgb) / var(--opacity-70));
       gap: 0 var(--facets-form-horizontal-gap);
-      padding-bottom: var(--padding-xs);
+      padding-block: 1.5rem;
+      padding-inline: 5.5rem; /* 88px → 32px grid margin + 88px = 120px total */
     }
   }
 
@@ -993,6 +1072,7 @@
     display: flex;
     gap: var(--facets-mobile-gap);
     flex-direction: column;
+    margin-top: 1.5rem;
 
     @media screen and (min-width: 750px) {
       gap: 1rem;
@@ -1262,11 +1342,174 @@
   .facets--drawer .theme-drawer__title {
     --variant-picker-swatch-width: 32px;
     --variant-picker-swatch-height: 32px;
+    color: #141517;
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-size: 2rem;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1.2;
 
     @media screen and (min-width: 750px) {
       --variant-picker-swatch-width: 26px;
       --variant-picker-swatch-height: 26px;
     }
+  }
+
+  /* Hide the active-filter count badge in the drawer header */
+  .facets--drawer .theme-drawer__title .theme-drawer__badge {
+    display: none;
+  }
+
+  /* ─── Elevate: drawer close button — circular 32px icon ─── */
+  .facets--drawer .theme-drawer__close-button .svg-wrapper {
+    display: none;
+  }
+
+  .facets--drawer .theme-drawer__close-button {
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32' fill='none'%3E%3Cpath d='M0 16C0 7.16344 7.16344 0 16 0C24.8366 0 32 7.16344 32 16C32 24.8366 24.8366 32 16 32C7.16344 32 0 24.8366 0 16Z' fill='%23E2E3E5'/%3E%3Cpath d='M10 10L22 22M22 10L10 22' stroke='%23555860' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E") no-repeat center / contain;
+    border: none;
+    cursor: pointer;
+  }
+
+  /* ─── Elevate: drawer dialog background ─── */
+  .facets--drawer .theme-drawer__dialog {
+    background: rgba(226, 227, 229, 0.40);
+  }
+
+  .facets--drawer .theme-drawer__header {
+    padding: 1rem 1.5rem;
+    border-radius: 0;
+    background: #FDFCFC;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.10),
+                0 2px 4px -2px rgba(0, 0, 0, 0.10);
+  }
+
+  /* ─── Elevate: drawer filter group headers ─── */
+  .facets--drawer .facets__item::before {
+    content: none;
+  }
+
+  .facets--drawer .facets__summary {
+    border-bottom: 1px solid #AEB2B8;
+    padding: 0.75rem;
+  }
+
+  .facets--drawer .facets__label {
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    color: #141517;
+    letter-spacing: -0.0125rem;
+    line-height: 1.5;
+    text-transform: none;
+  }
+
+  /* ─── Elevate: drawer action buttons ─── */
+  .facets--drawer ~ .facets__drawer-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding-inline: 1.5rem;
+    padding-block: 1rem;
+    background-image: none;
+    background-color: #FDFCFC;
+    box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1),
+                0 -2px 4px -2px rgba(0, 0, 0, 0.1);
+  }
+
+  /* ─── Active filter pills inside drawer bottom bar ─── */
+  .facets--drawer ~ .facets__drawer-actions .facets-remove {
+    display: none;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0;
+    margin: 0;
+    align-items: center;
+  }
+
+  .facets--drawer ~ .facets__drawer-actions .facets-remove:has(facet-remove-component) {
+    display: flex;
+    margin: 0;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #AEB2B8;
+  }
+
+  .facets--drawer ~ .facets__drawer-actions .facets-remove:has(facet-remove-component)::before {
+    content: 'Active Filters:';
+    display: block;
+    width: 100%;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #36393F;
+  }
+
+  .facets--drawer ~ .facets__drawer-actions .facets-remove__pill {
+    background: #6B7280;
+    color: #FDFCFC;
+    border-radius: 999px;
+    padding: 0.25rem 0.5rem 0.25rem 1rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: none;
+  }
+
+  .facets--drawer ~ .facets__drawer-actions .facets-remove__pill .svg-wrapper {
+    width: 1rem;
+    height: 1rem;
+    color: #FDFCFC;
+  }
+
+  /* Buttons row — 50/50 split */
+  .facets--drawer ~ .facets__drawer-actions .facets__drawer-actions-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.625rem;
+    width: 100%;
+  }
+
+  .facets--drawer ~ .facets__drawer-actions .facets__drawer-actions-buttons > facet-remove-component {
+    display: flex;
+  }
+
+  .facets--drawer ~ .facets__drawer-actions .facets__drawer-actions-buttons .facets__clear-all,
+  .facets--drawer ~ .facets__drawer-actions .facets__drawer-actions-buttons .facets__see-results {
+    width: 100%;
+  }
+
+  .facets--drawer ~ .facets__drawer-actions .facets__clear-all,
+  .facets--drawer ~ .facets__drawer-actions .facets__see-results {
+    border-radius: 0.75rem;
+    padding: 0.75rem 1.5rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.03rem;
+    line-height: 1.4;
+    flex: 1;
+  }
+
+  .facets--drawer ~ .facets__drawer-actions .facets__clear-all {
+    border: 0.5px solid #141517;
+    background: transparent;
+    color: #141517;
+  }
+
+  .facets--drawer ~ .facets__drawer-actions .facets__see-results {
+    background: #E31E24;
+    color: #FDFCFC;
+    border: none;
   }
 
   /* Status */
@@ -1447,52 +1690,60 @@
 
   /* ─── Elevate: Figma sidebar overrides ─── */
 
-  /* Sidebar container */
+  /* Sidebar container — stretches to product grid row height, scrolls if taller */
   .facets-block-wrapper--vertical:not(theme-drawer) {
     @media screen and (min-width: 750px) {
       background: rgba(226, 227, 229, 0.4);
       border-radius: 1rem;
       padding: 1.5rem 1rem;
+      min-height: 0;
+      overflow-y: auto;
     }
   }
 
-  /* Search filter input */
+  /* Search filter input — Figma: button/light-desktop */
   .elevate-filter-search {
-    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1.5rem;
+    background: #FDFCFC;
+    border: 0.5px solid #141517;
+    border-radius: 0.75rem;
     margin-block-end: 1rem;
+    overflow: hidden;
   }
 
   .elevate-filter-search__icon {
-    position: absolute;
-    left: 1rem;
-    top: 50%;
-    transform: translateY(-50%);
-    color: #6B7280;
+    flex-shrink: 0;
     display: flex;
     align-items: center;
+    color: #141517;
     pointer-events: none;
   }
 
   .elevate-filter-search__input {
-    width: 100%;
-    height: 2.75rem;
-    padding: 0.5rem 1rem 0.5rem 2.75rem;
-    border: 1px solid #AEB2B8;
-    border-radius: 1.5rem;
-    background: #fff;
-    font-family: 'Inter', sans-serif;
-    font-size: 0.875rem;
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-family: 'Host Grotesk', sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
     color: #141517;
     outline: none;
-    transition: border-color 0.2s ease;
+    padding: 0;
   }
 
   .elevate-filter-search__input::placeholder {
-    color: #AEB2B8;
+    color: #141517;
   }
 
-  .elevate-filter-search__input:focus {
+  .elevate-filter-search:focus-within {
     border-color: #141517;
+    outline: 1px solid #141517;
+    outline-offset: -1px;
   }
 
   /* Group headers — Inter Bold 20px, border-bottom divider */
@@ -1521,46 +1772,69 @@
   .facets--vertical .facets__inputs-wrapper:not(:has(.facets__inputs-list)),
   .facets--vertical .facets__inputs-wrapper .facets__inputs-list {
     @media screen and (min-width: 750px) {
+      margin-top: 0;
       gap: 0.75rem;
     }
   }
 
-  /* Remove the default top-border separator on vertical items */
-  .facets--vertical .facets__item::before {
+  /* Remove the default top-border separator on vertical items —
+     doubled selector to beat theme's :not(:first-of-type) specificity */
+  .facets--vertical .facets__item.facets__item::before {
     @media screen and (min-width: 750px) {
       content: none;
     }
   }
 
-  /* Checkbox overrides — 24px, 1.5px border, 4px radius */
-  .facets--vertical .checkbox .icon-checkmark {
+  /* Caret icon for filter groups — 24×24 per Figma */
+  .facets--vertical .facets__summary .icon-caret {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-block-start: 0;
+    transform: rotate(180deg);
+    transition: transform 0.2s ease;
+  }
+
+  .facets--vertical .facets__summary .icon-caret svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .facets--vertical .facets__panel[open] > .facets__summary .icon-caret {
+    transform: rotate(0deg);
+  }
+
+  /* Checkbox overrides — hide theme SVG (replaced by elevate-filter-checkbox snippet) */
+  :is(.facets--vertical, .facets--drawer) .checkbox .icon-checkmark {
+    display: none;
+  }
+
+  :is(.facets--vertical, .facets--drawer) .checkbox .icon-checkbox-off,
+  :is(.facets--vertical, .facets--drawer) .checkbox .icon-checkbox-on {
     width: 1.5rem;
     height: 1.5rem;
     min-width: 1.5rem;
-    border: 1.5px solid #6B7280;
-    border-radius: 0.25rem;
+    flex-shrink: 0;
   }
 
-  .facets--vertical .checkbox .checkbox__input:checked + .checkbox__label .icon-checkmark {
-    background-color: #E31E24;
-    border-color: #E31E24;
+  :is(.facets--vertical, .facets--drawer) .checkbox .icon-checkbox-on {
+    display: none;
+  }
+
+  :is(.facets--vertical, .facets--drawer) .checkbox .checkbox__input:checked + .checkbox__label .icon-checkbox-off {
+    display: none;
+  }
+
+  :is(.facets--vertical, .facets--drawer) .checkbox .checkbox__input:checked + .checkbox__label .icon-checkbox-on {
+    display: block;
   }
 
   .facets--vertical .checkbox .checkbox__label-text {
     font-family: 'Inter', sans-serif;
     font-weight: 400;
-    font-size: 1rem;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
     color: #141517;
-  }
-
-  /* Caret icon for filter groups */
-  .facets--vertical .facets__summary .icon-caret {
-    color: #141517;
-    transition: transform 0.2s ease;
-  }
-
-  .facets--vertical .facets__panel[open] > .facets__summary .icon-caret {
-    transform: rotate(180deg);
   }
 
   /* Products count in controls bar */
@@ -1568,7 +1842,7 @@
     @media screen and (min-width: 750px) {
       display: flex;
       align-items: center;
-      height: var(--minimum-touch-target);
+      height: auto;
     }
   }
 
@@ -1623,7 +1897,7 @@
   }
 
   /* Hide grid density controls on desktop */
-  .facets-controls-wrapper .column-options-wrapper {
+  .column-options-wrapper {
     @media screen and (min-width: 750px) {
       display: none;
     }
@@ -1638,6 +1912,12 @@
       font-size: 0.875rem;
       color: #36393F;
     }
+  }
+
+  /* Product count: current page number */
+  .elevate-product-count__current {
+    color: #36393F;
+    font-weight: 700;
   }
 
   /* Product count number in red */
@@ -1694,6 +1974,222 @@
   .facets-controls-wrapper .sorting-filter {
     @media screen and (min-width: 750px) {
       margin-left: auto;
+    }
+  }
+
+  /* ─── Elevate: Active Filters bar above controls ─── */
+
+  .elevate-active-filters__form {
+    display: contents;
+  }
+
+  .elevate-active-filters__form-inner {
+    display: contents;
+  }
+
+  .elevate-active-filters {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    grid-column: column-1 / column-12;
+    position: relative;
+    overflow: visible;
+  }
+
+  @media screen and (min-width: 750px) {
+    .elevate-active-filters {
+      display: none;
+      gap: 1rem;
+      padding: 1.5rem 5.5rem; /* 88px + 32px grid margin = 120px total */
+    }
+  }
+
+  /* Full-bleed background via pseudo-element */
+  .elevate-active-filters::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100vw;
+    background: rgba(226, 227, 229, 0.4);
+    border-bottom: 1px solid #AEB2B8;
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  @media screen and (min-width: 750px) {
+    .elevate-active-filters:has(facet-remove-component) {
+      display: flex;
+    }
+  }
+
+  .elevate-active-filters__label {
+    display: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: #36393F;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  @media screen and (min-width: 750px) {
+    .elevate-active-filters__label {
+      display: inline;
+    }
+  }
+
+  /* Override pill container styles inside active bar */
+  .elevate-active-filters .facets-remove {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin: 0;
+    padding: 0;
+    align-items: center;
+  }
+
+  .elevate-active-filters .facets-remove:has(facet-remove-component) {
+    margin: 0;
+  }
+
+  /* Pill styles — gray rounded pills with white text */
+  .elevate-active-filters .facets-remove__pill {
+    background: #6B7280;
+    color: #FDFCFC;
+    border-radius: 999px;
+    padding: 0.125rem 0.5rem 0.125rem 1rem;
+    font-size: 0.875rem;
+    letter-spacing: -0.01em;
+    line-height: 1.5;
+    height: 1.8125rem;
+    box-sizing: border-box;
+    gap: 0.5rem;
+    border: none;
+  }
+
+  .elevate-active-filters .facets-remove__pill .svg-wrapper {
+    width: 1rem;
+    height: 1rem;
+    color: #FDFCFC;
+  }
+
+  /* Hide clear-all in this bar */
+  .elevate-active-filters .facets__clear-all-link {
+    display: none;
+  }
+
+
+  /* ─── Mobile bar: product count ─── */
+  .facets-toggle .facets-toggle__count {
+    display: flex;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    color: #36393F;
+  }
+
+  /* ─── Mobile bar: sort pill styling ─── */
+  .facets-toggle .sorting-filter .facets__summary {
+    border: 1px solid #AEB2B8;
+    border-radius: 999px;
+    padding: 0.25rem 0.75rem;
+    gap: 0.5rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    color: #141517;
+    height: auto;
+  }
+
+  .facets-toggle .sorting-filter .facets__summary .facets__label {
+    display: none;
+  }
+
+  .facets-toggle .sorting-filter .facets__status {
+    display: inline-block;
+    font-size: 0.875rem;
+    font-weight: 400;
+    color: #141517;
+    margin: 0;
+    padding: 0;
+    max-width: 6ch;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    vertical-align: middle;
+  }
+
+  .facets-toggle .sorting-filter .sorting-filter__chevron {
+    width: 0.75rem;
+    height: 0.75rem;
+    color: #141517;
+    opacity: 1;
+    flex-shrink: 0;
+  }
+
+  .facets-toggle .sorting-filter .sorting-filter__chevron svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  /* ─── Mobile bar: show grid density controls ─── */
+  .facets-toggle .column-options-wrapper {
+    display: flex;
+  }
+
+  .facets-toggle .column-picker {
+    color: #E31E24;
+  }
+
+  /* ─── Filter button inside active filters bar ─── */
+  .elevate-active-filters__filter-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'Inter', sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    color: #141517;
+    background: none;
+    border: 0.5px solid #141517;
+    border-radius: 999px;
+    padding: 0.125rem 0.5rem;
+    height: 1.8125rem;
+    box-sizing: border-box;
+    cursor: pointer;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .elevate-active-filters__filter-btn .svg-wrapper {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .elevate-active-filters__count {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1rem;
+    height: 1rem;
+    border-radius: 999px;
+    background: #E31E24;
+    color: #FDFCFC;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  @media screen and (min-width: 750px) {
+    .elevate-active-filters__filter-btn {
+      display: none;
     }
   }
 {% endstylesheet %}

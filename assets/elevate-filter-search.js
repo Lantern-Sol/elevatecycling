@@ -1,15 +1,18 @@
 /**
  * Elevate Filter Search
- * Filters visible filter groups and items in the sidebar by text query.
+ * Filters visible filter groups and items by text query.
+ * Supports both the sidebar input and the mobile drawer input.
  */
 (function () {
-  const SEARCH_INPUT_ID = 'elevate-filter-search-input';
+  const SEARCH_INPUT_IDS = [
+    'elevate-filter-search-input',
+    'elevate-drawer-filter-search-input'
+  ];
 
-  function init() {
-    const input = document.getElementById(SEARCH_INPUT_ID);
-    if (!input) return;
-
-    const wrapper = input.closest('.facets__filters-wrapper');
+  function initForInput(input) {
+    const wrapper = input.closest('.facets-drawer__filters, .facets__filters-wrapper')
+      ?.querySelector('.facets__filters-wrapper')
+      || input.closest('.facets__filters-wrapper');
     if (!wrapper) return;
 
     input.addEventListener('input', () => {
@@ -57,6 +60,13 @@
           }
         }
       });
+    });
+  }
+
+  function init() {
+    SEARCH_INPUT_IDS.forEach((id) => {
+      const input = document.getElementById(id);
+      if (input) initForInput(input);
     });
   }
 

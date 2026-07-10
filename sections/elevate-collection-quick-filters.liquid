@@ -110,14 +110,14 @@
               assign size_url = collection.url | append: '?' | append: section.settings.size_param_name | append: '=' | append: chip_value
 
               assign chip_is_active = false
-              assign current_url = request.path
-              if request.query_string != blank
-                assign current_url = current_url | append: '?' | append: request.query_string
-              endif
               assign expected_param = section.settings.size_param_name | append: '=' | append: chip_value
-              if current_url contains expected_param
-                assign chip_is_active = true
-              endif
+              assign query_params = request.query_string | split: '&'
+              for param in query_params
+                if param == expected_param
+                  assign chip_is_active = true
+                  break
+                endif
+              endfor
             -%}
             <a
               href="{{ size_url }}"
@@ -178,24 +178,30 @@
               endcomment
               assign chip_is_active = false
               if current_qs != blank
+                assign query_params = current_qs | split: '&'
+                assign gte_match = false
+                assign lte_match = false
+
                 if chip_min != blank and chip_min != 0
                   assign gte_param = 'filter.v.price.gte=' | append: chip_min
-                  unless current_qs contains gte_param
-                    assign gte_match = false
-                  else
-                    assign gte_match = true
-                  endunless
+                  for param in query_params
+                    if param == gte_param
+                      assign gte_match = true
+                      break
+                    endif
+                  endfor
                 else
                   assign gte_match = true
                 endif
 
                 if chip_max != blank and chip_max != 0
                   assign lte_param = 'filter.v.price.lte=' | append: chip_max
-                  unless current_qs contains lte_param
-                    assign lte_match = false
-                  else
-                    assign lte_match = true
-                  endunless
+                  for param in query_params
+                    if param == lte_param
+                      assign lte_match = true
+                      break
+                    endif
+                  endfor
                 else
                   assign lte_match = true
                 endif
@@ -230,7 +236,7 @@
   .elevate-qf__inner {
     display: flex;
     flex-direction: column;
-    gap: 1rem;
+    gap: 0.5rem;
     padding-inline: 0.5rem;
   }
 
@@ -245,7 +251,7 @@
   .elevate-qf__header {
     display: flex;
     flex-direction: column;
-    gap: 0.25rem;
+    gap: 0;
   }
 
   .elevate-qf__label {
@@ -276,6 +282,10 @@
     scrollbar-width: none;
     -webkit-overflow-scrolling: touch;
     padding-block: 0.25rem;
+    /* Peek: break out of inner padding + grid margin so last card peeks from viewport edge */
+    margin-inline: calc(-0.5rem - var(--page-margin, 0.75rem));
+    padding-inline-start: calc(0.5rem + var(--page-margin, 0.75rem));
+    padding-inline-end: 1rem;
   }
 
   .elevate-qf__types::-webkit-scrollbar {
@@ -342,7 +352,8 @@
   /* ── Filter row ── */
   .elevate-qf__filter-row {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
+    align-items: center;
     gap: 0.5rem;
   }
 
@@ -353,13 +364,24 @@
     line-height: 1.5;
     color: #36393F;
     margin: 0;
+    flex-shrink: 0;
   }
 
   /* ── Chips row ── */
   .elevate-qf__chips {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     gap: 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    margin-inline: calc(-0.5rem - var(--page-margin, 0.75rem));
+    padding-inline-start: calc(0.5rem + var(--page-margin, 0.75rem));
+    padding-inline-end: 1rem;
+  }
+
+  .elevate-qf__chips::-webkit-scrollbar {
+    display: none;
   }
 
   /* ── Chip ── */
@@ -367,7 +389,6 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    min-width: 5rem;
     padding: 0.25rem 0.75rem;
     border: 1px solid #6B7280;
     border-radius: 999px;
@@ -405,26 +426,26 @@
   /* ─── Desktop (990px+) ─── */
   @media (min-width: 61.9375rem) {
     .elevate-qf__inner {
-      padding-inline: 4.375rem;
+      padding-inline: 4.375rem; /* 70px + 50px grid margin = 120px total */
     }
 
     .elevate-qf__types {
       overflow-x: visible;
       flex-wrap: wrap;
+      margin-inline: 0;
+      padding-inline: 0;
     }
 
     .elevate-qf__filter-row {
-      flex-direction: row;
-      align-items: center;
       gap: 1rem;
-    }
-
-    .elevate-qf__filter-label {
-      flex-shrink: 0;
     }
 
     .elevate-qf__chips {
+      flex-wrap: wrap;
+      overflow-x: visible;
       gap: 1rem;
+      margin-inline: 0;
+      padding-inline: 0;
     }
 
     .elevate-qf__chip {
