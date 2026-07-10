@@ -123,7 +123,7 @@
               if request.page_type == 'search' and search.terms != blank
                 assign size_url = size_url | append: 'q=' | append: search.terms | url_encode | append: '&type=product&'
               endif
-              assign size_url = size_url | append: section.settings.size_param_name | append: '=' | append: chip_value
+              assign size_url = size_url | append: section.settings.size_param_name | append: '=' | append: chip_value | url_encode
 
               assign chip_is_active = false
               assign expected_param = section.settings.size_param_name | append: '=' | append: chip_value

@@ -10,6 +10,9 @@
   ];
 
   function initForInput(input) {
+    if (input.__searchInitialized) return;
+    input.__searchInitialized = true;
+
     const wrapper = input.closest('.facets-drawer__filters, .facets__filters-wrapper')
       ?.querySelector('.facets__filters-wrapper')
       || input.closest('.facets__filters-wrapper');

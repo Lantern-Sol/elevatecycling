@@ -661,10 +661,13 @@
     syncHeight();
 
     /* Re-sync after filter changes (Shopify re-renders the grid) */
+    if (window.__elevateSidebarObserver) {
+      window.__elevateSidebarObserver.disconnect();
+    }
     var target = document.querySelector('.product-grid-container');
     if (target) {
-      var observer = new MutationObserver(syncHeight);
-      observer.observe(target, { childList: true, subtree: true });
+      window.__elevateSidebarObserver = new MutationObserver(syncHeight);
+      window.__elevateSidebarObserver.observe(target, { childList: true, subtree: true });
     }
 
     /* Only register window resize listener once */

@@ -67,6 +67,7 @@
               id="newsletter-email-{{ section.id }}"
               class="elevate-collection-newsletter__input"
               placeholder="{{ section.settings.email_placeholder }}"
+              value="{{ form.email }}"
               required
               autocomplete="email"
               {% if form.errors contains 'email' %}aria-invalid="true"{% endif %}
