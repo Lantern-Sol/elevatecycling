@@ -8,7 +8,7 @@
   comment
     ── Capture current query string for active state detection ──
   endcomment
-  assign current_qs = request.query_string | default: ''
+  assign current_qs = request.query_string | url_decode | default: ''
 -%}
 
 <div
@@ -127,7 +127,7 @@
 
               assign chip_is_active = false
               assign expected_param = section.settings.size_param_name | append: '=' | append: chip_value
-              assign query_params = request.query_string | split: '&'
+              assign query_params = request.query_string | url_decode | split: '&'
               for param in query_params
                 if param == expected_param
                   assign chip_is_active = true

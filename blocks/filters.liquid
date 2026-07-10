@@ -645,8 +645,6 @@
 <script>
   /* Sync sidebar height to product grid height */
   (function() {
-    if (window.__elevateSidebarSyncInit) return;
-    window.__elevateSidebarSyncInit = true;
     if (window.matchMedia('(max-width: 749px)').matches) return;
 
     var MIN_HEIGHT = 600;
@@ -659,18 +657,21 @@
       sidebar.style.maxHeight = h + 'px';
     }
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', syncHeight);
-    } else {
-      syncHeight();
-    }
-
-    window.addEventListener('resize', syncHeight);
+    /* Run sync immediately for the current DOM */
+    syncHeight();
 
     /* Re-sync after filter changes (Shopify re-renders the grid) */
-    var observer = new MutationObserver(syncHeight);
     var target = document.querySelector('.product-grid-container');
-    if (target) observer.observe(target, { childList: true, subtree: true });
+    if (target) {
+      var observer = new MutationObserver(syncHeight);
+      observer.observe(target, { childList: true, subtree: true });
+    }
+
+    /* Only register window resize listener once */
+    if (!window.__elevateSidebarSyncInit) {
+      window.__elevateSidebarSyncInit = true;
+      window.addEventListener('resize', syncHeight);
+    }
   })();
 </script>
 

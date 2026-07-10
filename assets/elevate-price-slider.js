@@ -13,7 +13,7 @@
   }
 
   /** Update CSS vars and label text for a .price-slider container. */
-  function syncSlider(slider) {
+  function syncSlider(slider, activeInput) {
     const minRange = slider.querySelector('.price-slider__range--min');
     const maxRange = slider.querySelector('.price-slider__range--max');
     if (!minRange || !maxRange) return;
@@ -24,7 +24,7 @@
 
     // Prevent crossing
     if (minVal > maxVal) {
-      if (minRange === document.activeElement) {
+      if (activeInput === minRange) {
         minRange.value = maxVal;
         minVal = maxVal;
       } else {
@@ -65,7 +65,7 @@
   document.addEventListener('input', function (e) {
     if (!e.target.classList.contains('price-slider__range')) return;
     var slider = e.target.closest('.price-slider');
-    if (slider) syncSlider(slider);
+    if (slider) syncSlider(slider, e.target);
   });
 
   // On release, trigger PriceFacetComponent filter update
@@ -74,7 +74,7 @@
     var slider = e.target.closest('.price-slider');
     if (!slider) return;
 
-    syncSlider(slider);
+    syncSlider(slider, e.target);
 
     var component = slider.closest('price-facet-component');
     if (component) {

@@ -59,10 +59,9 @@
         return fetch('/cart.js').then(function (r) { return r.json(); });
       })
       .then(function (cart) {
-        if (!cart) return;
         resolve({
-          cart: { totalQuantity: cart.item_count },
-          detail: { itemCount: cart.item_count, items: cart.items, source: 'elevate-card-atc' }
+          cart: { totalQuantity: cart ? cart.item_count : 0 },
+          detail: { itemCount: cart ? cart.item_count : 0, items: cart ? cart.items : [], source: 'elevate-card-atc' }
         });
       })
       .catch(function (err) {
