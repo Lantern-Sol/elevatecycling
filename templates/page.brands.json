@@ -1,0 +1,52 @@
+{
+  "sections": {
+    "hero": {
+      "type": "elevate-brands-hero",
+      "settings": {}
+    },
+    "filters": {
+      "type": "elevate-brands-filters",
+      "settings": {},
+      "blocks": {
+        "cat_bikes": {
+          "type": "category",
+          "settings": {
+            "label": "Bikes",
+            "collections": "complete-bikes,road-bikes,triathalon-tt-bikes,framesets,disc-brake-frames,rim-brake-frames"
+          }
+        },
+        "cat_components": {
+          "type": "category",
+          "settings": {
+            "label": "Components",
+            "collections": "cockpit-components,gruppo-components,groupsets,disc-brake-groupsets,rim-brake-groupsets,cranksets,derailleurs,bottom-brackets-bearings,brake-calipers,cassettes,chains,handlebars,stems,seatposts,saddles,pedals,forks,shifters,rotors,power-meters,electronic-components,di2,eps,etap,di2-junction-box"
+          }
+        },
+        "cat_wheels": {
+          "type": "category",
+          "settings": {
+            "label": "Wheels",
+            "collections": "wheels,disc-brake-wheelset,rim-brake-wheels,tires-tubes"
+          }
+        },
+        "cat_accessories": {
+          "type": "category",
+          "settings": {
+            "label": "Accessories",
+            "collections": "accessories,bottle-cages,computer-mounts"
+          }
+        }
+      },
+      "block_order": ["cat_bikes", "cat_components", "cat_wheels", "cat_accessories"]
+    },
+    "brands": {
+      "type": "elevate-brands-page",
+      "settings": {}
+    },
+    "sell_cta": {
+      "type": "elevate-brands-cta",
+      "settings": {}
+    }
+  },
+  "order": ["hero", "filters", "brands", "sell_cta"]
+}
