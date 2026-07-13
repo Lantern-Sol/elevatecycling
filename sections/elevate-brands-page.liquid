@@ -1,0 +1,746 @@
+{%- doc -%}
+  Elevate Cycling — Find Your Brands page section.
+  Auto-populated from shop.vendors with A–Z letter navigation,
+  brand cards (logo + name + product count), and filtered collection links.
+{%- enddoc -%}
+
+{%- liquid
+  comment
+    Build sorted vendor list from shop.vendors.
+    Group by first letter for A–Z nav.
+    Build override lookup from blocks.
+  endcomment
+
+  assign all_vendors = shop.vendors | sort
+  assign letters_used = ''
+  assign has_numeric = false
+
+  for vendor in all_vendors
+    assign v = vendor | strip
+    if v == blank
+      continue
+    endif
+    assign first_char = v | slice: 0 | upcase
+    assign first_char_ascii = first_char | replace: '0', 'NUM' | replace: '1', 'NUM' | replace: '2', 'NUM' | replace: '3', 'NUM' | replace: '4', 'NUM' | replace: '5', 'NUM' | replace: '6', 'NUM' | replace: '7', 'NUM' | replace: '8', 'NUM' | replace: '9', 'NUM'
+    if first_char_ascii == 'NUM'
+      assign has_numeric = true
+      assign first_char = '#'
+    endif
+    assign letter_check = letters_used | split: ','
+    assign letter_exists = false
+    for l in letter_check
+      if l == first_char
+        assign letter_exists = true
+        break
+      endif
+    endfor
+    unless letter_exists
+      if letters_used == ''
+        assign letters_used = first_char
+      else
+        assign letters_used = letters_used | append: ',' | append: first_char
+      endif
+    endunless
+  endfor
+
+  assign letters_array = letters_used | split: ','
+
+  comment
+    Build override lookup from blocks.
+    Blocks let the client set custom logos or URLs per vendor.
+  endcomment
+  assign override_vendors = ''
+  for block in section.blocks
+    if block.type == 'brand_override'
+      assign ov = block.settings.vendor_name | strip | downcase
+      if ov != blank
+        if override_vendors == ''
+          assign override_vendors = ov
+        else
+          assign override_vendors = override_vendors | append: '|||' | append: ov
+        endif
+      endif
+    endif
+  endfor
+
+  assign alphabet = '#,A,B,C,D,E,F,G,H,I,J,K,L,M,N,O,P,Q,R,S,T,U,V,W,X,Y,Z' | split: ','
+-%}
+
+<style>
+  .elevate-brands .elevate-brands__letter { color: #E31E24; }
+  .elevate-brands .elevate-brands__az-btn { color: #36393F; border-color: #6B7280; }
+  .elevate-brands .elevate-brands__az-btn.is-active { background: #F1DBDC; border-color: #E31E24; color: #36393F; }
+  .elevate-brands .elevate-brands__az-btn.is-disabled { color: #AEB2B8; border-color: #6B7280; }
+  .elevate-brands .elevate-brands__card { background: #FFFFFF; border-color: #E2E3E5; --button-color: #36393F; color: #36393F; }
+  .elevate-brands .elevate-brands__name { color: #36393F; }
+  .elevate-brands .elevate-brands__count { color: #36393F; }
+  .elevate-brands .elevate-brands__initial { color: #AEB2B8; }
+</style>
+
+<div
+  class="section section--page-width page-width-normal elevate-brands"
+  data-brands-page
+  style="
+    background: #FDFCFC;
+    color: #36393F;
+    --color: #36393F;
+    --color-foreground: #36393F;
+    --color-foreground-rgb: 54, 57, 63;
+    --color-background: #FDFCFC;
+    --elevate-brands-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-brands-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+  "
+>
+  <div class="elevate-brands__inner">
+    {%- comment -%} ── Sticky search + A–Z wrapper ── {%- endcomment -%}
+    <div class="elevate-brands__sticky-nav">
+      {%- comment -%} ── Search bar ── {%- endcomment -%}
+      <div class="elevate-brands__search">
+        <div class="elevate-brands__search-input-wrap">
+          <svg class="elevate-brands__search-icon" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <circle cx="11" cy="11" r="8"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input
+            type="text"
+            class="elevate-brands__search-input"
+            placeholder="Search brand"
+            data-brand-search-input
+            aria-label="Search brands"
+          >
+        </div>
+        <button type="button" class="elevate-brands__search-btn" data-brand-search-btn>
+          Search
+        </button>
+      </div>
+
+      {%- comment -%} ── A–Z Navigation ── {%- endcomment -%}
+      <nav class="elevate-brands__az" aria-label="Browse brands by letter">
+      {%- for letter in alphabet -%}
+        {%- assign has_letter = false -%}
+        {%- for l in letters_array -%}
+          {%- if l == letter -%}
+            {%- assign has_letter = true -%}
+            {%- break -%}
+          {%- endif -%}
+        {%- endfor -%}
+        {%- assign nav_id = letter -%}
+        {%- if letter == '#' -%}{%- assign nav_id = 'num' -%}{%- endif -%}
+        {%- if has_letter -%}
+          <button
+            type="button"
+            class="elevate-brands__az-btn"
+            data-letter="{{ nav_id }}"
+            aria-label="Jump to brands starting with {{ letter }}"
+          >
+            {{ letter }}
+          </button>
+        {%- else -%}
+          <span class="elevate-brands__az-btn is-disabled" aria-hidden="true">
+            {{ letter }}
+          </span>
+        {%- endif -%}
+      {%- endfor -%}
+    </nav>
+    </div>
+
+    {%- comment -%} ── Brand groups by letter ── {%- endcomment -%}
+    <div class="elevate-brands__groups">
+      {%- for letter in letters_array -%}
+        {%- assign letter_id = letter -%}
+        {%- if letter == '#' -%}{%- assign letter_id = 'num' -%}{%- endif -%}
+        <div class="elevate-brands__group" data-brand-group="{{ letter }}" id="brands-{{ letter_id }}">
+          <h2 class="elevate-brands__letter">{{ letter }}</h2>
+          <div class="elevate-brands__grid">
+            {%- for vendor in all_vendors -%}
+              {%- assign v = vendor | strip -%}
+              {%- if v == blank -%}{%- continue -%}{%- endif -%}
+              {%- assign first_char = v | slice: 0 | upcase -%}
+              {%- assign fc_check = first_char | replace: '0', 'NUM' | replace: '1', 'NUM' | replace: '2', 'NUM' | replace: '3', 'NUM' | replace: '4', 'NUM' | replace: '5', 'NUM' | replace: '6', 'NUM' | replace: '7', 'NUM' | replace: '8', 'NUM' | replace: '9', 'NUM' -%}
+              {%- if fc_check == 'NUM' -%}
+                {%- assign first_char = '#' -%}
+              {%- endif -%}
+              {%- if first_char != letter -%}{%- continue -%}{%- endif -%}
+
+              {%- liquid
+                assign vendor_handle = v | handleize
+                assign vendor_lower = v | downcase
+
+                comment
+                  Check for block override (custom logo / URL).
+                endcomment
+                assign has_override = false
+                assign override_logo = nil
+                assign override_url = ''
+                for block in section.blocks
+                  if block.type == 'brand_override'
+                    assign block_vendor = block.settings.vendor_name | strip | downcase
+                    if block_vendor == vendor_lower
+                      assign has_override = true
+                      assign override_logo = block.settings.custom_logo
+                      assign override_url = block.settings.custom_url
+                      break
+                    endif
+                  endif
+                endfor
+
+                comment
+                  Determine brand link URL.
+                endcomment
+                if override_url != blank
+                  assign brand_url = override_url
+                else
+                  assign vendor_encoded = v | url_encode
+                  assign brand_url = '/collections/all?sort_by=title-ascending&filter.p.vendor=' | append: vendor_encoded
+                endif
+              -%}
+
+              <a
+                class="elevate-brands__card"
+                href="{{ brand_url }}"
+                data-vendor="{{ v | escape }}"
+                data-vendor-handle="{{ vendor_handle }}"
+              >
+                <div class="elevate-brands__logo-wrap">
+                  {%- if has_override and override_logo != blank -%}
+                    <img
+                      class="elevate-brands__logo"
+                      src="{{ override_logo | image_url: width: 240 }}"
+                      alt="{{ v }} logo"
+                      width="120"
+                      height="60"
+                      loading="lazy"
+                    >
+                  {%- else -%}
+                    {%- assign logo_brands = ',3t,alchemy,arundel,basso,bianchi,black-inc,blackburn,bmc,cadex,campagnolo,cane-creek,cannondale,canyon,cateye,cervelo,chapter2,cinelli,cobb,colnago,continental,corima,deda-elementi,diatech,dotout,dt-swiss,easton,eecycleworks,elite,enve,ergon,evoc,factor,felt,ffwd,fizik,forte,forza,fsa,fulcrum,garmin,giant,giro,hed,hunt,ibera,itm,k-edge,land-shark,las,look,mavic,moots,orbea,origin8,praxis-works,quarq,ridley,ritchey,roval,scott,shimano,specialized,sram,tektro,time,trek,vittoria,wahoo,wilier,zipp,' -%}
+                    {%- assign handle_check = ',' | append: vendor_handle | append: ',' -%}
+                    {%- if logo_brands contains handle_check -%}
+                      {%- assign logo_asset = 'brand-' | append: vendor_handle | append: '.png' -%}
+                      <img
+                        class="elevate-brands__logo"
+                        src="{{ logo_asset | asset_url }}"
+                        alt="{{ v }} logo"
+                        width="120"
+                        height="60"
+                        loading="lazy"
+                      >
+                    {%- else -%}
+                      <span class="elevate-brands__initial" aria-hidden="true">
+                        {{ first_char }}
+                      </span>
+                    {%- endif -%}
+                  {%- endif -%}
+                </div>
+                <span class="elevate-brands__name">{{ v }}</span>
+                <span class="elevate-brands__count" data-brand-count="{{ vendor_handle }}"></span>
+              </a>
+            {%- endfor -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    </div>
+  </div>
+</div>
+
+<script>
+  (function initBrandsPage() {
+    var section = document.querySelector('[data-brands-page]');
+    if (!section) {
+      document.addEventListener('DOMContentLoaded', function () {
+        section = document.querySelector('[data-brands-page]');
+        if (section) boot(section);
+      });
+      return;
+    }
+    boot(section);
+
+    function boot(section) {
+      /* ── Search filtering ── */
+      var searchInput = section.querySelector('[data-brand-search-input]');
+      var searchBtn = section.querySelector('[data-brand-search-btn]');
+      var allCards = section.querySelectorAll('.elevate-brands__card');
+      var allGroups = section.querySelectorAll('.elevate-brands__group');
+
+      function filterBrands() {
+        var query = searchInput.value.trim().toLowerCase();
+        allCards.forEach(function (card) {
+          var vendor = (card.getAttribute('data-vendor') || '').toLowerCase();
+          card.style.display = (!query || vendor.indexOf(query) !== -1) ? '' : 'none';
+        });
+        allGroups.forEach(function (group) {
+          var visible = group.querySelectorAll('.elevate-brands__card:not([style*="display: none"])');
+          group.style.display = visible.length ? '' : 'none';
+        });
+      }
+
+      if (searchInput) {
+        searchInput.addEventListener('input', filterBrands);
+        searchInput.addEventListener('keydown', function (e) {
+          if (e.key === 'Enter') { e.preventDefault(); filterBrands(); }
+        });
+      }
+      if (searchBtn) {
+        searchBtn.addEventListener('click', filterBrands);
+      }
+
+      /* ── Scroll container: Horizon uses .page-wrapper on desktop ── */
+      var scrollContainer = document.querySelector('.page-wrapper') || document.scrollingElement || document.documentElement;
+
+      /* ── A–Z smooth scroll ── */
+      var azButtons = section.querySelectorAll('.elevate-brands__az-btn[data-letter]');
+      for (var i = 0; i < azButtons.length; i++) {
+        (function (btn) {
+          btn.addEventListener('click', function (e) {
+            e.preventDefault();
+            e.stopPropagation();
+            if (searchInput) { searchInput.value = ''; filterBrands(); }
+            var letter = btn.getAttribute('data-letter');
+            var target = document.getElementById('brands-' + letter);
+            if (!target) return;
+            var headerOffset = 120;
+            var top = target.getBoundingClientRect().top + scrollContainer.scrollTop - headerOffset;
+            scrollContainer.scrollTo({ top: top, behavior: 'smooth' });
+          });
+        })(azButtons[i]);
+      }
+
+      /* ── Active letter tracking on scroll ── */
+      var groups = section.querySelectorAll('[data-brand-group]');
+      if (groups.length && 'IntersectionObserver' in window) {
+        var observer = new IntersectionObserver(
+          function (entries) {
+            entries.forEach(function (entry) {
+              if (!entry.isIntersecting) return;
+              var letter = entry.target.getAttribute('data-brand-group');
+              var navKey = letter === '#' ? 'num' : letter;
+              azButtons.forEach(function (b) {
+                b.classList.toggle('is-active', b.getAttribute('data-letter') === navKey);
+              });
+            });
+          },
+          { rootMargin: '-120px 0px -60% 0px', threshold: 0 }
+        );
+        groups.forEach(function (g) { observer.observe(g); });
+      }
+
+      /* ── Fetch product counts per vendor ── */
+      var countEls = section.querySelectorAll('[data-brand-count]');
+      if (!countEls.length) return;
+
+      var vendors = [];
+      countEls.forEach(function (el) {
+        var card = el.closest('.elevate-brands__card');
+        if (card) {
+          vendors.push({
+            el: el,
+            name: card.getAttribute('data-vendor'),
+            handle: card.getAttribute('data-vendor-handle')
+          });
+        }
+      });
+
+      var idx = 0;
+      function fetchNextCount() {
+        if (idx >= vendors.length) return;
+        var v = vendors[idx];
+        idx++;
+
+        fetch('/search.json?type=product&q=' + encodeURIComponent('vendor:"' + v.name + '"'))
+          .then(function (r) { return r.json(); })
+          .then(function (data) {
+            if (data && typeof data.results_count === 'number' && data.results_count > 0) {
+              v.el.textContent = data.results_count + (data.results_count === 1 ? ' item' : ' items');
+            } else if (data && data.results && data.results.length > 0) {
+              v.el.textContent = data.results.length + ' items';
+            }
+          })
+          .catch(function () {})
+          .finally(function () {
+            setTimeout(fetchNextCount, 250);
+          });
+      }
+
+      fetchNextCount();
+    }
+  })();
+</script>
+
+
+{% stylesheet %}
+  /* ─── Brands Page ─── */
+  .elevate-brands {
+    padding-block-start: var(--elevate-brands-pt);
+    padding-block-end: var(--elevate-brands-pb);
+  }
+
+  .elevate-brands__inner {
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Nav wrapper (search + A–Z) ── */
+  .elevate-brands__sticky-nav {
+    padding-block: 0.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  /* ── Search bar ── */
+  .elevate-brands__search {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .elevate-brands__search-input-wrap {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 0.03125rem solid #141517;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .elevate-brands__search-icon {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #AEB2B8;
+  }
+
+  .elevate-brands__search-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: 0.03rem;
+    color: #36393F;
+  }
+
+  .elevate-brands__search-input::placeholder {
+    color: #AEB2B8;
+  }
+
+  .elevate-brands__search-btn {
+    flex-shrink: 0;
+    background: #E31E24;
+    color: #FDFCFC;
+    border: none;
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+
+  .elevate-brands__search-btn:hover {
+    opacity: 0.9;
+  }
+
+  /* ── A–Z Nav ── */
+  .elevate-brands__az {
+    display: flex;
+    gap: 0.5rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-right: calc(-0.5rem - var(--page-margin, 12px));
+    padding-right: calc(0.5rem + var(--page-margin, 12px));
+  }
+
+  .elevate-brands__az::-webkit-scrollbar {
+    display: none;
+  }
+
+  .elevate-brands__az-btn {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.5rem 1rem;
+    border-radius: 62rem;
+    border: 0.0625rem solid #6B7280;
+    background: transparent;
+    color: #36393F;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  }
+
+  .elevate-brands__az-btn:hover {
+    background: #F1DBDC;
+    border-color: #F1DBDC;
+    color: #36393F;
+  }
+
+  .elevate-brands__az-btn.is-active {
+    background: #F1DBDC;
+    border: 0.125rem solid #E31E24;
+    color: #36393F;
+  }
+
+  .elevate-brands__az-btn.is-disabled {
+    color: #AEB2B8;
+    border-color: #6B7280;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  /* ── Letter groups ── */
+  .elevate-brands__groups {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-brands__letter {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #E31E24;
+    margin: 0 0 1rem;
+    padding: 0 0.75rem 0.5rem;
+    border-bottom: 0.0625rem solid #AEB2B8;
+  }
+
+  /* ── Brand card grid ── */
+  .elevate-brands__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+
+  /* ── Brand card ── */
+  .elevate-brands__card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    padding: 0;
+    background: #FFFFFF;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    border: 0.0625rem solid #E2E3E5;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    overflow: hidden;
+  }
+
+  .elevate-brands__card:hover {
+    border-color: #AEB2B8;
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.08);
+  }
+
+  /* ── Logo area ── */
+  .elevate-brands__logo-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 106 / 85;
+  }
+
+  .elevate-brands__logo {
+    max-width: 80%;
+    max-height: 80%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+  }
+
+  /* ── Initial fallback ── */
+  .elevate-brands__initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.75rem;
+    height: 3.75rem;
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #AEB2B8;
+  }
+
+  /* ── Brand name ── */
+  .elevate-brands__name {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.2;
+    color: #36393F;
+    text-align: center;
+    word-break: break-word;
+    padding: 0.5rem 0.5rem 0;
+  }
+
+  /* ── Item count ── */
+  .elevate-brands__count {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #36393F;
+    min-height: 1.125rem;
+    padding: 0 0.5rem 0.5rem;
+  }
+
+  /* ─── Tablet (48rem / 768px) ─── */
+  @media (min-width: 48rem) {
+    .elevate-brands__grid {
+      grid-template-columns: repeat(auto-fill, minmax(6.625rem, 1fr));
+      gap: 1rem;
+    }
+
+    .elevate-brands__groups {
+      gap: 2.5rem;
+    }
+
+    .elevate-brands__card {
+      gap: 0.5rem;
+      padding: 1rem 0.75rem;
+      overflow: visible;
+    }
+
+    .elevate-brands__logo-wrap {
+      height: 3.75rem;
+      aspect-ratio: auto;
+    }
+
+    .elevate-brands__logo {
+      max-width: 100%;
+      max-height: 3.75rem;
+    }
+
+    .elevate-brands__name {
+      font-size: 1.25rem;
+      padding: 0;
+    }
+
+    .elevate-brands__count {
+      padding: 0;
+    }
+  }
+
+  /* ─── Desktop (62rem / 991px) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-brands__inner {
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-brands__sticky-nav {
+      padding-block: 2rem;
+      gap: 1.5rem;
+    }
+
+    .elevate-brands__search {
+      gap: 1rem;
+    }
+
+    .elevate-brands__search-input-wrap {
+      gap: 0.75rem;
+      padding: 0.75rem 1.5rem;
+    }
+
+    .elevate-brands__search-btn {
+      padding: 0.75rem 1.5rem;
+    }
+
+    .elevate-brands__az {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      overflow-x: visible;
+      margin-right: 0;
+      padding-right: 0;
+    }
+
+    .elevate-brands__logo-wrap {
+      height: 5.3125rem;
+    }
+
+    .elevate-brands__logo {
+      max-height: 5.3125rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Brands Page",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "blocks": [
+    {
+      "type": "brand_override",
+      "name": "Brand Override",
+      "settings": [
+        {
+          "type": "text",
+          "id": "vendor_name",
+          "label": "Vendor name",
+          "info": "Must match the exact product vendor name in Shopify (case-insensitive)."
+        },
+        {
+          "type": "image_picker",
+          "id": "custom_logo",
+          "label": "Custom logo",
+          "info": "Overrides the auto-detected logo from assets."
+        },
+        {
+          "type": "url",
+          "id": "custom_url",
+          "label": "Custom URL",
+          "info": "Override the default collection link (e.g., a dedicated brand collection page)."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Brands Page",
+      "settings": {}
+    }
+  ]
+}
+{% endschema %}
