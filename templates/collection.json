@@ -51,7 +51,7 @@
           "settings": {
             "fallback_key": "triathlon-tt",
             "label": "Triathlon/TT",
-            "link": "/collections/triathlon-tt"
+            "link": "https://elevatecycling.com/collections/all?sort_by=title-ascending&filter.p.m.custom.part_types=Complete+TT+bike"
           }
         },
         "type_clearance": {
