@@ -429,6 +429,8 @@
         "usp_selection"
       ],
       "settings": {
+        "stacked_layout": false,
+        "eyebrow": "",
         "heading": "NO GUESSWORK\nNO SURPRISES",
         "heading_color": "#36393f",
         "background_color": "#ffffff",
@@ -530,6 +532,8 @@
         "max_products": 6,
         "eyebrow": "NEW ARRIVALS",
         "heading": "Check what Just Dropped!",
+        "subheading": "",
+        "header_alignment": "center",
         "footer_text": "Stock moves fast. New items drop every weekday.",
         "cta_label": "View All Arrivals",
         "cta_link": ""
@@ -710,9 +714,9 @@
         "help_eyebrow": "NEED MORE HELP?",
         "help_text": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is.",
         "primary_label": "Visit FAQs",
-        "primary_link": "",
+        "primary_link": "shopify://pages/faq",
         "secondary_label": "Contact Our Mechanics",
-        "secondary_link": ""
+        "secondary_link": "shopify://pages/contact-us"
       }
     }
   },
