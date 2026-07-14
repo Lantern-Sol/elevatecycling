@@ -26,7 +26,7 @@
           "settings": {
             "fallback_key": "complete-groupset",
             "label": "Complete",
-            "link": "/collections/complete-groupsets"
+            "link": "/collections/groupsets"
           }
         },
         "type_derailleurs": {
@@ -66,7 +66,7 @@
           "settings": {
             "fallback_key": "calipers",
             "label": "Calipers",
-            "link": "/collections/calipers"
+            "link": "/collections/brake-calipers"
           }
         },
         "type_rotors": {

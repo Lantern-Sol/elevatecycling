@@ -18,7 +18,7 @@
           "settings": {
             "fallback_key": "all-frames",
             "label": "All Frames",
-            "link": "/collections/frames"
+            "link": "/collections/framesets"
           }
         },
         "type_cx_gravel": {
@@ -26,7 +26,7 @@
           "settings": {
             "fallback_key": "cx-gravel",
             "label": "CX/Gravel",
-            "link": "/collections/cx-gravel-frames"
+            "link": "/collections/framesets"
           }
         },
         "type_road": {
@@ -34,7 +34,7 @@
           "settings": {
             "fallback_key": "road",
             "label": "Road",
-            "link": "/collections/road-frames"
+            "link": "/collections/framesets"
           }
         },
         "type_triathlon": {
@@ -42,7 +42,7 @@
           "settings": {
             "fallback_key": "triathlon",
             "label": "Triathlon",
-            "link": "/collections/triathlon-frames"
+            "link": "/collections/framesets"
           }
         },
         "type_forks": {

@@ -26,7 +26,7 @@
           "settings": {
             "fallback_key": "cx-gravel",
             "label": "CX/Gravel",
-            "link": "/collections/cx-gravel"
+            "link": "/collections/complete-bikes?filter.p.m.custom.part_types=Complete+Bike+Gravel&filter.p.m.custom.part_types=Complete+Gravel+bike&filter.p.m.custom.part_types=Complete+gravel+bike"
           }
         },
         "type_road": {
@@ -42,7 +42,7 @@
           "settings": {
             "fallback_key": "triathlon-tt",
             "label": "Triathlon/TT",
-            "link": "/collections/triathlon-tt"
+            "link": "/collections/triathalon-tt-bikes"
           }
         },
         "type_clearance": {

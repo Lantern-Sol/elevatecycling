@@ -34,7 +34,7 @@
           "settings": {
             "fallback_key": "disc-brake",
             "label": "Disc Brake",
-            "link": "/collections/disc-brake-wheels"
+            "link": "/collections/disc-brake-wheelset"
           }
         },
         "type_tires": {
@@ -42,7 +42,7 @@
           "settings": {
             "fallback_key": "tires",
             "label": "Tires",
-            "link": "/collections/tires"
+            "link": "/collections/tires-tubes"
           }
         },
         "type_tubes_acc": {
@@ -50,7 +50,7 @@
           "settings": {
             "fallback_key": "tubes-acc",
             "label": "Tubes & Acc.",
-            "link": "/collections/tubes-accessories"
+            "link": "/collections/tires-tubes"
           }
         },
         "type_clearance": {
