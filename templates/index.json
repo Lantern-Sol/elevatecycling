@@ -249,7 +249,7 @@
             "heading": "Your gear\nhas value",
             "image": "shopify://shop_images/Frame_2147227945.webp",
             "button_label": "Get a Free Offer",
-            "button_link": "",
+            "button_link": "shopify://pages/sell-or-trade",
             "description": "Cash or store credit — fair offer within 24hrs. No auctions, no strangers, no lowball DMs."
           }
         }
