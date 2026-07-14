@@ -611,7 +611,7 @@
           "settings": {
             "label": "WHEELSETS",
             "label_mobile": "",
-            "link": "",
+            "link": "shopify://collections/disc-brake-wheelset",
             "position_x": 72,
             "position_y": 73,
             "line_direction": "left",
