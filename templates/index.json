@@ -27,7 +27,7 @@
         "heading_accent_color": "#e31e24",
         "subtitle": "Brand-new and certified pre-owned road, gravel, and CX equipment — every item inspected, fully spec'd, and priced up to 80% below retail. New inventory drops daily.",
         "primary_button_label": "Shop Bikes & Gear",
-        "primary_button_link": "shopify://collections",
+        "primary_button_link": "shopify://collections/all",
         "secondary_button_label": "Get a cash offer for your bike",
         "secondary_button_link": "shopify://pages/sell-or-trade",
         "show_scroll_indicator": true,
