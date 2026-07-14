@@ -40,7 +40,7 @@
     {%- endif -%}
 
     {%- if section.settings.button_text != blank -%}
-      <a href="{{ section.settings.button_url }}" class="elevate-blog-article-cta__btn">
+      <a {% if section.settings.button_url != blank %}href="{{ section.settings.button_url }}"{% endif %} class="elevate-blog-article-cta__btn">
         {{ section.settings.button_text }}
         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
           <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>

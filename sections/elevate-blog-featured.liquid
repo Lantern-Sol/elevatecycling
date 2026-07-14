@@ -84,10 +84,10 @@
 
           <div class="elevate-blog-featured__meta">
             <div class="elevate-blog-featured__meta-left">
-              {%- if article.metafields.custom.author_avatar != blank -%}
+              {%- if article.metafields.custom.author_avatar.value != blank -%}
                 <img
                   class="elevate-blog-featured__avatar-img"
-                  src="{{ article.metafields.custom.author_avatar | image_url: width: 48 }}"
+                  src="{{ article.metafields.custom.author_avatar.value | image_url: width: 48 }}"
                   alt="{{ article.author }}"
                   width="24"
                   height="24"

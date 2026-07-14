@@ -99,7 +99,7 @@
       <div class="elevate-about-cpo__cta-row">
         {%- if section.settings.primary_cta_text != blank -%}
           <a
-            href="{{ section.settings.primary_cta_url }}"
+            {% if section.settings.primary_cta_url != blank %}href="{{ section.settings.primary_cta_url }}"{% endif %}
             class="elevate-about-cpo__cta elevate-about-cpo__cta--primary"
           >
             {{ section.settings.primary_cta_text }}
@@ -108,7 +108,7 @@
 
         {%- if section.settings.secondary_cta_text != blank -%}
           <a
-            href="{{ section.settings.secondary_cta_url }}"
+            {% if section.settings.secondary_cta_url != blank %}href="{{ section.settings.secondary_cta_url }}"{% endif %}
             class="elevate-about-cpo__cta elevate-about-cpo__cta--secondary"
           >
             {{ section.settings.secondary_cta_text }}

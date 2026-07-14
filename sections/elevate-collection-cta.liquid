@@ -26,7 +26,7 @@
 
     {%- if section.settings.button_label != blank -%}
       <a
-        href="{{ section.settings.button_link }}"
+        {% if section.settings.button_link != blank %}href="{{ section.settings.button_link }}"{% endif %}
         class="elevate-collection-cta__btn"
       >
         {{ section.settings.button_label }}

@@ -15,6 +15,7 @@
   assign sid          = section.id
 -%}
 
+{%- if blog.articles_count > 1 -%}
 <div
   class="section section--page-width page-width-normal elevate-blog-related"
   data-scroll-reveal
@@ -95,10 +96,10 @@
 
             <div class="elevate-blog-related__meta">
               <div class="elevate-blog-related__meta-left">
-                {%- if related_article.metafields.custom.author_avatar != blank -%}
+                {%- if related_article.metafields.custom.author_avatar.value != blank -%}
                   <img
                     class="elevate-blog-related__avatar-img"
-                    src="{{ related_article.metafields.custom.author_avatar | image_url: width: 48 }}"
+                    src="{{ related_article.metafields.custom.author_avatar.value | image_url: width: 48 }}"
                     alt="{{ related_article.author }}"
                     width="24"
                     height="24"
@@ -151,6 +152,7 @@
     </div>
   </div>
 </div>
+{%- endif -%}
 
 <script>
   (function () {
