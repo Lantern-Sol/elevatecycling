@@ -421,7 +421,7 @@
           "settings": {
             "label": "GROUPSETS",
             "label_mobile": "",
-            "link": "",
+            "link": "shopify://collections/groupsets",
             "position_x": 0,
             "position_y": 58,
             "line_direction": "right",
