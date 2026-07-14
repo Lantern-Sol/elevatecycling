@@ -494,7 +494,7 @@
         "heading": "Shop By Category",
         "image": "shopify://shop_images/7a4976b575a6437e6daf5ba47d979d66508abad5.png",
         "button_label": "BROWSE ALL CATEGORIES",
-        "button_link": ""
+        "button_link": "https://elevatecycling.com/collections/all?sort_by=best-selling&filter.p.t.category=sg-4-4-2-1-1&filter.p.t.category=sg-4-4-2-1&filter.p.t.category=sg-4-4-2-1-3&filter.p.t.category=sg-4-4-2-1-4&filter.p.t.category=sg-4-4-2-4-2-1&filter.p.t.category=sg-4-4-2-4-2&filter.p.t.category=sg-4-4-2-4-5&filter.p.t.category=sg-4-4-2-4-6&filter.p.t.category=sg-4-4-2-8&filter.p.t.category=sg-4-4-2-9&filter.p.t.category=sg-4-4-2-13&filter.p.t.category=sg-4-4-2-15&filter.p.t.category=sg-4-4-2-4-8&filter.p.t.category=sg-4-4-2-17&filter.p.m.custom.crank_arm_length=165+mm&filter.p.m.custom.crank_arm_length=167.5+mm&filter.p.m.custom.crank_arm_length=170+mm&filter.p.m.custom.crank_arm_length=172.5+mm&filter.p.m.custom.crank_arm_length=175+mm&filter.p.m.custom.crank_arm_length=180+mm&filter.p.m.custom.spindle_type=30+mm+%28BB30%29"
       }
     },
     "elevate_reviews": {
@@ -589,7 +589,7 @@
         "subtitle": "Get a fair cash offer or store credit toward your next build — no auctions, no strangers.",
         "footer_text": "Free shipping label included · No obligation to accept · Payment within 48hrs",
         "cta_label": "Get a free offer on your gear",
-        "cta_link": ""
+        "cta_link": "shopify://pages/sell-or-trade"
       }
     },
     "elevate_faq": {
@@ -667,9 +667,9 @@
         "help_eyebrow": "NEED MORE HELP?",
         "help_text": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is.",
         "primary_label": "Visit FAQs",
-        "primary_link": "",
+        "primary_link": "shopify://pages/faq",
         "secondary_label": "Contact Our Mechanics",
-        "secondary_link": ""
+        "secondary_link": "shopify://pages/contact"
       }
     }
   },
