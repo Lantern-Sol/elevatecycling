@@ -13,7 +13,6 @@
 
 <div
   class="section section--page-width page-width-normal elevate-qf"
-  data-scroll-reveal
   style="
     background: #FDFCFC;
     --eqf-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
@@ -328,6 +327,7 @@
   }
 
   .elevate-qf__type-card:hover {
+    background: #F1DBDC;
     border-color: #E31E24;
   }
 
@@ -339,6 +339,15 @@
   .elevate-qf__type-card--active {
     background: #E31E24;
     border-color: #E31E24;
+  }
+
+  .elevate-qf__type-card--active:hover {
+    background: #FDFCFC;
+    border-color: #AEB2B8;
+  }
+
+  .elevate-qf__type-card--active:hover .elevate-qf__type-label {
+    color: #36393F;
   }
 
   /* ── Type card image ── */
@@ -449,10 +458,12 @@
     }
 
     .elevate-qf__types {
-      overflow-x: visible;
-      flex-wrap: wrap;
-      margin-inline: 0;
-      padding-inline: 0;
+      overflow-x: auto;
+      flex-wrap: nowrap;
+      margin-inline-start: 0;
+      margin-inline-end: calc(-4.375rem - var(--page-margin, 3.125rem));
+      padding-inline-start: 0;
+      padding-inline-end: calc(4.375rem + var(--page-margin, 3.125rem));
     }
 
     .elevate-qf__filter-row {
@@ -748,6 +759,34 @@
             { "value": "road", "label": "Road" },
             { "value": "triathlon-tt", "label": "Triathlon/TT" },
             { "value": "clearance", "label": "Clearance" },
+            { "value": "all-frames", "label": "All Frames" },
+            { "value": "triathlon", "label": "Triathlon (Frame)" },
+            { "value": "forks", "label": "Forks" },
+            { "value": "all-wheels", "label": "All Wheels" },
+            { "value": "rim-brake", "label": "Rim Brake" },
+            { "value": "disc-brake", "label": "Disc Brake" },
+            { "value": "tires", "label": "Tires" },
+            { "value": "tubes-acc", "label": "Tubes & Acc." },
+            { "value": "all-groupsets", "label": "All Groupsets" },
+            { "value": "complete-groupset", "label": "Complete Groupset" },
+            { "value": "derailleurs", "label": "Derailleurs" },
+            { "value": "cassettes", "label": "Cassettes" },
+            { "value": "cranksets", "label": "Cranksets" },
+            { "value": "shifters", "label": "Shifters" },
+            { "value": "calipers", "label": "Calipers" },
+            { "value": "rotors", "label": "Rotors" },
+            { "value": "all-components", "label": "All Components" },
+            { "value": "saddles", "label": "Saddles" },
+            { "value": "seatpost", "label": "Seatpost" },
+            { "value": "handlebars", "label": "Handlebars" },
+            { "value": "pedals", "label": "Pedals" },
+            { "value": "power-meters", "label": "Power Meters" },
+            { "value": "other", "label": "Other" },
+            { "value": "cl-complete-bikes", "label": "Clearance: Bikes" },
+            { "value": "cl-frames-forks", "label": "Clearance: Frames" },
+            { "value": "cl-wheels", "label": "Clearance: Wheels" },
+            { "value": "cl-groupsets", "label": "Clearance: Groupsets" },
+            { "value": "cl-components", "label": "Clearance: Components" },
             { "value": "none", "label": "None" }
           ],
           "default": "none"
