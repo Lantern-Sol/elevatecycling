@@ -1,0 +1,470 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "cpo_hero": {
+      "type": "elevate-cpo-hero",
+      "blocks": {
+        "stat_1": {
+          "type": "stat",
+          "settings": {
+            "value": "3,500+",
+            "label": "bikes certified"
+          }
+        },
+        "stat_2": {
+          "type": "stat",
+          "settings": {
+            "value": "99.8%",
+            "label": "eBay feedback"
+          }
+        },
+        "stat_3": {
+          "type": "stat",
+          "settings": {
+            "value": "$5.4M",
+            "label": "paid to sellers"
+          }
+        }
+      },
+      "block_order": [
+        "stat_1",
+        "stat_2",
+        "stat_3"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/cpo-hero.png",
+        "overlay_opacity": 85,
+        "breadcrumb_1_label": "Shop",
+        "breadcrumb_1_link": "",
+        "breadcrumb_2_label": "Complete Bikes",
+        "breadcrumb_2_link": "",
+        "badge_text": "CERTIFIED PRE-OWNED",
+        "heading": "Serious cyclists don't buy new. They buy certified.",
+        "heading_accent": "They buy certified.",
+        "subtitle": "Each bike is inspected, tuned, and backed by a 30-day warranty — so you ride with total confidence.",
+        "primary_label": "Shop Certified Bikes",
+        "primary_link": "",
+        "secondary_label": "Sell or trade your bike",
+        "secondary_link": "",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "lp_inspection": {
+      "type": "elevate-lp-inspection",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "title": "Intake & Identity Check",
+            "description": "Serial number logged. Frame matched to original spec sheet. Stolen-bike databases checked."
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "title": "Frame & Fork Inspection",
+            "description": "Checked for cracks, dents, and alignment issues under studio lighting. Carbon frames UV-inspected."
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "title": "Drivetrain Assessment",
+            "description": "Chain wear measured, cassette and chainring teeth checked, derailleur hanger alignment verified."
+          }
+        },
+        "step_4": {
+          "type": "step",
+          "settings": {
+            "number": "04",
+            "title": "Brake & Safety Systems",
+            "description": "Brake pad thickness, rotor trueness, and hydraulic line integrity tested under load."
+          }
+        },
+        "step_5": {
+          "type": "step",
+          "settings": {
+            "number": "05",
+            "title": "Wheel & Bearing Check",
+            "description": "Spoke tension gauged. Hubs, headset, and bottom bracket bearings tested for play and noise."
+          }
+        },
+        "step_6": {
+          "type": "step",
+          "settings": {
+            "number": "06",
+            "title": "Final Grade & Documentation",
+            "description": "Condition grade assigned. Mechanic's Notes written. High-res photos shot. Listing goes live."
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4",
+        "step_5",
+        "step_6"
+      ],
+      "settings": {
+        "eyebrow": "HOW WE CERTIFY",
+        "title": "<p>6-point inspection. <span>Nothing hidden.</span></p>",
+        "secondary_label": "Learn About CPO",
+        "secondary_url": "",
+        "primary_label": "Shop Certified Bikes",
+        "primary_url": "",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "cpo_grades": {
+      "type": "elevate-cpo-grades",
+      "blocks": {
+        "grade_aplus": {
+          "type": "grade",
+          "settings": {
+            "title": "Unridden",
+            "grade_label": "Grade A+ — New",
+            "grade_color": "green-solid",
+            "description": "Never ridden. May have been display or test-fitted. Original spec intact."
+          }
+        },
+        "grade_a": {
+          "type": "grade",
+          "settings": {
+            "title": "Excellent",
+            "grade_label": "Grade A — Like New",
+            "grade_color": "green",
+            "description": "No visible wear under normal inspection. Functionally indistinguishable from new — just priced like it isn't."
+          }
+        },
+        "grade_b": {
+          "type": "grade",
+          "settings": {
+            "title": "Expected",
+            "grade_label": "Grade B — Wear use",
+            "grade_color": "blue",
+            "description": "Normal ride wear consistent with regular use. Minor cosmetic marks possible. Mechanically sound and fully documented."
+          }
+        },
+        "grade_c": {
+          "type": "grade",
+          "settings": {
+            "title": "Fair",
+            "grade_label": "Grade C — Good",
+            "grade_color": "gray",
+            "description": "Visible use marks, possible paint chips or cable wear. Every mechanical system inspected and cleared. Priced retail to reflect condition honestly."
+          }
+        }
+      },
+      "block_order": [
+        "grade_aplus",
+        "grade_a",
+        "grade_b",
+        "grade_c"
+      ],
+      "settings": {
+        "eyebrow": "CONDITION SYSTEM",
+        "heading": "Grade assigned before listing. Never estimated.",
+        "heading_accent": "Never estimated.",
+        "guarantee_text": "30-day return if condition doesn't match the listing."
+      }
+    },
+    "cpo_video": {
+      "type": "elevate-cpo-video",
+      "settings": {
+        "caption": "HOW IT WORKS",
+        "heading": "Watch our mechanic walk through a full CPO inspection",
+        "video": "shopify://files/videos/hero-desktop.mp4",
+        "padding_top": 40,
+        "padding_bottom": 72
+      }
+    },
+    "elevate_reviews_dedqnq": {
+      "type": "elevate-reviews",
+      "blocks": {
+        "ebay_reviews_carousel_widget_block_xfLaB7": {
+          "type": "shopify://apps/ebay-reviews/blocks/carousel-widget-block/6ae47d69-fff4-432b-a762-b178008c9165",
+          "settings": {
+            "themeId": "light",
+            "autoscroll": true,
+            "showReviewPhotos": true,
+            "showRating": true,
+            "showDate": true,
+            "showName": false,
+            "fixedReviewsHeight": false,
+            "textStyle": "plain",
+            "ratingStyle": "text",
+            "alignment": "left",
+            "infoPosition": "top"
+          }
+        },
+        "stat_1": {
+          "type": "stat",
+          "settings": {
+            "value": "3,500+",
+            "label": "bikes certified"
+          }
+        },
+        "stat_2": {
+          "type": "stat",
+          "settings": {
+            "value": "99.8%",
+            "label": "eBay feedback"
+          }
+        },
+        "stat_3": {
+          "type": "stat",
+          "settings": {
+            "value": "$5.4M",
+            "label": "paid to sellers"
+          }
+        }
+      },
+      "block_order": [
+        "ebay_reviews_carousel_widget_block_xfLaB7",
+        "stat_1",
+        "stat_2",
+        "stat_3"
+      ],
+      "settings": {
+        "eyebrow": "TRUSTED BY CYCLIST",
+        "heading": "Don't take our word for it.",
+        "subtitle": "Real riders. Real builds. Real opinions.",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "reviews_cta_link": "",
+        "reviews_cta_text": "Read all reviews"
+      }
+    },
+    "cpo_ugc": {
+      "type": "elevate-cpo-ugc",
+      "blocks": {
+        "card_LHJ7Uw": {
+          "type": "card",
+          "settings": {
+            "badge_text": "Grade B · Pinarello F7",
+            "video": "shopify://files/videos/Man_reviewing_carbon_road_bike_202606031705.mp4"
+          }
+        },
+        "card_6d9paw": {
+          "type": "card",
+          "settings": {
+            "badge_text": "Grade C · Trek Emonda",
+            "video": "shopify://files/videos/Man_reviewing_carbon_road_bike_202606031706.mp4"
+          }
+        },
+        "card_D6zcBX": {
+          "type": "card",
+          "settings": {
+            "badge_text": "Grade B · Pinarello F7",
+            "video": "shopify://files/videos/Man_reviewing_carbon_road_bike_202606031705.mp4"
+          }
+        },
+        "card_EmycJf": {
+          "type": "card",
+          "settings": {
+            "badge_text": "Grade C · Trek Emonda",
+            "video": "shopify://files/videos/Man_reviewing_carbon_road_bike_202606031706.mp4"
+          }
+        },
+        "card_Y94mph": {
+          "type": "card",
+          "settings": {
+            "badge_text": "Grade B · Pinarello F7",
+            "video": "shopify://files/videos/Man_reviewing_carbon_road_bike_202606031705.mp4"
+          }
+        },
+        "card_48Phgz": {
+          "type": "card",
+          "settings": {
+            "badge_text": "Grade C · Trek Emonda",
+            "video": "shopify://files/videos/Man_reviewing_carbon_road_bike_202606031706.mp4"
+          }
+        },
+        "card_EJLhQX": {
+          "type": "card",
+          "settings": {
+            "badge_text": "Grade B · Pinarello F7",
+            "video": "shopify://files/videos/Man_reviewing_carbon_road_bike_202606031705.mp4"
+          }
+        },
+        "card_98LN6t": {
+          "type": "card",
+          "settings": {
+            "badge_text": "Grade C · Trek Emonda",
+            "video": "shopify://files/videos/Man_reviewing_carbon_road_bike_202606031706.mp4"
+          }
+        }
+      },
+      "block_order": [
+        "card_LHJ7Uw",
+        "card_6d9paw",
+        "card_D6zcBX",
+        "card_EmycJf",
+        "card_Y94mph",
+        "card_48Phgz",
+        "card_EJLhQX",
+        "card_98LN6t"
+      ],
+      "settings": {
+        "caption": "REAL BIKES. REAL RIDERS.",
+        "heading": "Certified gear, in the wild.",
+        "footer_text": "Tag your Elevate bike for a chance to be featured.",
+        "hashtag": "#ElevateCycling",
+        "hashtag_url": "",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "cpo_cta": {
+      "type": "elevate-cpo-cta",
+      "blocks": {
+        "usp_1": {
+          "type": "usp",
+          "settings": {
+            "icon": "shipping-fast",
+            "label": "Free US Shipping"
+          }
+        },
+        "usp_2": {
+          "type": "usp",
+          "settings": {
+            "icon": "return",
+            "label": "30-day free returns*"
+          }
+        },
+        "usp_3": {
+          "type": "usp",
+          "settings": {
+            "icon": "certified",
+            "label": "Certified Pre-Owned"
+          }
+        },
+        "usp_4": {
+          "type": "usp",
+          "settings": {
+            "icon": "return-circle",
+            "label": "Guaranteed Buyback"
+          }
+        }
+      },
+      "block_order": [
+        "usp_1",
+        "usp_2",
+        "usp_3",
+        "usp_4"
+      ],
+      "settings": {
+        "eyebrow": "SHOP CERTIFIED GEAR",
+        "heading": "Ready to upgrade? Shop bikes that have already proven themselves.",
+        "secondary_label": "Sell or trade your bike",
+        "secondary_link": "",
+        "primary_label": "Shop Certified Bikes",
+        "primary_link": ""
+      }
+    },
+    "elevate_faq_KhxANV": {
+      "type": "elevate-faq",
+      "blocks": {
+        "faq_rjcegN": {
+          "type": "faq",
+          "settings": {
+            "question": "What types of inventory does Elevate carry?",
+            "answer": "Elevate carries two types of inventory: brand-new gear sourced directly from brands at below-retail prices, and certified pre-owned gear bought from cyclists. Every item — new or pre-owned — is inspected, cleaned, and fully documented by our in-house mechanics before it goes live. We list condition honestly so you know exactly what you're getting before you decide."
+          }
+        },
+        "faq_BTyemJ": {
+          "type": "faq",
+          "settings": {
+            "question": "How accurate are the condition descriptions?",
+            "answer": "Every listing includes Mechanic's Notes written by the tech who inspected the item — specific, honest, and not filtered through a marketing lens. If there's a scratch on the chainstay or wear on the cassette, it'll say so. We'd rather lose a sale than have a customer surprised by something we didn't disclose."
+          }
+        },
+        "faq_YQhK9y": {
+          "type": "faq",
+          "settings": {
+            "question": "Can I return an item if it doesn't match the description?",
+            "answer": "Yes — we offer a 30-day satisfaction guarantee on all purchases. If the item doesn't match what was described, contact us and we'll make it right. Free return shipping is included for condition discrepancies. We stand behind every listing."
+          }
+        },
+        "faq_kprR3A": {
+          "type": "faq",
+          "settings": {
+            "question": "How do I know if the geometry fits me?",
+            "answer": "Every complete bike listing includes the full geometry table — top tube, stack, reach, head tube angle, and more. If you're unsure, contact our mechanics before you buy. We're familiar with most frames in our catalog and can help you compare to what you're currently riding."
+          }
+        },
+        "faq_WgTxhC": {
+          "type": "faq",
+          "settings": {
+            "question": "How does the sell or trade program work?",
+            "answer": "Submit your gear details through our sell form — takes about 2 minutes. We'll send a fair cash or store credit offer within 24hrs. Store credit runs 15–20% higher than cash and can be applied to anything in the catalog. If you accept, we send a free shipping label. Payment is processed within 48hrs of inspection."
+          }
+        },
+        "faq_AbPFX8": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "Yes. We ship to most countries outside the US. International shipping rates are calculated at checkout based on destination and item weight. Complete bikes ship fully assembled and boxed by our mechanics. All international orders are fully insured and tracked."
+          }
+        }
+      },
+      "block_order": [
+        "faq_rjcegN",
+        "faq_BTyemJ",
+        "faq_YQhK9y",
+        "faq_kprR3A",
+        "faq_WgTxhC",
+        "faq_AbPFX8"
+      ],
+      "settings": {
+        "padding_top": 72,
+        "padding_bottom": 40,
+        "show_divider": true,
+        "heading_line_1": "Questions?",
+        "heading_line_2": "we got the answers",
+        "phone_label": "Call or text us",
+        "phone": "(714) 248-5066",
+        "phone_note": "Mon–Fri, 9AM–5PM PST",
+        "phone_link": "",
+        "email_label": "Email support",
+        "email": "support@elevatecycling.com",
+        "email_note": "Response within 24hrs",
+        "email_link": "",
+        "location_label": "Visit us",
+        "location": "Santa Ana, CA",
+        "location_note": "Warehouse order pickup available",
+        "location_link": "",
+        "help_eyebrow": "NEED MORE HELP?",
+        "help_text": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is.",
+        "primary_label": "Visit FAQs",
+        "primary_link": "",
+        "secondary_label": "Contact Our Mechanics",
+        "secondary_link": ""
+      }
+    }
+  },
+  "order": [
+    "cpo_hero",
+    "lp_inspection",
+    "cpo_grades",
+    "cpo_video",
+    "elevate_reviews_dedqnq",
+    "cpo_ugc",
+    "cpo_cta",
+    "elevate_faq_KhxANV"
+  ]
+}

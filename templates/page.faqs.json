@@ -1,0 +1,440 @@
+{
+  "sections": {
+    "faq_hero": {
+      "type": "elevate-faq-hero",
+      "settings": {
+        "badge_text": "SUPPORT",
+        "heading": "Everything you[br] want to know[br] before you buy",
+        "subtitle": "49 questions answered. If yours isn't here, we're one message away.",
+        "overlay_opacity": 95,
+        "padding_top": 80,
+        "padding_bottom": 80
+      }
+    },
+    "faq_content": {
+      "type": "elevate-faq-page",
+      "settings": {
+        "filters_label": "Quick Filters",
+        "padding_top": 48,
+        "padding_bottom": 48
+      },
+      "blocks": {
+        "cq_1": {
+          "type": "faq",
+          "settings": {
+            "category": "Condition & Quality",
+            "question": "What does \"Certified Pre-Owned\" actually mean?",
+            "answer": "Every CPO item has been physically received at our warehouse, inspected by one of our mechanics, graded on our standardised condition scale, and documented with a full spec sheet and Mechanic's Notes before it goes live. Nothing is listed based on what a seller tells us — we verify everything ourselves."
+          }
+        },
+        "cq_2": {
+          "type": "faq",
+          "settings": {
+            "category": "Condition & Quality",
+            "question": "How do I know if a carbon frame has hidden crash damage?",
+            "answer": "We inspect every carbon frame for stress fractures, delamination, and paint cracking patterns consistent with impact. Any frame with suspected structural damage is not listed. If we find cosmetic damage only, it's documented in the Mechanic's Notes with photos."
+          }
+        },
+        "cq_3": {
+          "type": "faq",
+          "settings": {
+            "category": "Condition & Quality",
+            "question": "Who writes the Mechanic's Notes — is it the person who actually inspected the bike?",
+            "answer": "Yes. The Mechanic's Notes are written by the team member who physically inspected the item. They're intentional, specific, and unfiltered — if something needs attention, it's in the notes."
+          }
+        },
+        "cq_4": {
+          "type": "faq",
+          "settings": {
+            "category": "Condition & Quality",
+            "question": "What's included in the multi-point inspection?",
+            "answer": "Frame and fork integrity, headset, bottom bracket, drivetrain wear (chain, cassette, chainring), brake function and pad wear, wheel true and hub condition, seatpost and clamp, and overall component operation. We check what actually affects your ride."
+          }
+        },
+        "cq_5": {
+          "type": "faq",
+          "settings": {
+            "category": "Condition & Quality",
+            "question": "How do you grade bike condition?",
+            "answer": "We use four grades: Excellent (minimal wear, looks near-new), Good (normal use marks, fully functional), Fair (visible wear and cosmetic imperfections, mechanically sound), and Poor (heavy use, may need service). Each grade is described specifically in the listing — not just a label."
+          }
+        },
+        "cq_6": {
+          "type": "faq",
+          "settings": {
+            "category": "Condition & Quality",
+            "question": "Can I request more photos before purchasing?",
+            "answer": "Yes. Contact us before purchasing and we'll shoot additional angles or detail shots within one business day. We want you to feel confident before you commit."
+          }
+        },
+        "cq_7": {
+          "type": "faq",
+          "settings": {
+            "category": "Condition & Quality",
+            "question": "Are there bikes you won't sell?",
+            "answer": "Yes. We decline items with structural frame damage, severe corrosion, or missing components that can't be sourced. If something doesn't pass inspection, it doesn't get listed — full stop."
+          }
+        },
+        "cs_1": {
+          "type": "faq",
+          "settings": {
+            "category": "Compatibility & Specs",
+            "question": "How do I know if a groupset is compatible with my current setup?",
+            "answer": "Every listing specifies the drivetrain speed (11-speed, 12-speed), shifting type (mechanical or electronic), and brand. Check your current derailleur hanger and shifter compatibility before purchasing. If you're unsure, contact us — we'll help you check."
+          }
+        },
+        "cs_2": {
+          "type": "faq",
+          "settings": {
+            "category": "Compatibility & Specs",
+            "question": "How do I verify bottom bracket compatibility?",
+            "answer": "The spec sheet lists the BB shell type (threaded, PF30, T47, BB386, etc.) and the installed crankset. If you're swapping cranks, check your new crankset's spindle standard against the listed shell type before buying."
+          }
+        },
+        "cs_3": {
+          "type": "faq",
+          "settings": {
+            "category": "Compatibility & Specs",
+            "question": "Do you include the original geometry chart?",
+            "answer": "Yes, wherever the manufacturer publishes it. We pull geometry from the original spec sheet for the listed model year. For older or discontinued models, we note if geometry data isn't publicly available."
+          }
+        },
+        "cs_4": {
+          "type": "faq",
+          "settings": {
+            "category": "Compatibility & Specs",
+            "question": "What drivetrain parts are included with a complete bike?",
+            "answer": "The spec sheet lists every component. If anything has been swapped from stock, it's documented. You'll know exactly what groupset, crankset, cassette, chain, and brakes are on the bike before it ships."
+          }
+        },
+        "cs_5": {
+          "type": "faq",
+          "settings": {
+            "category": "Compatibility & Specs",
+            "question": "Is the listed frame size the seat tube or effective top tube?",
+            "answer": "We list frame size as the manufacturer originally designated it — usually seat tube center-to-top in cm. We also include the full geometry table in every listing where available, including stack, reach, and effective top tube."
+          }
+        },
+        "cs_6": {
+          "type": "faq",
+          "settings": {
+            "category": "Compatibility & Specs",
+            "question": "Does the listing show brake mount standard?",
+            "answer": "Yes. Every listing specifies flat mount or post mount for disc brake bikes, and includes caliper type. Rim brake bikes list brake reach. This is in the Full Spec Sheet on every PDP."
+          }
+        },
+        "pp_1": {
+          "type": "faq",
+          "settings": {
+            "category": "Purchasing & Pricing",
+            "question": "How are your prices set?",
+            "answer": "We price based on current market conditions — eBay sold listings, recent comparable sales, and condition. We don't inflate based on retail MSRP. Our goal is a price that's fair to you and sustainable for us."
+          }
+        },
+        "pp_2": {
+          "type": "faq",
+          "settings": {
+            "category": "Purchasing & Pricing",
+            "question": "Are your prices negotiable?",
+            "answer": "Our listed prices are firm. We price to market from the start — you won't find the same bike cheaper elsewhere for the same condition and documentation level."
+          }
+        },
+        "pp_3": {
+          "type": "faq",
+          "settings": {
+            "category": "Purchasing & Pricing",
+            "question": "Can I put a bike on hold while I decide?",
+            "answer": "We don't offer holds at this time. Inventory moves quickly and holds create friction for other buyers. If you're seriously considering a purchase, the safest move is to buy and use our 30-day return window if it's not right."
+          }
+        },
+        "pp_4": {
+          "type": "faq",
+          "settings": {
+            "category": "Purchasing & Pricing",
+            "question": "Do you offer financing or payment plans?",
+            "answer": "We don't offer in-house financing at this time. Some credit cards offer installment options at checkout depending on your issuer."
+          }
+        },
+        "pp_5": {
+          "type": "faq",
+          "settings": {
+            "category": "Purchasing & Pricing",
+            "question": "What payment methods do you accept?",
+            "answer": "We accept all major credit cards, debit cards, and PayPal. All transactions are processed securely through Shopify Payments."
+          }
+        },
+        "pp_6": {
+          "type": "faq",
+          "settings": {
+            "category": "Purchasing & Pricing",
+            "question": "How often does new inventory drop?",
+            "answer": "We add new listings daily. Follow us on Instagram or subscribe to our newsletter for new drop notifications — high-demand bikes often sell within hours of listing."
+          }
+        },
+        "sd_1": {
+          "type": "faq",
+          "settings": {
+            "category": "Shipping & Delivery",
+            "question": "How is the bike packaged for shipping?",
+            "answer": "Every bike is professionally packed by our team — pedals removed, handlebars turned, derailleur protected, and frame wrapped. We use purpose-built bike boxes. If it can be damaged in transit, we've already thought of it."
+          }
+        },
+        "sd_2": {
+          "type": "faq",
+          "settings": {
+            "category": "Shipping & Delivery",
+            "question": "How long does it take to ship after I order?",
+            "answer": "Most orders ship within 2 business days of purchase. You'll receive a tracking number by email when it leaves our warehouse in Santa Ana, CA."
+          }
+        },
+        "sd_3": {
+          "type": "faq",
+          "settings": {
+            "category": "Shipping & Delivery",
+            "question": "Who is responsible if the bike is damaged in transit?",
+            "answer": "We are. Every shipment is insured. If your bike arrives damaged, contact us within 48 hours with photos and we'll resolve it — replacement, repair credit, or full refund."
+          }
+        },
+        "sd_4": {
+          "type": "faq",
+          "settings": {
+            "category": "Shipping & Delivery",
+            "question": "Can I pick up locally in Orange County?",
+            "answer": "Yes. Local pickup is available at our Santa Ana, CA warehouse. Select local pickup at checkout and we'll coordinate a time. Pickup is typically available within 1 business day of order."
+          }
+        },
+        "sd_5": {
+          "type": "faq",
+          "settings": {
+            "category": "Shipping & Delivery",
+            "question": "Will the bike arrive ready to ride?",
+            "answer": "The bike will be in the condition described in the listing and may need basic reassembly (handlebars, pedals) after unpacking. We recommend a quick check at your local shop if you're not comfortable with the reassembly yourself."
+          }
+        },
+        "sd_6": {
+          "type": "faq",
+          "settings": {
+            "category": "Shipping & Delivery",
+            "question": "Do you ship internationally?",
+            "answer": "Currently we ship within the United States only. Free shipping is included on all orders. International shipping is not available at this time."
+          }
+        },
+        "rb_1": {
+          "type": "faq",
+          "settings": {
+            "category": "Returns & Buyer Protection",
+            "question": "What is your return policy?",
+            "answer": "We offer a 30-day return window from delivery. If the bike isn't right for any reason, contact us and we'll initiate the return. Items must be in the same condition as received."
+          }
+        },
+        "rb_2": {
+          "type": "faq",
+          "settings": {
+            "category": "Returns & Buyer Protection",
+            "question": "What if the bike doesn't match the listing when it arrives?",
+            "answer": "Contact us immediately with photos. If there's a material discrepancy between the listing and what you received, we'll cover return shipping and issue a full refund or find you a replacement."
+          }
+        },
+        "rb_3": {
+          "type": "faq",
+          "settings": {
+            "category": "Returns & Buyer Protection",
+            "question": "What if I discover undisclosed damage after delivery?",
+            "answer": "Document it with photos and contact us within 7 days of delivery. We take listing accuracy seriously. If damage wasn't disclosed, we'll make it right — return, partial refund, or repair credit."
+          }
+        },
+        "rb_4": {
+          "type": "faq",
+          "settings": {
+            "category": "Returns & Buyer Protection",
+            "question": "Do I pay return shipping?",
+            "answer": "If the return is due to a listing error or damage we failed to disclose, we cover return shipping. For change-of-mind returns, the buyer is responsible for return shipping costs."
+          }
+        },
+        "rb_5": {
+          "type": "faq",
+          "settings": {
+            "category": "Returns & Buyer Protection",
+            "question": "How long does a refund take to process?",
+            "answer": "Once we receive and inspect the returned item, refunds are processed within 3-5 business days back to your original payment method."
+          }
+        },
+        "st_1": {
+          "type": "faq",
+          "settings": {
+            "category": "Selling & Trading",
+            "question": "How do I get an offer for my bike or components?",
+            "answer": "Fill out our sell/trade form at elevatecycling.com/sell. Takes about 3 minutes. Tell us what you have, add a couple of photos, and we'll respond with an offer within 24 business hours."
+          }
+        },
+        "st_2": {
+          "type": "faq",
+          "settings": {
+            "category": "Selling & Trading",
+            "question": "How do you determine what my gear is worth?",
+            "answer": "We price against current eBay sold listings and recent comparable sales, adjusted for condition, spec level, and demand. We don't lowball — our offers reflect real market value."
+          }
+        },
+        "st_3": {
+          "type": "faq",
+          "settings": {
+            "category": "Selling & Trading",
+            "question": "What condition does my gear need to be in?",
+            "answer": "We accept bikes and components in Excellent, Good, and Fair condition. We'll consider items with wear as long as they're mechanically functional. Heavily damaged, seized, or structurally compromised items are generally declined."
+          }
+        },
+        "st_4": {
+          "type": "faq",
+          "settings": {
+            "category": "Selling & Trading",
+            "question": "How does shipping work if I accept the offer?",
+            "answer": "We send you a prepaid shipping label the same day you accept. Box up your gear, drop it at any UPS location, and you're done. We cover the shipping cost completely."
+          }
+        },
+        "st_5": {
+          "type": "faq",
+          "settings": {
+            "category": "Selling & Trading",
+            "question": "Is store credit worth more than cash?",
+            "answer": "Yes. If you opt for store credit instead of cash, we add 15% to your offer value. So a $500 cash offer becomes $575 in store credit — a straightforward bonus if you're planning to buy."
+          }
+        },
+        "st_6": {
+          "type": "faq",
+          "settings": {
+            "category": "Selling & Trading",
+            "question": "Can I trade my bike toward a purchase?",
+            "answer": "Yes. Tell us what you're selling and what you're looking to buy. We'll apply your trade-in value toward any in-stock item. Contact us to coordinate a trade."
+          }
+        },
+        "st_7": {
+          "type": "faq",
+          "settings": {
+            "category": "Selling & Trading",
+            "question": "Do you buy components as well as complete bikes?",
+            "answer": "Yes. We purchase groupsets, wheels, frames, and other individual components. Use the components path in our sell form and describe what you have."
+          }
+        },
+        "st_8": {
+          "type": "faq",
+          "settings": {
+            "category": "Selling & Trading",
+            "question": "How long does it take to receive an offer?",
+            "answer": "We review every submission and respond within 1-2 business days via email. High-volume periods (weekends, holidays) may take slightly longer."
+          }
+        },
+        "st_9": {
+          "type": "faq",
+          "settings": {
+            "category": "Selling & Trading",
+            "question": "When and how do I get paid after I accept?",
+            "answer": "Payment is sent within 3-5 business days after we receive and inspect your item. We pay via ACH bank transfer, check, or PayPal. Store credit is also available at a 15% bonus on your offer value."
+          }
+        },
+        "st_10": {
+          "type": "faq",
+          "settings": {
+            "category": "Selling & Trading",
+            "question": "Can a local bike shop sell inventory in bulk?",
+            "answer": "Yes, we work with shops. We offer net payment terms and can arrange pickup for larger lots. Email us directly at support@elevatecycling.com to discuss."
+          }
+        },
+        "cp_1": {
+          "type": "faq",
+          "settings": {
+            "category": "CPO Process & Trust",
+            "question": "What's the difference between Elevate and buying on eBay?",
+            "answer": "On eBay, every listing is different — no standard inspection, no consistent grading, no recourse if the seller misrepresents the condition. Every item from Elevate has been physically inspected, graded, and documented by our team. You know exactly what you're getting before it ships."
+          }
+        },
+        "cp_2": {
+          "type": "faq",
+          "settings": {
+            "category": "CPO Process & Trust",
+            "question": "How long have you been in business?",
+            "answer": "Elevate Cycling was founded in 2021 in Santa Ana, California. We operate two warehouses and a full-time team of mechanics and operations staff."
+          }
+        },
+        "cp_3": {
+          "type": "faq",
+          "settings": {
+            "category": "CPO Process & Trust",
+            "question": "Why should I trust a pre-owned bike from an online seller?",
+            "answer": "We've purchased over 3,500 bikes and paid $5.4M to sellers. We carry a 99.8% eBay feedback rating and were ranked #395 on the Inc. 5000 in 2025. Our reputation is built on every transaction going right — not just most of them."
+          }
+        },
+        "cp_4": {
+          "type": "faq",
+          "settings": {
+            "category": "CPO Process & Trust",
+            "question": "Do you sell bikes with undisclosed issues?",
+            "answer": "No. Our entire model is built on condition transparency. If a mechanic finds something, it goes in the notes. If a frame doesn't pass inspection, it doesn't get listed. If something slips through, we make it right — see our return policy."
+          }
+        },
+        "cp_5": {
+          "type": "faq",
+          "settings": {
+            "category": "CPO Process & Trust",
+            "question": "Are you an authorized dealer for any brands?",
+            "answer": "We are not an authorized new-goods dealer. We are a Certified Pre-Owned marketplace — we buy, inspect, and resell used performance gear independently. This keeps our prices lower and our standards higher than consignment models."
+          }
+        },
+        "ao_1": {
+          "type": "faq",
+          "settings": {
+            "category": "Account & Orders",
+            "question": "Do I need an account to purchase?",
+            "answer": "No. You can check out as a guest. Creating an account lets you track orders, save favorites, and access your purchase history — but it's not required."
+          }
+        },
+        "ao_2": {
+          "type": "faq",
+          "settings": {
+            "category": "Account & Orders",
+            "question": "How do I track my order?",
+            "answer": "Once your order ships, you'll receive an email with a tracking number and carrier link. You can also log into your account to view real-time order status at any time."
+          }
+        },
+        "ao_3": {
+          "type": "faq",
+          "settings": {
+            "category": "Account & Orders",
+            "question": "Can I cancel or modify an order after it's placed?",
+            "answer": "If your order hasn't shipped yet, contact us as soon as possible and we'll do our best to accommodate changes or cancellations. Once an order has shipped, it can't be modified — but you can return it under our 30-day policy."
+          }
+        },
+        "ao_4": {
+          "type": "faq",
+          "settings": {
+            "category": "Account & Orders",
+            "question": "How do I contact support?",
+            "answer": "Email us at support@elevatecycling.com or use the contact form on our website. Our team — including our mechanics — responds within one business day."
+          }
+        }
+      },
+      "block_order": [
+        "cq_1", "cq_2", "cq_3", "cq_4", "cq_5", "cq_6", "cq_7",
+        "cs_1", "cs_2", "cs_3", "cs_4", "cs_5", "cs_6",
+        "pp_1", "pp_2", "pp_3", "pp_4", "pp_5", "pp_6",
+        "sd_1", "sd_2", "sd_3", "sd_4", "sd_5", "sd_6",
+        "rb_1", "rb_2", "rb_3", "rb_4", "rb_5",
+        "st_1", "st_2", "st_3", "st_4", "st_5", "st_6", "st_7", "st_8", "st_9", "st_10",
+        "cp_1", "cp_2", "cp_3", "cp_4", "cp_5",
+        "ao_1", "ao_2", "ao_3", "ao_4"
+      ]
+    },
+    "faq_contact": {
+      "type": "elevate-faq-contact",
+      "settings": {},
+      "blocks": {
+        "topic_1": { "type": "topic", "settings": { "label": "Pre-purchase question" } },
+        "topic_2": { "type": "topic", "settings": { "label": "Order status" } },
+        "topic_3": { "type": "topic", "settings": { "label": "Return or exchange" } },
+        "topic_4": { "type": "topic", "settings": { "label": "Sell or trade" } },
+        "topic_5": { "type": "topic", "settings": { "label": "Something else" } }
+      },
+      "block_order": ["topic_1", "topic_2", "topic_3", "topic_4", "topic_5"]
+    }
+  },
+  "order": ["faq_hero", "faq_content", "faq_contact"]
+}
