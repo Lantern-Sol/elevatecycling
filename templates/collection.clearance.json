@@ -464,7 +464,7 @@
         "phone_label": "Call or text us",
         "phone": "(714) 248-5066",
         "phone_note": "Mon–Fri, 9AM–5PM PST",
-        "phone_link": "",
+        "phone_link": "tel:+1(714) 248-5066",
         "email_label": "Email support",
         "email": "support@elevatecycling.com",
         "email_note": "Response within 24hrs",
