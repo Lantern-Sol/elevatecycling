@@ -227,7 +227,7 @@
             "heading": "Looking for a complete build?",
             "image": "shopify://shop_images/Frame_2147227945_2.webp",
             "button_label": "Shop Complete Bikes",
-            "button_link": "",
+            "button_link": "shopify://collections/complete-bikes",
             "description": "Full bikes and framesets — road, gravel, CX. Every one inspected, spec'd, and priced"
           }
         },
