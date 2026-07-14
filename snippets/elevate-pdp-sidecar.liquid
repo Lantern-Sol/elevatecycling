@@ -377,7 +377,7 @@
 
         {%- comment -%} CTA {%- endcomment -%}
         <p class="elevate-size-popup__cta">
-          Unsure about a specific listing? <a href="/pages/ask-a-mechanic" class="elevate-size-popup__cta-link">Ask to our Mechanics</a>
+          Unsure about a specific listing? <a href="{{ settings.elevate_ask_mechanic_url | default: '/pages/contact' }}" class="elevate-size-popup__cta-link">Ask our Mechanics</a>
         </p>
       </div>
     </dialog>

@@ -1288,6 +1288,17 @@
     ]
   },
   {
+    "name": "Elevate — Global Links",
+    "settings": [
+      {
+        "type": "url",
+        "id": "elevate_ask_mechanic_url",
+        "label": "Ask a Mechanic page",
+        "default": "/pages/contact"
+      }
+    ]
+  },
+  {
     "name": "t:names.page_layout",
     "settings": [
       {
