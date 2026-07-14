@@ -14,7 +14,7 @@
       "settings": {
         "breadcrumb_root_label": "Shop",
         "breadcrumb_root_link": "",
-        "subtitle": "300\u2013500 new items \u2014 Updated daily.",
+        "subtitle": "300–500 new items — Updated daily.",
         "padding_top": 24,
         "padding_bottom": 24
       }
@@ -100,10 +100,10 @@
         "price_1_label": "Under $2K",
         "price_1_min": 0,
         "price_1_max": 2000,
-        "price_2_label": "$2K\u2013$4K",
+        "price_2_label": "$2K–$4K",
         "price_2_min": 2000,
         "price_2_max": 4000,
-        "price_3_label": "$4K\u2013$6K",
+        "price_3_label": "$4K–$6K",
         "price_3_min": 4000,
         "price_3_max": 6000,
         "price_4_label": "Over $6K",
@@ -214,8 +214,8 @@
       ],
       "settings": {
         "eyebrow": "YOUR DREAM GEAR, UNDER RETAIL PRICE",
-        "heading": "Frames & Forks \u2014 New & Certified Pre-Owned",
-        "description": "<p>Shop our curated selection of new and certified pre-owned frames and forks from the world's top brands. Every item is professionally inspected and backed by our quality guarantee \u2014 so you ride with total confidence.</p>",
+        "heading": "Frames & Forks — New & Certified Pre-Owned",
+        "description": "<p>Shop our curated selection of new and certified pre-owned frames and forks from the world's top brands. Every item is professionally inspected and backed by our quality guarantee — so you ride with total confidence.</p>",
         "padding_top": 32,
         "padding_bottom": 32
       }
@@ -346,14 +346,14 @@
           "type": "inventory_card",
           "settings": {
             "badge_icon": "star",
-            "badge_text": "NEW \u00b7 BELOW RETAIL",
-            "description": "We source directly from brands \u2014 overstock, closeouts, and bulk deals \u2014 so you get current-model gear at prices you won't find at a standard retailer.",
+            "badge_text": "NEW · BELOW RETAIL",
+            "description": "We source directly from brands — overstock, closeouts, and bulk deals — so you get current-model gear at prices you won't find at a standard retailer.",
             "feature_1": "100% brand new, never ridden",
             "feature_2": "Direct from the brand, not gray market",
             "feature_3": "Full manufacturer's warranty applies",
             "feature_4": "Inspected and packaged before it ships",
             "cta_label": "SHOP NEW STOCK",
-            "cta_link": ""
+            "cta_link": "shopify://collections/all"
           }
         },
         "inventory_card_f7wr6b": {
@@ -361,13 +361,13 @@
           "settings": {
             "badge_icon": "certificate-solid",
             "badge_text": "CERTIFIED PRE-OWNED",
-            "description": "Every used item goes through our in-house inspection process \u2014 cleaned, photographed, condition-graded, and fully spec'd \u2014 so there are no surprises when it arrives.",
+            "description": "Every used item goes through our in-house inspection process — cleaned, photographed, condition-graded, and fully spec'd — so there are no surprises when it arrives.",
             "feature_1": "Mechanic-inspected and condition-graded",
             "feature_2": "Full spec sheet on every listing",
             "feature_3": "Honest condition descriptions, no fluff",
             "feature_4": "30-day returns if it's not as described",
             "cta_label": "SHOP CERTIFIED PRE-OWNED",
-            "cta_link": ""
+            "cta_link": "shopify://collections/complete-bikes"
           }
         }
       },
@@ -390,7 +390,7 @@
         "eyebrow": "PAY WITH YOUR OLD GEAR",
         "heading": "Sell or trade in",
         "button_label": "Get a Quote",
-        "button_link": "/pages/sell-or-trade",
+        "button_link": "shopify://pages/sell-or-trade",
         "padding_top": 32,
         "padding_bottom": 32
       }
@@ -401,7 +401,7 @@
         "eyebrow": "SUBSCRIBE",
         "heading": "Save your search, get $50 OFF",
         "heading_accent": "get $50 OFF",
-        "body": "300\u2013500 new listings each week \u2014 get notified when similar gear gets listed.",
+        "body": "300–500 new listings each week — get notified when similar gear gets listed.",
         "email_label": "Email",
         "email_placeholder": "johndoe@email.com",
         "button_label": "Subscribe to Newsletter",
@@ -417,35 +417,35 @@
           "type": "faq",
           "settings": {
             "question": "What types of inventory does Elevate carry?",
-            "answer": "Elevate carries two types of inventory: brand-new gear sourced directly from brands at below-retail prices, and certified pre-owned gear bought from cyclists. Every item \u2014 new or pre-owned \u2014 is inspected, cleaned, and fully documented by our in-house mechanics before it goes live. We list condition honestly so you know exactly what you're getting before you decide."
+            "answer": "Elevate carries two types of inventory: brand-new gear sourced directly from brands at below-retail prices, and certified pre-owned gear bought from cyclists. Every item — new or pre-owned — is inspected, cleaned, and fully documented by our in-house mechanics before it goes live. We list condition honestly so you know exactly what you're getting before you decide."
           }
         },
         "faq_9G8k3k": {
           "type": "faq",
           "settings": {
             "question": "How accurate are the condition descriptions?",
-            "answer": "Every listing includes Mechanic's Notes written by the tech who inspected the item \u2014 specific, honest, and not filtered through a marketing lens. If there's a scratch on the chainstay or wear on the cassette, it'll say so. We'd rather lose a sale than have a customer surprised by something we didn't disclose."
+            "answer": "Every listing includes Mechanic's Notes written by the tech who inspected the item — specific, honest, and not filtered through a marketing lens. If there's a scratch on the chainstay or wear on the cassette, it'll say so. We'd rather lose a sale than have a customer surprised by something we didn't disclose."
           }
         },
         "faq_wnb7im": {
           "type": "faq",
           "settings": {
             "question": "Can I return an item if it doesn't match the description?",
-            "answer": "Yes \u2014 we offer a 30-day satisfaction guarantee on all purchases. If the item doesn't match what was described, contact us and we'll make it right. Free return shipping is included for condition discrepancies. We stand behind every listing."
+            "answer": "Yes — we offer a 30-day satisfaction guarantee on all purchases. If the item doesn't match what was described, contact us and we'll make it right. Free return shipping is included for condition discrepancies. We stand behind every listing."
           }
         },
         "faq_d3UKbp": {
           "type": "faq",
           "settings": {
             "question": "How do I know if the geometry fits me?",
-            "answer": "Every complete bike listing includes the full geometry table \u2014 top tube, stack, reach, head tube angle, and more. If you're unsure, contact our mechanics before you buy. We're familiar with most frames in our catalog and can help you compare to what you're currently riding."
+            "answer": "Every complete bike listing includes the full geometry table — top tube, stack, reach, head tube angle, and more. If you're unsure, contact our mechanics before you buy. We're familiar with most frames in our catalog and can help you compare to what you're currently riding."
           }
         },
         "faq_ixxAY3": {
           "type": "faq",
           "settings": {
             "question": "How does the sell or trade program work?",
-            "answer": "Submit your gear details through our sell form \u2014 takes about 2 minutes. We'll send a fair cash or store credit offer within 24hrs. Store credit runs 15\u201320% higher than cash and can be applied to anything in the catalog. If you accept, we send a free shipping label. Payment is processed within 48hrs of inspection."
+            "answer": "Submit your gear details through our sell form — takes about 2 minutes. We'll send a fair cash or store credit offer within 24hrs. Store credit runs 15–20% higher than cash and can be applied to anything in the catalog. If you accept, we send a free shipping label. Payment is processed within 48hrs of inspection."
           }
         },
         "faq_QEYzmF": {
@@ -472,12 +472,12 @@
         "heading_line_2": "we got the answers",
         "phone_label": "Call or text us",
         "phone": "(714) 248-5066",
-        "phone_note": "Mon\u2013Fri, 9AM\u20135PM PST",
-        "phone_link": "",
+        "phone_note": "Mon–Fri, 9AM–5PM PST",
+        "phone_link": "tel:+1(714) 248-5066",
         "email_label": "Email support",
         "email": "support@elevatecycling.com",
         "email_note": "Response within 24hrs",
-        "email_link": "",
+        "email_link": "mailto:support@elevatecycling.com",
         "location_label": "Visit us",
         "location": "Santa Ana, CA",
         "location_note": "Warehouse order pickup available",
@@ -485,9 +485,9 @@
         "help_eyebrow": "NEED MORE HELP?",
         "help_text": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is.",
         "primary_label": "Visit FAQs",
-        "primary_link": "",
+        "primary_link": "shopify://pages/faq",
         "secondary_label": "Contact Our Mechanics",
-        "secondary_link": ""
+        "secondary_link": "shopify://pages/contact-us"
       }
     }
   },
