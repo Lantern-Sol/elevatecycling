@@ -539,104 +539,84 @@
         "cta_link": ""
       }
     },
-    "elevate_shop_by_category": {
-      "type": "elevate-shop-by-category",
+    "elevate_faq_cM97bD": {
+      "type": "elevate-faq",
       "blocks": {
-        "cat_bikes": {
-          "type": "category",
+        "faq_eUQhMg": {
+          "type": "faq",
           "settings": {
-            "label": "COMPLETE BIKES",
-            "label_mobile": "FULL BIKES",
-            "link": "",
-            "position_x": 6,
-            "position_y": 19,
-            "line_direction": "right",
-            "line_length": 90,
-            "position_x_mobile": 39,
-            "position_y_mobile": 11,
-            "line_direction_mobile": "down",
-            "line_length_mobile": 40
+            "question": "What types of inventory does Elevate carry?",
+            "answer": "Elevate carries two types of inventory: brand-new gear sourced directly from brands at below-retail prices, and certified pre-owned gear bought from cyclists. Every item — new or pre-owned — is inspected, cleaned, and fully documented by our in-house mechanics before it goes live. We list condition honestly so you know exactly what you're getting before you decide."
           }
         },
-        "cat_groupsets": {
-          "type": "category",
+        "faq_mKLLDy": {
+          "type": "faq",
           "settings": {
-            "label": "GROUPSETS",
-            "label_mobile": "",
-            "link": "",
-            "position_x": 0,
-            "position_y": 58,
-            "line_direction": "right",
-            "line_length": 130,
-            "position_x_mobile": 22,
-            "position_y_mobile": 62,
-            "line_direction_mobile": "up",
-            "line_length_mobile": 40
+            "question": "How accurate are the condition descriptions?",
+            "answer": "Every listing includes Mechanic's Notes written by the tech who inspected the item — specific, honest, and not filtered through a marketing lens. If there's a scratch on the chainstay or wear on the cassette, it'll say so. We'd rather lose a sale than have a customer surprised by something we didn't disclose."
           }
         },
-        "cat_cockpit": {
-          "type": "category",
+        "faq_WACCaa": {
+          "type": "faq",
           "settings": {
-            "label": "COCKPIT",
-            "label_mobile": "",
-            "link": "",
-            "position_x": 66,
-            "position_y": 21,
-            "line_direction": "left",
-            "line_length": 70,
-            "position_x_mobile": 68,
-            "position_y_mobile": 8,
-            "line_direction_mobile": "down",
-            "line_length_mobile": 24
+            "question": "Can I return an item if it doesn't match the description?",
+            "answer": "Yes — we offer a 30-day satisfaction guarantee on all purchases. If the item doesn't match what was described, contact us and we'll make it right. Free return shipping is included for condition discrepancies. We stand behind every listing."
           }
         },
-        "cat_components": {
-          "type": "category",
+        "faq_mBAQr8": {
+          "type": "faq",
           "settings": {
-            "label": "COMPONENTS",
-            "label_mobile": "",
-            "link": "",
-            "position_x": 41,
-            "position_y": 50,
-            "line_direction": "up",
-            "line_length": 195,
-            "position_x_mobile": 50,
-            "position_y_mobile": 52,
-            "line_direction_mobile": "up",
-            "line_length_mobile": 24
+            "question": "How do I know if the geometry fits me?",
+            "answer": "Every complete bike listing includes the full geometry table — top tube, stack, reach, head tube angle, and more. If you're unsure, contact our mechanics before you buy. We're familiar with most frames in our catalog and can help you compare to what you're currently riding."
           }
         },
-        "cat_wheelsets": {
-          "type": "category",
+        "faq_NtDxPP": {
+          "type": "faq",
           "settings": {
-            "label": "WHEELSETS",
-            "label_mobile": "",
-            "link": "",
-            "position_x": 72,
-            "position_y": 73,
-            "line_direction": "left",
-            "line_length": 135,
-            "position_x_mobile": 78,
-            "position_y_mobile": 65,
-            "line_direction_mobile": "up",
-            "line_length_mobile": 32
+            "question": "How does the sell or trade program work?",
+            "answer": "Submit your gear details through our sell form — takes about 2 minutes. We'll send a fair cash or store credit offer within 24hrs. Store credit runs 15–20% higher than cash and can be applied to anything in the catalog. If you accept, we send a free shipping label. Payment is processed within 48hrs of inspection."
+          }
+        },
+        "faq_Dg9aDx": {
+          "type": "faq",
+          "settings": {
+            "question": "Do you ship internationally?",
+            "answer": "Yes. We ship to most countries outside the US. International shipping rates are calculated at checkout based on destination and item weight. Complete bikes ship fully assembled and boxed by our mechanics. All international orders are fully insured and tracked."
           }
         }
       },
       "block_order": [
-        "cat_bikes",
-        "cat_groupsets",
-        "cat_cockpit",
-        "cat_components",
-        "cat_wheelsets"
+        "faq_eUQhMg",
+        "faq_mKLLDy",
+        "faq_WACCaa",
+        "faq_mBAQr8",
+        "faq_NtDxPP",
+        "faq_Dg9aDx"
       ],
       "settings": {
-        "padding_top": 24,
-        "padding_bottom": 24,
-        "heading": "Shop By Category",
-        "image": "shopify://shop_images/7a4976b575a6437e6daf5ba47d979d66508abad5.png",
-        "button_label": "BROWSE ALL CATEGORIES",
-        "button_link": ""
+        "padding_top": 72,
+        "padding_bottom": 40,
+        "show_divider": true,
+        "heading_line_1": "Questions?",
+        "heading_line_2": "we got the answers",
+        "phone_label": "Call or text us",
+        "phone": "(714) 248-5066",
+        "phone_note": "Mon–Fri, 9AM–5PM PST",
+        "phone_link": "tel:+1714 248-5066",
+        "email_label": "Email support",
+        "email": "support@elevatecycling.com",
+        "email_note": "Response within 24hrs",
+        "email_link": "mailto:support@elevatecycling.com",
+        "location_label": "Visit us",
+        "location": "Santa Ana, CA",
+        "location_note": "Warehouse order pickup available",
+        "location_link": "",
+        "help_eyebrow": "NEED MORE HELP?",
+        "help_text": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is.",
+        "primary_label": "Visit FAQs",
+        "primary_link": "shopify://pages/faq",
+        "secondary_label": "Contact Our Mechanics",
+        "secondary_link": "shopify://pages/contact"
       }
     }
   },
@@ -649,6 +629,6 @@
     "elevate_reviews",
     "elevate_pdp_delivery",
     "elevate_new_arrivals",
-    "elevate_shop_by_category"
+    "elevate_faq_cM97bD"
   ]
 }
