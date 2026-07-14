@@ -1,0 +1,697 @@
+{%- doc -%}
+  Elevate Cycling — Popular articles carousel section.
+  Displays a horizontal carousel of featured-style blog article cards
+  with prev/next arrows and stepper dots. Merchant picks articles via blocks.
+{%- enddoc -%}
+
+{%- liquid
+  assign pt = section.settings.padding_top | times: 0.0625
+  assign pb = section.settings.padding_bottom | times: 0.0625
+  assign heading = section.settings.heading
+  assign cta_text = section.settings.cta_text
+  assign slide_count = 0
+-%}
+
+{%- comment -%} Count valid article blocks {%- endcomment -%}
+{%- for block in section.blocks -%}
+  {%- if block.settings.article != blank -%}
+    {%- assign slide_count = slide_count | plus: 1 -%}
+  {%- endif -%}
+{%- endfor -%}
+
+{%- if slide_count > 0 -%}
+  <div
+    class="section section--page-width page-width-normal elevate-blog-popular"
+    data-scroll-reveal
+    style="
+      background: linear-gradient(180deg, #f1dbdc 0%, #fdfcfc 100%);
+      padding-block-start: {{ pt }}rem;
+      padding-block-end: {{ pb }}rem;
+      border-radius: 2rem 2rem 0 0;
+    "
+  >
+    <div class="elevate-blog-popular__inner">
+      {%- if heading != blank -%}
+        <h2 class="elevate-blog-popular__heading">{{ heading }}</h2>
+      {%- endif -%}
+
+      {%- comment -%} ── Carousel track ── {%- endcomment -%}
+      <div
+        class="elevate-blog-popular__carousel"
+        data-popular-carousel
+        data-slide-count="{{ slide_count }}"
+      >
+        <div class="elevate-blog-popular__track" data-popular-track>
+          {%- for block in section.blocks -%}
+            {%- liquid
+              assign article = block.settings.article
+              if article == blank
+                continue
+              endif
+
+              assign badge_text = article.metafields.custom.article_badge.value
+
+              assign word_count = article.content | strip_html | split: ' ' | size
+              assign read_time = word_count | divided_by: 200
+              if read_time < 1
+                assign read_time = 1
+              endif
+            -%}
+
+            <div class="elevate-blog-popular__slide" {{ block.shopify_attributes }}>
+              <a href="{{ article.url }}" class="elevate-blog-popular__card">
+                {%- comment -%} ── Image ── {%- endcomment -%}
+                <div class="elevate-blog-popular__image-wrap">
+                  {%- if article.image -%}
+                    {{
+                      article.image
+                      | image_url: width: 1200
+                      | image_tag:
+                        widths: '375, 600, 800, 1000, 1200',
+                        sizes: '(min-width: 990px) 600px, 100vw',
+                        loading: 'lazy',
+                        class: 'elevate-blog-popular__image',
+                        alt: article.title
+                    }}
+                  {%- else -%}
+                    {{ 'image' | placeholder_svg_tag: 'elevate-blog-popular__image elevate-blog-popular__image--placeholder' }}
+                  {%- endif -%}
+
+                  {%- if badge_text != blank -%}
+                    <span class="elevate-blog-popular__tag">{{ badge_text }}</span>
+                  {%- endif -%}
+                </div>
+
+                {%- comment -%} ── Content ── {%- endcomment -%}
+                <div class="elevate-blog-popular__content">
+                  <span class="elevate-blog-popular__badge-featured">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="14" viewBox="0 0 15 14" fill="none" aria-hidden="true">
+                      <path d="M14.3359 5.20703L9.25 4.66992L7.16797 0L5.08594 4.66992L0 5.20703L3.79883 8.63086L2.73828 13.6328L7.16797 11.0781L11.5977 13.6328L10.5371 8.63086L14.3359 5.20703Z" fill="#141517"/>
+                    </svg>
+                    {{ section.settings.featured_badge_text }}
+                  </span>
+
+                  <h3 class="elevate-blog-popular__title">{{ article.title }}</h3>
+
+                  {%- if article.excerpt_or_content != blank -%}
+                    <p class="elevate-blog-popular__excerpt">
+                      {{ article.excerpt_or_content | strip_html | truncate: 160 }}
+                    </p>
+                  {%- endif -%}
+
+                  <hr class="elevate-blog-popular__divider">
+
+                  <div class="elevate-blog-popular__meta">
+                    <div class="elevate-blog-popular__meta-left">
+                      {%- if article.metafields.custom.author_avatar != blank -%}
+                        <img
+                          class="elevate-blog-popular__avatar-img"
+                          src="{{ article.metafields.custom.author_avatar | image_url: width: 48 }}"
+                          alt="{{ article.author }}"
+                          width="24"
+                          height="24"
+                          loading="lazy"
+                        >
+                      {%- else -%}
+                        <div class="elevate-blog-popular__avatar">
+                          {{ article.author | slice: 0 | upcase }}
+                        </div>
+                      {%- endif -%}
+                      <div class="elevate-blog-popular__meta-text">
+                        <span class="elevate-blog-popular__author">{{ article.author }}</span>
+                        <span class="elevate-blog-popular__date">
+                          {{ article.published_at | date: '%b %d, %Y' }}
+                        </span>
+                      </div>
+                    </div>
+                    <span class="elevate-blog-popular__read-time">{{ read_time }} min read</span>
+                  </div>
+
+                  <span class="elevate-blog-popular__cta">
+                    {{ cta_text }}
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                      <path d="M6 3L11 8L6 13" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
+                </div>
+              </a>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      {%- comment -%} ── Navigation ── {%- endcomment -%}
+      {%- if slide_count > 1 -%}
+        <div class="elevate-blog-popular__nav">
+          <button
+            type="button"
+            class="elevate-blog-popular__arrow elevate-blog-popular__arrow--prev"
+            aria-label="Previous article"
+            data-popular-prev
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none" aria-hidden="true">
+              <path d="M6.9609 0.0859L0.5859 6.4609L0.0703 7L0.5859 7.5391L6.9609 13.9141L8.0391 12.8359L2.9531 7.75H18V6.25H2.9531L8.0391 1.1641L6.9609 0.0859Z" fill="#141517"/>
+            </svg>
+          </button>
+
+          <div class="elevate-blog-popular__stepper" data-popular-stepper>
+            {%- for i in (1..slide_count) -%}
+              <span
+                class="elevate-blog-popular__dot{% if forloop.first %} elevate-blog-popular__dot--active{% endif %}"
+                data-popular-dot="{{ forloop.index0 }}"
+              ></span>
+            {%- endfor -%}
+          </div>
+
+          <button
+            type="button"
+            class="elevate-blog-popular__arrow elevate-blog-popular__arrow--next"
+            aria-label="Next article"
+            data-popular-next
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 18 14" fill="none" aria-hidden="true">
+              <path d="M11.0391 0.0859L9.9609 1.1641L15.0469 6.25H0V7.75H15.0469L9.9609 12.8359L11.0391 13.9141L17.4141 7.5391L17.9297 7L17.4141 6.4609L11.0391 0.0859Z" fill="#141517"/>
+            </svg>
+          </button>
+        </div>
+      {%- endif -%}
+    </div>
+  </div>
+{%- endif -%}
+
+<script>
+  (function () {
+    function initPopularCarousel(section) {
+      const carousel = section.querySelector('[data-popular-carousel]');
+      if (!carousel) return;
+
+      const track = carousel.querySelector('[data-popular-track]');
+      const dots = section.querySelectorAll('[data-popular-dot]');
+      const prevBtn = section.querySelector('[data-popular-prev]');
+      const nextBtn = section.querySelector('[data-popular-next]');
+      const count = parseInt(carousel.dataset.slideCount, 10);
+      let current = 0;
+
+      function updateDots(index) {
+        current = index;
+        dots.forEach(function (dot, i) {
+          dot.classList.toggle('elevate-blog-popular__dot--active', i === current);
+        });
+      }
+
+      function goTo(index) {
+        if (index < 0) index = count - 1;
+        if (index >= count) index = 0;
+        var slide = track.children[index];
+        if (slide) {
+          track.scrollTo({ left: slide.offsetLeft, behavior: 'smooth' });
+        }
+        updateDots(index);
+      }
+
+      if (prevBtn) prevBtn.addEventListener('click', function () { goTo(current - 1); });
+      if (nextBtn) nextBtn.addEventListener('click', function () { goTo(current + 1); });
+
+      dots.forEach(function (dot) {
+        dot.addEventListener('click', function () {
+          goTo(parseInt(dot.dataset.popularDot, 10));
+        });
+      });
+
+      /* Update active dot on native scroll/swipe */
+      var scrollTimer;
+      track.addEventListener('scroll', function () {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(function () {
+          var first = track.children[0];
+          if (!first) return;
+          var gap = parseFloat(getComputedStyle(track).columnGap) || 0;
+          var step = first.offsetWidth + gap;
+          var index = Math.round(track.scrollLeft / step);
+          if (index >= 0 && index < count && index !== current) {
+            updateDots(index);
+          }
+        }, 80);
+      }, { passive: true });
+    }
+
+    /* Init on DOMContentLoaded and Shopify section events */
+    function init() {
+      document.querySelectorAll('.elevate-blog-popular').forEach(initPopularCarousel);
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', init);
+    } else {
+      init();
+    }
+    document.addEventListener('shopify:section:load', function (e) {
+      initPopularCarousel(e.target);
+    });
+  })();
+</script>
+
+{% stylesheet %}
+  /* ─── Blog Popular Articles Carousel ─── */
+  .elevate-blog-popular__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-inline: 0.5rem;
+  }
+
+  .elevate-blog-popular__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Carousel ── */
+  .elevate-blog-popular__carousel {
+    position: relative;
+    margin-inline-end: -1.25rem;
+  }
+
+  .elevate-blog-popular__track {
+    display: flex;
+    gap: 1rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .elevate-blog-popular__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .elevate-blog-popular__slide {
+    flex: 0 0 85%;
+    min-width: 0;
+    scroll-snap-align: start;
+  }
+
+  .elevate-blog-popular__slide:last-child {
+    margin-inline-end: 1.25rem;
+  }
+
+  /* ── Card (reuses featured card pattern) ── */
+  .elevate-blog-popular__card {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border-radius: 1rem;
+    overflow: hidden;
+    background: linear-gradient(180deg, #250a0a 0%, #6d1316 100%);
+    box-shadow:
+      0 0.125rem 0.25rem -0.125rem rgba(0, 0, 0, 0.1),
+      0 0.25rem 0.375rem -0.0625rem rgba(0, 0, 0, 0.1);
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.25s ease;
+  }
+
+  .elevate-blog-popular__card:hover {
+    box-shadow:
+      0 0.25rem 0.5rem -0.125rem rgba(0, 0, 0, 0.14),
+      0 0.5rem 0.75rem -0.0625rem rgba(0, 0, 0, 0.14);
+  }
+
+  /* ── Image ── */
+  .elevate-blog-popular__image-wrap {
+    position: relative;
+    width: 100%;
+    height: 14.25rem;
+    overflow: hidden;
+  }
+
+  .elevate-blog-popular__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+  }
+
+  .elevate-blog-popular__image--placeholder {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+    background: #e8d5d6;
+    color: #AEB2B8;
+  }
+
+  .elevate-blog-popular__tag {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.5rem;
+    background: #E31E24;
+    border-radius: 0.125rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #FDFCFC;
+    text-transform: capitalize;
+    letter-spacing: -0.0075rem;
+  }
+
+  /* ── Content ── */
+  .elevate-blog-popular__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .elevate-blog-popular__badge-featured {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 0.25rem;
+    padding: 0.25rem 0.5rem;
+    background: #F9D44E;
+    border-radius: 0.25rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #141517;
+    text-transform: capitalize;
+    letter-spacing: -0.0075rem;
+  }
+
+  .elevate-blog-popular__title {
+    font-family: 'Inter', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    letter-spacing: -0.0125rem;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-blog-popular__excerpt {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  .elevate-blog-popular__divider {
+    border: none;
+    border-top: 0.5px solid #AEB2B8;
+    margin: 0;
+    opacity: 0.4;
+  }
+
+  /* ── Meta row ── */
+  .elevate-blog-popular__meta {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-inline: 0.5rem;
+  }
+
+  .elevate-blog-popular__meta-left {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .elevate-blog-popular__avatar-img {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .elevate-blog-popular__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: #AEB2B8;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.625rem;
+    color: #141517;
+    flex-shrink: 0;
+  }
+
+  .elevate-blog-popular__meta-text {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .elevate-blog-popular__author {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.625rem;
+    line-height: 1.5;
+    letter-spacing: -0.00625rem;
+    color: #AEB2B8;
+  }
+
+  .elevate-blog-popular__date {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.625rem;
+    line-height: 1.5;
+    letter-spacing: -0.00625rem;
+    color: #AEB2B8;
+  }
+
+  .elevate-blog-popular__read-time {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #AEB2B8;
+    white-space: nowrap;
+  }
+
+  /* ── CTA ── */
+  .elevate-blog-popular__cta {
+    display: inline-flex;
+    align-items: center;
+    align-self: end;
+    gap: 0.5rem;
+    padding-inline: 0.5rem;
+    padding-block: 0.5rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    color: #FDFCFC;
+    text-decoration: none;
+    border-bottom: 0.5px solid #FDFCFC;
+  }
+
+  .elevate-blog-popular__card:hover .elevate-blog-popular__cta {
+    border-bottom-width: 1.5px;
+  }
+
+  /* ── Navigation ── */
+  .elevate-blog-popular__nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+  }
+
+  .elevate-blog-popular__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    border: 0.03125rem solid #141517;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    flex-shrink: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .elevate-blog-popular__arrow:hover {
+    background: rgba(20, 21, 23, 0.06);
+  }
+
+  .elevate-blog-popular__arrow:focus-visible {
+    outline: 2px solid #141517;
+    outline-offset: 2px;
+  }
+
+  /* ── Stepper dots ── */
+  .elevate-blog-popular__stepper {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .elevate-blog-popular__dot {
+    width: 0.75rem;
+    height: 0.25rem;
+    border-radius: 62rem;
+    background: #6B7280;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .elevate-blog-popular__dot--active {
+    background: #E31E24;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-blog-popular__inner {
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-blog-popular__carousel {
+      margin-inline-end: 0;
+    }
+
+    .elevate-blog-popular__track {
+      gap: 0;
+      overflow: hidden;
+    }
+
+    .elevate-blog-popular__slide {
+      flex: 0 0 100%;
+    }
+
+    .elevate-blog-popular__slide:last-child {
+      margin-inline-end: 0;
+    }
+
+    .elevate-blog-popular__heading {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-blog-popular__card {
+      flex-direction: row;
+      max-height: 25rem;
+      border-radius: 1.5rem;
+    }
+
+    .elevate-blog-popular__image-wrap {
+      flex: 0 0 50%;
+      height: auto;
+      border-radius: 1rem;
+    }
+
+    .elevate-blog-popular__image {
+      border-radius: 1rem;
+    }
+
+    .elevate-blog-popular__tag {
+      top: 1.5rem;
+      left: 1.5rem;
+      border-radius: 0.25rem;
+    }
+
+    .elevate-blog-popular__content {
+      flex: 1;
+      padding: 1.5rem 2rem;
+      justify-content: center;
+    }
+
+    .elevate-blog-popular__excerpt {
+      font-size: 0.875rem;
+      letter-spacing: -0.00875rem;
+    }
+
+    .elevate-blog-popular__author,
+    .elevate-blog-popular__date {
+      font-size: 0.75rem;
+      letter-spacing: -0.0075rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Blog Popular Articles",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Popular articles"
+    },
+    {
+      "type": "text",
+      "id": "featured_badge_text",
+      "label": "Featured badge text",
+      "default": "Featured"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Read Article"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "article",
+      "name": "Article",
+      "settings": [
+        {
+          "type": "article",
+          "id": "article",
+          "label": "Article"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Popular Articles"
+    }
+  ]
+}
+{% endschema %}

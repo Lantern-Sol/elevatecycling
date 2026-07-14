@@ -1,0 +1,220 @@
+{%- liquid
+  assign author_bio = article.metafields.custom.author_bio.value | default: section.settings.author_bio
+  assign author_avatar = article.metafields.custom.author_avatar.value | default: section.settings.author_avatar
+  assign author_role = article.metafields.custom.author_role.value | default: section.settings.author_role
+  assign first_name = article.author | split: ' ' | first
+-%}
+
+{%- if author_bio != blank -%}
+  <div
+    class="section section--page-width page-width-normal elevate-blog-article-author"
+    data-scroll-reveal
+    style="background: #FDFCFC; border-top: 0.5px solid #AEB2B8; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
+
+    <div class="elevate-blog-article-author__inner">
+      <span class="elevate-blog-article-author__eyebrow">ABOUT THE AUTHOR</span>
+
+      <div class="elevate-blog-article-author__bio-row">
+        <div class="elevate-blog-article-author__avatar">
+          {%- if author_avatar != blank -%}
+            <img
+              src="{{ author_avatar | image_url: width: 128 }}"
+              alt="{{ article.author }}"
+              width="64"
+              height="64"
+              loading="lazy">
+          {%- else -%}
+            <span class="elevate-blog-article-author__initial">
+              {{- article.author | slice: 0 -}}
+            </span>
+          {%- endif -%}
+        </div>
+
+        <div class="elevate-blog-article-author__bio-info">
+          <span class="elevate-blog-article-author__name">{{ article.author }}</span>
+
+          {%- if author_role != blank -%}
+            <span class="elevate-blog-article-author__role">{{ author_role }}</span>
+          {%- endif -%}
+
+          <p class="elevate-blog-article-author__bio-text">{{ author_bio }}</p>
+
+          <a href="{{ blog.url }}" class="elevate-blog-article-author__link">
+            See all articles by {{ first_name }} &rarr;
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+{%- endif -%}
+
+{% stylesheet %}
+  .elevate-blog-article-author__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-inline: 0.5rem;
+  }
+
+  .elevate-blog-article-author__eyebrow {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: #6B7280;
+  }
+
+  /* — Bio row — */
+  .elevate-blog-article-author__bio-row {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 1.5rem;
+  }
+
+  /* — Avatar — */
+  .elevate-blog-article-author__avatar {
+    flex-shrink: 0;
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .elevate-blog-article-author__avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .elevate-blog-article-author__initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: #E31E24;
+    color: #FDFCFC;
+    font-family: 'Inter', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1;
+    text-transform: uppercase;
+  }
+
+  /* — Bio info — */
+  .elevate-blog-article-author__bio-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .elevate-blog-article-author__name {
+    font-family: 'Inter', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: #36393F;
+  }
+
+  .elevate-blog-article-author__role {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    color: #E31E24;
+  }
+
+  .elevate-blog-article-author__bio-text {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    letter-spacing: -0.01em;
+    line-height: 1.5;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-blog-article-author__link {
+    display: inline-block;
+    font-family: 'Host Grotesk', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: #E31E24;
+    text-decoration: none;
+    border-bottom: 0.5px solid #E31E24;
+    padding-bottom: 0.125rem;
+    margin-top: 0.25rem;
+    align-self: flex-start;
+    transition: opacity 0.2s ease;
+  }
+
+  .elevate-blog-article-author__link:hover,
+  .elevate-blog-article-author__link:focus-visible {
+    opacity: 0.8;
+  }
+
+  .elevate-blog-article-author__link:focus-visible {
+    outline: 2px solid #E31E24;
+    outline-offset: 2px;
+  }
+
+  /* — Desktop — */
+  @media (min-width: 61.9375rem) {
+    .elevate-blog-article-author__inner {
+      padding-inline: 10.375rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Author Bio",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "author_bio",
+      "label": "Author bio (fallback)"
+    },
+    {
+      "type": "text",
+      "id": "author_role",
+      "label": "Author role (fallback)"
+    },
+    {
+      "type": "image_picker",
+      "id": "author_avatar",
+      "label": "Author avatar (fallback)"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 40,
+      "label": "Padding top"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "label": "Padding bottom"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Author Bio"
+    }
+  ]
+}
+{% endschema %}

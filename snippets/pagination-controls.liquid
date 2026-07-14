@@ -162,22 +162,18 @@
 {%- endif -%}
 
 {% stylesheet %}
+  /* ─── Pagination – Elevate pill style (per Figma) ─── */
   .pagination {
-    --pagination-size: 36px;
-    --pagination-inset: 2px;
-    --pagination-radius: 6;
-
     display: flex;
     justify-content: center;
-    padding: var(--padding-xl) var(--padding-sm);
-    margin-top: var(--padding-xl);
+    padding: 2.5rem 0;
     position: relative;
     isolation: isolate;
   }
 
   .pagination__list {
     display: flex;
-    gap: 0;
+    gap: 0.75rem;
     align-items: center;
     list-style: none;
     margin: 0;
@@ -186,28 +182,29 @@
   }
 
   .pagination__item {
-    width: var(--pagination-size);
-    aspect-ratio: 1;
+    width: auto;
+    aspect-ratio: unset;
     display: grid;
     place-items: center;
   }
 
+  /* Kill theme hover-indicator pseudo-elements */
+  .pagination__link::before,
+  .pagination__list::before {
+    display: none !important;
+  }
+
   .pagination__link {
-    display: grid;
-    place-items: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     color: var(--color-foreground);
     text-decoration: none;
-    width: 100%;
-    height: 100%;
     user-select: none;
     position: relative;
     outline-color: var(--color-foreground);
     -webkit-tap-highlight-color: transparent;
-    font-size: var(--font-size--md);
-    font-weight: var(--font-weight-normal);
-    border-radius: calc(var(--pagination-radius) * 1px);
-    transition: color var(--hover-transition-duration) var(--hover-transition-timing),
-      opacity var(--hover-transition-duration) var(--hover-transition-timing);
+    transition: background-color 0.2s ease, opacity 0.2s ease;
   }
 
   .pagination__link:focus-visible {
@@ -215,143 +212,142 @@
     outline-offset: 2px;
   }
 
+  /* ── Page pills ── */
+  .pagination__link--page {
+    width: 1.5rem;
+    height: 1rem;
+    min-width: 1.5rem;
+    background: #AEB2B8;
+    border-radius: 62rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #FDFCFC;
+  }
+
+  .pagination__link--page:hover {
+    background: #9a9ea4;
+  }
+
+  /* Active page – red */
   .pagination__link--current {
-    color: var(--color-secondary-button-hover-background);
-    background: var(--color-background);
-    font-weight: var(--font-weight-medium);
+    background: #E31E24;
+    color: #FDFCFC;
     cursor: default;
   }
 
+  .pagination__link--current:hover {
+    background: #c91a1f;
+  }
+
+  /* ── Ellipsis ── */
   .pagination__link--gap {
     cursor: default;
     pointer-events: none;
+    color: #AEB2B8;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    background: none;
+    width: 1.5rem;
+    text-align: center;
   }
 
+  /* ── Arrow buttons ── */
   .pagination__link--arrow {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 0.75rem;
+    border: 0.03125rem solid #141517;
+    background: transparent;
   }
 
-  .pagination__link--disabled {
+  .pagination__link--arrow:hover {
+    background: rgba(20, 21, 23, 0.06);
+  }
+
+  /* Disabled arrows */
+  .pagination__link--disabled.pagination__link--arrow {
     opacity: 0.3;
-    cursor: not-allowed;
+    border-color: transparent;
     pointer-events: none;
+    cursor: not-allowed;
   }
 
-  .pagination__link svg {
-    width: 0.5rem;
-    height: 0.75rem;
-    flex-shrink: 0;
+  /* Replace theme chevron SVGs with Figma solid-fill arrows */
+  .pagination__link--arrow svg {
+    display: none;
+  }
+
+  .pagination__link--arrow::after {
+    content: '';
+    display: block;
+    width: 1.5rem;
+    height: 1.5rem;
+    background-color: #141517;
+    -webkit-mask-size: contain;
+    mask-size: contain;
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+    -webkit-mask-position: center;
+    mask-position: center;
+  }
+
+  /* Previous arrow (left) */
+  .pagination__item:first-child .pagination__link--arrow::after {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 14' fill='%23141517'%3E%3Cpath d='M6.9609 0.0859L0.5859 6.4609L0.0703 7L0.5859 7.5391L6.9609 13.9141L8.0391 12.8359L2.9531 7.75H18V6.25H2.9531L8.0391 1.1641L6.9609 0.0859Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 14' fill='%23141517'%3E%3Cpath d='M6.9609 0.0859L0.5859 6.4609L0.0703 7L0.5859 7.5391L6.9609 13.9141L8.0391 12.8359L2.9531 7.75H18V6.25H2.9531L8.0391 1.1641L6.9609 0.0859Z'/%3E%3C/svg%3E");
+  }
+
+  /* Next arrow (right) */
+  .pagination__item:last-child .pagination__link--arrow::after {
+    -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 14' fill='%23141517'%3E%3Cpath d='M11.0391 0.0859L9.9609 1.1641L15.0469 6.25H0V7.75H15.0469L9.9609 12.8359L11.0391 13.9141L17.4141 7.5391L17.9297 7L17.4141 6.4609L11.0391 0.0859Z'/%3E%3C/svg%3E");
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 18 14' fill='%23141517'%3E%3Cpath d='M11.0391 0.0859L9.9609 1.1641L15.0469 6.25H0V7.75H15.0469L9.9609 12.8359L11.0391 13.9141L17.4141 7.5391L17.9297 7L17.4141 6.4609L11.0391 0.0859Z'/%3E%3C/svg%3E");
+  }
+
+  /* Arrow-to-pills spacing: 32px per Figma */
+  .pagination__item:first-child {
+    margin-inline-end: 1.25rem;
+  }
+
+  .pagination__item:last-child {
+    margin-inline-start: 1.25rem;
   }
 
   .pagination__item--mobile-only {
     display: none;
   }
 
-  /* Fallback for browsers without anchor positioning support */
-  @supports not (anchor-name: --pagination-active) {
-    .pagination__link:not(.pagination__link--gap)::before {
-      content: '';
-      position: absolute;
-      inset: var(--pagination-inset);
-      border-radius: calc(var(--pagination-radius) * 1px);
-      background: rgb(var(--color-foreground-rgb) / var(--opacity-10));
-      z-index: -1;
-      opacity: 0;
-      transition: background var(--hover-transition-duration) var(--hover-transition-timing),
-        opacity var(--hover-transition-duration) var(--hover-transition-timing);
-    }
-
-    .pagination__link[aria-current='page']::before {
-      background: var(--color-foreground);
-      opacity: 1;
-    }
-
-    .pagination__link:hover:not([aria-current='page'], .pagination__link--gap, .pagination__link--disabled)::before {
-      opacity: 1;
-    }
-  }
-
-  /* Modern approach with anchor positioning */
-  @supports (anchor-name: --pagination-active) {
-    .pagination__list::before {
-      content: '';
-      z-index: -1;
-      position: absolute;
-      width: calc(var(--pagination-size) - (2 * var(--pagination-inset)));
-      aspect-ratio: 1;
-      pointer-events: none;
-      opacity: 0;
-      border-radius: calc(var(--pagination-radius) * 1px);
-      background: rgb(var(--color-foreground-rgb) / var(--opacity-10));
-      transition: left var(--hover-transition-duration) var(--hover-transition-timing),
-        top var(--hover-transition-duration) var(--hover-transition-timing);
-    }
-
-    /* Hide hover indicator on touch devices */
-    @media (hover: none) and (pointer: coarse) {
-      .pagination__list::before {
-        content: unset;
-      }
-    }
-
-    .pagination__list:has(
-        .pagination__link:is(:hover, :focus-visible):not(.pagination__link--gap, .pagination__link--disabled)
-      )::before {
-      opacity: 1;
-    }
-
-    /* Style current page directly */
-    .pagination__link[aria-current='page']::before {
-      content: '';
-      position: absolute;
-      inset: var(--pagination-inset);
-      border-radius: calc(var(--pagination-radius) * 1px);
-      background: var(--color-foreground);
-      z-index: -1;
-    }
-
-    .pagination__list
-      .pagination__item:has(
-        .pagination__link:is(:hover, :focus-visible):not(.pagination__link--gap, .pagination__link--disabled)
-      ) {
-      anchor-name: --pagination-hover;
-    }
-
-    /* Position hover indicator using anchor */
-    .pagination__list::before {
-      position-anchor: --pagination-hover;
-      left: calc(anchor(left) + var(--pagination-inset));
-      top: calc(anchor(top) + var(--pagination-inset));
-    }
-
-    .pagination__item:has(+ .pagination__item--gap) .pagination__link::after,
-    .pagination__item--gap + .pagination__item .pagination__link::after {
-      position: absolute;
-      content: '';
-      pointer-events: auto;
-    }
-
-    .pagination__item:has(+ .pagination__item--gap) .pagination__link::after {
-      inset: 0 -50% 0 100%;
-    }
-
-    .pagination__item--gap + .pagination__item .pagination__link::after {
-      inset: 0 100% 0 -50%;
-    }
-  }
-
+  /* ── Mobile ── */
   @media screen and (max-width: 749px) {
-    .pagination {
-      --pagination-size: 44px;
-      --pagination-inset: 5px;
-
-      padding: var(--padding-lg) var(--padding-sm);
+    .pagination__list {
+      gap: 0.5rem;
     }
 
-    .pagination__link {
-      font-size: var(--font-size--sm);
+    .pagination__link--page {
+      width: 1.5rem;
+      height: 1rem;
+      min-width: 1.5rem;
+      font-size: 0.625rem;
+    }
+
+    .pagination__link--arrow {
+      width: 2.5rem;
+      height: 2.5rem;
+    }
+
+    .pagination__item:first-child {
+      margin-inline-end: 0.5rem;
+    }
+
+    .pagination__item:last-child {
+      margin-inline-start: 0.5rem;
+    }
+
+    .pagination__link--gap {
+      width: 1rem;
     }
 
     .pagination__item--mobile-hide {
@@ -360,10 +356,6 @@
 
     .pagination__item--mobile-only {
       display: grid;
-    }
-
-    .pagination__item:has(.pagination__link--gap) {
-      width: calc(var(--pagination-size) * 0.5);
     }
   }
 {% endstylesheet %}

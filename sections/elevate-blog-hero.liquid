@@ -1,0 +1,394 @@
+{%- doc -%}
+  Elevate Cycling — Blog hero section.
+  Full-bleed background with solid dark overlay,
+  center-aligned content: badge pill, heading with accent-color word,
+  subtitle, and a search form for filtering blog articles.
+{%- enddoc -%}
+
+{%- liquid
+  assign has_image = false
+  if section.settings.image != blank
+    assign has_image = true
+  endif
+
+  assign heading_html = section.settings.heading
+  if section.settings.heading_accent != blank
+    assign accent_open = '<span class="elevate-blog-hero__accent">'
+    assign accent_close = '</span>'
+    assign accent_wrap = accent_open | append: section.settings.heading_accent | append: accent_close
+    assign heading_html = heading_html | replace: section.settings.heading_accent, accent_wrap
+  endif
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-blog-hero"
+  style="
+    background: #0a0a0a;
+    --elevate-blog-hero-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-blog-hero-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+    --elevate-blog-hero-overlay-opacity: {{ section.settings.overlay_opacity | divided_by: 100.0 }};
+  "
+>
+  {%- comment -%} ── Background media ── {%- endcomment -%}
+  <div class="elevate-blog-hero__media">
+    {%- if has_image -%}
+      {%- assign img = section.settings.image -%}
+      {{
+        img
+        | image_url: width: 3840
+        | image_tag:
+          widths: '375, 750, 1080, 1440, 1920, 2560, 3840',
+          sizes: '100vw',
+          fetchpriority: 'high',
+          loading: 'eager',
+          class: 'elevate-blog-hero__image',
+          alt: ''
+      }}
+    {%- else -%}
+      <div class="elevate-blog-hero__placeholder"></div>
+    {%- endif -%}
+
+    <div class="elevate-blog-hero__overlay"></div>
+  </div>
+
+  <div class="elevate-blog-hero__inner">
+    {%- if section.settings.badge_text != blank -%}
+      <span class="elevate-blog-hero__badge">{{ section.settings.badge_text }}</span>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h1 class="elevate-blog-hero__heading">{{ heading_html }}</h1>
+    {%- endif -%}
+
+    {%- if section.settings.subtitle != blank -%}
+      <p class="elevate-blog-hero__subtitle">
+        Buying guides, gear reviews, and CPO advice
+        <br class="elevate-blog-hero__br-desktop">
+        from the Elevate mechanics team.
+      </p>
+    {%- endif -%}
+
+    <form class="elevate-blog-hero__search" action="/search" method="get" role="search">
+      <input type="hidden" name="type" value="article">
+      <div class="elevate-blog-hero__search-input">
+        <svg class="elevate-blog-hero__search-icon" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+          <path d="M11.7891 0C7.65527 0 4.28906 3.36621 4.28906 7.5C4.28906 9.2959 4.91895 10.9424 5.97656 12.2344L0 18.2109L1.07812 19.2891L7.05469 13.3125C8.34668 14.3701 9.99316 15 11.7891 15C15.9229 15 19.2891 11.6338 19.2891 7.5C19.2891 3.36621 15.9229 0 11.7891 0ZM11.7891 1.5C15.1113 1.5 17.7891 4.17773 17.7891 7.5C17.7891 10.8223 15.1113 13.5 11.7891 13.5C8.4668 13.5 5.78906 10.8223 5.78906 7.5C5.78906 4.17773 8.4668 1.5 11.7891 1.5Z" fill="#FDFCFC"/>
+        </svg>
+        <input
+          type="search"
+          name="q"
+          placeholder="{{ section.settings.search_placeholder }}"
+          aria-label="{{ section.settings.search_placeholder }}"
+          class="elevate-blog-hero__input"
+          style="background-color: transparent;"
+        >
+      </div>
+      <button type="submit" class="elevate-blog-hero__search-btn">
+        {{ section.settings.search_button_text }}
+      </button>
+    </form>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Blog Hero ─── */
+  .elevate-blog-hero {
+    position: relative;
+    overflow: hidden;
+    padding-block-start: var(--elevate-blog-hero-pt);
+    padding-block-end: var(--elevate-blog-hero-pb);
+  }
+
+  .elevate-blog-hero__inner {
+    grid-column: 2;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 16rem;
+    padding-inline: 0.5rem;
+    gap: 1rem;
+  }
+
+  /* ── Media layer ── */
+  .elevate-blog-hero__media {
+    position: absolute;
+    inset: 0;
+    z-index: var(--layer-lowest);
+    grid-column: 1 / -1;
+  }
+
+  .elevate-blog-hero__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-blog-hero__placeholder {
+    width: 100%;
+    height: 100%;
+    background: #0a0a0a;
+  }
+
+  .elevate-blog-hero__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--elevate-blog-hero-overlay-opacity, 0.95));
+    pointer-events: none;
+  }
+
+  /* ── Badge ── */
+  .elevate-blog-hero__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.3125rem 0.75rem;
+    background: #E31E24;
+    border-radius: 62.4375rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #FDFCFC;
+    text-transform: uppercase;
+  }
+
+  /* ── Heading ── */
+  .elevate-blog-hero__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    text-align: center;
+    margin: 0;
+  }
+
+  .elevate-blog-hero__accent {
+    color: inherit;
+  }
+
+  /* ── Subtitle ── */
+  .elevate-blog-hero__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #E2E3E5;
+    margin: 0;
+  }
+
+  .elevate-blog-hero__br-desktop {
+    display: none;
+  }
+
+  /* ── Search form ── */
+  .elevate-blog-hero__search {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 1rem;
+  }
+
+  .elevate-blog-hero__search-input {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+  }
+
+  .elevate-blog-hero__search-icon {
+    position: absolute;
+    left: 1rem;
+    color: #AEB2B8;
+    pointer-events: none;
+  }
+
+  .elevate-blog-hero__input {
+    width: 100%;
+    padding: 0.75rem 1rem 0.75rem 2.75rem;
+    background: transparent;
+    background-color: transparent;
+    -webkit-appearance: none;
+    appearance: none;
+    border: 0.5px solid #FDFCFC;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-style: italic;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #FDFCFC;
+  }
+
+  .elevate-blog-hero__input::placeholder {
+    color: #AEB2B8;
+  }
+
+  .elevate-blog-hero__input:focus {
+    outline: 2px solid #E31E24;
+    outline-offset: 1px;
+  }
+
+  .elevate-blog-hero__search-btn {
+    padding: 0.75rem 1.5rem;
+    background: #E31E24;
+    border: none;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #FDFCFC;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    white-space: nowrap;
+  }
+
+  .elevate-blog-hero__search-btn:hover {
+    background: #c9191f;
+  }
+
+  .elevate-blog-hero__search-btn:focus-visible {
+    outline: 2px solid #FDFCFC;
+    outline-offset: 2px;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-blog-hero__inner {
+      min-height: 20rem;
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-blog-hero__heading {
+      font-size: 4rem;
+    }
+
+    .elevate-blog-hero__subtitle {
+      max-width: 35.75rem;
+    }
+
+    .elevate-blog-hero__br-desktop {
+      display: inline;
+    }
+
+    .elevate-blog-hero__search {
+      flex-direction: row;
+      width: 35.75rem;
+    }
+
+    .elevate-blog-hero__search-input {
+      flex: 1;
+    }
+
+    .elevate-blog-hero__search-btn {
+      width: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Blog Hero",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Background"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 95
+    },
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "text",
+      "id": "badge_text",
+      "label": "Badge text",
+      "default": "BLOG"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "The Cycling Garage"
+    },
+    {
+      "type": "text",
+      "id": "heading_accent",
+      "label": "Heading accent text",
+      "info": "Word(s) within the heading to highlight in red.",
+      "default": "Garage"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle",
+      "default": "Buying guides, gear reviews, and CPO advice from the Elevate mechanics team."
+    },
+    {
+      "type": "header",
+      "content": "Search"
+    },
+    {
+      "type": "text",
+      "id": "search_placeholder",
+      "label": "Search placeholder",
+      "default": "Search Articles"
+    },
+    {
+      "type": "text",
+      "id": "search_button_text",
+      "label": "Search button text",
+      "default": "Search"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Hero"
+    }
+  ]
+}
+{% endschema %}

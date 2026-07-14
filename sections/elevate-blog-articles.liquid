@@ -1,0 +1,408 @@
+{%- doc -%}
+  Elevate Cycling — Blog article grid section.
+  Renders a 3-column card grid of blog articles with tag badge,
+  excerpt, author meta, read-time, and "Read Article →" CTA.
+  Replaces Horizon's built-in main-blog section.
+{%- enddoc -%}
+
+{%- liquid
+  assign per_page = section.settings.posts_per_page
+  assign cta_text = section.settings.cta_text
+  assign pt = section.settings.padding_top | times: 0.0625
+  assign pb = section.settings.padding_bottom | times: 0.0625
+-%}
+
+{% paginate blog.articles by per_page %}
+  <div
+    class="section section--page-width page-width-normal elevate-blog-articles"
+    data-scroll-reveal
+    style="
+      background: #FDFCFC;
+      padding-block-start: {{ pt }}rem;
+      padding-block-end: {{ pb }}rem;
+    "
+  >
+    <div class="elevate-blog-articles__inner">
+      {%- if blog.articles.size > 0 -%}
+        <div class="elevate-blog-articles__grid">
+          {%- for article in blog.articles -%}
+            {%- liquid
+              assign badge_text = article.metafields.custom.article_badge.value
+
+              assign word_count = article.content | strip_html | split: ' ' | size
+              assign read_time = word_count | divided_by: 200
+              if read_time < 1
+                assign read_time = 1
+              endif
+            -%}
+
+            <a href="{{ article.url }}" class="elevate-blog-articles__card">
+              {%- comment -%} ── Image with tag badge ── {%- endcomment -%}
+              <div class="elevate-blog-articles__image-wrap">
+                {%- if article.image -%}
+                  {{
+                    article.image
+                    | image_url: width: 800
+                    | image_tag:
+                      widths: '300, 400, 600, 800',
+                      sizes: '(min-width: 990px) 33vw, 100vw',
+                      loading: 'lazy',
+                      class: 'elevate-blog-articles__image',
+                      alt: article.title
+                  }}
+                {%- else -%}
+                  <div class="elevate-blog-articles__image-placeholder">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <rect width="24" height="24" rx="4" fill="#E5E7EB"/>
+                      <path d="M4 16l4-4 4 4 4-6 4 6" stroke="#9CA3AF" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                      <circle cx="15" cy="9" r="2" fill="#9CA3AF"/>
+                    </svg>
+                  </div>
+                {%- endif -%}
+
+                {%- if badge_text != blank -%}
+                  <span class="elevate-blog-articles__tag">{{ badge_text }}</span>
+                {%- endif -%}
+              </div>
+
+              {%- comment -%} ── Content ── {%- endcomment -%}
+              <div class="elevate-blog-articles__content">
+                <h2 class="elevate-blog-articles__title">{{ article.title }}</h2>
+
+                {%- if article.excerpt_or_content != blank -%}
+                  <p class="elevate-blog-articles__excerpt">
+                    {{ article.excerpt_or_content | strip_html | truncate: 120 }}
+                  </p>
+                {%- endif -%}
+
+                <hr class="elevate-blog-articles__divider">
+
+                <div class="elevate-blog-articles__meta">
+                  <div class="elevate-blog-articles__meta-left">
+                    {%- if article.metafields.custom.author_avatar != blank -%}
+                      <img
+                        class="elevate-blog-articles__avatar-img"
+                        src="{{ article.metafields.custom.author_avatar | image_url: width: 48 }}"
+                        alt="{{ article.author }}"
+                        width="24"
+                        height="24"
+                        loading="lazy"
+                      >
+                    {%- else -%}
+                      <div class="elevate-blog-articles__avatar">
+                        {{ article.author | slice: 0 | upcase }}
+                      </div>
+                    {%- endif -%}
+                    <div class="elevate-blog-articles__meta-text">
+                      <span class="elevate-blog-articles__author">{{ article.author }}</span>
+                      <span class="elevate-blog-articles__date">
+                        {{ article.published_at | date: '%b %d, %Y' }}
+                      </span>
+                    </div>
+                  </div>
+                  <span class="elevate-blog-articles__read-time">{{ read_time }} min read</span>
+                </div>
+
+                <span class="elevate-blog-articles__cta">
+                  {{ cta_text }} &rarr;
+                </span>
+              </div>
+            </a>
+          {%- endfor -%}
+        </div>
+
+        {%- if paginate.pages > 1 -%}
+          {% render 'pagination-controls', paginate: paginate %}
+        {%- endif -%}
+      {%- else -%}
+        <p class="elevate-blog-articles__empty">No articles found.</p>
+      {%- endif -%}
+    </div>
+  </div>
+{% endpaginate %}
+
+{% stylesheet %}
+  /* ─── Blog Articles Grid ─── */
+  .elevate-blog-articles__inner {
+    padding-inline: 0.5rem;
+  }
+
+  .elevate-blog-articles__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* ── Card ── */
+  .elevate-blog-articles__card {
+    display: flex;
+    flex-direction: column;
+    background: #FDFCFC;
+    border-radius: 1rem;
+    overflow: hidden;
+    box-shadow:
+      0 0.125rem 0.25rem rgba(0, 0, 0, 0.06),
+      0 0.5rem 1rem rgba(0, 0, 0, 0.08);
+    text-decoration: none;
+    color: inherit;
+    transition: box-shadow 0.25s ease, transform 0.25s ease;
+  }
+
+  .elevate-blog-articles__card:hover {
+    box-shadow:
+      0 0.25rem 0.5rem rgba(0, 0, 0, 0.1),
+      0 0.75rem 1.5rem rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+  }
+
+  /* ── Image ── */
+  .elevate-blog-articles__image-wrap {
+    position: relative;
+    width: 100%;
+    height: 14.25rem;
+    overflow: hidden;
+  }
+
+  .elevate-blog-articles__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 0.5rem;
+  }
+
+  .elevate-blog-articles__image-placeholder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #F3F4F6;
+    border-radius: 0.5rem;
+  }
+
+  .elevate-blog-articles__tag {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.125rem 0.5rem;
+    background: #E31E24;
+    border-radius: 0.125rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #FDFCFC;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  /* ── Content ── */
+  .elevate-blog-articles__content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 1rem;
+  }
+
+  .elevate-blog-articles__title {
+    font-family: 'Inter', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.4;
+    letter-spacing: -0.0125rem;
+    color: #141517;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .elevate-blog-articles__excerpt {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #36393F;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .elevate-blog-articles__divider {
+    border: none;
+    border-top: 0.5px solid #AEB2B8;
+    margin: 0;
+    opacity: 0.4;
+  }
+
+  /* ── Meta row ── */
+  .elevate-blog-articles__meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .elevate-blog-articles__meta-left {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+
+  .elevate-blog-articles__avatar-img {
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+  }
+
+  .elevate-blog-articles__avatar {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: #AEB2B8;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.625rem;
+    color: #141517;
+    flex-shrink: 0;
+  }
+
+  .elevate-blog-articles__meta-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .elevate-blog-articles__author {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 500;
+    font-size: 0.625rem;
+    line-height: 1.4;
+    color: #AEB2B8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .elevate-blog-articles__date {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.625rem;
+    line-height: 1.4;
+    color: #AEB2B8;
+  }
+
+  .elevate-blog-articles__read-time {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #AEB2B8;
+    white-space: nowrap;
+  }
+
+  /* ── CTA ── */
+  .elevate-blog-articles__cta {
+    display: inline-flex;
+    align-self: flex-end;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #E31E24;
+    text-decoration: underline;
+    text-underline-offset: 0.25rem;
+    text-decoration-thickness: 0.5px;
+    transition: text-decoration-thickness 0.2s ease;
+  }
+
+  .elevate-blog-articles__card:hover .elevate-blog-articles__cta {
+    text-decoration-thickness: 1.5px;
+  }
+
+  /* ── Empty state ── */
+  .elevate-blog-articles__empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    color: #AEB2B8;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-blog-articles__inner {
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-blog-articles__grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Blog Articles",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "range",
+      "id": "posts_per_page",
+      "label": "Articles per page",
+      "min": 3,
+      "max": 30,
+      "step": 3,
+      "default": 9
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Read Article"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 48
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Articles"
+    }
+  ]
+}
+{% endschema %}

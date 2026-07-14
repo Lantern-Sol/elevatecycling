@@ -1,0 +1,187 @@
+{%- doc -%}
+  Elevate Cycling — Blog category filters section.
+  Horizontal row of pill-style tag filters that link to
+  /blogs/{handle}/tagged/{tag}. Active tag highlighted with
+  red border + pink background. Uses blog.all_tags dynamically.
+{%- enddoc -%}
+
+{%- liquid
+  assign current_tag = ''
+  if current_tags != blank
+    assign current_tag = current_tags | first
+  endif
+
+  assign pt = section.settings.padding_top | times: 0.0625
+  assign pb = section.settings.padding_bottom | times: 0.0625
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-blog-filters"
+  data-scroll-reveal
+  style="
+    background: #FDFCFC;
+    padding-block-start: {{ pt }}rem;
+    padding-block-end: {{ pb }}rem;
+  "
+>
+  <div class="elevate-blog-filters__inner">
+    {%- if section.settings.heading != blank -%}
+      <p class="elevate-blog-filters__heading">{{ section.settings.heading }}</p>
+    {%- endif -%}
+
+    <nav class="elevate-blog-filters__nav" aria-label="Filter articles by category">
+      <ul class="elevate-blog-filters__list" role="list">
+        <li>
+          <a
+            href="{{ blog.url }}"
+            class="elevate-blog-filters__pill{% if current_tag == blank %} is-active{% endif %}"
+            {% if current_tag == blank %}aria-current="page"{% endif %}
+          >All</a>
+        </li>
+        {%- for tag in blog.all_tags -%}
+          <li>
+            <a
+              href="{{ blog.url }}/tagged/{{ tag | handleize }}"
+              class="elevate-blog-filters__pill{% if tag == current_tag %} is-active{% endif %}"
+              {% if tag == current_tag %}aria-current="page"{% endif %}
+            >{{ tag }}</a>
+          </li>
+        {%- endfor -%}
+      </ul>
+    </nav>
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Blog Category Filters ─── */
+  .elevate-blog-filters__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+    padding-inline: 0.5rem;
+    border-top: 0.5px solid #AEB2B8;
+    padding-block-start: 2rem;
+  }
+
+  .elevate-blog-filters__heading {
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    color: #141517;
+    text-align: left;
+    width: 100%;
+    margin: 0;
+  }
+
+  .elevate-blog-filters__nav {
+    width: 100%;
+  }
+
+  .elevate-blog-filters__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    gap: 0.5rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .elevate-blog-filters__pill {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 3rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid #E2E3E5;
+    border-radius: 0.5rem;
+    background: #FDFCFC;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #36393F;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    cursor: pointer;
+  }
+
+  .elevate-blog-filters__pill:hover {
+    border-color: #E31E24;
+    background: #f1dbdc;
+    color: #141517;
+  }
+
+  .elevate-blog-filters__pill.is-active {
+    border: 2px solid #E31E24;
+    background: #F1DBDC;
+    color: #141517;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-blog-filters__inner {
+      align-items: center;
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-blog-filters__heading {
+      text-align: center;
+    }
+
+    .elevate-blog-filters__list {
+      justify-content: center;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Blog Filters",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Category Filters"
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "presets": [
+    {
+      "name": "Blog Filters"
+    }
+  ]
+}
+{% endschema %}

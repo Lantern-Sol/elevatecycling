@@ -9,105 +9,154 @@
  */
 {
   "sections": {
+    "blog-hero": {
+      "type": "elevate-blog-hero",
+      "settings": {
+        "overlay_opacity": 95,
+        "badge_text": "BLOG",
+        "heading": "The Cycling Garage",
+        "heading_accent": "Garage",
+        "subtitle": "Buying guides, gear reviews, and CPO advice from the Elevate mechanics team.",
+        "search_placeholder": "Search Articles",
+        "search_button_text": "Search",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "blog-featured": {
+      "type": "elevate-blog-featured",
+      "settings": {
+        "article": "news/best-practices-for-inspecting-second-hand-road-cycling-components-before-purchase",
+        "image": "shopify://shop_images/98c6a0d8e2e9efb3348f27807c96b4b0a3cf84fa.jpg",
+        "featured_badge_text": "Featured",
+        "cta_text": "Read Article",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "blog-filters": {
+      "type": "elevate-blog-filters",
+      "settings": {
+        "heading": "Category Filters",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
     "main": {
-      "type": "main-blog",
+      "type": "elevate-blog-articles",
+      "settings": {
+        "posts_per_page": 9,
+        "cta_text": "Read Article",
+        "padding_top": 0,
+        "padding_bottom": 48
+      }
+    },
+    "elevate_cpo_process_RFMHNM": {
+      "type": "elevate-cpo-process",
       "blocks": {
-        "title": {
-          "type": "text",
-          "name": "Title",
+        "step_PBj9jx": {
+          "type": "step",
           "settings": {
-            "text": "<h1>{{ closest.blog.title }}</h1>",
-            "width": "fit-content",
-            "max_width": "narrow",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-primary--family)",
-            "font_size": "",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 48,
-            "padding-block-end": 48,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "title": "Sourced",
+            "description": "<p>Bought directly from cyclists. <strong>Every piece is evaluated on arrival</strong> — if it doesn't meet the bar, it doesn't come in.</p>"
+          }
         },
-        "static-blog-post-card": {
-          "type": "_blog-post-card",
-          "static": true,
+        "step_pkUdee": {
+          "type": "step",
           "settings": {
-            "alignment": "left"
-          },
-          "blocks": {
-            "heading": {
-              "type": "_heading",
-              "name": "t:names.title",
-              "static": true,
-              "settings": {
-                "type_preset": "h4",
-                "font": "var(--font-primary--family)",
-                "font_size": "",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "text": "",
-                "read_only": true,
-                "alignment": "left",
-                "show_alignment": false,
-                "padding-block-start": 0,
-                "padding-block-end": 10,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "blog-post-details": {
-              "type": "_blog-post-info-text",
-              "name": "t:names.details",
-              "static": true,
-              "settings": {
-                "show_date": true,
-                "show_author": false,
-                "type_preset": "",
-                "alignment": "left",
-                "show_alignment": false,
-                "padding-block-start": 0,
-                "padding-block-end": 0
-              },
-              "blocks": {}
-            },
-            "image": {
-              "type": "_blog-post-image",
-              "static": true,
-              "settings": {
-                "height": "large",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 4
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
+            "title": "Inspected",
+            "description": "<p>Frame integrity, drivetrain, brakes, component wear — all checked and documented line by line. <strong>Nothing assumed.</strong></p>"
+          }
+        },
+        "step_dBBJpz": {
+          "type": "step",
+          "settings": {
+            "title": "Photographed",
+            "description": "<p>20 studio shots per item. Every angle, every scratch. <strong>You see exactly what you're getting</strong> before you decide.</p>"
+          }
+        },
+        "step_dJ6neb": {
+          "type": "step",
+          "settings": {
+            "title": "Listed",
+            "description": "<p>Full spec sheet, geometry, and Mechanic's Notes attached. <strong>Goes live only when fully documented.</strong></p>"
+          }
         }
       },
       "block_order": [
-        "title"
+        "step_PBj9jx",
+        "step_pkUdee",
+        "step_dBBJpz",
+        "step_dJ6neb"
       ],
       "settings": {
-        "padding-block-start": 0,
-        "padding-block-end": 48
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "eyebrow": "CERTIFIED PRE-OWNED",
+        "heading": "Every item earns its listing.",
+        "subtitle": "Four steps. Same process, every time. No shortcuts.",
+        "primary_label": "Shop CPO Bikes & Gear",
+        "primary_link": "",
+        "secondary_label": "Learn more about CPO",
+        "secondary_link": ""
+      }
+    },
+    "blog-popular": {
+      "type": "elevate-blog-popular",
+      "blocks": {
+        "article_1": {
+          "type": "article",
+          "settings": {
+            "article": "news/best-practices-for-inspecting-second-hand-road-cycling-components-before-purchase"
+          }
+        },
+        "article_2": {
+          "type": "article",
+          "settings": {
+            "article": "news/how-to-verify-the-certification-of-pre-owned-road-bike-components"
+          }
+        },
+        "article_3": {
+          "type": "article",
+          "settings": {
+            "article": "news/how-does-a-certified-pre-owned-warranty-differ-from-new-components"
+          }
+        }
+      },
+      "block_order": [
+        "article_1",
+        "article_2",
+        "article_3"
+      ],
+      "settings": {
+        "heading": "Popular articles",
+        "featured_badge_text": "Featured",
+        "cta_text": "Read Article",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "blog-newsletter": {
+      "type": "elevate-blog-newsletter",
+      "settings": {
+        "heading": "New gear drops daily.\nDon't miss the good stuff.",
+        "body": "Subscribe and we'll keep you posted — new listings, buying\nguides, and CPO tips straight to your inbox.",
+        "email_label": "Email",
+        "email_placeholder": "johndoe@email.com",
+        "button_label": "Subscribe to Newsletter",
+        "success_message": "You're in! New articles will land in your inbox.",
+        "padding_top": 88,
+        "padding_bottom": 40
       }
     }
   },
   "order": [
-    "main"
+    "blog-hero",
+    "blog-featured",
+    "blog-filters",
+    "main",
+    "elevate_cpo_process_RFMHNM",
+    "blog-popular",
+    "blog-newsletter"
   ]
 }
