@@ -280,7 +280,7 @@
         "header_alignment": "center",
         "footer_text": "Stock moves fast. New items drop every weekday.",
         "cta_label": "View All Arrivals",
-        "cta_link": ""
+        "cta_link": "shopify://collections/complete-bikes"
       }
     },
     "elevate_parallax_banner": {
