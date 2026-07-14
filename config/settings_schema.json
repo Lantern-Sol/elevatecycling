@@ -7,7 +7,7 @@
     "theme_documentation_url": "https://help.shopify.com/manual/online-store/themes",
     "theme_support_url": "https://support.shopify.com/"
   },
-  {
+  { 
     "name": "t:names.logo_and_favicon",
     "settings": [
       {
@@ -1294,7 +1294,7 @@
         "type": "url",
         "id": "elevate_ask_mechanic_url",
         "label": "Ask a Mechanic page",
-        "default": "/pages/contact"
+        "info": "Default: /pages/contact"
       }
     ]
   },
