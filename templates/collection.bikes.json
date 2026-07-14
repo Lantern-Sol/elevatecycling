@@ -344,7 +344,7 @@
             "feature_3": "Full manufacturer's warranty applies",
             "feature_4": "Inspected and packaged before it ships",
             "cta_label": "SHOP NEW STOCK",
-            "cta_link": ""
+            "cta_link": "shopify://collections/all"
           }
         },
         "inventory_card_f7wr6b": {
@@ -358,7 +358,7 @@
             "feature_3": "Honest condition descriptions, no fluff",
             "feature_4": "30-day returns if it's not as described",
             "cta_label": "SHOP CERTIFIED PRE-OWNED",
-            "cta_link": ""
+            "cta_link": "shopify://collections/complete-bikes"
           }
         }
       },
@@ -381,7 +381,7 @@
         "eyebrow": "PAY WITH YOUR OLD GEAR",
         "heading": "Sell or trade in",
         "button_label": "Get a Quote",
-        "button_link": "/pages/sell-or-trade",
+        "button_link": "shopify://pages/sell-or-trade",
         "padding_top": 32,
         "padding_bottom": 32
       }
@@ -476,9 +476,9 @@
         "help_eyebrow": "NEED MORE HELP?",
         "help_text": "Our mechanics answer the phone, reply to emails, and actually know what a BB386 is.",
         "primary_label": "Visit FAQs",
-        "primary_link": "",
+        "primary_link": "shopify://pages/faq",
         "secondary_label": "Contact Our Mechanics",
-        "secondary_link": ""
+        "secondary_link": "shopify://pages/contact-us"
       }
     }
   },
