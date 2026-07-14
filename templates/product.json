@@ -547,7 +547,7 @@
           "settings": {
             "label": "COMPLETE BIKES",
             "label_mobile": "FULL BIKES",
-            "link": "",
+            "link": "shopify://collections/complete-bikes",
             "position_x": 6,
             "position_y": 19,
             "line_direction": "right",
@@ -563,7 +563,7 @@
           "settings": {
             "label": "GROUPSETS",
             "label_mobile": "",
-            "link": "",
+            "link": "shopify://collections/groupsets",
             "position_x": 0,
             "position_y": 58,
             "line_direction": "right",
@@ -579,7 +579,7 @@
           "settings": {
             "label": "COCKPIT",
             "label_mobile": "",
-            "link": "",
+            "link": "shopify://collections/cockpit-components",
             "position_x": 66,
             "position_y": 21,
             "line_direction": "left",
@@ -595,7 +595,7 @@
           "settings": {
             "label": "COMPONENTS",
             "label_mobile": "",
-            "link": "",
+            "link": "shopify://collections/other-accessories",
             "position_x": 41,
             "position_y": 50,
             "line_direction": "up",
