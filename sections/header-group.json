@@ -204,7 +204,7 @@
         "cpo_desc_groupsets": "Every groupset spec'd — speeds, brake standard, and compatibility confirmed.",
         "cpo_desc_components": "Every component graded and spec'd — no compatibility surprises.",
         "cpo_link_text": "What's CPO?",
-        "cpo_link_url": "/pages/cpo",
+        "cpo_link_url": "shopify://pages/certified-pre-owned",
         "show_megamenu_trade_card": true,
         "trade_eyebrow": "TRADE OR SALE",
         "trade_noun_bikes": "YOUR BIKE",
@@ -213,7 +213,7 @@
         "trade_noun_groupsets": "GEAR",
         "trade_noun_components": "COMPONENTS",
         "trade_cta_text": "Quote your gear",
-        "trade_cta_url": "/pages/sell-trade",
+        "trade_cta_url": "shopify://pages/sell-or-trade",
         "trade_fine_print": "$5.4M+ paid to sellers · Complete bikes and components accepted"
       }
     }
