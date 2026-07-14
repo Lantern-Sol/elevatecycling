@@ -4,7 +4,7 @@
   Rendered inside .elevate-cta-card after buy-buttons.
 {%- endcomment -%}
 
-<a href="/pages/ask-a-mechanic" class="elevate-cta-card__ask-btn">
+<a href="{{ settings.elevate_ask_mechanic_url | default: '/pages/contact' }}" class="elevate-cta-card__ask-btn">
   Ask a Mechanic
 </a>
 
