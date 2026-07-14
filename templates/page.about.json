@@ -1,0 +1,294 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "about_hero": {
+      "type": "elevate-about-hero",
+      "blocks": {
+        "stat_bikes": {
+          "type": "stat",
+          "settings": {
+            "value": "3,500+",
+            "label": "bikes bought"
+          }
+        },
+        "stat_feedback": {
+          "type": "stat",
+          "settings": {
+            "value": "99.8%",
+            "label": "eBay feedback"
+          }
+        },
+        "stat_paid": {
+          "type": "stat",
+          "settings": {
+            "value": "$5.4M",
+            "label": "paid out"
+          }
+        },
+        "stat_turnaround": {
+          "type": "stat",
+          "settings": {
+            "value": "24h",
+            "label": "turnaround"
+          }
+        }
+      },
+      "block_order": [
+        "stat_bikes",
+        "stat_feedback",
+        "stat_paid",
+        "stat_turnaround"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/hero.png",
+        "overlay_opacity": 0,
+        "badge_text": "SELL OR TRADE",
+        "heading": "\"Every great bike deserves a second owner\"",
+        "heading_accent": "second owner",
+        "subtitle": "We're the only place in used performance cycling where buyers know exactly what they're getting — and sellers know exactly what they'll be paid.",
+        "stats_label": "Elevate Cycling by the numbers",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "about_story": {
+      "type": "elevate-about-story",
+      "blocks": {
+        "member_1": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03A.png",
+            "name": "Troy [Last name]",
+            "role": "Founder & CEO"
+          }
+        },
+        "member_2": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03B.png",
+            "name": "Kevin [Last name]",
+            "role": "COO"
+          }
+        },
+        "member_3": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03A.png",
+            "name": "Troy [Last name]",
+            "role": "Founder & CEO"
+          }
+        },
+        "member_4": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03B.png",
+            "name": "Kevin [Last name]",
+            "role": "COO"
+          }
+        },
+        "member_5": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03A.png",
+            "name": "Troy [Last name]",
+            "role": "Founder & CEO"
+          }
+        },
+        "member_6": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03B.png",
+            "name": "Kevin [Last name]",
+            "role": "COO"
+          }
+        },
+        "member_7": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03A.png",
+            "name": "Troy [Last name]",
+            "role": "Founder & CEO"
+          }
+        },
+        "member_8": {
+          "type": "member",
+          "settings": {
+            "image": "shopify://shop_images/photo-Shot03B.png",
+            "name": "Kevin [Last name]",
+            "role": "COO"
+          }
+        }
+      },
+      "block_order": [
+        "member_1",
+        "member_2",
+        "member_3",
+        "member_4",
+        "member_5",
+        "member_6",
+        "member_7",
+        "member_8"
+      ],
+      "settings": {
+        "label_text": "WHO WE ARE",
+        "heading": "Built by cyclists. Run like a business.",
+        "story_quote": "\"replace with Troy's founding story. Word count matched (~110 words)\"",
+        "story_text": "<p>Troy and Kevin started Elevate Cycling in 2021 with a straightforward premise: performance gear deserves a better second life than eBay listings and Facebook lowballers.</p><p>Based in Santa Ana, California, we operate two warehouses and a team of mechanics who ride the same bikes we sell. Every piece that comes through our doors gets inspected, graded, and documented before it goes anywhere near a listing.</p><p>We built this for the buyer who wants to know exactly what they're getting — and the seller who wants to be treated fairly. That's still the whole business.</p>",
+        "team_heading": "Meet the team",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "about_cpo": {
+      "type": "elevate-about-cpo",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/step-01.png",
+            "title": "Acquire",
+            "description": "We source bikes and parts from individual sellers and shops. Every submission is reviewed by our team before we commit."
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/step-01_a5c681f2-845b-49c0-91da-a572eddec38b.png",
+            "title": "Inspect & Grade",
+            "description": "Full mechanical check on every piece. Frame integrity, drivetrain, brakes, wheel true — nothing skipped."
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/step-01_851464ec-29c5-46ba-b2e4-78a6b34de653.png",
+            "title": "Detailed Photography",
+            "description": "~20 studio shots per listing. Every angle, every detail, every scratch. What you see in the listing is what ships."
+          }
+        },
+        "step_4": {
+          "type": "step",
+          "settings": {
+            "image": "shopify://shop_images/step-01_1caeb35b-48df-4865-9064-f3bab1928aa7.png",
+            "title": "List",
+            "description": "Full spec sheet and Mechanic's Notes built before anything lists. Year, groupset, brake type, condition. Nothing hidden."
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4"
+      ],
+      "settings": {
+        "label": "CERTIFIED PRE-OWNED",
+        "heading": "Four steps. Same process, every time. No shortcuts.",
+        "heading_accent": "every time.",
+        "subtitle": "Every bike earns its listing",
+        "primary_cta_text": "Shop Bikes & Gear",
+        "primary_cta_url": "",
+        "secondary_cta_text": "Learn more about CPO",
+        "secondary_cta_url": "",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "about_trade_cta": {
+      "type": "elevate-about-trade-cta",
+      "settings": {
+        "label": "TRADE OR SALE",
+        "heading": "GOT GEAR COLLECTING DUST?",
+        "body_1": "We pay fair market value, send a free shipping label, and turn around an offer within 24 hours.",
+        "body_2": "No haggling. No lowball after the fact. No FB Marketplace drama.",
+        "cta_text": "Get a Quote for your gear",
+        "cta_url": "",
+        "disclaimer": "$5.4M+ paid to sellers · Complete bikes and components accepted",
+        "background_image": "shopify://shop_images/trade-section.png",
+        "background_image_mobile": "shopify://shop_images/banner.png",
+        "padding_top": 72,
+        "padding_bottom": 72
+      }
+    },
+    "main": {
+      "type": "main-page",
+      "blocks": {
+        "heading": {
+          "type": "text",
+          "name": "Title",
+          "settings": {
+            "text": "<h1>{{ closest.page.title }}</h1>",
+            "mobile_text": "",
+            "width": "100%",
+            "max_width": "normal",
+            "alignment": "left",
+            "height_mode": "auto",
+            "desktop_height": "",
+            "mobile_height": "",
+            "type_preset": "h2",
+            "font": "var(--font-primary--family)",
+            "enable_custom_font_weight": false,
+            "weight": "400",
+            "font_size": "",
+            "line_height": "normal",
+            "custom_line_height": 1.5,
+            "letter_spacing": "normal",
+            "case": "none",
+            "wrap": "pretty",
+            "type_preset_mobile": "rte",
+            "mobile_font_size": "1rem",
+            "mobile_custom_line_height": 1.5,
+            "text_color": "",
+            "background": false,
+            "background_color": "#00000026",
+            "corner_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0,
+            "use_mobile_padding": false,
+            "padding-block-start-mobile": 0,
+            "padding-block-end-mobile": 0,
+            "padding-inline-start-mobile": 0,
+            "padding-inline-end-mobile": 0
+          },
+          "blocks": {}
+        },
+        "page-content": {
+          "type": "page-content",
+          "settings": {
+            "text_color": ""
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "heading",
+        "page-content"
+      ],
+      "disabled": true,
+      "settings": {
+        "content_direction": "column",
+        "gap": 32,
+        "background_color": "",
+        "padding-block-start": 40,
+        "padding-block-end": 80
+      }
+    }
+  },
+  "order": [
+    "about_hero",
+    "about_story",
+    "about_cpo",
+    "about_trade_cta",
+    "main"
+  ]
+}
