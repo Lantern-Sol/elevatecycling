@@ -29,7 +29,7 @@
         "primary_button_label": "Shop Bikes & Gear",
         "primary_button_link": "shopify://collections",
         "secondary_button_label": "Get a cash offer for your bike",
-        "secondary_button_link": "",
+        "secondary_button_link": "shopify://pages/sell-or-trade",
         "show_scroll_indicator": true,
         "padding_top": 100,
         "padding_bottom": 24
