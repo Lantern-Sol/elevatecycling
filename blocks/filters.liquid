@@ -120,8 +120,8 @@
       {{ page_type_attribute }}
       {{ results_count_attribute }}
     >
-      <form action="{{ results_url }}" class="elevate-active-filters__form-inner">
-        <div class="elevate-active-filters" data-scroll-reveal>
+      <form action="{{ results_url }}" class="elevate-active-filters__form-inner" ref="facetsForm">
+        <div class="elevate-active-filters">
           <button
             class="elevate-active-filters__filter-btn"
             on:click="#filters-drawer/open"
@@ -154,7 +154,6 @@
     {% # These elements are always rendered in the horizontal bar that's why we apply the .facets--horizontal class %}
     <div
       class="facets facets--horizontal facets-controls-wrapper spacing-style{{ desktop_drawer_class }}"
-      data-scroll-reveal
       style="{% render 'spacing-style', settings: block_settings %}{% if block_settings.text_label_case == 'uppercase' %} --facet-label-transform: uppercase;{% endif %}"
     >
       {% if block_settings.enable_filtering %}
@@ -229,7 +228,6 @@
       {%- if block_settings.filter_width == 'full-width' %} facets-block-wrapper--full-width{% endif %}
       {{ desktop_drawer_class }}
     "
-    data-scroll-reveal
     style="
       --grid-column--desktop:
         {%- if block_settings.filter_style == 'horizontal' -%}
@@ -435,7 +433,6 @@
       {%- if block_settings.enable_filtering == false %} facets-toggle--no-filters{% endif %}
       {%- if block_settings.filter_style == 'horizontal' and has_custom_color %} color-custom-{{ block.id }}{% endif %}
     "
-    data-scroll-reveal
     style="
       --facets-inner-padding-block: {{ block_settings.padding-block-start }}px {{ block_settings.padding-block-end }}px; --facets-inner-padding-inline: var(--padding-lg);
       {{ facets_margin_style }}

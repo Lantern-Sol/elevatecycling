@@ -55,8 +55,36 @@
     rootMargin: '0px 0px -50px 0px'
   });
 
-  /* ── Init ── */
+  /* ── Observe a single element (skip if already revealed) ── */
+  function observeEl(el) {
+    if (!el.classList.contains('is-revealed')) {
+      observer.observe(el);
+    }
+  }
+
+  /* ── Init: observe all existing elements ── */
   var els = document.querySelectorAll('[data-scroll-reveal]');
   console.log('[scroll-reveal] Observing', els.length, 'elements');
-  els.forEach(function (el) { observer.observe(el); });
+  els.forEach(function (el) { observeEl(el); });
+
+  /* ── Watch for new [data-scroll-reveal] elements added by morph/AJAX ── */
+  var domObserver = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+      mutation.addedNodes.forEach(function (node) {
+        if (node.nodeType !== 1) return;
+        /* Check the added node itself */
+        if (node.hasAttribute && node.hasAttribute('data-scroll-reveal')) {
+          observeEl(node);
+        }
+        /* Check descendants of the added node */
+        if (node.querySelectorAll) {
+          node.querySelectorAll('[data-scroll-reveal]').forEach(function (child) {
+            observeEl(child);
+          });
+        }
+      });
+    });
+  });
+
+  domObserver.observe(document.body, { childList: true, subtree: true });
 })();

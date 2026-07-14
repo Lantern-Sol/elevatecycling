@@ -1263,7 +1263,7 @@ ul[product-grid-view='zoom-out'] .card-gallery>img {
       view-transition-name: product-grid;
     }
 
-    footer {
+    body > .page-wrapper > footer {
       view-transition-name: footer;
     }
 
