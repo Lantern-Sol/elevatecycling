@@ -316,7 +316,7 @@
             "feature_3": "Full manufacturer's warranty applies",
             "feature_4": "Inspected and packaged before it ships",
             "cta_label": "SHOP NEW STOCK",
-            "cta_link": ""
+            "cta_link": "shopify://collections/all"
           }
         },
         "card_cpo": {
@@ -330,7 +330,7 @@
             "feature_3": "Honest condition descriptions, no fluff",
             "feature_4": "30-day returns if it's not as described",
             "cta_label": "SHOP CERTIFIED PRE-OWNED",
-            "cta_link": ""
+            "cta_link": "shopify://collections/complete-bikes"
           }
         }
       },
@@ -392,9 +392,9 @@
         "heading": "Every item earns its listing.",
         "subtitle": "Four steps. Same process, every time. No shortcuts.",
         "primary_label": "Shop CPO Bikes & Gear",
-        "primary_link": "",
+        "primary_link": "shopify://collections/complete-bikes",
         "secondary_label": "Learn more about CPO",
-        "secondary_link": ""
+        "secondary_link": "shopify://pages/certified-pre-owned"
       }
     },
     "elevate_shop_by_category": {
