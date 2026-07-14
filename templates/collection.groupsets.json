@@ -417,7 +417,7 @@
         "eyebrow": "PAY WITH YOUR OLD GEAR",
         "heading": "Sell or trade in",
         "button_label": "Get a Quote",
-        "button_link": "/pages/sell-or-trade",
+        "button_link": "shopify://pages/sell-or-trade",
         "padding_top": 32,
         "padding_bottom": 32
       }
