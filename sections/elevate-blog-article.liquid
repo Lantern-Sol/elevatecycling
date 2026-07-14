@@ -83,7 +83,7 @@
             | image_url: width: 2400
             | image_tag:
               widths: '600, 1000, 1400, 1800, 2400',
-              sizes: '100vw',
+              sizes: '(min-width: 1040px) 1008px, 100vw',
               loading: 'eager',
               class: 'elevate-blog-article__image',
               alt: article.image.alt | default: article.title

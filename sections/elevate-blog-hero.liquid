@@ -62,9 +62,7 @@
 
     {%- if section.settings.subtitle != blank -%}
       <p class="elevate-blog-hero__subtitle">
-        Buying guides, gear reviews, and CPO advice
-        <br class="elevate-blog-hero__br-desktop">
-        from the Elevate mechanics team.
+        {{ section.settings.subtitle | newline_to_br }}
       </p>
     {%- endif -%}
 
