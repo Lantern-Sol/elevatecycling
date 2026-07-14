@@ -29,7 +29,8 @@
     </div>
 
     <div class="elevate-blog-newsletter__form-wrap" id="blog-newsletter-{{ section.id }}">
-      {%- form 'customer', id: 'BlogNewsletter' -%}
+      {%- assign form_id = 'BlogNewsletter-' | append: section.id -%}
+      {%- form 'customer', id: form_id -%}
         {%- if form.posted_successfully? -%}
           <p class="elevate-blog-newsletter__success" role="status" tabindex="-1">
             {{ section.settings.success_message }}

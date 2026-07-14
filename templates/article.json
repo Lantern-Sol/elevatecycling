@@ -116,7 +116,7 @@
     "elevate_blog_newsletter_kEEjnF": {
       "type": "elevate-blog-newsletter",
       "settings": {
-        "heading": "New gear drops daily.Don't miss the good stuff.",
+        "heading": "New gear drops daily.\nDon't miss the good stuff.",
         "body": "Subscribe and we'll keep you posted — new listings, buying\nguides, and CPO tips straight to your inbox.",
         "email_label": "Email",
         "email_placeholder": "johndoe@email.com",

@@ -196,7 +196,7 @@
       dot.addEventListener('click', function () {
         var idx = parseInt(this.dataset.index, 10);
         if (cards[idx]) {
-          cards[idx].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
+          slider.scrollTo({ left: cards[idx].offsetLeft - slider.offsetLeft, behavior: 'smooth' });
         }
       });
     });
