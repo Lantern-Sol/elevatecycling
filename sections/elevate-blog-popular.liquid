@@ -204,7 +204,7 @@
         if (index >= count) index = 0;
         var slide = track.children[index];
         if (slide) {
-          track.scrollTo({ left: slide.offsetLeft, behavior: 'smooth' });
+          track.scrollTo({ left: slide.offsetLeft - track.offsetLeft, behavior: 'smooth' });
         }
         updateDots(index);
       }

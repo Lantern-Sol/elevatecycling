@@ -1,4 +1,5 @@
 <div
+  id="elevate-blog-article-footer-{{ section.id }}"
   class="section section--page-width page-width-normal elevate-blog-article-footer"
   data-scroll-reveal
   style="background: #FDFCFC; padding-top: {{ section.settings.padding_top }}px; padding-bottom: {{ section.settings.padding_bottom }}px;">
@@ -44,7 +45,7 @@
 
 <script>
   (function() {
-    var section = document.querySelector('.elevate-blog-article-footer');
+    var section = document.getElementById('elevate-blog-article-footer-{{ section.id }}');
     if (!section) return;
 
     var btn = section.querySelector('.elevate-blog-article-footer__copy-link');

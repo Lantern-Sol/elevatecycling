@@ -41,7 +41,7 @@
           {%- if form.errors -%}
             <p class="elevate-blog-newsletter__error" role="alert">
               {{ form.errors.translated_fields['email'] | capitalize }}
-              {{ form.errors.messages['email'] }}
+              {{ form.errors.messages['email'] | join: ', ' }}
             </p>
           {%- endif -%}
 

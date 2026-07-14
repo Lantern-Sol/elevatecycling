@@ -40,7 +40,7 @@
           <p class="elevate-blog-article-author__bio-text">{{ author_bio }}</p>
 
           <a href="{{ blog.url }}" class="elevate-blog-article-author__link">
-            See all articles by {{ first_name }} &rarr;
+            See all articles by {% if first_name != blank %}{{ first_name }}{% else %}the author{% endif %} &rarr;
           </a>
         </div>
       </div>
