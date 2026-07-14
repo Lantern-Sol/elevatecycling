@@ -1,0 +1,247 @@
+{%- comment -%}
+  Elevate Cycling — Blog Article CTA section.
+  Full-width background image banner with dark overlay,
+  centered eyebrow + heading + outlined button.
+  Placed below the article content.
+{%- endcomment -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-blog-article-cta"
+  data-scroll-reveal
+  style="
+    background: #141517;
+    --elevate-article-cta-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-article-cta-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+    --elevate-article-cta-overlay: {{ section.settings.overlay_opacity | times: 0.01 }};
+  "
+>
+  {%- if section.settings.image != blank -%}
+    <div class="elevate-blog-article-cta__bg">
+      {{
+        section.settings.image
+        | image_url: width: 1920
+        | image_tag:
+          loading: 'lazy',
+          sizes: '100vw',
+          widths: '600,900,1200,1600,1920',
+          class: 'elevate-blog-article-cta__bg-img'
+      }}
+      <div class="elevate-blog-article-cta__overlay"></div>
+    </div>
+  {%- endif -%}
+
+  <div class="elevate-blog-article-cta__inner">
+    {%- if section.settings.caption != blank -%}
+      <p class="elevate-blog-article-cta__caption">{{ section.settings.caption }}</p>
+    {%- endif -%}
+
+    {%- if section.settings.heading != blank -%}
+      <h2 class="elevate-blog-article-cta__heading">{{ section.settings.heading }}</h2>
+    {%- endif -%}
+
+    {%- if section.settings.button_text != blank -%}
+      <a {% if section.settings.button_url != blank %}href="{{ section.settings.button_url }}"{% endif %} class="elevate-blog-article-cta__btn">
+        {{ section.settings.button_text }}
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </a>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── Blog Article CTA ─── */
+  .elevate-blog-article-cta {
+    position: relative;
+    overflow: hidden;
+    text-align: center;
+  }
+
+  /* ── Background image (full bleed) ── */
+  .elevate-blog-article-cta__bg {
+    grid-column: 1 / -1;
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+
+  .elevate-blog-article-cta__bg-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-blog-article-cta__overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, var(--elevate-article-cta-overlay, 0.7));
+  }
+
+  /* ── Content ── */
+  .elevate-blog-article-cta__inner {
+    position: relative;
+    z-index: 1;
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    padding-inline: 0.5rem;
+    padding-block-start: var(--elevate-article-cta-pt);
+    padding-block-end: var(--elevate-article-cta-pb);
+  }
+
+  /* ── Caption ── */
+  .elevate-blog-article-cta__caption {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  /* ── Heading ── */
+  .elevate-blog-article-cta__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  /* ── Button (outlined) ── */
+  .elevate-blog-article-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    color: #FDFCFC;
+    border: 1px solid #FDFCFC;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: 0.03em;
+    text-decoration: none;
+    transition: background 0.2s ease;
+  }
+
+  .elevate-blog-article-cta__btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .elevate-blog-article-cta__btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+    flex-shrink: 0;
+  }
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-blog-article-cta__inner {
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-blog-article-cta__heading {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-blog-article-cta__btn {
+      width: auto;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Article CTA",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Content"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "caption",
+      "label": "Caption",
+      "default": "IN STOCK NOW"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Shopping for a used road bike?"
+    },
+    {
+      "type": "text",
+      "id": "button_text",
+      "label": "Button text",
+      "default": "Explore Our Inventory"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Overlay"
+    },
+    {
+      "type": "range",
+      "id": "overlay_opacity",
+      "label": "Overlay opacity",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "%",
+      "default": 70
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    }
+  ],
+  "presets": [
+    {
+      "name": "Article CTA"
+    }
+  ]
+}
+{% endschema %}

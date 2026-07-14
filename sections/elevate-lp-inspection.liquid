@@ -43,13 +43,13 @@
     {%- if section.settings.secondary_label != blank or section.settings.primary_label != blank -%}
       <div class="elevate-lp-inspection__cta-row">
         {%- if section.settings.secondary_label != blank -%}
-          <a href="{{ section.settings.secondary_url }}" class="elevate-lp-inspection__btn elevate-lp-inspection__btn--secondary">
+          <a {% if section.settings.secondary_url != blank %}href="{{ section.settings.secondary_url }}"{% endif %} class="elevate-lp-inspection__btn elevate-lp-inspection__btn--secondary">
             {{ section.settings.secondary_label }}
           </a>
         {%- endif -%}
 
         {%- if section.settings.primary_label != blank -%}
-          <a href="{{ section.settings.primary_url }}" class="elevate-lp-inspection__btn elevate-lp-inspection__btn--primary">
+          <a {% if section.settings.primary_url != blank %}href="{{ section.settings.primary_url }}"{% endif %} class="elevate-lp-inspection__btn elevate-lp-inspection__btn--primary">
             <span>{{ section.settings.primary_label }}</span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               {%- render 'icon', icon: 'arrow-right-solid' -%}

@@ -1,0 +1,533 @@
+{%- doc -%}
+  Elevate Cycling — Custom blog article section.
+  Replaces Horizon's default main-blog-post with a 5-zone layout:
+  hero header, featured image, styled body, tags + share, about the author.
+{%- enddoc -%}
+
+{%- liquid
+  assign word_count = article.content | strip_html | split: ' ' | size
+  assign read_time = word_count | divided_by: 200
+  if read_time < 1
+    assign read_time = 1
+  endif
+
+  assign badge_text = article.metafields.custom.article_badge.value
+  assign author_avatar = article.metafields.custom.author_avatar.value
+  assign author_role = article.metafields.custom.author_role.value
+
+  assign pt = section.settings.padding_top | times: 0.0625
+  assign pb = section.settings.padding_bottom | times: 0.0625
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-blog-article"
+  style="
+    background: #FDFCFC;
+    padding-block-start: {{ pt }}rem;
+    padding-block-end: {{ pb }}rem;
+  "
+>
+  <article class="elevate-blog-article__inner">
+
+    {%- comment -%} ═══ Zone 1: Hero Header ═══ {%- endcomment -%}
+    <header class="elevate-blog-article__hero">
+      <div class="elevate-blog-article__hero-top">
+        {%- if badge_text != blank -%}
+          <span class="elevate-blog-article__badge">{{ badge_text }}</span>
+        {%- endif -%}
+        <span class="elevate-blog-article__read-time">{{ read_time }} min read</span>
+      </div>
+
+      <div class="elevate-blog-article__hero-bottom">
+        <h1 class="elevate-blog-article__title">{{ article.title }}</h1>
+
+        {%- if section.settings.show_author_card -%}
+          <div class="elevate-blog-article__author-card">
+            <div class="elevate-blog-article__author-avatar-wrap">
+              {%- if author_avatar != blank -%}
+                <img
+                  class="elevate-blog-article__author-avatar"
+                  src="{{ author_avatar | image_url: width: 186 }}"
+                  alt="{{ article.author }}"
+                  width="93"
+                  height="93"
+                  loading="eager"
+                >
+              {%- else -%}
+                <div class="elevate-blog-article__author-initial">
+                  {{ article.author | slice: 0 | upcase }}
+                </div>
+              {%- endif -%}
+            </div>
+            <div class="elevate-blog-article__author-info">
+              <span class="elevate-blog-article__written-by">WRITTEN BY</span>
+              <span class="elevate-blog-article__author-name">{{ article.author }}</span>
+              {%- if author_role != blank -%}
+                <span class="elevate-blog-article__author-role">{{ author_role }}</span>
+              {%- endif -%}
+              <span class="elevate-blog-article__date">
+                {{ article.published_at | date: '%B %d, %Y' }}
+              </span>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </header>
+
+    {%- comment -%} ═══ Zone 2: Featured Image ═══ {%- endcomment -%}
+    {%- if article.image -%}
+      <figure class="elevate-blog-article__figure">
+        <div class="elevate-blog-article__image-wrap">
+          {{
+            article.image
+            | image_url: width: 2400
+            | image_tag:
+              widths: '600, 1000, 1400, 1800, 2400',
+              sizes: '(min-width: 1040px) 1008px, 100vw',
+              loading: 'eager',
+              class: 'elevate-blog-article__image',
+              alt: article.image.alt | default: article.title
+          }}
+        </div>
+        {%- if article.image.alt != blank -%}
+          <figcaption class="elevate-blog-article__caption">
+            {{ article.image.alt }}
+          </figcaption>
+        {%- endif -%}
+        <hr class="elevate-blog-article__divider">
+      </figure>
+    {%- endif -%}
+
+    {%- comment -%} ═══ Zone 3: Article Body ═══ {%- endcomment -%}
+    <div class="elevate-blog-article__body">
+      {{ article.content }}
+    </div>
+
+  </article>
+</div>
+
+
+{% stylesheet %}
+  /* ═══ Blog Article ═══ */
+  .elevate-blog-article__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    padding-inline: 0.5rem;
+    max-width: 63rem;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  /* ─── Zone 1: Hero Header ─── */
+  .elevate-blog-article__hero {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .elevate-blog-article__hero-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .elevate-blog-article__badge {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    background: #E31E24;
+    border-radius: 6.25rem;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #FDFCFC;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  .elevate-blog-article__read-time {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #AEB2B8;
+    margin-inline-start: auto;
+  }
+
+  .elevate-blog-article__hero-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .elevate-blog-article__title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 1.1;
+    color: #36393F;
+    margin: 0;
+    text-transform: uppercase;
+  }
+
+  /* ── Author card ── */
+  .elevate-blog-article__author-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.75rem;
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1.5rem;
+  }
+
+  .elevate-blog-article__author-avatar-wrap {
+    flex-shrink: 0;
+  }
+
+  .elevate-blog-article__author-avatar {
+    width: 5.8125rem;
+    height: 5.8125rem;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .elevate-blog-article__author-initial {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 5.8125rem;
+    height: 5.8125rem;
+    border-radius: 50%;
+    background: #AEB2B8;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    color: #FDFCFC;
+  }
+
+  .elevate-blog-article__author-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow: hidden;
+  }
+
+  .elevate-blog-article__written-by {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #36393F;
+    text-transform: uppercase;
+    letter-spacing: 0.015rem;
+  }
+
+  .elevate-blog-article__author-name {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #6D1316;
+    letter-spacing: -0.00875rem;
+  }
+
+  .elevate-blog-article__author-role {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #36393F;
+    letter-spacing: -0.0075rem;
+  }
+
+  .elevate-blog-article__date {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #36393F;
+    letter-spacing: -0.0075rem;
+  }
+
+  /* ─── Zone 2: Featured Image ─── */
+  .elevate-blog-article__figure {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 0;
+  }
+
+  .elevate-blog-article__image-wrap {
+    width: 100vw;
+    margin-inline-start: 50%;
+    transform: translateX(-50%);
+    height: 18.75rem;
+    overflow: hidden;
+  }
+
+  .elevate-blog-article__image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .elevate-blog-article__caption {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-style: italic;
+    font-size: 0.8125rem;
+    line-height: 1.5;
+    color: #6B7280;
+    text-align: center;
+  }
+
+  .elevate-blog-article__divider {
+    border: none;
+    border-top: 0.5px solid #E5E7EB;
+    margin: 0;
+  }
+
+  /* ─── Zone 3: Article Body ─── */
+  .elevate-blog-article__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .elevate-blog-article__body > * {
+    margin-block: 0;
+  }
+
+  .elevate-blog-article__body h2 {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-blog-article__body h3 {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.2;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-blog-article__body h4 {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.125rem;
+    line-height: 1.4;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-blog-article__body p {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #36393F;
+    letter-spacing: -0.01rem;
+    margin: 0;
+  }
+
+  .elevate-blog-article__body a {
+    color: #E31E24;
+    text-decoration: underline;
+    text-underline-offset: 0.15em;
+    transition: color 0.2s ease;
+  }
+
+  .elevate-blog-article__body a:hover {
+    color: #c9191f;
+  }
+
+  .elevate-blog-article__body img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 0.5rem;
+  }
+
+  /* ── Pro Tip / Blockquote ── */
+  .elevate-blog-article__body blockquote {
+    position: relative;
+    background: rgba(226, 227, 229, 0.4);
+    padding: 1.5rem 1.5rem 1.5rem 2rem;
+    margin: 0;
+    border-radius: 1rem;
+    overflow: hidden;
+  }
+
+  .elevate-blog-article__body blockquote::before {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 0.5rem;
+    background: #E31E24;
+  }
+
+  .elevate-blog-article__body blockquote p {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #36393F;
+    letter-spacing: -0.01rem;
+  }
+
+  .elevate-blog-article__body blockquote p:first-child strong:first-child {
+    color: #E31E24;
+    text-transform: uppercase;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    letter-spacing: -0.00875rem;
+    display: block;
+    margin-block-end: 0.75rem;
+  }
+
+  .elevate-blog-article__body blockquote p + p {
+    margin-block-start: 0.75rem;
+  }
+
+  .elevate-blog-article__body ul,
+  .elevate-blog-article__body ol {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #36393F;
+    letter-spacing: -0.01rem;
+    margin: 0;
+    padding-inline-start: 1.5rem;
+  }
+
+  .elevate-blog-article__body li {
+    margin-block-end: 0.375rem;
+  }
+
+  .elevate-blog-article__body li::marker {
+    color: #E31E24;
+  }
+
+  .elevate-blog-article__body hr {
+    border: none;
+    border-top: 1px solid #E5E7EB;
+    margin: 0;
+    padding: 0;
+    height: 0;
+  }
+
+  .elevate-blog-article__body table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+  }
+
+  .elevate-blog-article__body th,
+  .elevate-blog-article__body td {
+    padding: 0.75rem 1rem;
+    border: 1px solid #E5E7EB;
+    text-align: left;
+  }
+
+  .elevate-blog-article__body th {
+    background: rgba(226, 227, 229, 0.4);
+    font-weight: 700;
+    color: #36393F;
+  }
+
+
+  /* ─── Desktop (990px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-blog-article__inner {
+      gap: 2.5rem;
+    }
+
+    .elevate-blog-article__title {
+      font-size: 3.5625rem;
+      flex: 1;
+      min-width: 0;
+    }
+
+    .elevate-blog-article__hero-bottom {
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    .elevate-blog-article__image-wrap {
+      height: 37.5rem;
+    }
+
+    .elevate-blog-article__hero-bottom {
+      align-items: center;
+    }
+
+    .elevate-blog-article__author-card {
+      flex-shrink: 0;
+      max-width: 16.75rem;
+    }
+
+    .elevate-blog-article__body h2 {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-blog-article__body h3 {
+      font-size: 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Blog Article",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "show_author_card",
+      "label": "Show author card",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 80
+    }
+  ],
+  "templates": ["article"]
+}
+{% endschema %}

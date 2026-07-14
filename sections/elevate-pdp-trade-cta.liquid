@@ -102,7 +102,7 @@
       <div class="elevate-pdp-trade__cta-row">
         {%- if section.settings.cta_text != blank -%}
           <a
-            href="{{ section.settings.cta_url }}"
+            {% if section.settings.cta_url != blank %}href="{{ section.settings.cta_url }}"{% endif %}
             class="elevate-pdp-trade__cta elevate-pdp-trade__cta--primary"
           >
             <span>{{ section.settings.cta_text }}</span>
@@ -113,7 +113,7 @@
         {%- endif -%}
         {%- if section.settings.secondary_cta_text != blank -%}
           <a
-            href="{{ section.settings.secondary_cta_url }}"
+            {% if section.settings.secondary_cta_url != blank %}href="{{ section.settings.secondary_cta_url }}"{% endif %}
             class="elevate-pdp-trade__cta elevate-pdp-trade__cta--secondary"
           >
             <span>{{ section.settings.secondary_cta_text }}</span>

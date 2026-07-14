@@ -112,7 +112,7 @@
       <div class="elevate-hero__buttons">
         {%- if section.settings.primary_button_label != blank -%}
           <a
-            href="{{ section.settings.primary_button_link }}"
+            {% if section.settings.primary_button_link != blank %}href="{{ section.settings.primary_button_link }}"{% endif %}
             class="elevate-hero__btn elevate-hero__btn--primary"
           >
             <span>{{ section.settings.primary_button_label }}</span>
@@ -123,7 +123,7 @@
         {%- endif -%}
         {%- if section.settings.secondary_button_label != blank -%}
           <a
-            href="{{ section.settings.secondary_button_link }}"
+            {% if section.settings.secondary_button_link != blank %}href="{{ section.settings.secondary_button_link }}"{% endif %}
             class="elevate-hero__btn elevate-hero__btn--secondary"
           >
             {{ section.settings.secondary_button_label }}

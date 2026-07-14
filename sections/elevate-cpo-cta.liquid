@@ -22,13 +22,13 @@
     {%- if section.settings.primary_label != blank or section.settings.secondary_label != blank -%}
       <div class="elevate-cpo-cta__buttons">
         {%- if section.settings.secondary_label != blank -%}
-          <a href="{{ section.settings.secondary_link }}" class="elevate-cpo-cta__btn elevate-cpo-cta__btn--secondary">
+          <a {% if section.settings.secondary_link != blank %}href="{{ section.settings.secondary_link }}"{% endif %} class="elevate-cpo-cta__btn elevate-cpo-cta__btn--secondary">
             {{ section.settings.secondary_label }}
           </a>
         {%- endif -%}
 
         {%- if section.settings.primary_label != blank -%}
-          <a href="{{ section.settings.primary_link }}" class="elevate-cpo-cta__btn elevate-cpo-cta__btn--primary">
+          <a {% if section.settings.primary_link != blank %}href="{{ section.settings.primary_link }}"{% endif %} class="elevate-cpo-cta__btn elevate-cpo-cta__btn--primary">
             <span>{{ section.settings.primary_label }}</span>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
               {%- render 'icon', icon: 'arrow-right-solid' -%}
