@@ -195,9 +195,9 @@
         "heading_accent": "every time.",
         "subtitle": "Every bike earns its listing",
         "primary_cta_text": "Shop Bikes & Gear",
-        "primary_cta_url": "",
+        "primary_cta_url": "shopify://collections/complete-bikes",
         "secondary_cta_text": "Learn more about CPO",
-        "secondary_cta_url": "",
+        "secondary_cta_url": "shopify://pages/certified-pre-owned",
         "padding_top": 72,
         "padding_bottom": 72
       }
@@ -210,7 +210,7 @@
         "body_1": "We pay fair market value, send a free shipping label, and turn around an offer within 24 hours.",
         "body_2": "No haggling. No lowball after the fact. No FB Marketplace drama.",
         "cta_text": "Get a Quote for your gear",
-        "cta_url": "",
+        "cta_url": "shopify://pages/sell-or-trade",
         "disclaimer": "$5.4M+ paid to sellers · Complete bikes and components accepted",
         "background_image": "shopify://shop_images/trade-section.png",
         "background_image_mobile": "shopify://shop_images/banner.png",
