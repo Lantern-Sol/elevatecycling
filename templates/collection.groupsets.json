@@ -380,7 +380,7 @@
             "feature_3": "Full manufacturer's warranty applies",
             "feature_4": "Inspected and packaged before it ships",
             "cta_label": "SHOP NEW STOCK",
-            "cta_link": ""
+            "cta_link": "shopify://collections/all"
           }
         },
         "inventory_card_f7wr6b": {
@@ -394,7 +394,7 @@
             "feature_3": "Honest condition descriptions, no fluff",
             "feature_4": "30-day returns if it's not as described",
             "cta_label": "SHOP CERTIFIED PRE-OWNED",
-            "cta_link": ""
+            "cta_link": "shopify://collections/complete-bikes"
           }
         }
       },
