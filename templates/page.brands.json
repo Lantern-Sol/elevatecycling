@@ -1,12 +1,29 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
 {
   "sections": {
     "hero": {
       "type": "elevate-brands-hero",
-      "settings": {}
+      "settings": {
+        "overlay_opacity": 95,
+        "badge_text": "SHOP BY BRAND",
+        "heading": "FIND YOUR BRAND",
+        "heading_accent": "BRAND",
+        "subtitle": "Every brand links to our current inventory — certified pre-owned and brand-new, only what's actually in stock.",
+        "show_count_badge": true,
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
     },
     "filters": {
       "type": "elevate-brands-filters",
-      "settings": {},
       "blocks": {
         "cat_bikes": {
           "type": "category",
@@ -37,16 +54,40 @@
           }
         }
       },
-      "block_order": ["cat_bikes", "cat_components", "cat_wheels", "cat_accessories"]
+      "block_order": [
+        "cat_bikes",
+        "cat_components",
+        "cat_wheels",
+        "cat_accessories"
+      ],
+      "settings": {}
     },
     "brands": {
       "type": "elevate-brands-page",
-      "settings": {}
+      "settings": {
+        "padding_top": 48,
+        "padding_bottom": 72
+      }
     },
     "sell_cta": {
       "type": "elevate-brands-cta",
-      "settings": {}
+      "settings": {
+        "caption": "SELL OR TRADE",
+        "heading": "DON'T SEE YOUR BRAND?",
+        "body": "We buy most performance road, gravel, and triathlon brands. Get a free offer within 24 hours.",
+        "button_text": "Get your offer",
+        "button_url": "shopify://pages/sell-or-trade",
+        "gradient_from": "#250a0a",
+        "gradient_to": "#6d1316",
+        "padding_top": 64,
+        "padding_bottom": 64
+      }
     }
   },
-  "order": ["hero", "filters", "brands", "sell_cta"]
+  "order": [
+    "hero",
+    "filters",
+    "brands",
+    "sell_cta"
+  ]
 }
