@@ -1,0 +1,66 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "press-hero": {
+      "type": "elevate-press-hero",
+      "settings": {
+        "overlay_opacity": 95,
+        "badge_text": "BLOG",
+        "heading": "The Cycling Garage",
+        "heading_accent": "Garage",
+        "subtitle": "Buying guides, gear reviews, and CPO advice\nfrom the Elevate mechanics team.",
+        "media_kit_show": true,
+        "media_kit_heading": "MEDIA KIT",
+        "media_kit_description": "Logos, brand guidelines, and press assets.",
+        "media_kit_button_text": "Download Media Kit",
+        "media_kit_url": "",
+        "padding_top": 48,
+        "padding_bottom": 48
+      }
+    },
+    "filters": {
+      "type": "elevate-blog-filters",
+      "settings": {
+        "heading": "Category Filters",
+        "padding_top": 32,
+        "padding_bottom": 32
+      }
+    },
+    "articles": {
+      "type": "elevate-press-articles",
+      "settings": {
+        "posts_per_page": 9,
+        "cta_text": "Read Article",
+        "padding_top": 0,
+        "padding_bottom": 48
+      }
+    },
+    "elevate_blog_newsletter_gFjbGt": {
+      "type": "elevate-blog-newsletter",
+      "settings": {
+        "heading": "New gear drops daily.\nDon't miss the good stuff.",
+        "body": "Subscribe and we'll keep you posted — new listings, buying\nguides, and CPO tips straight to your inbox.",
+        "email_label": "Email",
+        "email_placeholder": "johndoe@email.com",
+        "button_label": "Subscribe to Newsletter",
+        "success_message": "You're in! New articles will land in your inbox.",
+        "padding_top": 88,
+        "padding_bottom": 40
+      }
+    }
+  },
+  "order": [
+    "press-hero",
+    "filters",
+    "articles",
+    "elevate_blog_newsletter_gFjbGt"
+  ]
+}
