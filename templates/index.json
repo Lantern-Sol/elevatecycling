@@ -453,7 +453,7 @@
           "settings": {
             "label": "COMPONENTS",
             "label_mobile": "",
-            "link": "shopify://collections/other-accessories",
+            "link": "shopify://collections/accessories",
             "position_x": 41,
             "position_y": 50,
             "line_direction": "up",

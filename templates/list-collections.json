@@ -27,7 +27,7 @@
           "settings": {
             "fallback_key": "all-bikes",
             "label": "All Bikes",
-            "link": "/collections/all"
+            "link": "/collections/complete-bikes"
           }
         },
         "type_cx_gravel": {
@@ -35,7 +35,7 @@
           "settings": {
             "fallback_key": "cx-gravel",
             "label": "CX/Gravel",
-            "link": "/collections/cx-gravel"
+            "link": "/collections/complete-bikes?filter.p.m.custom.part_types=Complete+Bike+Gravel&filter.p.m.custom.part_types=Complete+Gravel+bike&filter.p.m.custom.part_types=Complete+gravel+bike"
           }
         },
         "type_road": {
@@ -43,7 +43,7 @@
           "settings": {
             "fallback_key": "road",
             "label": "Road",
-            "link": "/collections/road"
+            "link": "/collections/road-bikes"
           }
         },
         "type_triathlon": {
@@ -51,7 +51,7 @@
           "settings": {
             "fallback_key": "triathlon-tt",
             "label": "Triathlon/TT",
-            "link": "/collections/triathlon-tt"
+            "link": "/collections/triathalon-tt-bikes"
           }
         },
         "type_clearance": {
@@ -202,42 +202,42 @@
           "type": "pill_link",
           "settings": {
             "label": "Used Gravel Bikes",
-            "url": "/collections/cx-gravel"
+            "url": "/collections/complete-bikes?filter.p.m.custom.part_types=Complete+Bike+Gravel&filter.p.m.custom.part_types=Complete+Gravel+bike&filter.p.m.custom.part_types=Complete+gravel+bike"
           }
         },
         "pill_carbon": {
           "type": "pill_link",
           "settings": {
             "label": "Carbon Road Bikes",
-            "url": "/collections/road"
+            "url": "/collections/road-bikes?filter.p.m.custom.material=Carbon"
           }
         },
         "pill_specialized": {
           "type": "pill_link",
           "settings": {
             "label": "Used Specialized Bikes",
-            "url": "/collections/all"
+            "url": "/collections/complete-bikes?filter.p.vendor=Specialized"
           }
         },
         "pill_ultegra": {
           "type": "pill_link",
           "settings": {
             "label": "Shimano Ultegra Bikes",
-            "url": "/collections/all"
+            "url": "/collections/complete-bikes?filter.p.vendor=Shimano"
           }
         },
         "pill_trek": {
           "type": "pill_link",
           "settings": {
             "label": "Used Trek Bikes",
-            "url": "/collections/all"
+            "url": "/collections/complete-bikes?filter.p.vendor=Trek"
           }
         },
         "pill_under2k": {
           "type": "pill_link",
           "settings": {
             "label": "Bikes Under $2,000",
-            "url": "/collections/all"
+            "url": "/collections/complete-bikes?filter.v.price.lte=2000"
           }
         }
       },

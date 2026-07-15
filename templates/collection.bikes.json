@@ -156,42 +156,42 @@
           "type": "pill_link",
           "settings": {
             "label": "Used Gravel Bikes",
-            "url": "/collections/cx-gravel"
+            "url": "/collections/complete-bikes?filter.p.m.custom.part_types=Complete+Bike+Gravel&filter.p.m.custom.part_types=Complete+Gravel+bike&filter.p.m.custom.part_types=Complete+gravel+bike"
           }
         },
         "pill_carbon": {
           "type": "pill_link",
           "settings": {
             "label": "Carbon Road Bikes",
-            "url": "/collections/road"
+            "url": "/collections/road-bikes?filter.p.m.custom.material=Carbon"
           }
         },
         "pill_specialized": {
           "type": "pill_link",
           "settings": {
             "label": "Used Specialized Bikes",
-            "url": "/collections/all"
+            "url": "/collections/complete-bikes?filter.p.vendor=Specialized"
           }
         },
         "pill_ultegra": {
           "type": "pill_link",
           "settings": {
             "label": "Shimano Ultegra Bikes",
-            "url": "/collections/all"
+            "url": "/collections/complete-bikes?filter.p.vendor=Shimano"
           }
         },
         "pill_trek": {
           "type": "pill_link",
           "settings": {
             "label": "Used Trek Bikes",
-            "url": "/collections/all"
+            "url": "/collections/complete-bikes?filter.p.vendor=Trek"
           }
         },
         "pill_under2k": {
           "type": "pill_link",
           "settings": {
             "label": "Bikes Under $2,000",
-            "url": "/collections/all"
+            "url": "/collections/complete-bikes?filter.v.price.lte=2000"
           }
         }
       },
