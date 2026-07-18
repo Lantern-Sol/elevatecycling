@@ -105,7 +105,7 @@
       "settings": {
         "background_color": "#e31e24",
         "text_color": "#fdfcfc",
-        "marquee_speed": 20,
+        "rotate_speed": 4,
         "padding-block-start": 8,
         "padding-block-end": 8,
         "use_mobile_padding": false,
