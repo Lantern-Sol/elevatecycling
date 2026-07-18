@@ -1,7 +1,7 @@
 {%- comment -%}
   Elevate Cycling — USP announcement bar.
-  Desktop: all items in a row.
-  Mobile: horizontal CSS marquee (items cloned via JS for seamless loop).
+  Desktop: all items in a static row.
+  Mobile: single-item rotator with left/right arrows + auto-rotate.
 {%- endcomment -%}
 
 {%- liquid
@@ -16,33 +16,126 @@
   class="usps-bar spacing-style section section--full-width color-custom-{{ section.id }}"
   style="
     {% render 'spacing-padding', settings: section.settings %};
-    --usps-speed: {{ section.settings.marquee_speed }}s;
+    --usps-rotate-speed: {{ section.settings.rotate_speed }}s;
+    display: flex;
+    align-items: center;
     background-color: {{ bg }};
     color: {{ fg }};
   "
   aria-label="Store highlights"
 >
+  {%- comment -%} Mobile arrows + single item rotator {%- endcomment -%}
+  <button
+    class="usps-bar__arrow usps-bar__arrow--prev"
+    type="button"
+    aria-label="Previous highlight"
+  >
+    <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M9.96094 5.08594L3.58594 11.4609L3.07031 12L3.58594 12.5391L9.96094 18.9141L11.0391 17.8359L5.95312 12.75H21V11.25H5.95312L11.0391 6.16406L9.96094 5.08594Z" fill="currentColor"/>
+    </svg>
+  </button>
+
   <div class="usps-bar__track">
     {% content_for 'blocks' %}
   </div>
+
+  <button
+    class="usps-bar__arrow usps-bar__arrow--next"
+    type="button"
+    aria-label="Next highlight"
+  >
+    <svg aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+      <path d="M14.0391 5.08594L12.9609 6.16406L18.0469 11.25H3V12.75H18.0469L12.9609 17.8359L14.0391 18.9141L20.4141 12.5391L20.9297 12L20.4141 11.4609L14.0391 5.08594Z" fill="currentColor"/>
+    </svg>
+  </button>
 </aside>
 
 <script>
   (function () {
-    var track = document.querySelector(
-      '#shopify-section-{{ section.id }} .usps-bar__track'
-    );
-    if (!track) return;
+    var section = document.getElementById('shopify-section-{{ section.id }}');
+    if (!section) return;
 
+    var track = section.querySelector('.usps-bar__track');
     var items = track.querySelectorAll('.usps-bar__item');
-    if (!items.length) return;
+    if (items.length === 0) return;
 
-    items.forEach(function (item) {
-      var clone = item.cloneNode(true);
-      clone.classList.add('usps-bar__item--clone');
-      clone.setAttribute('aria-hidden', 'true');
-      clone.removeAttribute('data-shopify-editor-block');
-      track.appendChild(clone);
+    /* Single item: show it, hide arrows, done */
+    items[0].classList.add('usps-bar__item--active');
+    if (items.length < 2) {
+      section.querySelectorAll('.usps-bar__arrow').forEach(function (a) {
+        a.style.display = 'none';
+      });
+      return;
+    }
+
+    var current = 0;
+    var total = items.length;
+    var interval = null;
+    var speed = {{ section.settings.rotate_speed | default: 4 }} * 1000;
+
+    function show(index) {
+      items.forEach(function (item, i) {
+        item.classList.toggle('usps-bar__item--active', i === index);
+      });
+      current = index;
+    }
+
+    function next() {
+      show((current + 1) % total);
+    }
+
+    function prev() {
+      show((current - 1 + total) % total);
+    }
+
+    function startAuto() {
+      stopAuto();
+      interval = setInterval(next, speed);
+    }
+
+    function stopAuto() {
+      if (interval) clearInterval(interval);
+    }
+
+    /* Init: show first item */
+    show(0);
+
+    /* Arrow clicks */
+    var prevBtn = section.querySelector('.usps-bar__arrow--prev');
+    var nextBtn = section.querySelector('.usps-bar__arrow--next');
+
+    if (prevBtn) {
+      prevBtn.addEventListener('click', function () {
+        prev();
+        startAuto();
+      });
+    }
+
+    if (nextBtn) {
+      nextBtn.addEventListener('click', function () {
+        next();
+        startAuto();
+      });
+    }
+
+    /* Auto-rotate only on mobile */
+    var mql = window.matchMedia('(max-width: 61.875rem)');
+
+    function handleMQ(e) {
+      if (e.matches) {
+        startAuto();
+      } else {
+        stopAuto();
+      }
+    }
+
+    mql.addEventListener('change', handleMQ);
+    handleMQ(mql);
+
+    /* Cleanup on section re-render in Theme Editor */
+    section.addEventListener('shopify:section:unload', function () {
+      stopAuto();
+      mql.removeEventListener('change', handleMQ);
     });
   })();
 </script>
@@ -51,38 +144,48 @@
   .usps-bar {
     overflow: hidden;
     position: relative;
+    padding-inline: 1rem;
   }
 
-  /* ── Track — mobile marquee ── */
+  /* ── Mobile: single-item rotator with arrows ── */
+  .usps-bar__arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0;
+    border: none;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .usps-bar__arrow svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
   .usps-bar__track {
     display: flex;
     align-items: center;
-    gap: 2.5rem;
-    width: max-content;
-    animation: usps-marquee var(--usps-speed, 20s) linear infinite;
-  }
-
-  @keyframes usps-marquee {
-    to {
-      translate: -50% 0;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .usps-bar__track {
-      animation: none;
-      width: 100%;
-      overflow-x: auto;
-    }
+    justify-content: center;
+    flex: 1;
+    min-width: 0;
   }
 
   /* ── Individual item ── */
   .usps-bar__item {
-    display: flex;
+    display: none;
     align-items: center;
     gap: 0.25rem;
-    flex-shrink: 0;
     white-space: nowrap;
+  }
+
+  .usps-bar__item--active {
+    display: flex;
   }
 
   .usps-bar__icon {
@@ -93,7 +196,7 @@
 
   .usps-bar__text {
     font-family: var(--font-body--family), sans-serif;
-    font-size: 0.875rem;
+    font-size: 0.75rem;
     font-weight: 400;
     line-height: 1.5;
     letter-spacing: -0.01em;
@@ -103,17 +206,24 @@
     margin: 0;
   }
 
-  /* ── Desktop — static row ── */
+  /* ── Desktop — static row, no arrows ── */
   @media screen and (min-width: 61.9375rem) {
+    .usps-bar__arrow {
+      display: none;
+    }
+
     .usps-bar__track {
-      animation: none;
-      width: 100%;
       justify-content: space-between;
       padding-inline: 4.5rem;
     }
 
-    .usps-bar__item--clone {
-      display: none;
+    .usps-bar__item {
+      display: flex;
+      flex-shrink: 0;
+    }
+
+    .usps-bar__text {
+      font-size: 0.875rem;
     }
   }
 {% endstylesheet %}
@@ -148,13 +258,13 @@
     },
     {
       "type": "range",
-      "id": "marquee_speed",
-      "label": "Mobile scroll speed",
-      "min": 10,
-      "max": 60,
-      "step": 5,
+      "id": "rotate_speed",
+      "label": "Auto-rotate interval (mobile)",
+      "min": 2,
+      "max": 10,
+      "step": 1,
       "unit": "s",
-      "default": 20
+      "default": 4
     },
     {
       "type": "header",
