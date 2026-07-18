@@ -105,7 +105,7 @@
     {%- comment -%} Bottom bar: copyright + policies {%- endcomment -%}
     <div class="elevate-footer__bottom">
       <p class="elevate-footer__copyright">
-        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved.
+        &copy; {{ 'now' | date: '%Y' }} {{ shop.name }}. All rights reserved. | Designed by <a href="https://www.lanternsol.com/" target="_blank" rel="noopener">Lantern Sol</a>
       </p>
 
       {%- assign legal_page_url = pages['legal'].url | default: '/pages/legal' -%}
@@ -333,6 +333,15 @@
     color: var(--footer-text, #AEB2B8);
     margin: 0;
     text-align: center;
+  }
+
+  .elevate-footer__copyright a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  .elevate-footer__copyright a:hover {
+    color: #FDFCFC;
   }
 
   .elevate-footer__policies {
