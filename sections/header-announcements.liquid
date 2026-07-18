@@ -57,7 +57,16 @@
 
     var track = section.querySelector('.usps-bar__track');
     var items = track.querySelectorAll('.usps-bar__item');
-    if (items.length < 2) return;
+    if (items.length === 0) return;
+
+    /* Single item: show it, hide arrows, done */
+    items[0].classList.add('usps-bar__item--active');
+    if (items.length < 2) {
+      section.querySelectorAll('.usps-bar__arrow').forEach(function (a) {
+        a.style.display = 'none';
+      });
+      return;
+    }
 
     var current = 0;
     var total = items.length;
@@ -122,6 +131,12 @@
 
     mql.addEventListener('change', handleMQ);
     handleMQ(mql);
+
+    /* Cleanup on section re-render in Theme Editor */
+    section.addEventListener('shopify:section:unload', function () {
+      stopAuto();
+      mql.removeEventListener('change', handleMQ);
+    });
   })();
 </script>
 
