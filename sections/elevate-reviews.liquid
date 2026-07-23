@@ -518,10 +518,9 @@
       var dotsWrap = document.createElement('div');
       dotsWrap.className = 'elevate-reviews__dots';
 
-      /* One dot per slide, capped at MAX_DOTS */
-      var totalSlides = swiperEl.querySelectorAll('.swiper-slide').length;
-      var slidesPerView = 1;
-      var pageCount = Math.max(1, Math.min(MAX_DOTS, totalSlides));
+      /* ── Dots cycle 0→9→0→9… with every slide change ── */
+      var pageCount = MAX_DOTS;
+      var activeDot = 0;
 
       for (var i = 0; i < pageCount; i++) {
         var dot = document.createElement('button');
@@ -531,69 +530,63 @@
         dotsWrap.appendChild(dot);
       }
 
-      var swiperWrapper = swiperEl.querySelector('.swiper-wrapper');
-      var slides = swiperEl.querySelectorAll('.swiper-slide');
-
-      function getActivePage() {
-        if (!swiperWrapper || slides.length === 0) return 0;
-
-        /* Read translateX from the wrapper transform */
-        var transform = swiperWrapper.style.transform || '';
-        var match = transform.match(/translate3d\(\s*(-?[\d.]+)px/);
-        var tx = match ? Math.abs(parseFloat(match[1])) : 0;
-
-        /* Get width of a single slide including gap */
-        var firstSlide = slides[0];
-        var slideRect = firstSlide.getBoundingClientRect();
-        var slideWidth = slideRect.width;
-        var gap = parseFloat(getComputedStyle(swiperWrapper).gap) || 0;
-        if (gap === 0 && slides.length > 1) {
-          var secondRect = slides[1].getBoundingClientRect();
-          gap = secondRect.left - slideRect.right;
-        }
-        var step = slideWidth + gap;
-        if (step <= 0) return 0;
-
-        var idx = Math.round(tx / step);
-        var page = Math.floor(idx / slidesPerView);
-        if (page >= pageCount) page = pageCount - 1;
-        if (page < 0) page = 0;
-        return page;
-      }
-
-      function updateDots() {
-        var page = getActivePage();
-        var dots = dotsWrap.querySelectorAll('.elevate-reviews__dot');
-        dots.forEach(function(d, j) {
-          d.classList.toggle('elevate-reviews__dot--active', j === page);
+      function setActiveDot(idx) {
+        activeDot = ((idx % pageCount) + pageCount) % pageCount;
+        var allDots = dotsWrap.querySelectorAll('.elevate-reviews__dot');
+        allDots.forEach(function(d, j) {
+          d.classList.toggle('elevate-reviews__dot--active', j === activeDot);
         });
       }
+
+      /* ── Detect every slide change via .swiper-slide-active ── */
+      var lastRealIdx = -1;
+      function syncDots() {
+        var active = swiperEl.querySelector('.swiper-slide-active');
+        if (!active) return;
+        var attr = active.getAttribute('data-swiper-slide-index');
+        var realIdx = attr !== null ? parseInt(attr, 10) : 0;
+        if (realIdx === lastRealIdx) return;
+
+        var prev = lastRealIdx;
+        lastRealIdx = realIdx;
+
+        /* First run — just set dot 0 */
+        if (prev === -1) { setActiveDot(0); return; }
+
+        /* Determine direction: forward or backward */
+        if (realIdx === 0 && prev > 1) {
+          /* Looped forward past last slide → advance dot */
+          setActiveDot(activeDot + 1);
+        } else if (prev === 0 && realIdx > 1) {
+          /* Looped backward past first slide → retreat dot */
+          setActiveDot(activeDot - 1);
+        } else if (realIdx > prev) {
+          setActiveDot(activeDot + 1);
+        } else if (realIdx < prev) {
+          setActiveDot(activeDot - 1);
+        }
+      }
+
+      setInterval(syncDots, 200);
+      syncDots();
 
       /* ── Events ── */
       prevBtn.addEventListener('click', function() { swiper.slidePrev(); });
       nextBtn.addEventListener('click', function() { swiper.slideNext(); });
 
       dotsWrap.addEventListener('click', function(e) {
-        var dot = e.target.closest('.elevate-reviews__dot');
-        if (!dot) return;
-        var page = parseInt(dot.dataset.page, 10);
-        swiper.slideTo(page * slidesPerView);
-      });
-
-      /* Watch transform changes on swiper-wrapper via MutationObserver + poll */
-      var lastPage = 0;
-      function checkPage() {
-        var page = getActivePage();
-        if (page !== lastPage) {
-          lastPage = page;
-          updateDots();
+        var btn = e.target.closest('.elevate-reviews__dot');
+        if (!btn) return;
+        var targetDot = parseInt(btn.dataset.page, 10);
+        /* Jump forward/backward the difference in slides */
+        var diff = targetDot - activeDot;
+        if (diff > 0) {
+          for (var s = 0; s < diff; s++) swiper.slideNext();
+        } else if (diff < 0) {
+          for (var s = 0; s < Math.abs(diff); s++) swiper.slidePrev();
         }
-      }
-
-      var observer = new MutationObserver(checkPage);
-      if (swiperWrapper) {
-        observer.observe(swiperWrapper, { attributes: true, attributeFilter: ['style'] });
-      }
+        setActiveDot(targetDot);
+      });
 
       /* ── Assemble nav row ── */
       nav.appendChild(prevBtn);
