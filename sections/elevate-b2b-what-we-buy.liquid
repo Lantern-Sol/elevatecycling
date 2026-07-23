@@ -1,0 +1,468 @@
+{%- doc -%}
+  Elevate Cycling — B2B "What We Buy" section.
+  Header row (heading, bike image, subnote) + grid of dark category cards.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-b2b-wwb"
+  data-scroll-reveal="children"
+  style="
+    background: #FDFCFC;
+    --b2b-wwb-pad-top: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    --b2b-wwb-pad-bottom: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+    {%- if section.settings.mobile_padding_custom -%}
+      --b2b-wwb-pad-top-m: {{ section.settings.padding_top_mobile | divided_by: 16.0 }}rem;
+      --b2b-wwb-pad-bottom-m: {{ section.settings.padding_bottom_mobile | divided_by: 16.0 }}rem;
+    {%- endif -%}
+  "
+>
+  <div class="elevate-b2b-wwb__inner">
+
+    {%- comment -%} ── Header row ── {%- endcomment -%}
+    <div class="elevate-b2b-wwb__header">
+      {%- if section.settings.heading != blank or section.settings.heading_line_2 != blank -%}
+        <h2 class="elevate-b2b-wwb__heading">
+          {{- section.settings.heading -}}
+          {%- if section.settings.heading_line_2 != blank -%}
+            <br>{{ section.settings.heading_line_2 }}
+          {%- endif -%}
+        </h2>
+      {%- endif -%}
+
+      {%- if section.settings.header_image != blank -%}
+        <div class="elevate-b2b-wwb__header-image">
+          {{
+            section.settings.header_image
+            | image_url: width: 960
+            | image_tag:
+              widths: '320, 480, 640, 960',
+              sizes: '(min-width: 48rem) 33vw, 80vw',
+              loading: 'lazy',
+              class: 'elevate-b2b-wwb__header-img',
+              alt: section.settings.heading
+          }}
+        </div>
+      {%- else -%}
+        <div class="elevate-b2b-wwb__header-image">
+          <img
+            src="{{ 'b2b-what-we-buy-bike.png' | asset_url }}"
+            alt="{{ section.settings.heading }}"
+            class="elevate-b2b-wwb__header-img"
+            loading="lazy"
+            width="960"
+            height="640"
+          >
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.subnote != blank -%}
+        <p class="elevate-b2b-wwb__subnote">{{ section.settings.subnote }}</p>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Cards grid ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-b2b-wwb__cards">
+        {%- for block in section.blocks -%}
+          <div class="elevate-b2b-wwb__card" {{ block.shopify_attributes }}>
+            <div class="elevate-b2b-wwb__card-top">
+              <span class="elevate-b2b-wwb__card-badge" aria-hidden="true">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                  {%- render 'icon', icon: block.settings.icon -%}
+                </svg>
+              </span>
+              {%- if block.settings.title != blank -%}
+                <p class="elevate-b2b-wwb__card-title">{{ block.settings.title }}</p>
+              {%- endif -%}
+              {%- if block.settings.description != blank -%}
+                <p class="elevate-b2b-wwb__card-desc">{{ block.settings.description }}</p>
+              {%- endif -%}
+            </div>
+            {%- if block.settings.requirement != blank -%}
+              <div class="elevate-b2b-wwb__card-bottom">
+                <hr class="elevate-b2b-wwb__card-divider" aria-hidden="true">
+                <p class="elevate-b2b-wwb__card-req">
+                  <svg class="elevate-b2b-wwb__card-check" xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true"><path d="M2.5 7.5L5.5 10.5L11.5 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  {{- block.settings.requirement -}}
+                </p>
+              </div>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── B2B What We Buy ─── */
+  .elevate-b2b-wwb__inner {
+    padding-block: var(--b2b-wwb-pad-top-m, var(--b2b-wwb-pad-top)) var(--b2b-wwb-pad-bottom-m, var(--b2b-wwb-pad-bottom));
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Header ── */
+  .elevate-b2b-wwb__header {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+  }
+
+  .elevate-b2b-wwb__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #141517;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-wwb__header-image {
+    width: 100%;
+    max-width: 20rem;
+    aspect-ratio: 420 / 136;
+    overflow: hidden;
+    align-self: center;
+  }
+
+  .elevate-b2b-wwb__header-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+  }
+
+  .elevate-b2b-wwb__subnote {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+    margin: 0;
+    white-space: pre-line;
+  }
+
+  /* ── Cards ── */
+  .elevate-b2b-wwb__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    overflow: clip;
+  }
+
+  .elevate-b2b-wwb__card {
+    background: #141517;
+    border-radius: 1.5rem;
+    padding: 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 1rem;
+    overflow: clip;
+  }
+
+  .elevate-b2b-wwb__card-top {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .elevate-b2b-wwb__card-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    background: #E31E24;
+    border-radius: 0.5rem;
+    flex-shrink: 0;
+    color: #FDFCFC;
+  }
+
+  .elevate-b2b-wwb__card-badge svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .elevate-b2b-wwb__card-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    letter-spacing: -0.0125rem;
+    color: #FDFCFC;
+    margin: 0;
+  }
+
+  .elevate-b2b-wwb__card-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  .elevate-b2b-wwb__card-bottom {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  .elevate-b2b-wwb__card-divider {
+    border: none;
+    border-block-start: 0.0625rem solid #AEB2B8;
+    margin: 0;
+  }
+
+  .elevate-b2b-wwb__card-req {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #E31E24;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.375rem;
+  }
+
+  .elevate-b2b-wwb__card-check {
+    flex-shrink: 0;
+  }
+
+  /* ─── Desktop (991px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-b2b-wwb__inner {
+      padding-block: var(--b2b-wwb-pad-top) var(--b2b-wwb-pad-bottom);
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-b2b-wwb__header {
+      display: grid;
+      grid-template-columns: 1fr auto 1fr;
+      align-items: end;
+      gap: 2rem;
+      margin-bottom: 3rem;
+      overflow: clip;
+    }
+
+    .elevate-b2b-wwb__heading {
+      font-size: 3.5625rem;
+      max-width: 23.625rem;
+      align-self: start;
+    }
+
+    .elevate-b2b-wwb__header-image {
+      width: 26.25rem;
+      max-width: none;
+      aspect-ratio: 420 / 136;
+      align-self: center;
+      justify-self: center;
+    }
+
+    .elevate-b2b-wwb__subnote {
+      font-size: 1rem;
+      text-align: right;
+      justify-self: end;
+      max-width: 16.75rem;
+    }
+
+    .elevate-b2b-wwb__cards {
+      flex-direction: row;
+      gap: 1.5rem;
+    }
+
+    .elevate-b2b-wwb__card {
+      flex: 1;
+      min-width: 0;
+      min-height: 13.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "B2B What We Buy",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Header"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading (line 1)",
+      "default": "IF IT'S PREMIUM,"
+    },
+    {
+      "type": "text",
+      "id": "heading_line_2",
+      "label": "Heading (line 2)",
+      "default": "WE'RE INTERESTED."
+    },
+    {
+      "type": "image_picker",
+      "id": "header_image",
+      "label": "Header image"
+    },
+    {
+      "type": "textarea",
+      "id": "subnote",
+      "label": "Subnote text",
+      "default": "High-end road, gravel, and triathlon.\nNew, refurbished, or B-stock.\nPallets, lots, or one-off runs."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_padding_custom",
+      "label": "Custom mobile padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "card",
+      "name": "Category card",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icon",
+          "options": [
+            { "value": "complete-bike", "label": "Complete bike" },
+            { "value": "frameset", "label": "Frameset" },
+            { "value": "wheel", "label": "Wheel" },
+            { "value": "gear", "label": "Gear / Groupset" },
+            { "value": "puzzle-piece", "label": "Puzzle piece / Components" }
+          ],
+          "default": "complete-bike"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Category"
+        },
+        {
+          "type": "textarea",
+          "id": "description",
+          "label": "Description",
+          "default": "Short description of this category."
+        },
+        {
+          "type": "text",
+          "id": "requirement",
+          "label": "Requirement note",
+          "default": "Minimum 10 units"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "B2B What We Buy",
+      "blocks": [
+        {
+          "type": "card",
+          "settings": {
+            "icon": "complete-bike",
+            "title": "Complete bikes",
+            "description": "Road, gravel, cyclocross, triathlon & TT. All major brands.",
+            "requirement": "Good condition or better"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "icon": "frameset",
+            "title": "Framesets",
+            "description": "Carbon & aluminum. Disc and rim. No crash damage or structural repairs.",
+            "requirement": "Inspected for impact damage"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "icon": "wheel",
+            "title": "Wheelsets",
+            "description": "Carbon & alloy. Zipp, ENVE, Roval, DT Swiss and more.",
+            "requirement": "True, no cracks or dents"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "icon": "gear",
+            "title": "Groupsets",
+            "description": "Shimano, SRAM, Campagnolo. Di2, eTap, EPS, mechanical.",
+            "requirement": "Functional, no stripped parts"
+          }
+        },
+        {
+          "type": "card",
+          "settings": {
+            "icon": "puzzle-piece",
+            "title": "Components",
+            "description": "Cockpit, power meters, saddles, seatposts. ENVE, Fizik, Quarq, PRO.",
+            "requirement": "No cracks or stripped threads"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

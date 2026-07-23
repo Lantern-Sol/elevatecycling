@@ -1,0 +1,1465 @@
+{%- doc -%}
+  Elevate Cycling — B2B CTA multi-step section.
+  3-step bulk submission form for brand partnerships:
+  Step 1 (Description) → Step 2 (Contact) → Step 3 (All Done).
+  Simplified from elevate-trade-form.liquid — bulk mode only, no per-item, no sidebar.
+  Submits via Shopify /contact endpoint.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-b2b-cta"
+  data-b2b-cta
+  data-scroll-reveal
+  style="
+    background: #FDFCFC;
+    --elevate-b2b-cta-pt: {{ section.settings.padding_top | times: 0.0625 }}rem;
+    --elevate-b2b-cta-pb: {{ section.settings.padding_bottom | times: 0.0625 }}rem;
+    {%- if section.settings.mobile_padding_custom -%}
+      --elevate-b2b-cta-pt-m: {{ section.settings.padding_top_mobile | times: 0.0625 }}rem;
+      --elevate-b2b-cta-pb-m: {{ section.settings.padding_bottom_mobile | times: 0.0625 }}rem;
+    {%- endif -%}
+  "
+>
+  <div class="elevate-b2b-cta__inner">
+
+    {%- comment -%} ── Step header (changes per step) ── {%- endcomment -%}
+    <div class="elevate-b2b-cta__header" data-b2b-header>
+      <p class="elevate-b2b-cta__eyebrow" data-b2b-eyebrow>{{ section.settings.step1_eyebrow | default: 'SUBMIT YOUR GEAR' }}</p>
+      <h2 class="elevate-b2b-cta__heading" data-b2b-heading>{{ section.settings.step1_heading | default: 'SEND US YOUR LIST.' }}</h2>
+      <p class="elevate-b2b-cta__subtitle" data-b2b-subtitle>{{ section.settings.step1_subtitle | default: "A spreadsheet of SKUs, quantities, condition, and your target floor is all we need. We'll come back inside 48 hours with a written offer on the whole lot — and a draft resale agreement built around your channel rules." }}</p>
+    </div>
+
+    {%- comment -%} ── Progress bar ── {%- endcomment -%}
+    <div class="elevate-b2b-cta__progress" data-b2b-progress>
+      <div class="elevate-b2b-cta__progress-step" data-b2b-progress-step="1">
+        <div class="elevate-b2b-cta__progress-bar is-filled"></div>
+        <div class="elevate-b2b-cta__progress-circle is-active">1</div>
+        <span class="elevate-b2b-cta__progress-label is-active">{{ section.settings.step1_label | default: 'Description' }}</span>
+      </div>
+      <div class="elevate-b2b-cta__progress-step" data-b2b-progress-step="2">
+        <div class="elevate-b2b-cta__progress-bar"></div>
+        <div class="elevate-b2b-cta__progress-circle">2</div>
+        <span class="elevate-b2b-cta__progress-label">{{ section.settings.step2_label | default: 'Contact' }}</span>
+      </div>
+      <div class="elevate-b2b-cta__progress-step" data-b2b-progress-step="3">
+        <div class="elevate-b2b-cta__progress-bar"></div>
+        <div class="elevate-b2b-cta__progress-circle">3</div>
+        <span class="elevate-b2b-cta__progress-label">{{ section.settings.step3_label | default: 'All Done!' }}</span>
+      </div>
+    </div>
+
+    {%- comment -%} ── Main content ── {%- endcomment -%}
+    <div class="elevate-b2b-cta__main">
+
+      {%- comment -%} ══════════════════════════════════════ {%- endcomment -%}
+      {%- comment -%} ── STEP 1: Description (bulk only) ── {%- endcomment -%}
+      {%- comment -%} ══════════════════════════════════════ {%- endcomment -%}
+      <div class="elevate-b2b-cta__step" data-b2b-step="1">
+        <div class="elevate-b2b-cta__template-buttons">
+          <a href="{{ section.settings.bulk_excel_url | default: '#' }}" class="elevate-b2b-cta__template-btn"{% if section.settings.bulk_excel_url != blank %} download{% endif %}>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="24" height="24" aria-hidden="true">
+              {%- render 'icon', icon: 'file-excel' -%}
+            </svg>
+            <span class="elevate-b2b-cta__template-btn-text">
+              <span class="elevate-b2b-cta__template-btn-title">Excel Template</span>
+              <span class="elevate-b2b-cta__template-btn-sub">Download .xlsx</span>
+            </span>
+          </a>
+          <a href="{{ section.settings.bulk_sheets_url | default: '#' }}" class="elevate-b2b-cta__template-btn" target="_blank" rel="noopener">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" width="24" height="24" aria-hidden="true">
+              {%- render 'icon', icon: 'google-sheets' -%}
+            </svg>
+            <span class="elevate-b2b-cta__template-btn-text">
+              <span class="elevate-b2b-cta__template-btn-title">Google Sheets</span>
+              <span class="elevate-b2b-cta__template-btn-sub">Open & duplicate</span>
+            </span>
+          </a>
+        </div>
+
+        <div class="elevate-b2b-cta__field">
+          <label class="elevate-b2b-cta__label">Upload your inventory file</label>
+          <div class="elevate-b2b-cta__upload-zone" data-b2b-upload-zone>
+            <div class="elevate-b2b-cta__upload-prompt">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24" aria-hidden="true" class="elevate-b2b-cta__upload-icon">
+                {%- render 'icon', icon: 'upload' -%}
+              </svg>
+              <p class="elevate-b2b-cta__upload-text">Upload your filled file</p>
+              <p class="elevate-b2b-cta__upload-hint">.XLSX or .CSV — Max. 10 MB</p>
+            </div>
+            <input type="file" class="sr-only" data-b2b-file-input accept=".xlsx,.csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,text/csv">
+          </div>
+          <div class="elevate-b2b-cta__file-name" data-b2b-filename hidden></div>
+        </div>
+
+        <div class="elevate-b2b-cta__field">
+          <label class="elevate-b2b-cta__label" for="b2b-notes-{{ section.id }}">Notes (optional)</label>
+          <textarea id="b2b-notes-{{ section.id }}" class="elevate-b2b-cta__textarea" data-b2b-field="notes" placeholder="Anything else we should know — condition notes, price targets, timeline..." rows="3"></textarea>
+        </div>
+      </div>
+
+      {%- comment -%} ══════════════════════════════ {%- endcomment -%}
+      {%- comment -%} ── STEP 2: Contact ────────── {%- endcomment -%}
+      {%- comment -%} ══════════════════════════════ {%- endcomment -%}
+      <div class="elevate-b2b-cta__step elevate-b2b-cta__step--contact" data-b2b-step="2" hidden>
+        <div class="elevate-b2b-cta__row">
+          <div class="elevate-b2b-cta__field">
+            <label class="elevate-b2b-cta__label" for="b2b-name-{{ section.id }}">
+              Name <span class="elevate-b2b-cta__required">*</span>
+            </label>
+            <input type="text" id="b2b-name-{{ section.id }}" class="elevate-b2b-cta__input" data-b2b-field="contactName" placeholder="John" required>
+          </div>
+          <div class="elevate-b2b-cta__field">
+            <label class="elevate-b2b-cta__label" for="b2b-lastname-{{ section.id }}">
+              Last Name <span class="elevate-b2b-cta__required">*</span>
+            </label>
+            <input type="text" id="b2b-lastname-{{ section.id }}" class="elevate-b2b-cta__input" data-b2b-field="contactLastName" placeholder="Doe" required>
+          </div>
+        </div>
+
+        <div class="elevate-b2b-cta__row">
+          <div class="elevate-b2b-cta__field">
+            <label class="elevate-b2b-cta__label" for="b2b-email-{{ section.id }}">
+              Email <span class="elevate-b2b-cta__required">*</span>
+            </label>
+            <input type="email" id="b2b-email-{{ section.id }}" class="elevate-b2b-cta__input" data-b2b-field="contactEmail" placeholder="johndoe@example.com" required>
+          </div>
+          <div class="elevate-b2b-cta__field">
+            <label class="elevate-b2b-cta__label" for="b2b-phone-{{ section.id }}">
+              Phone <span class="elevate-b2b-cta__required">*</span>
+            </label>
+            <input type="tel" id="b2b-phone-{{ section.id }}" class="elevate-b2b-cta__input" data-b2b-field="contactPhone" placeholder="(123) 456-7890" required>
+          </div>
+        </div>
+
+        <div class="elevate-b2b-cta__consent">
+          <label class="elevate-b2b-cta__consent-label">
+            <input type="checkbox" class="elevate-b2b-cta__checkbox" data-b2b-field="terms">
+            <span class="elevate-b2b-cta__consent-text">{{ section.settings.consent_text | default: "I confirm I'm authorized to sell this inventory on behalf of my company. <a href='/pages/terms'>View full terms</a>." }}</span>
+          </label>
+        </div>
+      </div>
+
+      {%- comment -%} ══════════════════════════════ {%- endcomment -%}
+      {%- comment -%} ── STEP 3: All Done ───────── {%- endcomment -%}
+      {%- comment -%} ══════════════════════════════ {%- endcomment -%}
+      <div class="elevate-b2b-cta__step elevate-b2b-cta__step--done" data-b2b-step="3" hidden>
+        <div class="elevate-b2b-cta__done-content">
+          <div class="elevate-b2b-cta__done-badge">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="32" height="32" aria-hidden="true">
+              {%- render 'icon', icon: 'check-circle' -%}
+            </svg>
+          </div>
+
+          <h3 class="elevate-b2b-cta__done-heading">{{ section.settings.done_heading | default: "We've got it — offer incoming" }}</h3>
+          <p class="elevate-b2b-cta__done-subtitle">{{ section.settings.done_subtitle | default: "You'll hear from us within the next 48h via email with a written offer on your entire lot. No lowballs, no games." }}</p>
+
+          <div class="elevate-b2b-cta__done-steps">
+            {%- for i in (1..4) -%}
+              {%- assign done_title_key = 'done_step_' | append: i | append: '_title' -%}
+              {%- assign done_desc_key = 'done_step_' | append: i | append: '_desc' -%}
+              {%- assign step_title = section.settings[done_title_key] -%}
+              {%- assign step_desc = section.settings[done_desc_key] -%}
+              {%- if step_title != blank -%}
+                <div class="elevate-b2b-cta__done-step">
+                  <span class="elevate-b2b-cta__done-step-badge">{{ i }}</span>
+                  <div class="elevate-b2b-cta__done-step-text">
+                    <p class="elevate-b2b-cta__done-step-title">{{ step_title }}</p>
+                    {%- if step_desc != blank -%}
+                      <p class="elevate-b2b-cta__done-step-desc">{{ step_desc }}</p>
+                    {%- endif -%}
+                  </div>
+                </div>
+              {%- endif -%}
+            {%- endfor -%}
+          </div>
+
+          <a href="{{ section.settings.done_cta_link | default: '/collections/all' }}" class="elevate-b2b-cta__done-cta">
+            <span>{{ section.settings.done_cta_text | default: 'Browse While You Wait' }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </a>
+        </div>
+      </div>
+
+      {%- comment -%} ── Footer / nav buttons ── {%- endcomment -%}
+      <div class="elevate-b2b-cta__footer" data-b2b-footer>
+        <div class="elevate-b2b-cta__footer-row">
+          <button type="button" class="elevate-b2b-cta__btn elevate-b2b-cta__btn--back" data-b2b-back hidden>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-left' -%}
+            </svg>
+            <span>Back</span>
+          </button>
+          <button type="button" class="elevate-b2b-cta__btn elevate-b2b-cta__btn--next" data-b2b-next>
+            <span>{{ section.settings.next_text | default: 'Next' }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </button>
+          <button type="button" class="elevate-b2b-cta__btn elevate-b2b-cta__btn--submit" data-b2b-submit hidden>
+            <span>{{ section.settings.submit_text | default: 'Submit' }}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="20" height="20" aria-hidden="true">
+              {%- render 'icon', icon: 'arrow-right-solid' -%}
+            </svg>
+          </button>
+        </div>
+        <p class="elevate-b2b-cta__disclaimer">{{ section.settings.disclaimer_text | default: 'Your info is never shared or sold. We respond within 2 business days.' }}</p>
+      </div>
+
+    </div>
+
+    {%- comment -%} Hidden Liquid form — Shopify injects CAPTCHA token + handles submit {%- endcomment -%}
+    {% form 'contact', id: 'b2b-contact-form', class: 'sr-only', aria-hidden: 'true' %}
+      <input type="email" name="contact[email]" value="" data-b2b-hidden-email>
+      <input type="hidden" name="contact[name]" value="" data-b2b-hidden-name>
+      <input type="hidden" name="contact[phone]" value="" data-b2b-hidden-phone>
+      <input type="hidden" name="contact[subject]" value="" data-b2b-hidden-subject>
+      <textarea name="contact[body]" data-b2b-hidden-body style="display:none"></textarea>
+    {% endform %}
+
+  </div>
+</div>
+
+{%- comment -%} ══════════════════════════════════════════ {%- endcomment -%}
+{%- comment -%} ── JavaScript ─────────────────────────── {%- endcomment -%}
+{%- comment -%} ══════════════════════════════════════════ {%- endcomment -%}
+<script type="module">
+(function() {
+  var root = document.querySelector('[data-b2b-cta]');
+  if (!root) return;
+
+  /* ── Cached DOM refs ── */
+  var progressSteps = root.querySelectorAll('[data-b2b-progress-step]');
+  var eyebrow = root.querySelector('[data-b2b-eyebrow]');
+  var heading = root.querySelector('[data-b2b-heading]');
+  var subtitle = root.querySelector('[data-b2b-subtitle]');
+  var btnBack = root.querySelector('[data-b2b-back]');
+  var btnNext = root.querySelector('[data-b2b-next]');
+  var btnSubmit = root.querySelector('[data-b2b-submit]');
+  var footer = root.querySelector('[data-b2b-footer]');
+  var uploadZone = root.querySelector('[data-b2b-upload-zone]');
+  var fileInput = root.querySelector('[data-b2b-file-input]');
+  var filenameEl = root.querySelector('[data-b2b-filename]');
+
+  /* ── Step header content ── */
+  var stepHeaders = {
+    1: {
+      eyebrow: {{ section.settings.step1_eyebrow | default: 'SUBMIT YOUR GEAR' | json }},
+      heading: {{ section.settings.step1_heading | default: 'SEND US YOUR LIST.' | json }},
+      subtitle: {{ section.settings.step1_subtitle | default: "A spreadsheet of SKUs, quantities, condition, and your target floor is all we need. We'll come back inside 48 hours with a written offer on the whole lot — and a draft resale agreement built around your channel rules." | json }}
+    },
+    2: {
+      eyebrow: {{ section.settings.step2_eyebrow | default: 'ALMOST THERE' | json }},
+      heading: {{ section.settings.step2_heading | default: 'How should we reach you?' | json }},
+      subtitle: {{ section.settings.step2_subtitle | default: "We'll send your offer to the email below. Usually within 48 hours." | json }}
+    }
+  };
+
+  /* ── State ── */
+  var state = {
+    step: 1,
+    bulk: { file: null, notes: '' },
+    contact: { name: '', lastName: '', email: '', phone: '', terms: false }
+  };
+
+  /* ═══════════════════════════════════ */
+  /* ── Render helpers ── */
+  /* ═══════════════════════════════════ */
+
+  function updateProgress() {
+    progressSteps.forEach(function(el) {
+      var s = parseInt(el.dataset.b2bProgressStep);
+      var circle = el.querySelector('.elevate-b2b-cta__progress-circle');
+      var label = el.querySelector('.elevate-b2b-cta__progress-label');
+      if (circle) {
+        circle.classList.toggle('is-active', s === state.step);
+        circle.classList.toggle('is-completed', s < state.step);
+      }
+      if (label) {
+        label.classList.toggle('is-active', s === state.step);
+        label.classList.toggle('is-completed', s < state.step);
+      }
+    });
+    progressSteps.forEach(function(el) {
+      var s = parseInt(el.dataset.b2bProgressStep);
+      var bar = el.querySelector('.elevate-b2b-cta__progress-bar');
+      if (bar) bar.classList.toggle('is-filled', s <= state.step);
+    });
+  }
+
+  function updateHeader() {
+    if (state.step === 3) {
+      eyebrow.hidden = true;
+      heading.hidden = true;
+      subtitle.hidden = true;
+      return;
+    }
+    eyebrow.hidden = false;
+    heading.hidden = false;
+    subtitle.hidden = false;
+    var h = stepHeaders[state.step];
+    if (h) {
+      eyebrow.textContent = h.eyebrow;
+      heading.textContent = h.heading;
+      subtitle.textContent = h.subtitle;
+    }
+  }
+
+  function showStep(n) {
+    state.step = n;
+    updateProgress();
+    updateHeader();
+
+    root.querySelectorAll('[data-b2b-step]').forEach(function(el) {
+      el.hidden = el.dataset.b2bStep !== String(n);
+    });
+
+    footer.hidden = n === 3;
+    btnBack.hidden = n === 1;
+    btnNext.hidden = n !== 1;
+    btnSubmit.hidden = n !== 2;
+  }
+
+  /* ── Save current field values to state ── */
+  function saveCurrentFields() {
+    if (state.step === 1) {
+      var notesEl = root.querySelector('[data-b2b-field="notes"]');
+      if (notesEl) state.bulk.notes = notesEl.value;
+    } else if (state.step === 2) {
+      state.contact.name = root.querySelector('[data-b2b-field="contactName"]').value;
+      state.contact.lastName = root.querySelector('[data-b2b-field="contactLastName"]').value;
+      state.contact.email = root.querySelector('[data-b2b-field="contactEmail"]').value;
+      state.contact.phone = root.querySelector('[data-b2b-field="contactPhone"]').value;
+      state.contact.terms = root.querySelector('[data-b2b-field="terms"]').checked;
+    }
+  }
+
+  /* ═══════════════════════════════════ */
+  /* ── Validation ── */
+  /* ═══════════════════════════════════ */
+  function clearErrors() {
+    root.querySelectorAll('.is-error').forEach(function(el) { el.classList.remove('is-error'); });
+    root.querySelectorAll('.elevate-b2b-cta__error').forEach(function(el) { el.remove(); });
+  }
+
+  function showError(field, message) {
+    field.classList.add('is-error');
+    var err = document.createElement('p');
+    err.className = 'elevate-b2b-cta__error';
+    err.textContent = message;
+    field.closest('.elevate-b2b-cta__field').appendChild(err);
+  }
+
+  function validateStep1() {
+    clearErrors();
+    if (!state.bulk.file) {
+      uploadZone.classList.add('is-error');
+      var err = document.createElement('p');
+      err.className = 'elevate-b2b-cta__error';
+      err.textContent = 'Please upload your inventory file';
+      uploadZone.closest('.elevate-b2b-cta__field').appendChild(err);
+      return false;
+    }
+    return true;
+  }
+
+  function validateStep2() {
+    clearErrors();
+    var valid = true;
+
+    var nameEl = root.querySelector('[data-b2b-field="contactName"]');
+    if (!nameEl.value.trim()) { showError(nameEl, 'Name is required'); valid = false; }
+
+    var lastEl = root.querySelector('[data-b2b-field="contactLastName"]');
+    if (!lastEl.value.trim()) { showError(lastEl, 'Last name is required'); valid = false; }
+
+    var emailEl = root.querySelector('[data-b2b-field="contactEmail"]');
+    if (!emailEl.value.trim() || !emailEl.value.includes('@')) { showError(emailEl, 'Valid email is required'); valid = false; }
+
+    var phoneEl = root.querySelector('[data-b2b-field="contactPhone"]');
+    if (!phoneEl.value.trim()) { showError(phoneEl, 'Phone is required'); valid = false; }
+
+    var termsEl = root.querySelector('[data-b2b-field="terms"]');
+    if (!termsEl.checked) {
+      termsEl.closest('.elevate-b2b-cta__consent').classList.add('is-error');
+      valid = false;
+    }
+
+    return valid;
+  }
+
+  /* ═══════════════════════════════════ */
+  /* ── Submission ── */
+  /* ═══════════════════════════════════ */
+  function buildSubmissionBody() {
+    var lines = [];
+    lines.push('=== B2B BRAND PARTNERSHIP — BULK SUBMISSION ===');
+    lines.push('');
+    lines.push('MODE: Bulk submission (spreadsheet attached separately)');
+    if (state.bulk.file) lines.push('File uploaded: ' + state.bulk.file.name);
+    if (state.bulk.notes) lines.push('Notes: ' + state.bulk.notes);
+    lines.push('');
+    lines.push('=== CONTACT INFO ===');
+    lines.push('Name: ' + state.contact.name + ' ' + state.contact.lastName);
+    lines.push('Email: ' + state.contact.email);
+    lines.push('Phone: ' + state.contact.phone);
+
+    return lines.join('\n');
+  }
+
+  function submitForm() {
+    saveCurrentFields();
+    if (!validateStep2()) return;
+
+    var submitBtn = btnSubmit;
+    submitBtn.disabled = true;
+    submitBtn.querySelector('span').textContent = 'Sending\u2026';
+
+    var subject = 'B2B Brand Partnership \u2014 Bulk Submission';
+
+    var hiddenForm = document.getElementById('b2b-contact-form');
+    hiddenForm.querySelector('[data-b2b-hidden-email]').value = state.contact.email;
+    hiddenForm.querySelector('[data-b2b-hidden-name]').value = state.contact.name + ' ' + state.contact.lastName;
+    hiddenForm.querySelector('[data-b2b-hidden-phone]').value = state.contact.phone;
+    hiddenForm.querySelector('[data-b2b-hidden-subject]').value = subject;
+    hiddenForm.querySelector('[data-b2b-hidden-body]').value = buildSubmissionBody();
+
+    var iframeName = 'b2b-submit-frame';
+    var iframe = document.getElementById(iframeName);
+    if (!iframe) {
+      iframe = document.createElement('iframe');
+      iframe.id = iframeName;
+      iframe.name = iframeName;
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+    }
+    hiddenForm.target = iframeName;
+
+    iframe.onload = function() {
+      try {
+        var iframeWindow = iframe.contentWindow;
+        if (iframeWindow && iframeWindow.location.href.indexOf('/challenge') !== -1) {
+          window.location.href = iframeWindow.location.href;
+          return;
+        }
+
+        var iframeDoc = iframe.contentDocument || iframeWindow.document;
+        var iframeHtml = iframeDoc.documentElement.innerHTML;
+        var hasErrors = iframeDoc.querySelector('.errors, .form-errors');
+        var isCaptchaError = iframeHtml.indexOf('Missing CAPTCHA') !== -1;
+
+        if (!hasErrors && !isCaptchaError) {
+          showStep(3);
+          root.querySelector('.elevate-b2b-cta__inner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        } else {
+          submitBtn.disabled = false;
+          submitBtn.querySelector('span').textContent = {{ section.settings.submit_text | default: 'Submit' | json }};
+          alert('Something went wrong. Please check your fields and try again.');
+        }
+      } catch (e) {
+        hiddenForm.target = '_self';
+        hiddenForm.submit();
+      }
+    };
+
+    hiddenForm.submit();
+  }
+
+  /* ═══════════════════════════════════ */
+  /* ── Event listeners ── */
+  /* ═══════════════════════════════════ */
+
+  /* File upload */
+  uploadZone.addEventListener('click', function() { fileInput.click(); });
+  fileInput.addEventListener('change', function() {
+    if (fileInput.files.length) {
+      state.bulk.file = fileInput.files[0];
+      filenameEl.textContent = state.bulk.file.name;
+      filenameEl.hidden = false;
+      uploadZone.classList.remove('is-error');
+    }
+  });
+
+  uploadZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    uploadZone.classList.add('is-dragover');
+  });
+  uploadZone.addEventListener('dragleave', function() {
+    uploadZone.classList.remove('is-dragover');
+  });
+  uploadZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    uploadZone.classList.remove('is-dragover');
+    if (e.dataTransfer.files.length) {
+      state.bulk.file = e.dataTransfer.files[0];
+      filenameEl.textContent = state.bulk.file.name;
+      filenameEl.hidden = false;
+      uploadZone.classList.remove('is-error');
+    }
+  });
+
+  /* Navigation: Next */
+  btnNext.addEventListener('click', function() {
+    saveCurrentFields();
+    if (state.step === 1) {
+      if (!validateStep1()) return;
+      showStep(2);
+      root.querySelector('.elevate-b2b-cta__inner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  /* Navigation: Back */
+  btnBack.addEventListener('click', function() {
+    clearErrors();
+    if (state.step === 2) {
+      showStep(1);
+      root.querySelector('.elevate-b2b-cta__inner').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+
+  /* Submit */
+  btnSubmit.addEventListener('click', function() {
+    saveCurrentFields();
+    submitForm();
+  });
+
+  /* ── Init ── */
+  showStep(1);
+
+})();
+</script>
+
+{% stylesheet %}
+  /* ─── B2B CTA Section ─── */
+  .elevate-b2b-cta {
+    position: relative;
+    padding-block-start: var(--elevate-b2b-cta-pt-m, var(--elevate-b2b-cta-pt));
+    padding-block-end: var(--elevate-b2b-cta-pb-m, var(--elevate-b2b-cta-pb));
+  }
+
+  .elevate-b2b-cta__inner {
+    grid-column: 2;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 0.5rem;
+  }
+
+  /* ── sr-only ── */
+  .elevate-b2b-cta .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Header              ── */
+  /* ══════════════════════════ */
+  .elevate-b2b-cta__header {
+    padding-block-end: 1.5rem;
+    text-align: center;
+    max-width: 40rem;
+    margin-inline: auto;
+  }
+
+  .elevate-b2b-cta__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-cta__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #141517;
+    margin: 0.25rem 0 0;
+  }
+
+  .elevate-b2b-cta__subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #36393F;
+    margin: 0.5rem 0 0;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Progress bar        ── */
+  /* ══════════════════════════ */
+  .elevate-b2b-cta__progress {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding-block-start: 0.5rem;
+    padding-block-end: 1.5rem;
+  }
+
+  .elevate-b2b-cta__progress-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    position: relative;
+    width: 4.375rem;
+  }
+
+  .elevate-b2b-cta__progress-bar {
+    position: absolute;
+    top: 0.625rem;
+    right: 50%;
+    width: 4.375rem;
+    height: 0.25rem;
+    background: #E2E3E5;
+    border-radius: 6.1875rem;
+    z-index: 1;
+    transition: background-color 0.2s ease;
+  }
+
+  .elevate-b2b-cta__progress-step:first-child .elevate-b2b-cta__progress-bar {
+    display: none;
+  }
+
+  .elevate-b2b-cta__progress-bar.is-filled {
+    background: #E31E24;
+  }
+
+  .elevate-b2b-cta__progress-circle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    background: #E2E3E5;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.8125rem;
+    line-height: 1;
+    color: #141517;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    transition: background-color 0.2s ease, color 0.2s ease;
+  }
+
+  .elevate-b2b-cta__progress-circle.is-active,
+  .elevate-b2b-cta__progress-circle.is-completed {
+    background: #E31E24;
+    color: #FDFCFC;
+  }
+
+  .elevate-b2b-cta__progress-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #36393F;
+    white-space: nowrap;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Main content area   ── */
+  /* ══════════════════════════ */
+  .elevate-b2b-cta__main {
+    max-width: 40rem;
+    margin-inline: auto;
+    width: 100%;
+  }
+
+  .elevate-b2b-cta__step {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-b2b-cta__step[hidden] {
+    display: none;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Form fields         ── */
+  /* ══════════════════════════ */
+  .elevate-b2b-cta__row {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .elevate-b2b-cta__field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .elevate-b2b-cta__label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 500;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #141517;
+    padding-inline-start: 0.25rem;
+  }
+
+  .elevate-b2b-cta__required {
+    color: #EB4343;
+  }
+
+  .elevate-b2b-cta .elevate-b2b-cta__input,
+  .elevate-b2b-cta .elevate-b2b-cta__textarea {
+    width: 100%;
+    padding: 0.625rem 0.75rem;
+    border: 1px solid #AEB2B8;
+    border-radius: 0.5rem;
+    background: #FDFCFC;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.9375rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #36393F;
+    transition: border-color 0.15s ease;
+    height: 2.875rem;
+  }
+
+  .elevate-b2b-cta__input:focus,
+  .elevate-b2b-cta__textarea:focus {
+    outline: none;
+    border-color: #E31E24;
+  }
+
+  .elevate-b2b-cta__input::placeholder,
+  .elevate-b2b-cta__textarea::placeholder {
+    color: #AEB2B8;
+  }
+
+  .elevate-b2b-cta__input.is-error,
+  .elevate-b2b-cta__textarea.is-error {
+    border-color: #EB4343;
+  }
+
+  .elevate-b2b-cta__textarea {
+    height: auto;
+    resize: vertical;
+    min-height: 5rem;
+  }
+
+  .elevate-b2b-cta__error {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: #EB4343;
+    margin: 0.125rem 0 0 0.25rem;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Template buttons    ── */
+  /* ══════════════════════════ */
+  .elevate-b2b-cta__template-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .elevate-b2b-cta__template-btn {
+    display: flex;
+    flex: 1 0 0;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border: 0.5px solid #141517;
+    border-radius: 0.75rem;
+    background: #FDFCFC;
+    color: #141517;
+    text-decoration: none;
+    transition: border-color 0.15s ease;
+  }
+
+  .elevate-b2b-cta__template-btn:hover {
+    border-color: #E31E24;
+  }
+
+  .elevate-b2b-cta__template-btn svg {
+    flex-shrink: 0;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: #36393F;
+  }
+
+  .elevate-b2b-cta__template-btn-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    align-items: flex-start;
+    justify-content: center;
+    line-height: 1.5;
+  }
+
+  .elevate-b2b-cta__template-btn-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: #141517;
+    letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+
+  .elevate-b2b-cta__template-btn-sub {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    color: #AEB2B8;
+    letter-spacing: -0.01em;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Upload zone         ── */
+  /* ══════════════════════════ */
+  .elevate-b2b-cta__upload-zone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    border: 2px dashed #AEB2B8;
+    border-radius: 0.5rem;
+    background: rgba(226, 227, 229, 0.4);
+    cursor: pointer;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+    min-height: 7rem;
+  }
+
+  .elevate-b2b-cta__upload-zone:hover,
+  .elevate-b2b-cta__upload-zone.is-dragover {
+    border-color: #E31E24;
+    background: rgba(227, 30, 36, 0.04);
+  }
+
+  .elevate-b2b-cta__upload-zone.is-error {
+    border-color: #EB4343;
+  }
+
+  .elevate-b2b-cta__upload-prompt {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+  }
+
+  .elevate-b2b-cta__upload-icon {
+    color: #AEB2B8;
+    margin-block-end: 0.25rem;
+  }
+
+  .elevate-b2b-cta__upload-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-b2b-cta__upload-hint {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  .elevate-b2b-cta__file-name {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: #36393F;
+    padding: 0.5rem 0.25rem;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Consent             ── */
+  /* ══════════════════════════ */
+  .elevate-b2b-cta__consent {
+    padding-block-start: 0.5rem;
+  }
+
+  .elevate-b2b-cta .elevate-b2b-cta__consent-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  .elevate-b2b-cta__consent.is-error .elevate-b2b-cta__checkbox {
+    border-color: #EB4343;
+  }
+
+  .elevate-b2b-cta__checkbox {
+    -webkit-appearance: none;
+    appearance: none;
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0.125rem 0 0;
+    border: 2px solid #AEB2B8;
+    border-radius: 0.25rem;
+    background: #FDFCFC;
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .elevate-b2b-cta__checkbox:checked {
+    background: #E31E24;
+    border-color: #E31E24;
+  }
+
+  .elevate-b2b-cta__checkbox:checked::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0.625rem;
+    height: 0.625rem;
+    transform: translate(-50%, -50%);
+    background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23fff' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'/%3E%3C/svg%3E") no-repeat center / contain;
+  }
+
+  .elevate-b2b-cta__consent-text {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #36393F;
+  }
+
+  .elevate-b2b-cta__consent-text a {
+    color: #E31E24;
+    text-decoration: underline;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Step 3: All Done    ── */
+  /* ══════════════════════════ */
+  .elevate-b2b-cta__step--done {
+    padding: 1rem 0;
+  }
+
+  .elevate-b2b-cta__done-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    max-width: 32rem;
+    margin: 0 auto;
+  }
+
+  .elevate-b2b-cta__done-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 3.5rem;
+    height: 3.5rem;
+    border-radius: 1rem;
+    background: #FEF2F2;
+    color: #E31E24;
+  }
+
+  .elevate-b2b-cta__done-heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.1;
+    color: #141517;
+    margin: 0;
+  }
+
+  .elevate-b2b-cta__done-subtitle {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-b2b-cta__done-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+    text-align: left;
+    padding: 1rem 0;
+  }
+
+  .elevate-b2b-cta__done-step {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  .elevate-b2b-cta__done-step-badge {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+    background: #AEB2B8;
+    flex-shrink: 0;
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    color: #FDFCFC;
+  }
+
+  .elevate-b2b-cta__done-step-text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+  }
+
+  .elevate-b2b-cta__done-step-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 600;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: #141517;
+    margin: 0;
+  }
+
+  .elevate-b2b-cta__done-step-desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.8125rem;
+    line-height: 1.4;
+    color: #6B7280;
+    margin: 0;
+  }
+
+  .elevate-b2b-cta__done-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: #E31E24;
+    border-radius: 0.75rem;
+    color: #FDFCFC;
+    text-decoration: none;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    transition: background-color 0.15s ease;
+    margin-block-start: 0.5rem;
+  }
+
+  .elevate-b2b-cta__done-cta:hover {
+    background: #c4191e;
+  }
+
+  .elevate-b2b-cta__done-cta svg {
+    color: #FDFCFC;
+  }
+
+  /* ══════════════════════════ */
+  /* ── Footer / buttons    ── */
+  /* ══════════════════════════ */
+  .elevate-b2b-cta__footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding-block-start: 1.5rem;
+  }
+
+  .elevate-b2b-cta__footer[hidden] {
+    display: none;
+  }
+
+  .elevate-b2b-cta__footer-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  .elevate-b2b-cta__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    transition: background-color 0.15s ease, opacity 0.15s ease;
+    border: none;
+  }
+
+  .elevate-b2b-cta__btn svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  .elevate-b2b-cta__btn--back {
+    background: transparent;
+    color: #36393F;
+    border: 1px solid #AEB2B8;
+  }
+
+  .elevate-b2b-cta__btn--back:hover {
+    background: #F2F2F3;
+    border-color: #36393F;
+  }
+
+  .elevate-b2b-cta__btn--back svg {
+    color: #36393F;
+  }
+
+  .elevate-b2b-cta__btn--next,
+  .elevate-b2b-cta__btn--submit {
+    background: #E31E24;
+    color: #FDFCFC;
+  }
+
+  .elevate-b2b-cta__btn--next:hover,
+  .elevate-b2b-cta__btn--submit:hover {
+    background: #c4191e;
+  }
+
+  .elevate-b2b-cta__btn--next svg,
+  .elevate-b2b-cta__btn--submit svg {
+    color: #FDFCFC;
+  }
+
+  .elevate-b2b-cta__btn[hidden] {
+    display: none;
+  }
+
+  .elevate-b2b-cta__btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .elevate-b2b-cta__disclaimer {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #6B7280;
+    margin: 0;
+  }
+
+  /* ══════════════════════════════════════ */
+  /* ── Desktop (990px+)                ── */
+  /* ══════════════════════════════════════ */
+  @media (min-width: 61.9375rem) {
+    .elevate-b2b-cta {
+      padding-block-start: var(--elevate-b2b-cta-pt);
+      padding-block-end: var(--elevate-b2b-cta-pb);
+    }
+
+    .elevate-b2b-cta__inner {
+      padding: 2.5rem 4.375rem;
+    }
+
+    .elevate-b2b-cta__heading {
+      font-size: 3rem;
+    }
+
+    .elevate-b2b-cta__template-buttons {
+      flex-direction: row;
+      gap: 1.5rem;
+      max-width: 25.875rem;
+      margin-inline: auto;
+    }
+
+    .elevate-b2b-cta__row {
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+    }
+
+    .elevate-b2b-cta__row > .elevate-b2b-cta__field {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .elevate-b2b-cta__step--done {
+      padding: 2rem 0;
+    }
+
+    .elevate-b2b-cta__done-heading {
+      font-size: 2.5rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "B2B — CTA Form",
+  "tag": "section",
+  "class": "section-wrapper",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Step 1 — Description"
+    },
+    {
+      "type": "text",
+      "id": "step1_label",
+      "label": "Progress label",
+      "default": "Description"
+    },
+    {
+      "type": "text",
+      "id": "step1_eyebrow",
+      "label": "Eyebrow",
+      "default": "SUBMIT YOUR GEAR"
+    },
+    {
+      "type": "text",
+      "id": "step1_heading",
+      "label": "Heading",
+      "default": "SEND US YOUR LIST."
+    },
+    {
+      "type": "textarea",
+      "id": "step1_subtitle",
+      "label": "Subtitle",
+      "default": "A spreadsheet of SKUs, quantities, condition, and your target floor is all we need. We'll come back inside 48 hours with a written offer on the whole lot — and a draft resale agreement built around your channel rules."
+    },
+    {
+      "type": "header",
+      "content": "Template downloads"
+    },
+    {
+      "type": "url",
+      "id": "bulk_excel_url",
+      "label": "Excel template download URL"
+    },
+    {
+      "type": "url",
+      "id": "bulk_sheets_url",
+      "label": "Google Sheets template URL"
+    },
+    {
+      "type": "header",
+      "content": "Step 2 — Contact"
+    },
+    {
+      "type": "text",
+      "id": "step2_label",
+      "label": "Progress label",
+      "default": "Contact"
+    },
+    {
+      "type": "text",
+      "id": "step2_eyebrow",
+      "label": "Eyebrow",
+      "default": "ALMOST THERE"
+    },
+    {
+      "type": "text",
+      "id": "step2_heading",
+      "label": "Heading",
+      "default": "How should we reach you?"
+    },
+    {
+      "type": "textarea",
+      "id": "step2_subtitle",
+      "label": "Subtitle",
+      "default": "We'll send your offer to the email below. Usually within 48 hours."
+    },
+    {
+      "type": "textarea",
+      "id": "consent_text",
+      "label": "Consent checkbox text",
+      "default": "I confirm I'm authorized to sell this inventory on behalf of my company. <a href='/pages/terms'>View full terms</a>."
+    },
+    {
+      "type": "header",
+      "content": "Step 3 — All Done"
+    },
+    {
+      "type": "text",
+      "id": "step3_label",
+      "label": "Progress label",
+      "default": "All Done!"
+    },
+    {
+      "type": "text",
+      "id": "done_heading",
+      "label": "Heading",
+      "default": "We've got it — offer incoming"
+    },
+    {
+      "type": "textarea",
+      "id": "done_subtitle",
+      "label": "Subtitle",
+      "default": "You'll hear from us within the next 48h via email with a written offer on your entire lot. No lowballs, no games."
+    },
+    {
+      "type": "text",
+      "id": "done_step_1_title",
+      "label": "Next step 1 — Title",
+      "default": "Check your inbox"
+    },
+    {
+      "type": "text",
+      "id": "done_step_1_desc",
+      "label": "Next step 1 — Description",
+      "default": "We'll email your offer within 48 hours"
+    },
+    {
+      "type": "text",
+      "id": "done_step_2_title",
+      "label": "Next step 2 — Title",
+      "default": "We evaluate your inventory"
+    },
+    {
+      "type": "text",
+      "id": "done_step_2_desc",
+      "label": "Next step 2 — Description",
+      "default": "Our team reviews condition, market value, and demand"
+    },
+    {
+      "type": "text",
+      "id": "done_step_3_title",
+      "label": "Next step 3 — Title",
+      "default": "Accept the offer"
+    },
+    {
+      "type": "text",
+      "id": "done_step_3_desc",
+      "label": "Next step 3 — Description",
+      "default": "Lock in your price — sign the PO and we handle the rest"
+    },
+    {
+      "type": "text",
+      "id": "done_step_4_title",
+      "label": "Next step 4 — Title",
+      "default": "Ship free, get paid"
+    },
+    {
+      "type": "text",
+      "id": "done_step_4_desc",
+      "label": "Next step 4 — Description",
+      "default": "We arrange freight pickup. Payment within 3–5 days of receipt."
+    },
+    {
+      "type": "text",
+      "id": "done_cta_text",
+      "label": "CTA button text",
+      "default": "Browse While You Wait"
+    },
+    {
+      "type": "url",
+      "id": "done_cta_link",
+      "label": "CTA button link",
+      "default": "/collections/all"
+    },
+    {
+      "type": "header",
+      "content": "Buttons & labels"
+    },
+    {
+      "type": "text",
+      "id": "next_text",
+      "label": "Next button text",
+      "default": "Next"
+    },
+    {
+      "type": "text",
+      "id": "submit_text",
+      "label": "Submit button text",
+      "default": "Submit"
+    },
+    {
+      "type": "text",
+      "id": "disclaimer_text",
+      "label": "Disclaimer text",
+      "default": "Your info is never shared or sold. We respond within 2 business days."
+    },
+    {
+      "type": "header",
+      "content": "Spacing"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Padding top",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Padding bottom",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 72
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_padding_custom",
+      "label": "Custom mobile padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 200,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    }
+  ],
+  "presets": [
+    {
+      "name": "B2B — CTA Form"
+    }
+  ]
+}
+{% endschema %}

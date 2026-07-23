@@ -1,0 +1,325 @@
+{%- doc -%}
+  Elevate Cycling — B2B Steps section.
+  "Three Steps. No Drama." — header row + 3 white step cards on gradient bg.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-b2b-steps"
+  data-scroll-reveal="children"
+  style="
+    background: linear-gradient(to bottom, #F1DBDC, #FDFCFC);
+    --b2b-steps-pad-top: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    --b2b-steps-pad-bottom: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+    {%- if section.settings.mobile_padding_custom -%}
+      --b2b-steps-pad-top-m: {{ section.settings.padding_top_mobile | divided_by: 16.0 }}rem;
+      --b2b-steps-pad-bottom-m: {{ section.settings.padding_bottom_mobile | divided_by: 16.0 }}rem;
+    {%- endif -%}
+  "
+>
+  <div id="b2b-steps" class="elevate-b2b-steps__inner">
+
+    {%- comment -%} ── Header row ── {%- endcomment -%}
+    {%- if section.settings.heading != blank or section.settings.description != blank -%}
+      <div class="elevate-b2b-steps__header">
+        {%- if section.settings.heading != blank -%}
+          <h2 class="elevate-b2b-steps__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.description != blank -%}
+          <p class="elevate-b2b-steps__desc">{{ section.settings.description }}</p>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Step tiles ── {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-b2b-steps__tiles">
+        {%- for block in section.blocks -%}
+          <div class="elevate-b2b-steps__tile" {{ block.shopify_attributes }}>
+            {%- if block.settings.number != blank -%}
+              <p class="elevate-b2b-steps__tile-number">{{ block.settings.number }}</p>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <h3 class="elevate-b2b-steps__tile-title">{{ block.settings.title }}</h3>
+            {%- endif -%}
+            {%- if block.settings.body != blank -%}
+              <p class="elevate-b2b-steps__tile-body">{{ block.settings.body }}</p>
+            {%- endif -%}
+            {%- if block.settings.tagline != blank -%}
+              <p class="elevate-b2b-steps__tile-tagline">{{ block.settings.tagline }}</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ─── B2B Steps ─── */
+  .elevate-b2b-steps__inner {
+    padding-block: var(--b2b-steps-pad-top-m, var(--b2b-steps-pad-top)) var(--b2b-steps-pad-bottom-m, var(--b2b-steps-pad-bottom));
+    padding-inline: 0.5rem;
+  }
+
+  /* ── Header ── */
+  .elevate-b2b-steps__header {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+  }
+
+  .elevate-b2b-steps__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
+    line-height: 1.1;
+    color: #36393F;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-steps__desc {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Tiles ── */
+  .elevate-b2b-steps__tiles {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-b2b-steps__tile {
+    background: #FDFCFC;
+    border-radius: 1.5rem;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .elevate-b2b-steps__tile-number {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-b2b-steps__tile-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1.1;
+    color: #36393F;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-steps__tile-body {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-b2b-steps__tile-tagline {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-style: italic;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+    margin-top: auto;
+  }
+
+  /* ─── Desktop (991px+) ─── */
+  @media (min-width: 61.9375rem) {
+    .elevate-b2b-steps__inner {
+      padding-block: var(--b2b-steps-pad-top) var(--b2b-steps-pad-bottom);
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-b2b-steps__header {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .elevate-b2b-steps__heading {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-b2b-steps__desc {
+      text-align: right;
+      max-width: 22rem;
+      flex-shrink: 0;
+    }
+
+    .elevate-b2b-steps__tiles {
+      flex-direction: row;
+      gap: 2rem;
+    }
+
+    .elevate-b2b-steps__tile {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .elevate-b2b-steps__tile-title {
+      font-size: 3rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "B2B Steps",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "THREE STEPS. NO DRAMA."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Ship us your excess — we handle inspection, listing, and sales through our own trusted channels."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_padding_custom",
+      "label": "Custom mobile padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "step",
+      "name": "Step",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Step number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Step title"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Body text",
+          "default": "Step description."
+        },
+        {
+          "type": "text",
+          "id": "tagline",
+          "label": "Tagline",
+          "info": "Red italic text at bottom of card. Leave blank to hide."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "B2B Steps",
+      "blocks": [
+        {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "title": "SEND YOUR LIST",
+            "body": "Email us your inventory list — SKUs, quantities, and condition. We'll review it and get back to you with an offer.",
+            "tagline": "OFFER IN < 48 HOURS"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "title": "SIGN & SHIP",
+            "body": "Accept the offer, sign the PO, and ship. We arrange freight pickup at no cost to you.",
+            "tagline": "FREIGHT ON US"
+          }
+        },
+        {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "title": "WE DO THE REST",
+            "body": "We inspect, photograph, list, and sell through our own established channels — no marketplace drama for your brand.",
+            "tagline": "ZERO CHANNEL CONFLICT"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
