@@ -58,17 +58,7 @@
           </svg>
         </button>
 
-        <div class="elevate-arrivals__dots" aria-label="Carousel navigation" data-arrivals-dots>
-          {%- assign dot_count = products.size | at_most: max -%}
-          {%- for i in (1..dot_count) -%}
-            <button
-              class="elevate-arrivals__dot{% if forloop.first %} elevate-arrivals__dot--active{% endif %}"
-              type="button"
-              aria-label="Go to product {{ forloop.index }}"
-              data-dot-index="{{ forloop.index0 }}"
-            ></button>
-          {%- endfor -%}
-        </div>
+        <div class="elevate-arrivals__dots" aria-label="Carousel navigation" data-arrivals-dots></div>
 
         <button
           class="elevate-arrivals__arrow"
@@ -377,84 +367,113 @@
 {% endstylesheet %}
 
 {% javascript %}
-  /* ─── New Arrivals — carousel navigation ─── */
-  /* Stats toggle + ATC are in assets/elevate-product-card.js (loaded by the snippet) */
+  /* ─── New Arrivals — page-based carousel navigation ─── */
   (function () {
     document.querySelectorAll('.elevate-arrivals').forEach(function (section) {
       var track = section.querySelector('[data-arrivals-track]');
-      var dots = section.querySelectorAll('.elevate-arrivals__dot');
+      var dotsWrap = section.querySelector('[data-arrivals-dots]');
       var prevBtn = section.querySelector('[data-arrivals-prev]');
       var nextBtn = section.querySelector('[data-arrivals-next]');
       var cards = section.querySelectorAll('[data-arrivals-card]');
       if (!track || cards.length < 2) return;
 
-      /* Scroll → update active dot via IntersectionObserver */
-      var activeDot = 0;
-      var observer = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            var index = Array.prototype.indexOf.call(cards, entry.target);
-            if (index >= 0) {
-              activeDot = index;
-              dots.forEach(function (dot, i) {
-                dot.classList.toggle('elevate-arrivals__dot--active', i === index);
-              });
-            }
-          }
-        });
-      }, {
-        root: track,
-        threshold: 0.6
-      });
+      var activePage = 0;
+      var pageCount = 1;
+      var dots = [];
 
-      cards.forEach(function (card) {
-        observer.observe(card);
-      });
-
-      /* Arrow click → scroll by card width + gap (with loop) */
-      function getScrollAmount() {
+      /* ── Helpers ── */
+      function getCardStep() {
         if (!cards[0]) return 300;
-        var style = getComputedStyle(track);
-        var gap = parseFloat(style.gap) || 32;
+        var gap = parseFloat(getComputedStyle(track).gap) || 32;
         return cards[0].offsetWidth + gap;
       }
 
-      function isAtStart() {
-        return track.scrollLeft <= 2;
+      function getVisibleCount() {
+        if (!cards[0]) return 1;
+        return Math.max(1, Math.round(track.offsetWidth / getCardStep()));
       }
 
-      function isAtEnd() {
-        return track.scrollLeft + track.offsetWidth >= track.scrollWidth - 2;
+      function getPageCount() {
+        var visible = getVisibleCount();
+        return Math.max(1, cards.length - visible + 1);
       }
 
+      function getPageFromScroll() {
+        var step = getCardStep();
+        if (step <= 0) return 0;
+        return Math.round(track.scrollLeft / step);
+      }
+
+      /* ── Build dots dynamically ── */
+      function buildDots() {
+        var newCount = getPageCount();
+        if (newCount === pageCount && dots.length === newCount) return;
+        pageCount = newCount;
+        dotsWrap.innerHTML = '';
+        dots = [];
+        for (var i = 0; i < pageCount; i++) {
+          var btn = document.createElement('button');
+          btn.className = 'elevate-arrivals__dot' + (i === activePage ? ' elevate-arrivals__dot--active' : '');
+          btn.type = 'button';
+          btn.setAttribute('aria-label', 'Go to slide ' + (i + 1));
+          btn.setAttribute('data-dot-index', i);
+          btn.addEventListener('click', (function (idx) {
+            return function () { scrollToPage(idx); };
+          })(i));
+          dotsWrap.appendChild(btn);
+          dots.push(btn);
+        }
+      }
+
+      function updateActiveDot(page) {
+        activePage = Math.max(0, Math.min(page, pageCount - 1));
+        dots.forEach(function (dot, i) {
+          dot.classList.toggle('elevate-arrivals__dot--active', i === activePage);
+        });
+      }
+
+      /* ── Scroll to page ── */
+      function scrollToPage(page) {
+        var target = Math.max(0, Math.min(page, pageCount - 1));
+        var step = getCardStep();
+        track.scrollTo({ left: target * step, behavior: 'smooth' });
+      }
+
+      /* ── Scroll listener → sync dots ── */
+      var scrollTimer;
+      track.addEventListener('scroll', function () {
+        clearTimeout(scrollTimer);
+        scrollTimer = setTimeout(function () {
+          updateActiveDot(getPageFromScroll());
+        }, 60);
+      }, { passive: true });
+
+      /* ── Arrow clicks ── */
       if (prevBtn) {
         prevBtn.addEventListener('click', function () {
-          if (isAtStart()) {
-            cards[cards.length - 1].scrollIntoView({ behavior: 'smooth', inline: 'end', block: 'nearest' });
-          } else {
-            track.scrollBy({ left: -getScrollAmount(), behavior: 'smooth' });
-          }
+          var page = getPageFromScroll();
+          scrollToPage(page <= 0 ? pageCount - 1 : page - 1);
         });
       }
       if (nextBtn) {
         nextBtn.addEventListener('click', function () {
-          if (isAtEnd()) {
-            cards[0].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
-          } else {
-            track.scrollBy({ left: getScrollAmount(), behavior: 'smooth' });
-          }
+          var page = getPageFromScroll();
+          scrollToPage(page >= pageCount - 1 ? 0 : page + 1);
         });
       }
 
-      /* Dot click → scroll to card */
-      dots.forEach(function (dot) {
-        dot.addEventListener('click', function () {
-          var index = parseInt(dot.getAttribute('data-dot-index'), 10);
-          if (cards[index]) {
-            cards[index].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
-          }
-        });
+      /* ── Rebuild dots on resize ── */
+      var resizeTimer;
+      window.addEventListener('resize', function () {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function () {
+          buildDots();
+          updateActiveDot(getPageFromScroll());
+        }, 150);
       });
+
+      /* ── Init ── */
+      buildDots();
     });
   })();
 {% endjavascript %}
