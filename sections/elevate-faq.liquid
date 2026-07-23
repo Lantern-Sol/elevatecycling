@@ -52,7 +52,23 @@
       {%- endfor -%}
     </div>
 
-    {%- comment -%} ── Bottom section: divider (mobile), contacts, help ── {%- endcomment -%}
+    {%- comment -%} ── Exclusive accordion: only one open at a time ── {%- endcomment -%}
+  <script>
+    (function () {
+      var accordion = document.querySelector('#shopify-section-{{ section.id }} .elevate-faq__accordion');
+      if (!accordion) return;
+      accordion.addEventListener('click', function (e) {
+        var summary = e.target.closest('summary');
+        if (!summary) return;
+        var parent = summary.parentElement;
+        accordion.querySelectorAll('details[open]').forEach(function (d) {
+          if (d !== parent) d.removeAttribute('open');
+        });
+      });
+    })();
+  </script>
+
+  {%- comment -%} ── Bottom section: divider (mobile), contacts, help ── {%- endcomment -%}
     <div class="elevate-faq__bottom">
       <div class="elevate-faq__divider elevate-faq__divider--bottom"></div>
 
