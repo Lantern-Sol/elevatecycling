@@ -1,0 +1,502 @@
+{%- doc -%}
+  Elevate Cycling — B2B LBS Role Split section.
+  "YOUR JOB: THREE THINGS. / OUR JOB: EVERYTHING ELSE."
+  Two columns (dark left for shop tasks, light right for Elevate tasks) + NO-list strip.
+{%- enddoc -%}
+
+{%- liquid
+  assign shop_items = section.blocks | where: 'type', 'shop_item'
+  assign we_items = section.blocks | where: 'type', 'we_item'
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-b2b-lbs-role-split"
+  data-scroll-reveal="children"
+  style="
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 2rem;
+    --lbs-role-pad-top: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    --lbs-role-pad-bottom: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+    {%- if section.settings.mobile_padding_custom -%}
+      --lbs-role-pad-top-m: {{ section.settings.padding_top_mobile | divided_by: 16.0 }}rem;
+      --lbs-role-pad-bottom-m: {{ section.settings.padding_bottom_mobile | divided_by: 16.0 }}rem;
+    {%- endif -%}
+  "
+>
+  <div class="elevate-b2b-lbs-role-split__inner">
+    {%- comment -%} ── Eyebrow ── {%- endcomment -%}
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="elevate-b2b-lbs-role-split__eyebrow">{{ section.settings.eyebrow }}</p>
+    {%- endif -%}
+
+    {%- comment -%} ── Left heading ── {%- endcomment -%}
+    <h2 class="elevate-b2b-lbs-role-split__heading elevate-b2b-lbs-role-split__heading--left">
+      <span class="elevate-b2b-lbs-role-split__heading-main">{{ section.settings.heading_left }}</span>
+      {%- if section.settings.heading_left_accent != blank -%}
+        <span class="elevate-b2b-lbs-role-split__heading-accent">{{ section.settings.heading_left_accent }}</span>
+      {%- endif -%}
+    </h2>
+
+    {%- comment -%} ── Left column: Your Shop ── {%- endcomment -%}
+    <div class="elevate-b2b-lbs-role-split__col elevate-b2b-lbs-role-split__col--shop">
+      {%- if section.settings.shop_title != blank -%}
+        <p class="elevate-b2b-lbs-role-split__col-title">{{ section.settings.shop_title }}</p>
+      {%- endif -%}
+
+      {%- for block in shop_items -%}
+        <div class="elevate-b2b-lbs-role-split__item" {{ block.shopify_attributes }}>
+          {%- if block.settings.title != blank -%}
+            <p class="elevate-b2b-lbs-role-split__item-title">{{ block.settings.title }}</p>
+          {%- endif -%}
+          {%- if block.settings.body != blank -%}
+            <p class="elevate-b2b-lbs-role-split__item-body">{{ block.settings.body }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} ── Right heading ── {%- endcomment -%}
+    <h2 class="elevate-b2b-lbs-role-split__heading elevate-b2b-lbs-role-split__heading--right">
+      <span class="elevate-b2b-lbs-role-split__heading-main">{{ section.settings.heading_right }}</span>
+      {%- if section.settings.heading_right_accent != blank -%}
+        <span class="elevate-b2b-lbs-role-split__heading-accent">{{ section.settings.heading_right_accent }}</span>
+      {%- endif -%}
+    </h2>
+
+    {%- comment -%} ── Right column: We Handle ── {%- endcomment -%}
+    <div class="elevate-b2b-lbs-role-split__col elevate-b2b-lbs-role-split__col--we">
+      {%- if section.settings.we_title != blank -%}
+        <p class="elevate-b2b-lbs-role-split__col-title">{{ section.settings.we_title }}</p>
+      {%- endif -%}
+
+      {%- for block in we_items -%}
+        <div class="elevate-b2b-lbs-role-split__item" {{ block.shopify_attributes }}>
+          {%- if block.settings.title != blank -%}
+            <p class="elevate-b2b-lbs-role-split__item-title">{{ block.settings.title }}</p>
+          {%- endif -%}
+          {%- if block.settings.body != blank -%}
+            <p class="elevate-b2b-lbs-role-split__item-body">{{ block.settings.body }}</p>
+          {%- endif -%}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- comment -%} ── NO strip ── {%- endcomment -%}
+    {%- if section.settings.strip_items != blank -%}
+      <div class="elevate-b2b-lbs-role-split__strip">
+        {%- assign strip_list = section.settings.strip_items | split: ',' -%}
+        {%- for item in strip_list -%}
+          <span class="elevate-b2b-lbs-role-split__strip-item">{{ item | strip }}</span>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .elevate-b2b-lbs-role-split__inner {
+    padding-block: var(--lbs-role-pad-top-m, var(--lbs-role-pad-top)) var(--lbs-role-pad-bottom-m, var(--lbs-role-pad-bottom));
+    padding-inline: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* ── Eyebrow ── */
+  .elevate-b2b-lbs-role-split__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ── Headings ── */
+  .elevate-b2b-lbs-role-split__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3.5625rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-role-split__heading-main {
+    color: #E31E24;
+    display: block;
+  }
+
+  .elevate-b2b-lbs-role-split__heading-accent {
+    color: #36393F;
+    display: block;
+  }
+
+  /* ── Columns ── */
+  .elevate-b2b-lbs-role-split__col {
+    border-radius: 1.5rem;
+    padding: 2rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-b2b-lbs-role-split__col--shop {
+    background: #250A0A;
+  }
+
+  .elevate-b2b-lbs-role-split__col--we {
+    background: #E2E3E5;
+  }
+
+  .elevate-b2b-lbs-role-split__col-title {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-role-split__col--shop .elevate-b2b-lbs-role-split__col-title {
+    color: #FDFCFC;
+  }
+
+  .elevate-b2b-lbs-role-split__col--we .elevate-b2b-lbs-role-split__col-title {
+    color: #141517;
+  }
+
+  /* ── Items ── */
+  .elevate-b2b-lbs-role-split__item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.375rem;
+  }
+
+  .elevate-b2b-lbs-role-split__item-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    letter-spacing: -0.0125rem;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-role-split__col--shop .elevate-b2b-lbs-role-split__item-title {
+    color: #FDFCFC;
+  }
+
+  .elevate-b2b-lbs-role-split__col--we .elevate-b2b-lbs-role-split__item-title {
+    color: #141517;
+  }
+
+  .elevate-b2b-lbs-role-split__item-body {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-role-split__col--shop .elevate-b2b-lbs-role-split__item-body {
+    color: #FDFCFC;
+    padding-inline-start: 1rem;
+  }
+
+  .elevate-b2b-lbs-role-split__col--we .elevate-b2b-lbs-role-split__item-body {
+    color: #36393F;
+    padding-inline-start: 0.75rem;
+  }
+
+  /* ── NO strip ── */
+  .elevate-b2b-lbs-role-split__strip {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem 2rem;
+    padding: 1.5rem 1rem;
+    border: 0.03125rem solid #AEB2B8;
+    border-radius: 1.5rem;
+  }
+
+  .elevate-b2b-lbs-role-split__strip-item {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 1rem;
+    line-height: 1.5;
+    letter-spacing: -0.01rem;
+    color: #6d1316;
+    font-style: italic;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* ── Desktop ── */
+  @media (min-width: 61.9375rem) {
+    .elevate-b2b-lbs-role-split__inner {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto auto auto;
+      column-gap: 2rem;
+      row-gap: 1rem;
+      padding-block: var(--lbs-role-pad-top) var(--lbs-role-pad-bottom);
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-b2b-lbs-role-split__eyebrow {
+      grid-column: 1 / -1;
+    }
+
+    .elevate-b2b-lbs-role-split__heading--left {
+      grid-column: 1;
+      grid-row: 2;
+    }
+
+    .elevate-b2b-lbs-role-split__heading--right {
+      grid-column: 2;
+      grid-row: 2;
+    }
+
+    .elevate-b2b-lbs-role-split__heading {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-b2b-lbs-role-split__heading-main,
+    .elevate-b2b-lbs-role-split__heading-accent {
+      display: inline;
+    }
+
+    .elevate-b2b-lbs-role-split__col--shop {
+      grid-column: 1;
+      grid-row: 3;
+      height: fit-content;
+    }
+
+    .elevate-b2b-lbs-role-split__col--we {
+      grid-column: 2;
+      grid-row: 3;
+      background: #FDFCFC;
+    }
+
+    .elevate-b2b-lbs-role-split__col {
+      padding: 1.5rem 2.5rem 2.5rem;
+    }
+
+    .elevate-b2b-lbs-role-split__col--we .elevate-b2b-lbs-role-split__col-title {
+      color: #36393F;
+    }
+
+    .elevate-b2b-lbs-role-split__col--we .elevate-b2b-lbs-role-split__item-title {
+      color: #36393F;
+    }
+
+    .elevate-b2b-lbs-role-split__col--shop .elevate-b2b-lbs-role-split__item-body {
+      color: #AEB2B8;
+      border-inline-start: 0.125rem solid rgba(255, 255, 255, 0.1);
+    }
+
+    .elevate-b2b-lbs-role-split__col--we .elevate-b2b-lbs-role-split__item-body {
+      color: #6B7280;
+      border-inline-start: 0.125rem solid rgba(0, 0, 0, 0.08);
+    }
+
+    .elevate-b2b-lbs-role-split__strip {
+      grid-column: 1 / -1;
+      grid-row: 4;
+      flex-wrap: nowrap;
+      justify-content: space-between;
+      gap: 2.5rem;
+      padding: 1.25rem 2rem;
+      border-radius: 1rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "LBS Role Split",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "HOW THE WORK SPLITS"
+    },
+    {
+      "type": "text",
+      "id": "heading_left",
+      "label": "Heading left",
+      "default": "YOUR JOB:"
+    },
+    {
+      "type": "text",
+      "id": "heading_left_accent",
+      "label": "Heading left accent",
+      "default": "THREE THINGS."
+    },
+    {
+      "type": "text",
+      "id": "heading_right",
+      "label": "Heading right",
+      "default": "OUR JOB:"
+    },
+    {
+      "type": "text",
+      "id": "heading_right_accent",
+      "label": "Heading right accent",
+      "default": "EVERYTHING ELSE."
+    },
+    {
+      "type": "text",
+      "id": "shop_title",
+      "label": "Shop column title",
+      "default": "YOUR SHOP"
+    },
+    {
+      "type": "text",
+      "id": "we_title",
+      "label": "We column title",
+      "default": "WE HANDLE"
+    },
+    {
+      "type": "textarea",
+      "id": "strip_items",
+      "label": "NO-list items (comma separated)",
+      "default": "NO APPRAISALS, NO PHOTOGRAPHY, NO LISTINGS, NO SHIPPING FEES, NO CUSTOMER SERVICE AFTER, NO RETURNS"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_padding_custom",
+      "label": "Custom mobile padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "shop_item",
+      "name": "Shop task",
+      "limit": 5,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "01 · QUOTE THE BIKE"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Body"
+        }
+      ]
+    },
+    {
+      "type": "we_item",
+      "name": "We handle",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "PRICING"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Body"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LBS Role Split",
+      "blocks": [
+        {
+          "type": "shop_item",
+          "settings": {
+            "title": "01 · QUOTE THE BIKE",
+            "body": "Customer brings their bike in. Submit make, model, condition. We come back within 24 hours with a written offer."
+          }
+        },
+        {
+          "type": "shop_item",
+          "settings": {
+            "title": "02 · ISSUE STORE CREDIT",
+            "body": "Customer accepts. Run the credit through your existing POS — Lightspeed, Ascend, Square, or a paper gift card."
+          }
+        },
+        {
+          "type": "shop_item",
+          "settings": {
+            "title": "03 · BOX AND SHIP",
+            "body": "We email a prepaid FedEx label the moment the customer accepts. Box the bike, hand it to FedEx. You're done."
+          }
+        },
+        {
+          "type": "we_item",
+          "settings": {
+            "title": "PRICING",
+            "body": "Same valuation engine that has priced 3,500 bikes and paid out $5.4M. Updated weekly against live resale data."
+          }
+        },
+        {
+          "type": "we_item",
+          "settings": {
+            "title": "INSTANT PAYMENT",
+            "body": "ACH hits your account the moment FedEx scans the label. No Net-15, no monthly statements, no waiting on inspection."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
