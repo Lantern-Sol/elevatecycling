@@ -1,0 +1,343 @@
+{%- doc -%}
+  Elevate Cycling — B2B LBS Requirements section.
+  "WHAT WE NEED FROM YOU" — sidebar + 2×2 grid of ask cards.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-b2b-lbs-requirements"
+  data-scroll-reveal="children"
+  style="
+    background: #FDFCFC;
+    --lbs-req-pad-top: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    --lbs-req-pad-bottom: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+    {%- if section.settings.mobile_padding_custom -%}
+      --lbs-req-pad-top-m: {{ section.settings.padding_top_mobile | divided_by: 16.0 }}rem;
+      --lbs-req-pad-bottom-m: {{ section.settings.padding_bottom_mobile | divided_by: 16.0 }}rem;
+    {%- endif -%}
+  "
+>
+  <div class="elevate-b2b-lbs-requirements__inner">
+    <div class="elevate-b2b-lbs-requirements__sidebar">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="elevate-b2b-lbs-requirements__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-b2b-lbs-requirements__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      {%- if section.settings.cta_text != blank -%}
+        <a
+          class="elevate-b2b-lbs-requirements__cta"
+          href="{{ section.settings.cta_link | default: '#' }}"
+        >
+          {{- section.settings.cta_text -}}
+        </a>
+      {%- endif -%}
+    </div>
+
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-b2b-lbs-requirements__grid">
+        {%- for block in section.blocks -%}
+          <div class="elevate-b2b-lbs-requirements__card" {{ block.shopify_attributes }}>
+            {%- if block.settings.number != blank -%}
+              <p class="elevate-b2b-lbs-requirements__card-number">{{ block.settings.number }}</p>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <p class="elevate-b2b-lbs-requirements__card-title">{{ block.settings.title }}</p>
+            {%- endif -%}
+            {%- if block.settings.body != blank -%}
+              <p class="elevate-b2b-lbs-requirements__card-body">{{ block.settings.body }}</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .elevate-b2b-lbs-requirements__inner {
+    padding-block: var(--lbs-req-pad-top-m, var(--lbs-req-pad-top)) var(--lbs-req-pad-bottom-m, var(--lbs-req-pad-bottom));
+    padding-inline: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* ── Sidebar ── */
+  .elevate-b2b-lbs-requirements__sidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .elevate-b2b-lbs-requirements__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-requirements__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 4rem;
+    line-height: 1.2;
+    color: #36393F;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-requirements__cta {
+    width: 100%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.75rem 1.5rem;
+    background: #E31E24;
+    border-radius: 0.75rem;
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    color: #FDFCFC;
+    text-decoration: none;
+    transition: background 0.2s ease;
+    margin-block-start: 0.5rem;
+  }
+
+  .elevate-b2b-lbs-requirements__cta:hover {
+    background: #c9191f;
+  }
+
+  /* ── Grid ── */
+  .elevate-b2b-lbs-requirements__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  /* ── Card ── */
+  .elevate-b2b-lbs-requirements__card {
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1.5rem;
+    padding: 1.5rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-b2b-lbs-requirements__card-number {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.5rem;
+    line-height: 1;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-requirements__card-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    letter-spacing: -0.0125rem;
+    color: #36393F;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-requirements__card-body {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #36393F;
+    margin: 0;
+  }
+
+  /* ── Desktop ── */
+  @media (min-width: 61.9375rem) {
+    .elevate-b2b-lbs-requirements__inner {
+      padding-block: var(--lbs-req-pad-top) var(--lbs-req-pad-bottom);
+      padding-inline: 4.375rem;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: 2rem;
+    }
+
+    .elevate-b2b-lbs-requirements__sidebar {
+      flex-shrink: 0;
+      width: 13rem;
+      position: sticky;
+      top: 6rem;
+      align-self: flex-start;
+    }
+
+    .elevate-b2b-lbs-requirements__heading {
+      font-size: 3.5625rem;
+    }
+
+    .elevate-b2b-lbs-requirements__cta {
+      width: auto;
+    }
+
+    .elevate-b2b-lbs-requirements__grid {
+      flex: 1;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 2rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "LBS Requirements",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "FOUR THINGS"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "WHAT WE NEED FROM YOU"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "Button text",
+      "default": "Start a 90-Day Pilot"
+    },
+    {
+      "type": "url",
+      "id": "cta_link",
+      "label": "Button link"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_padding_custom",
+      "label": "Custom mobile padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "ask",
+      "name": "Requirement",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "number",
+          "label": "Number",
+          "default": "01"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "A standard bike box on hand"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Body"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LBS Requirements",
+      "blocks": [
+        {
+          "type": "ask",
+          "settings": {
+            "number": "01",
+            "title": "A standard bike box on hand",
+            "body": "So your team can pack the bike when a customer accepts. We'll ship you flat-packed boxes on request — free."
+          }
+        },
+        {
+          "type": "ask",
+          "settings": {
+            "number": "02",
+            "title": "One team training, 25 minutes",
+            "body": "We come to you, or send video. Every staff member who runs the counter. That's it."
+          }
+        },
+        {
+          "type": "ask",
+          "settings": {
+            "number": "03",
+            "title": "Permission to email your customer list — once",
+            "body": "Co-branded launch announcement. You approve the copy before it sends. We never use it again without asking."
+          }
+        },
+        {
+          "type": "ask",
+          "settings": {
+            "number": "04",
+            "title": "A signature on a 1-page pilot agreement",
+            "body": "Plain English. No exclusivity, no minimums, no termination fees. One page."
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

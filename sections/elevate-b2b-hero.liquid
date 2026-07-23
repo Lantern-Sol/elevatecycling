@@ -75,7 +75,8 @@
       {%- if section.settings.heading != blank -%}
         <h1 class="elevate-b2b-hero__heading">
           {%- if section.settings.heading_accent != blank -%}
-            {{- section.settings.heading | replace: section.settings.heading_accent, '</span><span class="elevate-b2b-hero__heading-accent">' | append: '</span>' | prepend: '<span>' -}}
+            {%- assign accent_open = '</span><span class="elevate-b2b-hero__heading-accent">' | append: section.settings.heading_accent -%}
+            {{- section.settings.heading | replace: section.settings.heading_accent, accent_open | append: '</span>' | prepend: '<span>' -}}
           {%- else -%}
             {{- section.settings.heading -}}
           {%- endif -%}
@@ -124,6 +125,12 @@
             <div class="elevate-b2b-hero__step">
               <span class="elevate-b2b-hero__step-badge" aria-hidden="true">3</span>
               <p class="elevate-b2b-hero__step-label">{{ section.settings.step_3_title }}</p>
+            </div>
+          {%- endif -%}
+          {%- if section.settings.step_4_title != blank -%}
+            <div class="elevate-b2b-hero__step">
+              <span class="elevate-b2b-hero__step-badge" aria-hidden="true">4</span>
+              <p class="elevate-b2b-hero__step-label">{{ section.settings.step_4_title }}</p>
             </div>
           {%- endif -%}
         </div>
@@ -231,7 +238,7 @@
   }
 
   .elevate-b2b-hero__heading-accent {
-    color: #E31E24;
+    color: #FDFCFC;
   }
 
   /* ── Subtitle ── */
@@ -521,7 +528,7 @@
     .elevate-b2b-hero__step {
       flex-direction: row;
       text-align: start;
-      width: 8.625rem;
+      width: 8.125rem;
       flex: none;
     }
 
@@ -537,6 +544,10 @@
 
     .elevate-b2b-hero__step-label {
       font-size: 0.75rem;
+    }
+
+    .elevate-b2b-hero__step:not(:last-child) .elevate-b2b-hero__step-label {
+      padding-inline-end: 0;
     }
 
     .elevate-b2b-hero__cta-wrap {
@@ -678,6 +689,11 @@
       "id": "step_3_title",
       "label": "Step 3",
       "default": "We do the rest; inspect, list, etc."
+    },
+    {
+      "type": "text",
+      "id": "step_4_title",
+      "label": "Step 4"
     },
     {
       "type": "header",

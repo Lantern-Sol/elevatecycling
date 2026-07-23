@@ -1,0 +1,403 @@
+{%- doc -%}
+  Elevate Cycling — B2B LBS Pilot section.
+  "90 DAYS. NO COMMITMENT AFTER." with zero-stat cards + timeline milestones.
+{%- enddoc -%}
+
+{%- liquid
+  assign zero_stats = section.blocks | where: 'type', 'zero_stat'
+  assign milestones = section.blocks | where: 'type', 'milestone'
+-%}
+
+<div
+  class="section section--page-width page-width-normal elevate-b2b-lbs-pilot"
+  data-scroll-reveal="children"
+  style="
+    background: #FDFCFC;
+    --lbs-pilot-pad-top: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    --lbs-pilot-pad-bottom: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+    {%- if section.settings.mobile_padding_custom -%}
+      --lbs-pilot-pad-top-m: {{ section.settings.padding_top_mobile | divided_by: 16.0 }}rem;
+      --lbs-pilot-pad-bottom-m: {{ section.settings.padding_bottom_mobile | divided_by: 16.0 }}rem;
+    {%- endif -%}
+  "
+>
+  <div class="elevate-b2b-lbs-pilot__inner">
+    {%- comment -%} ── Header ── {%- endcomment -%}
+    <div class="elevate-b2b-lbs-pilot__header">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="elevate-b2b-lbs-pilot__eyebrow">{{ section.settings.eyebrow }}</p>
+      {%- endif -%}
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-b2b-lbs-pilot__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+    </div>
+
+    {%- comment -%} ── Zero stats ── {%- endcomment -%}
+    {%- if zero_stats.size > 0 -%}
+      <div class="elevate-b2b-lbs-pilot__zero-stats">
+        {%- for block in zero_stats -%}
+          <div class="elevate-b2b-lbs-pilot__zero-card" {{ block.shopify_attributes }}>
+            {%- if block.settings.value != blank -%}
+              <p class="elevate-b2b-lbs-pilot__zero-value">{{ block.settings.value }}</p>
+            {%- endif -%}
+            {%- if block.settings.label != blank -%}
+              <p class="elevate-b2b-lbs-pilot__zero-label">{{ block.settings.label }}</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} ── Timeline ── {%- endcomment -%}
+    {%- if milestones.size > 0 -%}
+      <div class="elevate-b2b-lbs-pilot__timeline">
+        {%- for block in milestones -%}
+          <div
+            class="elevate-b2b-lbs-pilot__milestone{% if block.settings.dark %} elevate-b2b-lbs-pilot__milestone--dark{% endif %}"
+            {{ block.shopify_attributes }}
+          >
+            {%- if block.settings.label != blank -%}
+              <p class="elevate-b2b-lbs-pilot__milestone-label">{{ block.settings.label }}</p>
+            {%- endif -%}
+            {%- if block.settings.title != blank -%}
+              <p class="elevate-b2b-lbs-pilot__milestone-title">{{ block.settings.title }}</p>
+            {%- endif -%}
+            {%- if block.settings.body != blank -%}
+              <p class="elevate-b2b-lbs-pilot__milestone-body">{{ block.settings.body }}</p>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  .elevate-b2b-lbs-pilot__inner {
+    padding-block: var(--lbs-pilot-pad-top-m, var(--lbs-pilot-pad-top)) var(--lbs-pilot-pad-bottom-m, var(--lbs-pilot-pad-bottom));
+    padding-inline: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* ── Header ── */
+  .elevate-b2b-lbs-pilot__eyebrow {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-pilot__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 3rem;
+    line-height: 1.2;
+    color: #36393F;
+    text-transform: uppercase;
+    margin: 0.25rem 0 0;
+  }
+
+  /* ── Zero stat cards ── */
+  .elevate-b2b-lbs-pilot__zero-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .elevate-b2b-lbs-pilot__zero-card {
+    background: #141517;
+    border-radius: 1.5rem;
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .elevate-b2b-lbs-pilot__zero-value {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.5rem;
+    line-height: 1.2;
+    color: #E31E24;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-pilot__zero-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 400;
+    font-size: 0.75rem;
+    line-height: 1.5;
+    letter-spacing: -0.0075rem;
+    color: #AEB2B8;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ── Timeline ── */
+  .elevate-b2b-lbs-pilot__timeline {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .elevate-b2b-lbs-pilot__milestone {
+    background: rgba(226, 227, 229, 0.4);
+    border-radius: 1.5rem;
+    padding: 1.5rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .elevate-b2b-lbs-pilot__milestone--dark {
+    background: #141517;
+  }
+
+  .elevate-b2b-lbs-pilot__milestone-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-pilot__milestone-title {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-weight: 700;
+    font-size: 1.25rem;
+    line-height: 1.5;
+    letter-spacing: -0.0125rem;
+    color: #36393F;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-pilot__milestone--dark .elevate-b2b-lbs-pilot__milestone-title {
+    color: #FDFCFC;
+  }
+
+  .elevate-b2b-lbs-pilot__milestone-body {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.00875rem;
+    color: #6B7280;
+    margin: 0;
+  }
+
+  .elevate-b2b-lbs-pilot__milestone--dark .elevate-b2b-lbs-pilot__milestone-body {
+    color: #AEB2B8;
+  }
+
+  /* ── Desktop ── */
+  @media (min-width: 61.9375rem) {
+    .elevate-b2b-lbs-pilot__inner {
+      padding-block: var(--lbs-pilot-pad-top) var(--lbs-pilot-pad-bottom);
+      padding-inline: 4.375rem;
+    }
+
+    .elevate-b2b-lbs-pilot__heading {
+      font-size: 4.25rem;
+    }
+
+    .elevate-b2b-lbs-pilot__zero-stats {
+      grid-template-columns: repeat(4, 1fr);
+      gap: 2rem;
+    }
+
+    .elevate-b2b-lbs-pilot__zero-value {
+      font-size: 3rem;
+    }
+
+    .elevate-b2b-lbs-pilot__timeline {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 2rem;
+    }
+
+    .elevate-b2b-lbs-pilot__milestone {
+      flex: 0 1 calc((100% - 4rem) / 3);
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "LBS Pilot",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow",
+      "default": "THE PILOT"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "90 DAYS. NO COMMITMENT AFTER."
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_padding_custom",
+      "label": "Custom mobile padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "zero_stat",
+      "name": "Zero stat",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value",
+          "default": "$0"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "SETUP FEE"
+        }
+      ]
+    },
+    {
+      "type": "milestone",
+      "name": "Milestone",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "WEEK 0"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "SIGN & GO LIVE"
+        },
+        {
+          "type": "textarea",
+          "id": "body",
+          "label": "Body"
+        },
+        {
+          "type": "checkbox",
+          "id": "dark",
+          "label": "Dark background",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "LBS Pilot",
+      "blocks": [
+        {
+          "type": "zero_stat",
+          "settings": { "value": "$0", "label": "SETUP FEE" }
+        },
+        {
+          "type": "zero_stat",
+          "settings": { "value": "$0", "label": "PLATFORM FEE" }
+        },
+        {
+          "type": "zero_stat",
+          "settings": { "value": "NONE", "label": "EXCLUSIVITY" }
+        },
+        {
+          "type": "zero_stat",
+          "settings": { "value": "NONE", "label": "MINIMUM VOLUME" }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "label": "WEEK 0",
+            "title": "SIGN & GO LIVE",
+            "body": "Labels and training pack sent same day. Your team is ready in 25 minutes. Live within 7 days.",
+            "dark": false
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "label": "WEEKS 1–4",
+            "title": "FIRST TRADE-INS SHIP",
+            "body": "Trade-ins start flowing to WH-C. Co-branded launch email to your customer list — you approve the copy before it sends.",
+            "dark": false
+          }
+        },
+        {
+          "type": "milestone",
+          "settings": {
+            "label": "WEEKS 5–8",
+            "title": "TUNE PRICING",
+            "body": "Shared dashboard shows trade-in volume, redemption rate, basket lift. We adjust the uplift together if the numbers say so.",
+            "dark": false
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

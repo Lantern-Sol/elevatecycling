@@ -1,0 +1,507 @@
+{
+  "sections": {
+    "main_page": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {}
+    },
+    "elevate_b2b_lbs_hero": {
+      "type": "elevate-b2b-hero",
+      "blocks": {
+        "stat_1": {
+          "type": "stat",
+          "settings": {
+            "value": "3,500+",
+            "label": "bikes bought"
+          }
+        },
+        "stat_2": {
+          "type": "stat",
+          "settings": {
+            "value": "99.8%",
+            "label": "eBay feedback"
+          }
+        },
+        "stat_3": {
+          "type": "stat",
+          "settings": {
+            "value": "$5.4M",
+            "label": "paid out"
+          }
+        }
+      },
+      "block_order": [
+        "stat_1",
+        "stat_2",
+        "stat_3"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/hero_1.png",
+        "image_mobile": "shopify://shop_images/hero_2.png",
+        "overlay_opacity": 0,
+        "eyebrow": "PARTNER PROGRAM · FOR INDEPENDENT BIKE SHOPS",
+        "heading": "TURN OLD BIKES<br>INTO NEW SALES.",
+        "heading_accent": "NEW SALES.",
+        "subtitle": "A trade-in program that closes the sale you were about to lose.<br>No appraisals, no listings, no shipping fees, no risk.",
+        "steps_heading": "How it works",
+        "step_1_title": "Quote in store",
+        "step_2_title": "Issue store credit",
+        "step_3_title": "You ship, freight's on us",
+        "step_4_title": "We pay, Instantly",
+        "cta_text": "Start a 90-Day Pilot",
+        "cta_link": "#pilot-cta",
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "mobile_padding_custom": false,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_lbs_problem": {
+      "type": "elevate-b2b-problem",
+      "blocks": {
+        "tile_1": {
+          "type": "tile",
+          "settings": {
+            "title": "THEY WON'T BUY NEW UNTIL<br>THE OLD BIKE IS GONE",
+            "body": "The trade-in conversation is the sale. Without it, they leave to figure it out on their own — and they don't come back."
+          }
+        },
+        "tile_2": {
+          "type": "tile",
+          "settings": {
+            "title": "FACEBOOK MARKETPLACE<br>TAKES 3–8 WEEKS",
+            "body": "Meet strangers, haggle, no-shows. By the time they sell it, they've forgotten why they walked into your shop."
+          }
+        },
+        "tile_3": {
+          "type": "tile",
+          "settings": {
+            "title": "YOU LOSE THE UPSELL<br>EVERY TIME",
+            "body": "No trade-in value to apply, no reason to buy today. The accessories, the fit, the service relationship — all walk out the door with them."
+          }
+        }
+      },
+      "block_order": [
+        "tile_1",
+        "tile_2",
+        "tile_3"
+      ],
+      "settings": {
+        "heading": "THE PROBLEM",
+        "description": "Your customer walks in with an old bike in their head.<br>And walks out without a new one.",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_lbs_program": {
+      "type": "elevate-b2b-lbs-program",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "title": "QUOTE IN STORE",
+            "body": "The customer brings their bike to your counter. You submit the make, model, and condition. Written offer within 24 hours from the same engine that has priced 3,500 bikes.",
+            "tag": "OFFER IN 24 HOURS"
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "title": "ISSUE STORE CREDIT",
+            "body": "Customer accepts. You issue store credit at 1.25× our cash offer — applied immediately toward a new bike, parts, or service. Runs through your existing POS: Lightspeed, Ascend, Square, or a paper gift card.",
+            "tag": "1.25× CASH OFFER"
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "title": "YOU SHIP",
+            "body": "We email a prepaid FedEx label the moment the customer accepts. Box the bike, hand it to FedEx. That's it. You don't manage shipping, returns, or anything after this.",
+            "tag": "PREPAID LABEL SENT INSTANTLY"
+          }
+        },
+        "step_4": {
+          "type": "step",
+          "settings": {
+            "number": "04",
+            "title": "WE PAY, INSTANTLY",
+            "body": "ACH hits your account the moment FedEx scans the label — not on delivery, not on inspection. Same-day direct deposit. You've already been reimbursed before we even open the box.",
+            "tag": "PAID ON LABEL SCAN"
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3",
+        "step_4"
+      ],
+      "settings": {
+        "eyebrow": "THE PROGRAM",
+        "heading": "FOUR STEPS.<br>NO INVENTORY.<br>NO RISK.",
+        "description": "Submit in 2 minutes. Offer in 24 hours.<br>Credit, same day.",
+        "cta_text": "Start a 90-Day Pilot",
+        "cta_link": "#pilot-cta",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 40,
+        "padding_bottom_mobile": 40
+      }
+    },
+    "elevate_b2b_lbs_economics": {
+      "type": "elevate-b2b-lbs-economics",
+      "blocks": {
+        "row_1": {
+          "type": "table_row",
+          "settings": {
+            "bike": "2021 Trek Madone SL6",
+            "offer": "$2,400",
+            "credit": "$3,000",
+            "margin": "+$288"
+          }
+        },
+        "row_2": {
+          "type": "table_row",
+          "settings": {
+            "bike": "2023 Cannondale Topstone",
+            "offer": "$1,180",
+            "credit": "$1,475",
+            "margin": "+$142"
+          }
+        },
+        "row_3": {
+          "type": "table_row",
+          "settings": {
+            "bike": "2021 Santa Cruz Hightower",
+            "offer": "$2,800",
+            "credit": "$3,500",
+            "margin": "+$336"
+          }
+        },
+        "row_4": {
+          "type": "table_row",
+          "settings": {
+            "bike": "2019 Specialized Allez",
+            "offer": "$420",
+            "credit": "$525",
+            "margin": "+$50"
+          }
+        },
+        "stat_1": {
+          "type": "stat",
+          "settings": {
+            "value": "82%",
+            "title": "RETURN WITHIN 30 DAYS",
+            "description": "Customers who accept store credit come back to your shop within a month. Usually for a bike. Often for a bigger one than they came in considering."
+          }
+        },
+        "stat_2": {
+          "type": "stat",
+          "settings": {
+            "value": "1.4×",
+            "title": "AVERAGE BASKET AT REDEMPTION",
+            "description": "They spend 40% more than the credit value. The credit is the down payment that gets them off the fence and into a new bike."
+          }
+        }
+      },
+      "block_order": [
+        "row_1",
+        "row_2",
+        "row_3",
+        "row_4",
+        "stat_1",
+        "stat_2"
+      ],
+      "settings": {
+        "eyebrow": "THE ECONOMICS",
+        "heading": "YOU EARN ON THE CREDIT.<br>AND ON THE UPSELL.",
+        "description": "<strong>Here's how it works:</strong> when a customer's bike is accepted, you issue store credit at <strong>1.25×</strong> our cash offer — applied to their next purchase at your shop. We reimburse the full credit amount plus a <strong>12% partner margin on top. Instant ACH</strong>, paid the moment FedEx scans the label.",
+        "tagline": "Cash buys a coffee. Credit buys their next bike — from you.",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_lbs_role_split": {
+      "type": "elevate-b2b-lbs-role-split",
+      "blocks": {
+        "shop_1": {
+          "type": "shop_item",
+          "settings": {
+            "title": "01 · QUOTE THE BIKE",
+            "body": "Customer brings their bike in. Submit make, model, condition. We come back within 24 hours with a written offer you can present with confidence."
+          }
+        },
+        "shop_2": {
+          "type": "shop_item",
+          "settings": {
+            "title": "02 · ISSUE STORE CREDIT",
+            "body": "Customer accepts. Run the credit through your existing POS — Lightspeed, Ascend, Square, or a paper gift card. Whatever you already use."
+          }
+        },
+        "shop_3": {
+          "type": "shop_item",
+          "settings": {
+            "title": "03 · BOX AND SHIP",
+            "body": "We email a prepaid FedEx label the moment the customer accepts. Box the bike, hand it to FedEx. You're done."
+          }
+        },
+        "we_1": {
+          "type": "we_item",
+          "settings": {
+            "title": "PRICING",
+            "body": "Same valuation engine that has priced 3,500 bikes and paid out $5.4M. Updated weekly against live resale data."
+          }
+        },
+        "we_2": {
+          "type": "we_item",
+          "settings": {
+            "title": "INSTANT PAYMENT",
+            "body": "ACH hits your account the moment FedEx scans the label. No Net-15, no monthly statements, no waiting on inspection."
+          }
+        },
+        "we_3": {
+          "type": "we_item",
+          "settings": {
+            "title": "PREPAID SHIPPING",
+            "body": "We send the FedEx label. You box and drop. We cover the freight on every accepted offer."
+          }
+        },
+        "we_4": {
+          "type": "we_item",
+          "settings": {
+            "title": "INSPECTION & RESALE",
+            "body": "Bike arrives at our Santa Ana warehouse. Mechanic-inspected within 24 hours. Resold through our buyer base — 99.8% positive feedback."
+          }
+        },
+        "we_5": {
+          "type": "we_item",
+          "settings": {
+            "title": "ALL POST-SHIP SUPPORT",
+            "body": "Customer service, returns, warranty on every credit issued — all routes to our team, not yours."
+          }
+        }
+      },
+      "block_order": [
+        "shop_1",
+        "shop_2",
+        "shop_3",
+        "we_1",
+        "we_2",
+        "we_3",
+        "we_4",
+        "we_5"
+      ],
+      "settings": {
+        "eyebrow": "HOW THE WORK SPLITS",
+        "heading_left": "YOUR JOB:",
+        "heading_left_accent": "THREE THINGS.",
+        "heading_right": "OUR JOB:",
+        "heading_right_accent": "EVERYTHING ELSE.",
+        "shop_title": "YOUR SHOP",
+        "we_title": "WE HANDLE",
+        "strip_items": "NO APPRAISALS, NO PHOTOGRAPHY, NO LISTINGS, NO SHIPPING FEES, NO CUSTOMER SERVICE AFTER, NO RETURNS",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_lbs_pilot": {
+      "type": "elevate-b2b-lbs-pilot",
+      "blocks": {
+        "zero_1": {
+          "type": "zero_stat",
+          "settings": {
+            "value": "$0",
+            "label": "SETUP FEE"
+          }
+        },
+        "zero_2": {
+          "type": "zero_stat",
+          "settings": {
+            "value": "$0",
+            "label": "PLATFORM FEE"
+          }
+        },
+        "zero_3": {
+          "type": "zero_stat",
+          "settings": {
+            "value": "NONE",
+            "label": "EXCLUSIVITY"
+          }
+        },
+        "zero_4": {
+          "type": "zero_stat",
+          "settings": {
+            "value": "NONE",
+            "label": "MINIMUM VOLUME"
+          }
+        },
+        "milestone_1": {
+          "type": "milestone",
+          "settings": {
+            "label": "WEEK 0",
+            "title": "SIGN & GO LIVE",
+            "body": "Labels and training pack sent same day. Your team is ready in 25 minutes. Live within 7 days.",
+            "dark": false
+          }
+        },
+        "milestone_2": {
+          "type": "milestone",
+          "settings": {
+            "label": "WEEKS 1–4",
+            "title": "FIRST TRADE-INS SHIP",
+            "body": "Trade-ins start flowing to WH-C. Co-branded launch email to your customer list — you approve the copy before it sends.",
+            "dark": false
+          }
+        },
+        "milestone_3": {
+          "type": "milestone",
+          "settings": {
+            "label": "WEEKS 5–8",
+            "title": "TUNE PRICING",
+            "body": "Shared dashboard shows trade-in volume, redemption rate, basket lift. We adjust the uplift together if the numbers say so.",
+            "dark": false
+          }
+        },
+        "milestone_4": {
+          "type": "milestone",
+          "settings": {
+            "label": "WEEKS 9–12",
+            "title": "JOINT REVIEW",
+            "body": "Sit-down with Kevin (COO). Walk through the data. Decide together whether to continue, scale, or adjust.",
+            "dark": false
+          }
+        },
+        "milestone_5": {
+          "type": "milestone",
+          "settings": {
+            "label": "DAY 91",
+            "title": "CONTINUE OR WALK.",
+            "body": "No termination fee. No equipment to return. Continue, or stop sending bikes. That's the whole agreement.",
+            "dark": true
+          }
+        }
+      },
+      "block_order": [
+        "zero_1",
+        "zero_2",
+        "zero_3",
+        "zero_4",
+        "milestone_1",
+        "milestone_2",
+        "milestone_3",
+        "milestone_4",
+        "milestone_5"
+      ],
+      "settings": {
+        "eyebrow": "THE PILOT",
+        "heading": "90 DAYS.<br>NO COMMITMENT AFTER.",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_lbs_requirements": {
+      "type": "elevate-b2b-lbs-requirements",
+      "blocks": {
+        "ask_1": {
+          "type": "ask",
+          "settings": {
+            "number": "01",
+            "title": "A standard bike box on hand",
+            "body": "So your team can pack the bike when a customer accepts. We'll ship you flat-packed boxes on request — free."
+          }
+        },
+        "ask_2": {
+          "type": "ask",
+          "settings": {
+            "number": "02",
+            "title": "One team training, 25 minutes",
+            "body": "We come to you, or send video. Every staff member who runs the counter. That's it."
+          }
+        },
+        "ask_3": {
+          "type": "ask",
+          "settings": {
+            "number": "03",
+            "title": "Permission to email your<br>customer list — once",
+            "body": "Co-branded launch announcement. You approve the copy before it sends. We never use it again without asking."
+          }
+        },
+        "ask_4": {
+          "type": "ask",
+          "settings": {
+            "number": "04",
+            "title": "A signature on a 1-page<br>pilot agreement",
+            "body": "Plain English. No exclusivity, no minimums, no termination fees. One page."
+          }
+        }
+      },
+      "block_order": [
+        "ask_1",
+        "ask_2",
+        "ask_3",
+        "ask_4"
+      ],
+      "settings": {
+        "eyebrow": "FOUR THINGS",
+        "heading": "WHAT WE NEED<br>FROM YOU",
+        "cta_text": "Start a 90-Day Pilot",
+        "cta_link": "#pilot-cta",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_lbs_conviction": {
+      "type": "elevate-b2b-conviction",
+      "settings": {
+        "heading": "LET'S RUN A 90-DAY PILOT.",
+        "description": "Sign today. Live in 7 days.",
+        "contact_1_label": "PARTNERSHIPS LEAD",
+        "contact_1_value": "Kevin Qian · COO",
+        "contact_2_label": "EMAIL",
+        "contact_2_value": "partners@elevatecycling.com",
+        "contact_2_url": "mailto:partners@elevatecycling.com",
+        "contact_3_label": "DIRECT",
+        "contact_3_value": "(714) 248-5066",
+        "contact_3_url": "tel:+17142485066",
+        "cta_text": "Start a Pilot",
+        "background_color": "#250a0a",
+        "padding_top": 64,
+        "padding_bottom": 64,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    }
+  },
+  "order": [
+    "main_page",
+    "elevate_b2b_lbs_hero",
+    "elevate_b2b_lbs_problem",
+    "elevate_b2b_lbs_program",
+    "elevate_b2b_lbs_economics",
+    "elevate_b2b_lbs_role_split",
+    "elevate_b2b_lbs_pilot",
+    "elevate_b2b_lbs_requirements",
+    "elevate_b2b_lbs_conviction"
+  ]
+}
