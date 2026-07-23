@@ -1,0 +1,416 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "main_page": {
+      "type": "main-page",
+      "disabled": true,
+      "settings": {
+        "content_direction": "column",
+        "gap": 12,
+        "background_color": "",
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "elevate_b2b_hero": {
+      "type": "elevate-b2b-hero",
+      "blocks": {
+        "stat_1": {
+          "type": "stat",
+          "settings": {
+            "value": "3,500+",
+            "label": "bikes bought"
+          }
+        },
+        "stat_2": {
+          "type": "stat",
+          "settings": {
+            "value": "99.8%",
+            "label": "eBay feedback"
+          }
+        },
+        "stat_3": {
+          "type": "stat",
+          "settings": {
+            "value": "$5.4M",
+            "label": "paid out"
+          }
+        },
+        "stat_4": {
+          "type": "stat",
+          "settings": {
+            "value": "24h",
+            "label": "turnaround"
+          }
+        }
+      },
+      "block_order": [
+        "stat_1",
+        "stat_2",
+        "stat_3",
+        "stat_4"
+      ],
+      "settings": {
+        "image": "shopify://shop_images/hero_1.png",
+        "image_mobile": "shopify://shop_images/hero_2.png",
+        "overlay_opacity": 0,
+        "eyebrow": "BRAND PARTNERSHIP PROGRAM · FOR BIKE, COMPONENT & WHEEL BRANDS",
+        "heading": "MOVE YOUR EXCESS. FAST.",
+        "heading_accent": "FAST.",
+        "subtitle": "A professional buyer for overstock, clearance, and excess inventory — protecting your brand while recovering capital fast.",
+        "steps_heading": "How it works",
+        "step_1_title": "Tell us what you've got",
+        "step_2_title": "Sign & ship, freight's on us",
+        "step_3_title": "We do the rest; inspect, list, etc.",
+        "cta_text": "Send Your Inventory List",
+        "cta_link": "",
+        "padding_top": 48,
+        "padding_bottom": 48,
+        "mobile_padding_custom": false,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_problem": {
+      "type": "elevate-b2b-problem",
+      "blocks": {
+        "tile_1": {
+          "type": "tile",
+          "settings": {
+            "title": "CAPITAL IS STUCK",
+            "body": "Last-season frames, demo fleet, and B-stock sit on pallets for quarters while working capital stays frozen."
+          }
+        },
+        "tile_2": {
+          "type": "tile",
+          "settings": {
+            "title": "LIQUIDATORS KILL PRICE FLOORS",
+            "body": "Once it hits the gray market, MAP integrity is gone — and your dealers notice. The damage outlasts the inventory."
+          }
+        },
+        "tile_3": {
+          "type": "tile",
+          "settings": {
+            "title": "NO ONE WANTS THE HEADACHE",
+            "body": "Listing, photographing, shipping, returns — internal teams aren't staffed for secondary-market ops."
+          }
+        }
+      },
+      "block_order": [
+        "tile_1",
+        "tile_2",
+        "tile_3"
+      ],
+      "settings": {
+        "heading": "EXCESS INVENTORY IS A CASH & CHANNEL PROBLEM.",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_who_we_are": {
+      "type": "elevate-b2b-who-we-are",
+      "blocks": {
+        "stat_1": {
+          "type": "stat",
+          "settings": {
+            "value": "3,500+",
+            "label": "bikes bought"
+          }
+        },
+        "stat_2": {
+          "type": "stat",
+          "settings": {
+            "value": "99.8%",
+            "label": "eBay feedback"
+          }
+        },
+        "stat_3": {
+          "type": "stat",
+          "settings": {
+            "value": "$5.4M",
+            "label": "paid out"
+          }
+        },
+        "stat_4": {
+          "type": "stat",
+          "settings": {
+            "value": "#395",
+            "label": "Inc. 5000"
+          }
+        },
+        "stat_5": {
+          "type": "stat",
+          "settings": {
+            "value": "48h",
+            "label": "turnaround"
+          }
+        }
+      },
+      "block_order": [
+        "stat_1",
+        "stat_2",
+        "stat_3",
+        "stat_4",
+        "stat_5"
+      ],
+      "settings": {
+        "heading": "THE FASTEST GROWING CYCLING RESELLER IN AMERICA.",
+        "description": "Founded 2021 in Santa Ana, CA. Twelve people across two warehouses, buying and selling high-end road bikes and components at a scale nobody else in this market has matched.",
+        "tagline": "EVERY CLAIM IS VERIFIABLE. EVERY GRADE IS HONEST.\nEVERY TRANSACTION IS DOCUMENTED.",
+        "cta_prompt": "Ready to move your inventory?",
+        "cta_text": "Send us your list",
+        "cta_url": "",
+        "background_color": "#141517",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "mobile_padding_custom": false,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_what_we_buy": {
+      "type": "elevate-b2b-what-we-buy",
+      "blocks": {
+        "card_1": {
+          "type": "card",
+          "settings": {
+            "icon": "complete-bike",
+            "title": "Complete bikes",
+            "description": "Road, gravel, cyclocross, triathlon & TT. All major brands.",
+            "requirement": "Good condition or better"
+          }
+        },
+        "card_2": {
+          "type": "card",
+          "settings": {
+            "icon": "frameset",
+            "title": "Framesets",
+            "description": "Carbon & aluminum. Disc and rim. No crash damage or structural repairs.",
+            "requirement": "Inspected for impact damage"
+          }
+        },
+        "card_3": {
+          "type": "card",
+          "settings": {
+            "icon": "wheel",
+            "title": "Wheelsets",
+            "description": "Carbon & alloy. Zipp, ENVE, Roval, DT Swiss and more.",
+            "requirement": "True, no cracks or dents"
+          }
+        },
+        "card_4": {
+          "type": "card",
+          "settings": {
+            "icon": "gear",
+            "title": "Groupsets",
+            "description": "Shimano, SRAM, Campagnolo. Di2, eTap, EPS, mechanical.",
+            "requirement": "Functional, no stripped parts"
+          }
+        },
+        "card_5": {
+          "type": "card",
+          "settings": {
+            "icon": "puzzle-piece",
+            "title": "Components",
+            "description": "Cockpit, power meters, saddles, seatposts. ENVE, Fizik, Quarq, PRO.",
+            "requirement": "No cracks or stripped threads"
+          }
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4",
+        "card_5"
+      ],
+      "settings": {
+        "heading": "IF IT'S PREMIUM,",
+        "heading_line_2": "WE'RE INTERESTED.",
+        "subnote": "High-end road, gravel, and triathlon.\nNew, refurbished, or B-stock.\nPallets, lots, or one-off runs.",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_brand_safety": {
+      "type": "elevate-b2b-brand-safety",
+      "blocks": {
+        "card_1": {
+          "type": "card",
+          "settings": {
+            "title": "PRICE FLOOR ENFORCEMENT",
+            "body": "Minimum advertised price set by you, enforced across every channel we list on. Violations void the agreement."
+          }
+        },
+        "card_2": {
+          "type": "card",
+          "settings": {
+            "title": "CHANNEL RESTRICTIONS",
+            "body": "Carve out marketplaces, geographies, or dealer territories you want off-limits. We list only where you allow."
+          }
+        },
+        "card_3": {
+          "type": "card",
+          "settings": {
+            "title": "CERTIFIED PRE-OWNED FRAMING",
+            "body": "Listings carry the Elevate CPO badge — clearly differentiated from new product, never positioned against your current line."
+          }
+        },
+        "card_4": {
+          "type": "card",
+          "settings": {
+            "title": "SERIAL & WARRANTY HANDLING",
+            "body": "Serials de-listed from your warranty program on purchase if requested. Full chain-of-custody documentation provided."
+          }
+        }
+      },
+      "block_order": [
+        "card_1",
+        "card_2",
+        "card_3",
+        "card_4"
+      ],
+      "settings": {
+        "heading": "YOUR BRAND, PROTECTED BY CONTRACT.",
+        "heading_accent": "PROTECTED BY CONTRACT.",
+        "quote_title": "OUR DEFAULT POSITION",
+        "quote_body": "We list under our certified pre-owned program. Never as new. Never below your floor. Never to dealers.",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_conviction": {
+      "type": "elevate-b2b-conviction",
+      "settings": {
+        "heading": "WRITTEN OFFER IN 48 HOURS.",
+        "description": "Send us your SKUs, quantities, condition, and target floor. We come back with a written offer on the whole lot — and a draft resale agreement built around your channel rules.",
+        "contact_1_label": "PARTNERSHIPS LEAD",
+        "contact_1_value": "Kevin Qian · COO",
+        "contact_2_label": "EMAIL",
+        "contact_2_value": "partners@elevatecycling.com",
+        "contact_2_url": "mailto:partners@elevatecycling.com",
+        "contact_3_label": "DIRECT",
+        "contact_3_value": "(714) 248-5066",
+        "contact_3_url": "tel:+17142485066",
+        "cta_text": "Send Your Inventory List",
+        "background_color": "#250a0a",
+        "padding_top": 64,
+        "padding_bottom": 64,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_steps": {
+      "type": "elevate-b2b-steps",
+      "blocks": {
+        "step_1": {
+          "type": "step",
+          "settings": {
+            "number": "01",
+            "title": "SEND YOUR LIST",
+            "body": "Email us your inventory list — SKUs, quantities, and condition. We'll review it and get back to you with an offer.",
+            "tagline": "OFFER IN < 48 HOURS"
+          }
+        },
+        "step_2": {
+          "type": "step",
+          "settings": {
+            "number": "02",
+            "title": "SIGN & SHIP",
+            "body": "Accept the offer, sign the PO, and ship. We arrange freight pickup at no cost to you.",
+            "tagline": "FREIGHT ON US"
+          }
+        },
+        "step_3": {
+          "type": "step",
+          "settings": {
+            "number": "03",
+            "title": "WE DO THE REST",
+            "body": "We inspect, photograph, list, and sell through our own established channels — no marketplace drama for your brand.",
+            "tagline": "ZERO CHANNEL CONFLICT"
+          }
+        }
+      },
+      "block_order": [
+        "step_1",
+        "step_2",
+        "step_3"
+      ],
+      "settings": {
+        "heading": "THREE STEPS. NO DRAMA.",
+        "description": "Ship us your excess — we handle inspection, listing, and sales through our own trusted channels.",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    },
+    "elevate_b2b_cta": {
+      "type": "elevate-b2b-cta",
+      "settings": {
+        "step1_label": "Description",
+        "step1_eyebrow": "SUBMIT YOUR GEAR",
+        "step1_heading": "SEND US YOUR LIST.",
+        "step1_subtitle": "A spreadsheet of SKUs, quantities, condition, and your target floor is all we need. We'll come back inside 48 hours with a written offer on the whole lot — and a draft resale agreement built around your channel rules.",
+        "bulk_excel_url": "",
+        "bulk_sheets_url": "",
+        "step2_label": "Contact",
+        "step2_eyebrow": "ALMOST THERE",
+        "step2_heading": "How should we reach you?",
+        "step2_subtitle": "We'll send your offer to the email below. Usually within 48 hours.",
+        "consent_text": "I confirm I'm authorized to sell this inventory on behalf of my company. <a href=\"/pages/terms\">View full terms</a>.",
+        "step3_label": "All Done!",
+        "done_heading": "We've got it — offer incoming",
+        "done_subtitle": "You'll hear from us within the next 48h via email with a written offer on your entire lot. No lowballs, no games.",
+        "done_step_1_title": "Check your inbox",
+        "done_step_1_desc": "We'll email your offer within 48 hours",
+        "done_step_2_title": "We evaluate your inventory",
+        "done_step_2_desc": "Our team reviews condition, market value, and demand",
+        "done_step_3_title": "Accept the offer",
+        "done_step_3_desc": "Lock in your price — sign the PO and we handle the rest",
+        "done_step_4_title": "Ship free, get paid",
+        "done_step_4_desc": "We arrange freight pickup. Payment within 3–5 days of receipt.",
+        "done_cta_text": "Browse While You Wait",
+        "done_cta_link": "shopify://collections/all",
+        "next_text": "Next",
+        "submit_text": "Submit",
+        "disclaimer_text": "Your info is never shared or sold. We respond within 2 business days.",
+        "padding_top": 72,
+        "padding_bottom": 72,
+        "mobile_padding_custom": true,
+        "padding_top_mobile": 32,
+        "padding_bottom_mobile": 32
+      }
+    }
+  },
+  "order": [
+    "main_page",
+    "elevate_b2b_hero",
+    "elevate_b2b_problem",
+    "elevate_b2b_who_we_are",
+    "elevate_b2b_what_we_buy",
+    "elevate_b2b_brand_safety",
+    "elevate_b2b_conviction",
+    "elevate_b2b_steps",
+    "elevate_b2b_cta"
+  ]
+}

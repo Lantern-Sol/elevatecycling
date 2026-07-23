@@ -1,0 +1,436 @@
+{%- doc -%}
+  Elevate Cycling — B2B Who We Are section.
+  Dark card with heading + description, stats bar, and CTA row.
+{%- enddoc -%}
+
+<div
+  class="section section--page-width page-width-normal elevate-b2b-who-we-are"
+  data-scroll-reveal="children"
+  style="
+    background: {{ section.settings.background_color }};
+    border-radius: 2rem;
+    overflow: clip;
+    --b2b-who-pad-top: {{ section.settings.padding_top | divided_by: 16.0 }}rem;
+    --b2b-who-pad-bottom: {{ section.settings.padding_bottom | divided_by: 16.0 }}rem;
+    {%- if section.settings.mobile_padding_custom -%}
+      --b2b-who-pad-top-m: {{ section.settings.padding_top_mobile | divided_by: 16.0 }}rem;
+      --b2b-who-pad-bottom-m: {{ section.settings.padding_bottom_mobile | divided_by: 16.0 }}rem;
+    {%- endif -%}
+  "
+>
+  <div class="elevate-b2b-who-we-are__inner">
+    {%- comment -%} Row 1 — Heading + Description {%- endcomment -%}
+    <div class="elevate-b2b-who-we-are__top">
+      {%- if section.settings.heading != blank -%}
+        <h2 class="elevate-b2b-who-we-are__heading">{{ section.settings.heading }}</h2>
+      {%- endif -%}
+
+      <div class="elevate-b2b-who-we-are__body">
+        {%- if section.settings.description != blank -%}
+          <p class="elevate-b2b-who-we-are__description">{{ section.settings.description }}</p>
+        {%- endif -%}
+        {%- if section.settings.tagline != blank -%}
+          <p class="elevate-b2b-who-we-are__tagline">{{ section.settings.tagline }}</p>
+        {%- endif -%}
+      </div>
+    </div>
+
+    {%- comment -%} Row 2 — Stats {%- endcomment -%}
+    {%- if section.blocks.size > 0 -%}
+      <div class="elevate-b2b-who-we-are__stats">
+        {%- for block in section.blocks -%}
+          {%- if forloop.index > 1 -%}
+            <span class="elevate-b2b-who-we-are__divider" aria-hidden="true"></span>
+          {%- endif -%}
+          <div class="elevate-b2b-who-we-are__stat" {{ block.shopify_attributes }}>
+            {%- if block.settings.value != blank -%}
+              <span class="elevate-b2b-who-we-are__stat-value">{{ block.settings.value }}</span>
+            {%- endif -%}
+            {%- if block.settings.label != blank -%}
+              <span class="elevate-b2b-who-we-are__stat-label">{{ block.settings.label }}</span>
+            {%- endif -%}
+          </div>
+        {%- endfor -%}
+      </div>
+    {%- endif -%}
+
+    {%- comment -%} Row 3 — CTA {%- endcomment -%}
+    {%- if section.settings.cta_text != blank or section.settings.cta_prompt != blank -%}
+      <div class="elevate-b2b-who-we-are__cta-row">
+        {%- if section.settings.cta_prompt != blank -%}
+          <p class="elevate-b2b-who-we-are__cta-prompt">{{ section.settings.cta_prompt }}</p>
+        {%- endif -%}
+        {%- if section.settings.cta_text != blank -%}
+          <a
+            class="elevate-b2b-who-we-are__cta-link"
+            href="#elevate-b2b-cta"
+            onclick="event.preventDefault();document.querySelector('.elevate-b2b-cta__inner').scrollIntoView({behavior:'smooth',block:'start'})"
+          >
+            {{- section.settings.cta_text -}}
+            <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M1 8h14M9 2l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </a>
+        {%- endif -%}
+      </div>
+    {%- endif -%}
+  </div>
+</div>
+
+{% stylesheet %}
+  /* ── Inner wrapper ── */
+  .elevate-b2b-who-we-are__inner {
+    padding-block: var(--b2b-who-pad-top-m, 2rem) var(--b2b-who-pad-bottom-m, 2rem);
+    padding-inline: 0.5rem;
+    border-radius: 2rem;
+    overflow: clip;
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+
+  /* ── Row 1 — Top ── */
+  .elevate-b2b-who-we-are__top {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .elevate-b2b-who-we-are__heading {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 700;
+    font-size: 2.25rem;
+    line-height: 1.2;
+    color: #FDFCFC;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  .elevate-b2b-who-we-are__body {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .elevate-b2b-who-we-are__description {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  .elevate-b2b-who-we-are__tagline {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #E31E24;
+    text-transform: uppercase;
+    margin: 0;
+  }
+
+  /* ── Row 2 — Stats ── */
+  .elevate-b2b-who-we-are__stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .elevate-b2b-who-we-are__divider {
+    display: none;
+  }
+
+  .elevate-b2b-who-we-are__stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    text-align: center;
+    white-space: nowrap;
+    padding-inline: 0.75rem;
+  }
+
+  .elevate-b2b-who-we-are__stat:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+  }
+
+  .elevate-b2b-who-we-are__stat-value {
+    font-family: 'Big Shoulders Display', var(--font-heading--family), sans-serif;
+    font-weight: 400;
+    font-size: 2rem;
+    line-height: 1.2;
+    color: #AEB2B8;
+  }
+
+  .elevate-b2b-who-we-are__stat-label {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 0.75rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #6B7280;
+    text-transform: uppercase;
+  }
+
+  /* ── Row 3 — CTA ── */
+  .elevate-b2b-who-we-are__cta-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 1rem;
+    border-top: 0.03125rem solid #6B7280;
+    padding-top: 1.5rem;
+  }
+
+  .elevate-b2b-who-we-are__cta-prompt {
+    font-family: 'Inter', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    color: #AEB2B8;
+    margin: 0;
+  }
+
+  .elevate-b2b-who-we-are__cta-link {
+    font-family: 'Host Grotesk', var(--font-body--family), sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.4;
+    letter-spacing: 0.03rem;
+    color: #E31E24;
+    text-decoration: none;
+    border-bottom: 0.03125rem solid #E31E24;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding-bottom: 0.125rem;
+    transition: opacity 0.2s ease;
+  }
+
+  .elevate-b2b-who-we-are__cta-link:hover {
+    opacity: 0.8;
+  }
+
+  /* ── Desktop ── */
+  @media (min-width: 61.9375rem) {
+    .elevate-b2b-who-we-are__inner {
+      padding-block: var(--b2b-who-pad-top) var(--b2b-who-pad-bottom);
+      padding-inline: 4.375rem;
+      gap: 3.5rem;
+    }
+
+    .elevate-b2b-who-we-are__top {
+      flex-direction: row;
+      gap: 5rem;
+      align-items: center;
+    }
+
+    .elevate-b2b-who-we-are__heading {
+      font-size: 3.5625rem;
+      max-width: 40rem;
+      flex-shrink: 0;
+    }
+
+    .elevate-b2b-who-we-are__body {
+      flex: 1;
+      text-align: right;
+    }
+
+    .elevate-b2b-who-we-are__stats {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.75rem;
+      padding-top: 1rem;
+    }
+
+    .elevate-b2b-who-we-are__divider {
+      display: block;
+      width: 0.03125rem;
+      height: 5rem;
+      background: #6B7280;
+      flex-shrink: 0;
+    }
+
+    .elevate-b2b-who-we-are__stat {
+      flex: 1;
+    }
+
+    .elevate-b2b-who-we-are__stat-value {
+      font-size: 3rem;
+    }
+
+    .elevate-b2b-who-we-are__cta-row {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      text-align: left;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "B2B Who We Are",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "Heading",
+      "default": "THE FASTEST GROWING CYCLING RESELLER IN AMERICA."
+    },
+    {
+      "type": "textarea",
+      "id": "description",
+      "label": "Description",
+      "default": "Founded 2021 in Santa Ana, CA. Twelve people across two warehouses, buying and selling high-end road bikes and components at a scale nobody else in this market has matched."
+    },
+    {
+      "type": "textarea",
+      "id": "tagline",
+      "label": "Tagline",
+      "default": "EVERY CLAIM IS VERIFIABLE. EVERY GRADE IS HONEST.\nEVERY TRANSACTION IS DOCUMENTED."
+    },
+    {
+      "type": "text",
+      "id": "cta_prompt",
+      "label": "CTA prompt",
+      "default": "Ready to move your inventory?"
+    },
+    {
+      "type": "text",
+      "id": "cta_text",
+      "label": "CTA text",
+      "default": "Send us your list"
+    },
+    {
+      "type": "url",
+      "id": "cta_url",
+      "label": "CTA link"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#141517"
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "label": "Top padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "label": "Bottom padding",
+      "min": 0,
+      "max": 120,
+      "step": 8,
+      "default": 72,
+      "unit": "px"
+    },
+    {
+      "type": "checkbox",
+      "id": "mobile_padding_custom",
+      "label": "Custom mobile padding",
+      "default": false
+    },
+    {
+      "type": "range",
+      "id": "padding_top_mobile",
+      "label": "Padding top (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 32,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_mobile",
+      "label": "Padding bottom (mobile)",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 32,
+      "visible_if": "{{ section.settings.mobile_padding_custom }}"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "limit": 6,
+      "settings": [
+        {
+          "type": "text",
+          "id": "value",
+          "label": "Value",
+          "default": "0"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "default": "Label"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "B2B Who We Are",
+      "blocks": [
+        {
+          "type": "stat",
+          "settings": {
+            "value": "3,500+",
+            "label": "bikes bought"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "99.8%",
+            "label": "eBay feedback"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "$5.4M",
+            "label": "paid out"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "#395",
+            "label": "Inc. 5000"
+          }
+        },
+        {
+          "type": "stat",
+          "settings": {
+            "value": "48h",
+            "label": "turnaround"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
